@@ -3,7 +3,7 @@ type: gdd-mechanics
 version: 0.1
 date: 14/7/
 ---
-# Mechanic Design — [ชื่อ Mechanic]
+# Mechanic Design — [Pipe Repair]
 
 ## State Diagram
 

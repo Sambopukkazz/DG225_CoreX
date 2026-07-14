@@ -3,7 +3,7 @@ type: doc-index
 version: 0.1
 date: 14/7/69
 ---
-# [Pipe Repair] — Documentation Index
+# [Imaginophobia] — Documentation Index
 
 ## 📖 เอกสารในโปรเจกต์นี้
 
