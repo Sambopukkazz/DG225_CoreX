@@ -1,9 +1,8 @@
 ---
 type: gdd-mechanics
 version: 0.1
-date: [วันที่]
+date: 14/7/
 ---
-
 # Mechanic Design — [ชื่อ Mechanic]
 
 ## State Diagram
@@ -12,17 +11,19 @@ date: [วันที่]
 stateDiagram-v2
     [*] --> Idle
     Idle --> Move : กด Arrow/WASD
-    Move --> Jump : กด Space
-    Jump --> Fall : ตกจากจุดสูงสุด
-    Fall --> Idle : แตะพื้น
-    Idle --> Attack : กด Attack button
-    Attack --> Idle : Animation จบ
+    Move --> Idle : ปล่อย Arrow/WASD
+    Idle --> Hide : กด Hide
+    Hide --> Idle : ออกจากที่ซ่อน
+    Idle --> Fix : กด Fix
+    Fix --> QTE : แบบ DBD
+    QTE --> Idle : ซ่อมเสร็จ
 ```
 
 ## Rules
 
-| State | เข้าเงื่อนไข | ออกเงื่อนไข | Note |
-|---|---|---|---|
-| Idle | เริ่มเกม / หยุดเคลื่อนที่ | กด input ใดๆ | Animation loop |
-| Move | กดปุ่มทิศทาง | ปล่อยปุ่ม / กระโดด | Speed = [ค่า] |
-| Jump | กด Space ขณะอยู่พื้น | ถึงจุดสูงสุด | Gravity = [ค่า] |
+| State | เข้าเงื่อนไข                        | ออกเงื่อนไข                                              | Note            |
+| ----- | ----------------------------------------------- | ------------------------------------------------------------------- | --------------- |
+| Idle  | เริ่มเกม / หยุดเคลื่อนที่ | กด input ใดๆ                                                   | Animation loop  |
+| Move  | กดปุ่มทิศทาง                        | ปล่อยปุ่ม                                                  | Speed = slow    |
+| Hide  | กด Hide                                       | โดนผลักออก / กดออกจากที่ซ่อน               | Have time limit |
+| Fix   | กด Fix                                        | ซ่อมไม่สำเร็จหลายครั้ง / ซ่อมสำเร็จ | Have QTE        |

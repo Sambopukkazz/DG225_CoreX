@@ -15,9 +15,9 @@ team: [เตชินท์ เจริญสิงห์
 
 ## Genre & Platform
 
-- **Genre:** [เช่น 2D Platformer, Top-down Shooter]
+- **Genre:** [เช่น 2D Sidescrolling, Horror]
 - **Platform:** PC (Windows)
-- **Engine:** MonoGame (C#)
+- **Engine:** Unity
 - **Target Audience:** [กลุ่มเป้าหมาย]
 
 ## Inspiration & References
