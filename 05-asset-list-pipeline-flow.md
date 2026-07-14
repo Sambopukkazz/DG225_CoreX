@@ -3,7 +3,7 @@
 ```mermaid
 flowchart TD
     subgraph SOURCES["แหล่ง Asset ฟรี"]
-        K1[Kenney.nl / OpenGameArt / itch.io] --> C1[docs/02_Assets/_candidates/]
+        K1[freetouse.com] --> C1[docs/02_Assets/_candidates/]
         K2[Freesound.org] --> C1
         K3[Google Fonts / Fontesk] --> C1
     end
