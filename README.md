@@ -1,1 +1,0 @@
-# DG225_ChatGPT
