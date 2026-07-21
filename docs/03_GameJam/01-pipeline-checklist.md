@@ -10,26 +10,27 @@ team: CoreX
 
 ## Must-Have (ต้องมีก่อน Hour 24 — Playable Build)
 
-| Module                                         | หน้าที่                                                                                         | สถานะ     | ผู้รับผิดชอบ |
-| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------- | ------------------------ |
-| `GameStateManager`                           | สลับ state (Menu / Playing / Pause / GameOver)                                                     | 🔲 Not Started | [เตชินท์ 116]     |
-| `InputManager`                               | รับ input keyboard/gamepad แบบรวมศูนย์                                                   | 🔲 Not Started | [เตชินท์ 116]     |
-| Core `Update()` logic ของกลไกหลัก | logic ของ core mechanic 1 อย่างที่เป็นหัวใจเกม                                  | 🔲 Not Started | [เตชินท์ 116]     |
-| Collision / interaction พื้นฐาน         | ตรวจชน/ตรวจ trigger ระหว่าง entity                                                    | 🔲 Not Started | [เตชินท์ 116]     |
-| Lighting / Shadow                              | จัดแสงในฉาก ใส่เงาให้วัตถุต่างๆ                                          | 🔲 Not Started | [พรภวิษย์ 132]   |
-| Objective Sequence                             | ลำดับเหตุการณ์ที่ผู้เล่นต้องเจอ                                         | 🔲 Not Started | [ธีนันทนัช 120] |
-| Paint Map                                      | ใช้ Tile Palette paint TIle Map ตาม Level Design                                                 | 🔲 Not Started | [พรภวิษย์ 132]   |
-| Dialogue ระหว่างเล่น/ตาย         | มีข้อความแสดงสิ่งที่ต้องทำหรือข้อผิดพลาดที่ไม่ควรทำ | 🔲 Not Started | [ธีนันทนัช 120] |
-| Asset Creation                                 | วาด Asset ประกอบในฉาก                                                                    | 🟡 Ongoing    | [นาถวัฒน์ 125]   |
+| Module                                         | หน้าที่                                                        | สถานะ     | ผู้รับผิดชอบ |
+| ---------------------------------------------- | --------------------------------------------------------------------- | -------------- | ------------------------ |
+| `GameStateManager`                           | สลับ state (Menu / Playing / Pause / GameOver)                    | 🔲 Not Started | [เตชินท์ 116]     |
+| `InputManager`                               | รับ input keyboard/gamepad แบบรวมศูนย์                  | 🔲 Not Started | [เตชินท์ 116]     |
+| Core `Update()` logic ของกลไกหลัก | logic ของ core mechanic 1 อย่างที่เป็นหัวใจเกม | 🔲 Not Started | [เตชินท์ 116]     |
+| Collision / interaction พื้นฐาน         | ตรวจชน/ตรวจ trigger ระหว่าง entity                   | 🔲 Not Started | [เตชินท์ 116]     |
+| Lighting / Shadow                              | จัดแสงในฉาก ใส่เงาให้วัตถุต่างๆ         | 🔲 Not Started | [พรภวิษย์ 132]   |
+| Objective Sequence                             | ลำดับเหตุการณ์ที่ผู้เล่นต้องเจอ        | 🔲 Not Started | [ธีนันทนัช 120] |
+| Paint Map                                      | ใช้ Tile Palette paint TIle Map ตาม Level Design                | 🔲 Not Started | [พรภวิษย์ 132]   |
+| Asset Creation                                 | วาด Asset ประกอบในฉาก                                   | 🟡 Ongoing    | [นาถวัฒน์ 125]   |
+|                                                |                                                                       |                |                          |
 
 ## Nice-to-Have (ทำถ้าเหลือเวลา — Hour 24–34)
 
-| Module                                | หน้าที่                           | สถานะ     | ผู้รับผิดชอบ |
-| ------------------------------------- | ---------------------------------------- | -------------- | ------------------------ |
-| `AudioManager` (SFX พื้นฐาน) | เสียงตอบสนอง action หลัก | 🔲 Not Started | [พรภวิษย์ 132]   |
-| Setting System                        | ปรับลดเสียงแยกประเภท | 🔲 Not Started | [เตชินท์ 116]     |
-| Music / เพลงประกอบ          | เพิ่มบรรยากาศ               | 🔲 Not Started | [พรภวิษย์ 132]   |
-| Start Menu                            | หน้าก่อนเข้าเกม           | 🔲 Not Started | [เตชินท์ 116]     |
+| Module                                 | หน้าที่                                                                                         | สถานะ     | ผู้รับผิดชอบ |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------- | ------------------------ |
+| `AudioManager` (SFX พื้นฐาน)  | เสียงตอบสนอง action หลัก                                                               | 🔲 Not Started | [พรภวิษย์ 132]   |
+| Setting System                         | ปรับลดเสียงแยกประเภท                                                               | 🔲 Not Started | [เตชินท์ 116]     |
+| Music / เพลงประกอบ           | เพิ่มบรรยากาศ                                                                             | 🔲 Not Started | [พรภวิษย์ 132]   |
+| Start Menu                             | หน้าก่อนเข้าเกม                                                                         | 🔲 Not Started | [เตชินท์ 116]     |
+| Dialogue ระหว่างเล่น/ตาย | มีข้อความแสดงสิ่งที่ต้องทำหรือข้อผิดพลาดที่ไม่ควรทำ | 🔲 Not Started | [ธีนันทนัช 120] |
 
 ## Cut-List (ตัดทิ้งก่อนถ้าเวลาไม่พอ — ห้ามเริ่มก่อน Must-Have เสร็จ)
 

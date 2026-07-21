@@ -4,16 +4,16 @@ version: 0.1
 date: 21/7/26
 team: CoreX
 ---
-# Team Roles & Pipeline Ownership — [ชื่อทีม]
+# Team Roles & Pipeline Ownership — [CoreX]
 
 ## แบ่งความรับผิดชอบตาม Pipeline (4 คน)
 
-| คน | ชื่อ   | Module ที่รับผิดชอบ         | Phase ที่ต้องเสร็จ |
-| ---- | ---------- | --------------------------------------- | ------------------------------ |
-| 1    | [ชื่อ] | `GameStateManager` + `InputManager` | Phase 2 (Hour 6–14)           |
-| 2    | [ชื่อ] | Core mechanic `Update()` logic        | Phase 2–3 (Hour 6–24)        |
-| 3    | [ชื่อ] | Render/`SpriteBatch` + Collision      | Phase 2–3 (Hour 6–24)        |
-| 4    | [ชื่อ] | Content pipeline (MGCB) + Audio/UI      | Phase 3–4 (Hour 14–34)       |
+| คน | ชื่อ                 | Module ที่รับผิดชอบ | Phase ที่ต้องเสร็จ |
+| ---- | ------------------------ | ------------------------------- | ------------------------------ |
+| 1    | [เตชินท์ 116]     | Mechanics + Logic               | Phase 1-4 (Hour 0–34)         |
+| 2    | [ธีนันทนัช 120] | Objective Sequence              | Phase 2–3 (Hour 6–24)        |
+| 3    | [นาถวัฒน์ 125]   | Asset Creation                  | Phase 1–5 (Hour 0–48)        |
+| 4    | [พรภวิษย์ 132]   | Lighting / Shadow + Paint Map   | Phase 3–4 (Hour 14–34)       |
 
 > คนละไฟล์/module = ชนกันน้อยที่สุด ปรับ module ตามตาราง [01-pipeline-checklist.md](01-pipeline-checklist.md) ให้ตรงกับเกมจริงของทีม
 
