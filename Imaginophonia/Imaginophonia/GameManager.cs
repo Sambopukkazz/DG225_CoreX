@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
+using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophonia {
     public class GameManager {
+        
 
         public GameManager() {
             
@@ -18,9 +20,10 @@ namespace Imaginophonia {
         }
 
         public void Draw() {
-            Globals.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            //Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            
 
-            Globals.SpriteBatch.End();
+            //Core.SpriteBatch.End();
         }
     }
 }

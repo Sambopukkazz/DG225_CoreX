@@ -10,9 +10,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophonia {
-    public class SpriteRenderer{
+    public class Player{
         private Texture2D texture;
         private Transform2 _transform;
+        private float _moveSpeed;
+
+        private SpriteSheet _spriteSheet;
+        private AnimatedSprite _animatedSprite;
+
         public bool IsActive { get; set; }
         public bool IsVisible { get; set; }
         public float Alpha { get; set; }
@@ -20,15 +25,9 @@ namespace Imaginophonia {
         public object Tag { get; set; }
         public Vector2 Origin { get; set; }
         public SpriteEffects Effect { get; set; }
+
         
-        public SpriteRenderer(Texture2D texture){
-            this.texture = texture;
-            IsActive = true;
-            IsVisible = true;
-            Alpha = 1.0f;
-            Depth = 0f;
-            
-            
+        public Player(Texture2D texture){
             
         }
         //public SpriteRenderer(Texture2D texture) {
@@ -37,7 +36,7 @@ namespace Imaginophonia {
         //}
 
         public void Update() {
-            
+            _transform.Position.Translate(InputManager.Direction.X * _moveSpeed, 0);
         }
 
         public void Draw() {
