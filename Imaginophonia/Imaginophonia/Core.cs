@@ -88,5 +88,11 @@ namespace Imaginophonia {
             // Create the sprite batch instance.
             SpriteBatch = new SpriteBatch(GraphicsDevice);
         }
+
+        protected override void UnloadContent() {
+            // Dispose of the audio controller.
+
+            base.UnloadContent();
+        }
     }
 }
