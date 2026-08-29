@@ -18,25 +18,36 @@ date: 14/7/69
 
 **Asset:** ดูตารางเต็มใน [00-concept.md](00-concept.md#asset-naming-convention)
 
-| Prefix      | ประเภท     |
-| ----------- | ---------------- |
-| `sprite_` | Sprite / Texture |
-| `sfx_`    | Sound Effect     |
-| `bgm_`    | Background Music |
-| `font_`   | Font             |
-| `data_`   | Data / Config    |
+| Prefix           | ประเภท                        |
+| ---------------- | ----------------------------------- |
+| `sprite_`      | Sprite / Texture                    |
+| `spritesheet_` | Spritesheet / AnimationSheet + Json |
+| `bgm_`         | Background Music                    |
+| `font_`        | Font                                |
+| `data_`        | Data / Config                       |
+| `sfx_`         |                                     |
+|                  |                                     |
 
 **เอกสาร:** ไฟล์ใน `docs/01_GDD/` เรียงลำดับด้วย prefix ตัวเลข 2 หลัก (`00-`, `01-`, ...) ตามลำดับที่สร้างขึ้นในแต่ละ Lab — ห้ามสลับเลขไฟล์ที่มีอยู่แล้ว เพิ่มไฟล์ใหม่ให้ต่อเลขถัดไป
 
 ## Asset Naming Convention
 
-| Prefix      | ประเภท     | ตัวอย่าง           |
-| ----------- | ---------------- | -------------------------- |
-| `sprite_` | Sprite / Texture | `sprite_player_idle.png` |
-| `sfx_`    | Sound Effect     | `sfx_jump.wav`           |
-| `bgm_`    | Background Music | `bgm_stage_01.mp3`       |
-| `font_`   | Font             | `font_ui_main.ttf`       |
-| `data_`   | Data / Config    | `data_enemies.json`      |
+| Prefix           | ประเภท                 | ตัวอย่าง                   |
+| ---------------- | ---------------------------- | ---------------------------------- |
+| `sprite_`      | Sprite / Texture             | `sprite_player_idle.png`         |
+| `spritesheet_` | Spritesheet / AnimationSheet | `spritesheet_player_texture.png` |
+|                  | Json                         | `spritesheet_player.json`        |
+| `sfx_`         | Sound Effect                 | `sfx_jump.wav`                   |
+| `bgm_`         | Background Music             | `bgm_stage_01.mp3`               |
+| `font_`        | Font                         | `font_ui_main.ttf`               |
+| `data_`        | Data / Config                | `data_enemies.json`              |
+
+## Scene Object Naming Convention (LDtk)
+
+| Prefix | ประเภท | ตัวอย่าง |
+| ------ | ------------ | ---------------- |
+|        |              |                  |
+|        |              |                  |
 
 ## 📁 ใครดูแลส่วนไหน
 
