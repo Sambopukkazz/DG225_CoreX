@@ -32,4 +32,7 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
     <PackageReference Include="MonoGame.Penumbra.DesktopGL" Version="3.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_\" />
+  </ItemGroup>
 </Project>

@@ -75,7 +75,7 @@ namespace Imaginophonia {
             Content.RootDirectory = "Content";
 
             // Mouse is visible by default.
-            IsMouseVisible = false;
+            IsMouseVisible = true;
         }
 
         protected override void Initialize() {
