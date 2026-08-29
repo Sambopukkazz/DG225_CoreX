@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.ECS;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Particles;
 using System;
@@ -10,9 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophonia {
-    public class Player{
-        private Texture2D texture;
-        private Transform2 _transform;
+    public class Player : GameObject{
         private float _moveSpeed;
 
         private SpriteSheet _spriteSheet;
@@ -23,24 +22,26 @@ namespace Imaginophonia {
         public float Alpha { get; set; }
         public float Depth { get; set; }
         public object Tag { get; set; }
-        public Vector2 Origin { get; set; }
+        
         public SpriteEffects Effect { get; set; }
 
         
-        public Player(Texture2D texture){
-            
-        }
-        //public SpriteRenderer(Texture2D texture) {
-        //    this.texture = texture;
-
-        //}
-
-        public void Update() {
-            _transform.Position.Translate(InputManager.Direction.X * _moveSpeed, 0);
+        public Player(){
+            Texture2DAtlas atlas = Game1.Content.Load<Texture2DAtlas>("load json");
+            _spriteSheet = new("", atlas);
+            _spriteSheet.DefineAnimation("", builder => {
+                builder.IsLooping(true)
+                .AddFrame("frame name",TimeSpan.FromSeconds(0.1));
+            });
         }
 
-        public void Draw() {
-            
+        public override void Update() {
+            Transform.Position.Translate(InputManager.Direction.X * _moveSpeed, 0);
+            base.Update();
+        }
+
+        public override void Draw() {
+            base.Draw();
         }
     }
 }

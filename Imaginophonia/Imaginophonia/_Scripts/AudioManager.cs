@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +82,31 @@ namespace Imaginophonia {
             soundEffectInstance.Pitch = pitch;
             soundEffectInstance.Pan = pan;
             soundEffectInstance.IsLooped = isLooped;
+
+            // Tell the instance to play
+            soundEffectInstance.Play();
+
+            // Add it to the active instances for tracking
+            _activeSoundEffectInstances.Add(soundEffectInstance);
+
+            return soundEffectInstance;
+        }
+
+        public SoundEffectInstance Play3DSoundEffect(SoundEffect soundEffect) {
+            // Create an instance from the sound effect given.
+            SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+
+            // Apply the volume, pitch, pan, and loop values specified.
+            soundEffectInstance.Volume = 1f;
+            soundEffectInstance.Pitch = 0f;
+            soundEffectInstance.Pan = 0f;
+            soundEffectInstance.IsLooped = true;
+
+            AudioEmitter audioEmitter = new();
+            AudioListener audioListener = new();
+            audioListener.Position = new Vector3(0,0,0);
+            audioEmitter.Position = Vector3.Right * 100;
+            soundEffectInstance.Apply3D(audioListener,audioEmitter);
 
             // Tell the instance to play
             soundEffectInstance.Play();

@@ -14,12 +14,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Audio/sfx_step_01.MP3
+#begin Audio/sfx_step_01.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_step_01.MP3
+/build:Audio/sfx_step_01.mp3
 
 #begin Character/Sp-Walk_left.png
 /importer:TextureImporter
@@ -46,4 +46,30 @@
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
 /build:Character/Sp-Walk_right.png
+
+#begin Font/GenerationFonting_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:Font/GenerationFonting_0.png
+
+#begin Font/GenerationFonting.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/processorParam:Version=6.1.1.0
+/build:Font/GenerationFonting.fnt
+
+#begin Tilemap/testmapfr.ldtk
+/importer:LDtkTilemapImporter
+/processor:TilemapProcessor
+/processorParam:LevelName=
+/processorParam:Version=6.1.1.0
+/build:Tilemap/testmapfr.ldtk
 
