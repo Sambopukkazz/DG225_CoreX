@@ -25,8 +25,8 @@ date: 14/7/69
 | `bgm_`         | Background Music                    |
 | `font_`        | Font                                |
 | `data_`        | Data / Config                       |
-| `sfx_`         |                                     |
-|                  |                                     |
+| `sfx_`         | Sound Effect                        |
+| `amb_`         | Ambient Sound                       |
 
 **เอกสาร:** ไฟล์ใน `docs/01_GDD/` เรียงลำดับด้วย prefix ตัวเลข 2 หลัก (`00-`, `01-`, ...) ตามลำดับที่สร้างขึ้นในแต่ละ Lab — ห้ามสลับเลขไฟล์ที่มีอยู่แล้ว เพิ่มไฟล์ใหม่ให้ต่อเลขถัดไป
 
@@ -34,10 +34,11 @@ date: 14/7/69
 
 | Prefix           | ประเภท                 | ตัวอย่าง                   |
 | ---------------- | ---------------------------- | ---------------------------------- |
-| `sprite_`      | Sprite / Texture             | `sprite_player_idle.png`         |
+| `sprite_`      | Sprite / Texture             | `sprite_player_idle_01.png`      |
 | `spritesheet_` | Spritesheet / AnimationSheet | `spritesheet_player_texture.png` |
 |                  | Json                         | `spritesheet_player.json`        |
-| `sfx_`         | Sound Effect                 | `sfx_jump.wav`                   |
+| `sfx_`         | Sound Effect                 | `sfx_jump.mp3`                   |
+| `amb_`         | Ambient Sound                | `amb_sewer.mp3`                  |
 | `bgm_`         | Background Music             | `bgm_stage_01.mp3`               |
 | `font_`        | Font                         | `font_ui_main.ttf`               |
 | `data_`        | Data / Config                | `data_enemies.json`              |
