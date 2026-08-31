@@ -1,0 +1,50 @@
+{
+	"textures": [
+		{
+			"filename": "spitesheet_player_texture.png",
+			"format": "RGBA8888",
+			"size": {"w":480,"h":60},
+			"frames": {
+				"sprite_idle":{
+					"frame": {"x":0,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_01":{
+					"frame": {"x":60,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_02":{
+					"frame": {"x":120,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_03":{
+					"frame": {"x":180,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_04":{
+					"frame": {"x":240,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_05":{
+					"frame": {"x":300,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_06":{
+					"frame": {"x":360,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_walk_07":{
+					"frame": {"x":420,"y":0,"w":60,"h":60},
+					"pivot": {"x":0.5,"y":0.5}
+				}
+			}
+		}
+	],
+
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"dataformat": "monogame-extended",
+		"version": "1.2",
+		"smartupdate": "$TexturePacker:SmartUpdate:37607fa425c582d260498c76470accca:fa52c0f060d8a96e18adb4f7cf86ac98:795ae75f4df1baf707d27892050b1b4f$"
+	}
+}
