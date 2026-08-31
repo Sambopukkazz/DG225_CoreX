@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Graphics;
 using Penumbra;
 using System;
@@ -15,7 +16,7 @@ namespace Imaginophonia {
             
         }
 
-        public void Update() {
+        public void Update(GameTime gameTime) {
             
         }
 

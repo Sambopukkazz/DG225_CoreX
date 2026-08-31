@@ -5,20 +5,23 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Extended.Timers;
 
 namespace Imaginophonia {
     public class GameObject {
 
-        public Transform2 Transform = new();
-        public Vector2 Origin { get; set; }
+        public Transform2 Transform { get; private set; } = new();
+        public Vector2 Origin { get; set; } = Vector2.Zero;
         public Matrix WorldMatrix { get; private set; } = Matrix.Identity;
 
-        public GameObject Parent;
+        public GameObject Parent { get; private set; }
         public readonly List<GameObject> Children = new();
 
-        private bool _active;
+        private bool _active = true;
         public bool Active => _active;
-        public bool Visibility { get; set; }
+        public bool Visible { get; set; } = true;
+        public string Tag { get; }
+        public string Name { get; }
 
         public virtual void Update() {
             if (Parent != null) {
@@ -27,6 +30,11 @@ namespace Imaginophonia {
             else {
                 WorldMatrix = Transform.LocalMatrix;
             }
+            //if(WorldMatrix.Decompose(out Vector3 position, out Quaternion rotation, out Vector3 scale)) {
+            //    Transform.Position = new Vector2(position.X, position.Y);
+            //    Transform.Rotation = rotation.Z;
+            //    Transform.Scale = new Vector2(scale.X, scale.Y);
+            //}
              
             foreach (var child in Children) { 
                 child.Update();

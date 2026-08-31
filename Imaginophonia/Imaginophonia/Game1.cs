@@ -5,10 +5,12 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions.Layers;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Tilemaps;
 using MonoGame.Extended.Tilemaps.Rendering;
 using MonoGame.Extended.ViewportAdapters;
 using Penumbra;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Reflection.Emit;
 
@@ -23,6 +25,9 @@ namespace Imaginophonia {
         AudioEmitter soundEmitter;
         PointLight light2;
         BitmapFont _font;
+        Player _player;
+
+        List<Timer> _timers = new();
 
         private Tilemap _tilemap;
         private TilemapSpriteBatchRenderer _renderer;
@@ -35,7 +40,7 @@ namespace Imaginophonia {
             Audio = new AudioManager();
             penumbra = new PenumbraComponent(this);
             Components.Add(penumbra);
-            penumbra.AmbientColor = Color.FromHSL(10,10,10);
+            penumbra.AmbientColor = Color.FromHSL(10,0,40);
             PointLight light = new PointLight();
             light.Position = new Vector2(960, 540);
             light.Color = Color.Blue;
@@ -56,8 +61,6 @@ namespace Imaginophonia {
             soundEmitter = new AudioEmitter();
             soundListener.Position = new Vector3(960,540,0);
             soundEmitter.Position = new Vector3(960, 540, 0);
-            soundEmitter.Forward = new Vector3(0,0,1000);
-            soundEmitter.Up = new Vector3(0,0,1000);
             soundEffect = Content.Load<SoundEffect>("Audio/sfx_step_01");
             soundEffectInstance = soundEffect.CreateInstance();
             soundEffectInstance.IsLooped = true;
@@ -65,6 +68,9 @@ namespace Imaginophonia {
             soundEffectInstance.Play();
             SoundEffect.DistanceScale = 100f;
             _font = Content.Load<BitmapFont>("Font/GenerationFonting");
+
+            _player = new();
+            _player.Transform.Position = new Vector2(0,500);
 
         }
 
@@ -79,6 +85,9 @@ namespace Imaginophonia {
                 direction.Normalize();
                 instance.Pan = MathHelper.Clamp(direction.X, -1f, 1f);
             }
+            else if (direction == Vector3.Zero) {
+                instance.Pan = 0;
+            }
         }
 
 
@@ -87,7 +96,7 @@ namespace Imaginophonia {
             
             base.Initialize();
 
-            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 800, 480);
+            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
             _camera = new OrthographicCamera(viewportAdapter);
         }
 
@@ -121,6 +130,9 @@ namespace Imaginophonia {
             //MathHelper.Clamp(relativePosition.X,0f,200f);
             //soundEmitter.Position = soundListener.Position + (relativePosition / distanceFactor);
             _renderer.Update(gameTime);
+            if(KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad1)) {
+                Time.AddTimer(new Timer(5));
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right)){
                 light2.Scale += new Vector2(10,10);
@@ -141,37 +153,50 @@ namespace Imaginophonia {
                 light2.Intensity -= 0.01f;
             }
 
-            
-            soundListener.Position += new Vector3(InputManager.Direction * 2, 0);
-            light2.Position = new Vector2(soundListener.Position.X, soundListener.Position.Y);
-            soundListener.Velocity = new Vector3(InputManager.Direction*20,0);
+            _player.Update(gameTime);
+            soundListener.Position = new Vector3(_player.Transform.Position, 0);
+            light2.Position = _player.Transform.Position;
+            soundListener.Velocity = new Vector3(InputManager.Direction*50,0);
             if (Keyboard.GetState().IsKeyDown(Keys.E)) {
                 UpdateSpatialAudio(soundEffectInstance, soundListener.Position, soundEmitter.Position, 150f, 500f);
+                _camera.LookAt(new Vector2(soundEmitter.Position.X, soundEmitter.Position.Y));
             }
-            else soundEffectInstance.Apply3D(soundListener, soundEmitter);
-            _camera.LookAt(new Vector2(soundListener.Position.X, soundListener.Position.Y));
+            else {
+                soundEffectInstance.Apply3D(soundListener, soundEmitter);
+                _camera.LookAt(_player.Transform.Position);
+            } 
 
-            _gameManager.Update();
+            _gameManager.Update(gameTime);
             Audio.Update();
-
+            Time.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime) {
             penumbra.BeginDraw();
+            
             GraphicsDevice.Clear(Color.White);
 
-            _renderer.Draw(SpriteBatch, _camera);
+            Matrix transformMatrix = _camera.GetViewMatrix();
+            penumbra.Transform = transformMatrix;
 
+            _renderer.Draw(SpriteBatch, _camera);
             // TODO: Add your drawing code here
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(samplerState: SamplerState.PointClamp,transformMatrix: transformMatrix);
             SpriteBatch.DrawRectangle(player, Color.Black, 3);
             SpriteBatch.DrawCircle(soundListener.Position.X, soundListener.Position.Y, 1f, 120, Color.Red, 4);
-            SpriteBatch.DrawCircle(soundEmitter.Position.X, soundEmitter.Position.Y, 1f, 10, Color.Red, 2);
+            SpriteBatch.DrawCircle(soundEmitter.Position.X, soundEmitter.Position.Y, 1f, 10, Color.White, 2);
             SpriteBatch.DrawString(_font, $"Light radius: {light2.Radius}\nLight scale: {light2.Scale.X}.{light2.Scale.Y}\nLight intensity: {light2.Intensity}", new Vector2(100, 100), Color.Black);
-
+            SpriteBatch.DrawString(_font, $"ListenerPos:{soundListener.Position.X}\nEmitterPosL:{soundEmitter.Position.X}\nCameraPos:{_camera.Position}", new Vector2(100, 300), Color.White);
+            SpriteBatch.DrawString(_font, $"\nElapseTime:{Time.DeltaTime}", new Vector2(100, 400), Color.White);
+            foreach (Timer timer in Time.Timers) {
+                SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
+            }
+            //SpriteBatch.DrawString(_font, $"Velocity: {_player.Velocity}\nVelocityCal: {_player.VelocityCal}", new Vector2(200, 500), Color.White);
+            _player.Draw();
             //SpriteBatch.DrawEllipse(soundEmitter.Position.X, soundEmitter.Position.Y, 1f, 120, Color.Red, 2);
             SpriteBatch.End();
+            
             _gameManager.Draw();
 
             base.Draw(gameTime);

@@ -21,7 +21,7 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_step_01.mp3
 
-#begin Character/Sp-Walk_left.png
+#begin Character/spitesheet_player_texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -32,20 +32,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:Character/Sp-Walk_left.png
+/build:Character/spitesheet_player_texture.png
 
-#begin Character/Sp-Walk_right.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:Character/Sp-Walk_right.png
+#begin Character/spitesheet_player.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/processorParam:Version=6.1.1.0
+/build:Character/spitesheet_player.json
 
 #begin Font/GenerationFonting_0.png
 /importer:TextureImporter
