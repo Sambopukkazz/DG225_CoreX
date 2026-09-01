@@ -23,6 +23,7 @@
 | 2 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with | เข้าใกล้สิ่งของแล้วมี highlight ขึ้น เมื่อออกห่างแล้วหายไป | 2             | —     |
 | 3 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.   | มี ui settings กดเข้าเกมต่างๆ                                                            | 3             | —     |
 | 4 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                  | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                         | 2             | —     |
+| 5 | As a developer,i want                                                                                                     | สกิลที่เพิ่มค่า                                                                           |               |        |
 
 ## Nice to Have
 
@@ -32,6 +33,8 @@
 | 2 | As a designer, I want to make a balance sheet of entities, so that I can understand the balance                                         | สร้าง spreadsheet ที่มีขอมูล entity ต่าง ๆ สามารถดูค่าต่างแล้วไปปรับในโค้ดได้ดดยไม่มีปัญหา | 3             | —     |
 | 3 | As a developer, I want to make my game's menu and gui to look nice, so that it looks appealing.                                         | design ui ให้สวยและเช้ากับ theme                                                                                                              | 1             | —     |
 | 4 | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | ได้ยินเสียงแทรกซ้ายขวา                                                                                                                  | 2             |        |
+| 5 | As a designer,iI want to make mini map                                                                                                  | มีmini map อยู่บริเวณมุมบนขวา                                                                                                             |               |        |
+| 6 |                                                                                                                                         |                                                                                                                                                               |               |        |
 
 ## MoSCoW Legend
 
