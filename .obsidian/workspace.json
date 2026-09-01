@@ -11,10 +11,14 @@
             "id": "02561c8ee7ac3d41",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "docs/04_Agile/02-sprint-backlog.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "02-sprint-backlog"
             }
           }
         ]
