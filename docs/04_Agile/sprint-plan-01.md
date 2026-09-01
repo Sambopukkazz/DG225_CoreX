@@ -29,7 +29,7 @@
 | 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | ธีนันทนัช 120                       | Must Have   | 6             | 🔲 Todo |
 | 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | พรภวิษย์ 132                         | Should Have | 3             | 🔲 Todo |
 | 7 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                | พรภวิษย์ 132 + เตชินท์ 116   | Should Have | 2             | 🔲 Todo |
-|   |                                                                                                                         |                                              |             |               |         |
+| 8 | As a Artist, I want to redesign the main charecter to make them look more paranoid.                                     | นาถวัฒน์ 125                        | Must Have   | 5             | 🔲 Todo |
 
 ## Status Legend
 

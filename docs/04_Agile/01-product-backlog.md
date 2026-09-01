@@ -7,13 +7,15 @@
 
 ## Must Have (MVP)
 
-| # | User Story                                                                                                              | Acceptance Criteria                                                                   | Estimate (SP) | Sprint |
-| - | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------- | ------ |
-| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                | เดินซ้ายขวาได้ ไม่เดินทะลุกำแพง                         | 1             | 1      |
-| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | เดินเข้าใกล้ของแล้วมีปุ้มแจ้ง กดแล้วทำ objective | 2             | —     |
-| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                    | หาดโดนแล้วสามารถตายได้                                          | 2             | —     |
-| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | สามารถเข้าออกประตุได้ มี objective วางไว้ใน map        | 3             | —     |
-| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | คิด concept phobia ให้สามารถโจมตี player ได้                      | 6             | —     |
+| # | User Story                                                                                                              | Acceptance Criteria                                                                     | Estimate (SP) | Sprint |
+| - | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------- | ------ |
+| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                | เดินซ้ายขวาได้ ไม่เดินทะลุกำแพง                           | 1             | 1      |
+| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | เดินเข้าใกล้ของแล้วมีปุ้มแจ้ง กดแล้วทำ objective   | 2             | —     |
+| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                    | หาดโดนแล้วสามารถตายได้                                            | 2             | —     |
+| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | สามารถเข้าออกประตุได้ มี objective วางไว้ใน map          | 3             | —     |
+| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | คิด concept phobia ให้สามารถโจมตี player ได้                        | 6             | —     |
+| 6 | As a Artist, I want to redesign the main charecter to make them look more paranoid.                                     | ปรับตัวละครหลักให้ดูมีความหวาดระแวงมากขึ้น    | 5             | 1      |
+| 7 | As a Artist, I want to redesign some of the assets to make them clearer and batter guide the player.                   | ปรับ Aessets ให้จัดเจนและนำทางผู้เล่นได้ระดับนึง | 3             | 2      |
 
 ## Should Have
 
@@ -24,6 +26,7 @@
 | 3 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.   | มี ui settings กดเข้าเกมต่างๆ                                                            | 3             | —     |
 | 4 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                  | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                         | 2             | —     |
 | 5 | As a developer,i want the game have skill heal Sanity                                                                    | สกิลที่เพิ่มค่าสติ                                                                     | 2             | ---    |
+| 6 | As a Artist, I want to redesign the mini-game UI                                                                         | ปรับ UI มินิเกม ให้ดูดีมากขึ้น                                                 | 3             | 3      |
 
 ## Nice to Have
 
@@ -34,7 +37,7 @@
 | 3 | As a developer, I want to make my game's menu and gui to look nice, so that it looks appealing.                                         | design ui ให้สวยและเช้ากับ theme                                                                                                              | 1             | —     |
 | 4 | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | ได้ยินเสียงแทรกซ้ายขวา                                                                                                                  | 2             |        |
 | 5 | As a designer,iI want to make mini map                                                                                                  | มีmini map อยู่บริเวณมุมบนขวา                                                                                                             |               |        |
-| 6 |                                                                                                                                         |                                                                                                                                                               |               |        |
+| 6 | As a Artist, I want to create a nomal map for an assets to make lighting look more realistic.                                           | ทำ Assets ให้มี nomal map ทำให้แสงตกกระทบดุสมจริงมากขึ้น                                                                 |               |        |
 
 ## MoSCoW Legend
 
