@@ -49,20 +49,23 @@ gantt
 | 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | Must Have   | 6             |
 | 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | Should Have | 3             |
 | 7 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                | Should Have | 2             |
-|   |                                                                                                                         |             |               |
+| 8 | As a Artist, I want to redesign the main charecter to make them look more paranoid.                                     | Must Have   | 5             |
 |   |                                                                                                                         |             |               |
 
 ## Sprint 2 (Draft)
 
-| # | User Story                                    | MoSCoW      | Estimate (SP) |
-| - | --------------------------------------------- | ----------- | ------------- |
-| 1 | As a player, I want to see my remaining lives | Should Have | 2             |
+| # | User Story                                                                                           | MoSCoW      | Estimate (SP) |
+| - | ---------------------------------------------------------------------------------------------------- | ----------- | ------------- |
+| 1 | As a player, I want to see my remaining lives                                                        | Should Have | 2             |
+| 2 | As a Artist, I want to redesign some of the assets to make them clearer and batter guide the player. | Must Have   | 3             |
 
 ## Sprint 3 (Draft)
 
 | # | User Story                                                                        | MoSCoW      | Estimate (SP) |
 | - | --------------------------------------------------------------------------------- | ----------- | ------------- |
 | 1 | [User Story ที่วางแผนไว้ล่วงหน้าจาก 01-product-backlog.md] | Should Have | [SP]          |
+| 3 | As a Artist, I want draw the assets and phobisd that have been added.             | Must Have   | 5             |
+| 4 | As a Artist, I want redesign the mini-game UI to make it look better.            | Should Have | 3             |
 
 > **Sprint 2-3 คือ draft ระดับ release plan** — เป้าหมายคือฝึกกะจำนวน SP ต่อ Sprint ให้ใกล้เคียง capacity ของทีม ไม่ใช่ล็อก scope ตายตัว ปรับได้ทุกครั้งที่ทำ Sprint Planning ของ Sprint ถัดไป
 
