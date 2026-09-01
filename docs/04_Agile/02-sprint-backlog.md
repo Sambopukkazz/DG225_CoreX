@@ -40,10 +40,17 @@ gantt
 
 ## Sprint 1 (กำลังทำ)
 
-| # | User Story                             | MoSCoW    | Estimate (SP) |
-| - | -------------------------------------- | --------- | ------------- |
-| 1 | As a player, I want to move left/right | Must Have | 3             |
-| 2 | As a player, I want to jump            | Must Have | 5             |
+| # | User Story                                                                                                              | MoSCoW      | Estimate (SP) |
+| - | ----------------------------------------------------------------------------------------------------------------------- | ----------- | ------------- |
+| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                | Must Have   | 1             |
+| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | Must Have   | 2             |
+| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                    | Must Have   | 2             |
+| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | Must Have   | 3             |
+| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | Must Have   | 6             |
+| 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | Should Have | 3             |
+| 7 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                | Should Have | 2             |
+|   |                                                                                                                         |             |               |
+|   |                                                                                                                         |             |               |
 
 ## Sprint 2 (Draft)
 
@@ -57,7 +64,7 @@ gantt
 | - | --------------------------------------------------------------------------------- | ----------- | ------------- |
 | 1 | [User Story ที่วางแผนไว้ล่วงหน้าจาก 01-product-backlog.md] | Should Have | [SP]          |
 
-> **Sprint 2-4 คือ draft ระดับ release plan** — เป้าหมายคือฝึกกะจำนวน SP ต่อ Sprint ให้ใกล้เคียง capacity ของทีม ไม่ใช่ล็อก scope ตายตัว ปรับได้ทุกครั้งที่ทำ Sprint Planning ของ Sprint ถัดไป
+> **Sprint 2-3 คือ draft ระดับ release plan** — เป้าหมายคือฝึกกะจำนวน SP ต่อ Sprint ให้ใกล้เคียง capacity ของทีม ไม่ใช่ล็อก scope ตายตัว ปรับได้ทุกครั้งที่ทำ Sprint Planning ของ Sprint ถัดไป
 
 > เมื่อ Sprint ไหนเริ่มทำงานจริง ให้คัดลอก template `sprint-plan-template.md` (ไฟล์แนบใน LMS) ไปสร้าง `docs/agile/sprint-plan-[NN].md` แล้วดึง Story ของ Sprint นั้นจากตารางด้านบนมาใส่คนรับผิดชอบ แตก Task และปรับ Estimate ให้ละเอียดขึ้น
 
