@@ -42,7 +42,27 @@
 
 ## Tasks
 
-### Story 1 — [ชื่อย่อของ Story]
+### Story 1 — [Player controls and acitons]
+
+- [X] [Player Class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [InputManager Class]  [owner:: เตชินท์ 116]  [estimate:: 2hrs]  [status::✅ Done]
+
+### Story 2 — [Menu and settings]
+
+- [ ] [Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hr]  [status:: 🔄 In Progress]
+- [ ] [Pause]  [owner:: พรภวิษย์ 132]  [estimate:: 6hr]  [status:: todo]
+
+### Story 3 — [Map creation]
+
+- [ ] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: 🔄 In Progress]
+- [ ] [Test map]  [owner:: เตชินท์ 116]  [estimate:: 12hrs]  [status:: 🔄 In Progress]
+
+### Story 4 — [Redesign main character]
+
+- [ ] [Player walk animation]  [owner:: ชื่อ]  [estimate:: 40hrs]  [status::🔄 In Progress]
+- [ ] [Player idle animation]  [owner:: ชื่อ]  [estimate:: 20hrs]  [status:: todo]
+
+### Story 5 — [ชื่อย่อของ Story]
 
 - [ ] [Task ย่อย]  [owner:: ชื่อ]  [estimate:: Nh]  [status:: todo]
 - [ ] [Task ย่อย]  [owner:: ชื่อ]  [estimate:: Nh]  [status:: todo]
