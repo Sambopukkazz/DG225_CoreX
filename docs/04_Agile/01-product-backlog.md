@@ -23,7 +23,7 @@
 | 2 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with | เข้าใกล้สิ่งของแล้วมี highlight ขึ้น เมื่อออกห่างแล้วหายไป | 2             | —     |
 | 3 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.   | มี ui settings กดเข้าเกมต่างๆ                                                            | 3             | —     |
 | 4 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                  | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                         | 2             | —     |
-| 5 | As a developer,i want                                                                                                     | สกิลที่เพิ่มค่า                                                                           |               |        |
+| 5 | As a developer,i want the game have skill heal Sanity                                                                    | สกิลที่เพิ่มค่าสติ                                                                     | 2             | ---    |
 
 ## Nice to Have
 
