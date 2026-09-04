@@ -21,6 +21,55 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_step_01.mp3
 
+#begin Audio/sfx_step_02.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_02.mp3
+
+#begin Audio/sfx_step_03.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_03.mp3
+
+#begin Audio/sfx_step_04.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_04.mp3
+
+#begin Audio/sfx_step_05.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_05.mp3
+
+#begin Audio/sfx_step_06.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_06.mp3
+
+#begin Audio/sfx_step_07.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_07.mp3
+
+#begin Audio/sfx_step_08.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_step_08.mp3
+
 #begin Character/spitesheet_player_texture.png
 /importer:TextureImporter
 /processor:TextureProcessor

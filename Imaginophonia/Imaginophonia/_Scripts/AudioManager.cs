@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace Imaginophonia {
     public class AudioManager : IDisposable {
-        private readonly List<SoundEffectInstance> _activeSoundEffectInstances;
+        private static AudioManager s_instance;
+        public static AudioManager Instance => s_instance;
+        private readonly List<AudioSource> _activeAudioSources;
         private float _previousAmbientVolume;
         private float _previousSoundEffectVolume;
         public bool IsMuted { get; private set; }
@@ -50,72 +52,102 @@ namespace Imaginophonia {
 
         public bool IsDisposed { get; private set; }
 
+        private SoundEffect[] _steps;
+        private int _stepOrder;
+
         public AudioManager() {
-            _activeSoundEffectInstances = new List<SoundEffectInstance>();
+            if (s_instance != null) {
+                throw new InvalidOperationException($"Only a single AudioManager instance can be created");
+            }
+            s_instance = this;
+
+            _activeAudioSources = new List<AudioSource>();
+            //Load Sound Effect
+            _steps = new SoundEffect[8];
+            for(int i = 1; i < 9; i++) {
+                _steps[i-1] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_step_0{i}");
+            }
         }
 
         ~AudioManager() => Dispose(false);
 
-        public void Update() {
-            for (int i = _activeSoundEffectInstances.Count - 1; i >= 0; i--) {
-                SoundEffectInstance instance = _activeSoundEffectInstances[i];
+        public void Update(IMoveable listener) {
+            for (int i = _activeAudioSources.Count - 1; i >= 0; i--) {
+                AudioSource instance = _activeAudioSources[i];
+                instance.Update();
 
-                if (instance.State == SoundState.Stopped) {
+                if (instance.Sound.State == SoundState.Stopped) {
                     if (!instance.IsDisposed) {
                         instance.Dispose();
                     }
-                    _activeSoundEffectInstances.RemoveAt(i);
+                    _activeAudioSources.RemoveAt(i);
+                }
+
+                if (instance.Tag == "AudioSource3D") {
+                    instance.UpdateSpatialAudio(listener);
                 }
             }
         }
 
-        public SoundEffectInstance PlaySoundEffect(SoundEffect soundEffect) {
-            return PlaySoundEffect(soundEffect, 1.0f, 0.0f, 0.0f, false);
+        public void PlayStepsSFX(Vector2 pos) {
+            AudioSource instance = new(pos);
+            _activeAudioSources.Add(instance);
+
+            if (_stepOrder >= _steps.Length) {
+                _stepOrder = 0;
+            }
+            instance.PlayOneShot(_steps[_stepOrder++]);
         }
 
-        public SoundEffectInstance PlaySoundEffect(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped) {
-            // Create an instance from the sound effect given.
-            SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+        //public void 
 
-            // Apply the volume, pitch, pan, and loop values specified.
-            soundEffectInstance.Volume = volume;
-            soundEffectInstance.Pitch = pitch;
-            soundEffectInstance.Pan = pan;
-            soundEffectInstance.IsLooped = isLooped;
+        //public SoundEffectInstance PlaySoundEffect(SoundEffect soundEffect) {
+        //    return PlaySoundEffect(soundEffect, 1.0f, 0.0f, 0.0f, false);
+        //}
 
-            // Tell the instance to play
-            soundEffectInstance.Play();
+        //public SoundEffectInstance PlaySoundEffect(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped) {
+        //    // Create an instance from the sound effect given.
+        //    SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
 
-            // Add it to the active instances for tracking
-            _activeSoundEffectInstances.Add(soundEffectInstance);
+        //    // Apply the volume, pitch, pan, and loop values specified.
+        //    soundEffectInstance.Volume = volume;
+        //    soundEffectInstance.Pitch = pitch;
+        //    soundEffectInstance.Pan = pan;
+        //    soundEffectInstance.IsLooped = isLooped;
 
-            return soundEffectInstance;
-        }
+        //    // Tell the instance to play
+        //    soundEffectInstance.Play();
 
-        public SoundEffectInstance Play3DSoundEffect(SoundEffect soundEffect) {
-            // Create an instance from the sound effect given.
-            SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
+        //    // Add it to the active instances for tracking
+        //    _activeAudioSources.Add(soundEffectInstance);
 
-            // Apply the volume, pitch, pan, and loop values specified.
-            soundEffectInstance.Volume = 1f;
-            soundEffectInstance.Pitch = 0f;
-            soundEffectInstance.Pan = 0f;
-            soundEffectInstance.IsLooped = true;
+        //    return soundEffectInstance;
+        //}
 
-            AudioEmitter audioEmitter = new();
-            AudioListener audioListener = new();
-            audioListener.Position = new Vector3(0,0,0);
-            audioEmitter.Position = Vector3.Right * 100;
-            soundEffectInstance.Apply3D(audioListener,audioEmitter);
+        //public SoundEffectInstance Play3DSoundEffect(SoundEffect soundEffect) {
+        //    //Create an instance from the sound effect given.
+        //    SoundEffectInstance soundEffectInstance = soundEffect.CreateInstance();
 
-            // Tell the instance to play
-            soundEffectInstance.Play();
+        //    //Apply the volume, pitch, pan, and loop values specified.
+        //    soundEffectInstance.Volume = 1f;
+        //    soundEffectInstance.Pitch = 0f;
+        //    soundEffectInstance.Pan = 0f;
+        //    soundEffectInstance.IsLooped = true;
 
-            // Add it to the active instances for tracking
-            _activeSoundEffectInstances.Add(soundEffectInstance);
+        //    AudioEmitter audioEmitter = new();
+        //    AudioListener audioListener = new();
+        //    audioListener.Position = new Vector3(0, 0, 0);
+        //    audioEmitter.Position = Vector3.Right * 100;
+        //    soundEffectInstance.Apply3D(audioListener, audioEmitter);
 
-            return soundEffectInstance;
-        }
+        //    //// Tell the instance to play
+        //    soundEffectInstance.Play();
+
+        //    //// Add it to the active instances for tracking
+        //    _activeAudioSources.Add(soundEffectInstance);
+
+        //    return soundEffectInstance;
+        //}
 
         public void PlayBgm(Song bgm, bool isRepeating = true) {
             if (MediaPlayer.State == MediaState.Playing) {
@@ -131,8 +163,8 @@ namespace Imaginophonia {
             MediaPlayer.Pause();
 
             // Pause any active sound effects.
-            foreach (SoundEffectInstance soundEffectInstance in _activeSoundEffectInstances) {
-                soundEffectInstance.Pause();
+            foreach (AudioSource audioSource in _activeAudioSources) {
+                audioSource.Sound.Pause();
             }
         }
 
@@ -141,8 +173,8 @@ namespace Imaginophonia {
             MediaPlayer.Resume();
 
             // Resume any active sound effects.
-            foreach (SoundEffectInstance soundEffectInstance in _activeSoundEffectInstances) {
-                soundEffectInstance.Resume();
+            foreach (AudioSource audioSource in _activeAudioSources) {
+                audioSource.Sound.Resume();
             }
         }
 
@@ -186,10 +218,10 @@ namespace Imaginophonia {
             }
 
             if (disposing) {
-                foreach (SoundEffectInstance soundEffectInstance in _activeSoundEffectInstances) {
-                    soundEffectInstance.Dispose();
+                foreach (AudioSource audioSource in _activeAudioSources) {
+                    audioSource.Dispose();
                 }
-                _activeSoundEffectInstances.Clear();
+                _activeAudioSources.Clear();
             }
 
             IsDisposed = true;

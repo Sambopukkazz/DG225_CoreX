@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophonia {
     public class AudioSource : GameObject,IDisposable {
-        public readonly SoundEffectInstance Sound;
+        public SoundEffectInstance Sound { get; private set; }
         private AudioEmitter _emitter;
 
         private float _duration;
@@ -21,34 +21,48 @@ namespace Imaginophonia {
 
         public bool IsDisposed { get; private set; }
 
-        public AudioSource(SoundEffect soundEffect) {
-            Sound = soundEffect.CreateInstance();
-            _duration = (float)soundEffect.Duration.TotalSeconds;
+        public AudioSource(Vector2 pos) : base ("AudioSource", "AudioSource") {
+            _emitter = new();
+            _emitter.Position = new Vector3(pos, 0);
         }
-        public AudioSource(SoundEffect soundEffect, float volume, float pitch, float pan, bool isLooped) {
-            Sound = soundEffect.CreateInstance();
-            _duration = (float)soundEffect.Duration.TotalSeconds;
-            Sound.Volume = volume;
-            Sound.Pitch = pitch;
-            Sound.Pan = pan;
-            Sound.IsLooped = isLooped;
-            
+        public AudioSource(Vector2 pos, float minDist, float maxDist) : base("AudioSource", "AudioSource3D") {
+            _innerRadius = minDist;
+            _outerRadius = maxDist;
+
+            _emitter = new();
+            _emitter.Position = new Vector3(pos, 0);
         }
 
         public override void Update() {
-            
             base.Update();
+
+            _emitter.Position = new Vector3(Transform.Position.X, Transform.Position.Y, 0);
         }
 
         public override void Draw() {
-            Game1.SpriteBatch.DrawCircle(Transform.Position, _innerRadius, 120,Color.LightYellow);
-            Game1.SpriteBatch.DrawCircle(Transform.Position, _outerRadius, 120, Color.LightYellow);
+            MainGame.SpriteBatch.DrawCircle(Transform.Position, _innerRadius, 120,Color.LightYellow);
+            MainGame.SpriteBatch.DrawCircle(Transform.Position, _outerRadius, 120, Color.LightYellow);
 
 
             base.Draw();
         }
 
-        public void UpdateSpatialAudio(IMoveable listener, IMoveable emitter) {
+        public void PlayLoopSFX(SoundEffect soundEffect, float volume = 1) {
+            Sound = soundEffect.CreateInstance();
+            _duration = (float)soundEffect.Duration.TotalSeconds;
+            Sound.IsLooped = true;
+            Sound.Play();
+        }
+
+        public void PlayOneShot(SoundEffect soundEffect, float volume = 1) {
+            Sound = soundEffect.CreateInstance();
+            _duration = (float)soundEffect.Duration.TotalSeconds;
+            Sound.Play();
+        }
+
+        public void UpdateSpatialAudio(IMoveable listener) {
+            IMoveable emitter = (IMoveable)Parent;
+
             Vector2 directionFromListener = new Vector2(_emitter.Position.X - Player.Listener.Position.X, _emitter.Position.Y - Player.Listener.Position.Y);
             if (directionFromListener != Vector2.Zero && true) {
                 directionFromListener.Normalize();
@@ -62,7 +76,6 @@ namespace Imaginophonia {
             float vListener = Vector2.Dot(listener.Velocity, directionFromListener);
             float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
             Sound.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
-
         }
 
         ~AudioSource() => Dispose(false);

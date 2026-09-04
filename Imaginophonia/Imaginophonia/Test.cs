@@ -15,7 +15,7 @@ using System.Net.Sockets;
 using System.Reflection.Emit;
 
 namespace Imaginophonia {
-    public class Game1 : Core {
+    public class Test : Core {
         GameManager _gameManager;
         PenumbraComponent penumbra;
         SoundEffect soundEffect;
@@ -35,8 +35,7 @@ namespace Imaginophonia {
 
         public static AudioManager Audio {  get; private set; }
 
-        public Game1() : base("Imaginophobia", 1920, 1080, false) {
-            _gameManager = new();
+        public Test() : base("Imaginophobia", 1920, 1080, false) {
             Audio = new AudioManager();
             penumbra = new PenumbraComponent(this);
             Components.Add(penumbra);
@@ -129,9 +128,9 @@ namespace Imaginophonia {
             //Vector3 relativePosition = soundEmitter.Position - soundListener.Position;
             //MathHelper.Clamp(relativePosition.X,0f,200f);
             //soundEmitter.Position = soundListener.Position + (relativePosition / distanceFactor);
-            _renderer.Update(gameTime);
+            //_renderer.Update(gameTime);
             if(KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad1)) {
-                Time.AddTimer(new Timer(5));
+                Time.AddTimer(5);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right)){
@@ -153,7 +152,7 @@ namespace Imaginophonia {
                 light2.Intensity -= 0.01f;
             }
 
-            _player.Update(gameTime);
+            _player.Update();
             soundListener.Position = new Vector3(_player.Transform.Position, 0);
             light2.Position = _player.Transform.Position;
             soundListener.Velocity = new Vector3(InputManager.Direction*50,0);
@@ -166,8 +165,6 @@ namespace Imaginophonia {
                 _camera.LookAt(_player.Transform.Position);
             } 
 
-            _gameManager.Update(gameTime);
-            Audio.Update();
             Time.Update(gameTime);
             base.Update(gameTime);
         }
@@ -186,7 +183,7 @@ namespace Imaginophonia {
             SpriteBatch.DrawRectangle(player, Color.Black, 3);
             SpriteBatch.DrawCircle(soundListener.Position.X, soundListener.Position.Y, 1f, 120, Color.Red, 4);
             SpriteBatch.DrawCircle(soundEmitter.Position.X, soundEmitter.Position.Y, 1f, 10, Color.White, 2);
-            SpriteBatch.DrawString(_font, $"Light radius: {light2.Radius}\nLight scale: {light2.Scale.X}.{light2.Scale.Y}\nLight intensity: {light2.Intensity}", new Vector2(100, 100), Color.Black);
+            SpriteBatch.DrawString(_font, $"Light radius: {light2.Radius}\nLight scale: {light2.Scale.X}.{light2.Scale.Y}\nLight intensity: {light2.Intensity}", new Vector2(100, 100), Color.White);
             SpriteBatch.DrawString(_font, $"ListenerPos:{soundListener.Position.X}\nEmitterPosL:{soundEmitter.Position.X}\nCameraPos:{_camera.Position}", new Vector2(100, 300), Color.White);
             SpriteBatch.DrawString(_font, $"\nElapseTime:{Time.DeltaTime}", new Vector2(100, 400), Color.White);
             foreach (Timer timer in Time.Timers) {
@@ -197,7 +194,6 @@ namespace Imaginophonia {
             //SpriteBatch.DrawEllipse(soundEmitter.Position.X, soundEmitter.Position.Y, 1f, 120, Color.Red, 2);
             SpriteBatch.End();
             
-            _gameManager.Draw();
 
             base.Draw(gameTime);
         }

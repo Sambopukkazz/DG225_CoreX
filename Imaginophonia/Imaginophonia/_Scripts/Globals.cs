@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 
 namespace Imaginophonia {
     public static class Globals {
-        public static float Time { get; set; }
+        public static GraphicsDeviceManager Graphics;
         public static ContentManager Content { get; set; }
         public static SpriteBatch SpriteBatch { get; set; }
-        public static void Update(GameTime gameTime) {
-            Time = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        }
     }
 }

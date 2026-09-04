@@ -1,2 +1,2 @@
-﻿using var game = new Imaginophonia.Game1();
+﻿using var game = new Imaginophonia.MainGame();
 game.Run();

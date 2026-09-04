@@ -10,25 +10,37 @@ using MonoGame.Extended.Timers;
 namespace Imaginophonia {
     public class GameObject {
 
-        public Transform2 Transform { get; private set; } = new();
-        public Vector2 Origin { get; set; } = Vector2.Zero;
-        public Matrix WorldMatrix { get; private set; } = Matrix.Identity;
+        public Transform2 Transform { get; private set; }
+        public Vector2 Origin { get; set; }
+        public Matrix WorldMatrix { get; private set; }
 
         public GameObject Parent { get; private set; }
-        public readonly List<GameObject> Children = new();
+        public readonly List<GameObject> Children;
 
-        private bool _active = true;
+        private bool _active;
         public bool Active => _active;
-        public bool Visible { get; set; } = true;
-        public string Tag { get; }
+        public bool Visible { get; set; }
+        public string Tag { get; protected set; }
         public string Name { get; }
+
+        public GameObject(string name, string tag) {
+            Transform = new();
+            Origin = Vector2.Zero;
+            WorldMatrix = Matrix.Identity;
+            Children = new();
+            _active = true;
+            Visible = true;
+            Name = name;
+            Tag = tag;
+        }
 
         public virtual void Update() {
             if (Parent != null) {
-                WorldMatrix = Transform.LocalMatrix * Parent.Transform.WorldMatrix;
+                //WorldMatrix = Transform.LocalMatrix * Parent.Transform.WorldMatrix;
+                Transform = Parent.Transform;
             }
             else {
-                WorldMatrix = Transform.LocalMatrix;
+                //WorldMatrix = Transform.LocalMatrix;
             }
             //if(WorldMatrix.Decompose(out Vector3 position, out Quaternion rotation, out Vector3 scale)) {
             //    Transform.Position = new Vector2(position.X, position.Y);
