@@ -21,8 +21,9 @@ namespace Imaginophonia {
         private Player _player;
         private AudioManager _audioManager;
         private LightManager _lightManager;
+        private SceneManager _sceneManager;
 
-
+        
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
@@ -30,15 +31,18 @@ namespace Imaginophonia {
             _lightManager = new LightManager();
             _player = new Player();
 
-            _tilemap = MainGame.Content.Load<Tilemap>("Tilemap/testmapfr");
+            _tilemap = MainGame.Content.Load<Tilemap>("Tilemap/electricalroom");
             _renderer = new TilemapSpriteBatchRenderer();
             _renderer.LoadTilemap(_tilemap);
+
+            _sceneManager = new(_renderer);
         }
 
         public void Update(GameTime gameTime) {
+
             _player.Update();
 
-            _camera.LookAt(_player.Transform.Position);
+            _camera.LookAt(new Vector2(_player.Transform.Position.X, _player.Transform.Position.Y -260));
 
             _renderer.Update(gameTime);
 
@@ -62,6 +66,7 @@ namespace Imaginophonia {
             MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: transformMatrix);
 
             _player.Draw();
+            AudioManager.Instance.Draw();
 
             MainGame.SpriteBatch.End();
 

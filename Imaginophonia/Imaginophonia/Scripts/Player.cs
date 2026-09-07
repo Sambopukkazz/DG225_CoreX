@@ -7,6 +7,7 @@ using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Particles;
 using Penumbra;
 using System;
@@ -20,48 +21,51 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Imaginophonia {
     public class Player : GameObject, IMoveable{
 
-        private SpriteSheet _spriteSheet;
         private AnimatedSprite _animatedSprite;
-        public static AudioListener Listener { get; }
-        private BoundingCapsule2D _bounds;
-        private Spotlight _light;
+        public AudioListener Listener { get; private set; }
+        private PointLight _light;
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float MoveSpeed { get; private set; } = 100f;
 
         public float Alpha { get; set; }
 
-        private enum CharacterState {
-            Idle,
-            Walking
-        }
+        private enum CharacterState { Idle, Walking }
         private CharacterState _characterState;
 
         public SpriteEffects Effect { get; set; }
+
+        private int _previousFrame;
 
         
         public Player() : base("Player", "Player"){
             //Set up animation
             Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
-            _spriteSheet = new("player", atlas);
+            SpriteSheet spriteSheet = new("player", atlas);
 
-            _spriteSheet.DefineAnimation("walk", builder => {
+            spriteSheet.DefineAnimation("walk", builder => {
                 builder.IsLooping(true);
                 for(int i = 1; i < 8; i++) {
-                    builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+                    if(i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+
                 }
             });
 
-            _spriteSheet.DefineAnimation("idle", builder => {
+            spriteSheet.DefineAnimation("idle", builder => {
                 builder.IsLooping(false)
                 .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
             });
 
-            _animatedSprite = new AnimatedSprite(_spriteSheet,"idle");
+            _animatedSprite = new AnimatedSprite(spriteSheet,"idle");
 
-            _light = new Spotlight();
+            _light = new PointLight();
+            _light.Color = Color.FromHSV(150f,0.5f,0.5f);
             LightManager.Penumbra.Lights.Add(_light);
-            
+
+            Listener = new AudioListener();
+
+            Transform.Position = new Vector2(0,800);
         }
 
         public override void Update() {
@@ -74,8 +78,22 @@ namespace Imaginophonia {
             _light.Position = Transform.Position;
             Testing();
 
+            Listener.Position = new Vector3(Transform.Position, 0);
             Animate();
             _animatedSprite.Update(Time.ElapsedTime);
+
+            if (_animatedSprite.CurrentAnimation == "walk" && _animatedSprite.Controller.CurrentFrame != _previousFrame) {
+                switch (_animatedSprite.Controller.CurrentFrame) {
+                    case 2:
+                    case 4:
+                    case 6:
+                        AudioManager.Instance.PlayStepsSFX(Transform.Position);
+                        _previousFrame = _animatedSprite.Controller.CurrentFrame;
+                        break;
+
+                }
+            }
+            
             //base.Update();
         }
 
@@ -99,17 +117,7 @@ namespace Imaginophonia {
             else if (InputManager.Direction == Vector2.Zero && _characterState != CharacterState.Idle) {
                 _characterState = CharacterState.Idle;
                 _animatedSprite.SetAnimation("idle");
-            }
-
-            if (_animatedSprite.CurrentAnimation == "walk") {
-                switch (_animatedSprite.Controller.CurrentFrame) {
-                    case 0:
-                        //Play Steps
-                        break;
-                    case 1:
-                        break;
-
-                }
+                _previousFrame = 0;
             }
 
             //if (!_animatedSprite.Controller.IsAnimating) {
@@ -137,10 +145,10 @@ namespace Imaginophonia {
                 _light.Radius -= 100;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-                _light.ConeDecay -= 1;
+                _light.Enabled = true;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
-                _light.ConeDecay += 1;
+                _light.Enabled = false;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
                 _light.Intensity += 0.01f;
@@ -148,11 +156,22 @@ namespace Imaginophonia {
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
                 _light.Intensity -= 0.01f;
             }
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
+                Time.AddTimer(5);
+            }
         }
 
         private void DebugTest() {
+            
+
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"Light radius: {_light.Radius}\nLight scale: {_light.Scale.X}.{_light.Scale.Y}\nLight intensity: {_light.Intensity}", new Vector2(100, 100), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"Light radius: {_light.Radius}\nLight scale: {_light.Scale.X}.{_light.Scale.Y}\nLight intensity: {_light.Intensity}", new Vector2(150, 100), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 200), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 300), Color.White);
+
+            foreach (Timer timer in Time.Timers) {
+                MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
+            }
         }
     }
 }

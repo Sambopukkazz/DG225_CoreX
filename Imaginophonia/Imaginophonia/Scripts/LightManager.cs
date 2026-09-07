@@ -13,11 +13,15 @@ namespace Imaginophonia {
         public LightManager() {
             Penumbra = new PenumbraComponent(MainGame.Instance);
 
-            Penumbra.AmbientColor = Color.FromHSL(10, 0, 40);
+            Penumbra.AmbientColor = Color.FromHSL(10, 0, 20);
         }
 
         public void Update(Matrix transformMatrix) {
             Penumbra.Transform = transformMatrix;
+        }
+
+        public void AddLight(Light light) {
+            Penumbra.Lights.Add(light);
         }
     }
 }
