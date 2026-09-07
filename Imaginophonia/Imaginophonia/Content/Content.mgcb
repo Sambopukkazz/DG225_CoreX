@@ -108,6 +108,26 @@
 /processorParam:Version=6.1.1.0
 /build:Font/GenerationFonting.fnt
 
+#begin Phobias/Scopophobia-Entity.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:Phobias/Scopophobia-Entity.png
+
+#begin Tilemap/electricalroom.ldtk
+/importer:LDtkTilemapImporter
+/processor:TilemapProcessor
+/processorParam:LevelName=
+/processorParam:Version=6.1.1.0
+/build:Tilemap/electricalroom.ldtk
+
 #begin Tilemap/testmapfr.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor

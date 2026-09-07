@@ -5,9 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophonia {
-    public class Scene {
-        public Scene() {
-            
-        }
+    public class Collectible {
     }
 }
