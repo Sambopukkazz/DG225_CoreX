@@ -40,17 +40,18 @@ gantt
 
 ## Sprint 1 (กำลังทำ)
 
-| # | User Story                                                                                                              | MoSCoW      | Estimate (SP) |
-| - | ----------------------------------------------------------------------------------------------------------------------- | ----------- | ------------- |
-| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                | Must Have   | 1             |
-| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | Must Have   | 2             |
-| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                    | Must Have   | 2             |
-| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | Must Have   | 3             |
-| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | Must Have   | 6             |
-| 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | Should Have | 3             |
-| 7 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                | Should Have | 2             |
-| 8 | As a Artist, I want to redesign the main charecter to make them look more paranoid.                                     | Must Have   | 5             |
-|   |                                                                                                                         |             |               |
+| # | User Story                                                                                                                              | MoSCoW      | Estimate (SP) |
+| - | --------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------- |
+| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                                | Must Have   | 1             |
+| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters.                 | Must Have   | 2             |
+| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                                    | Must Have   | 2             |
+| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                                       | Must Have   | 3             |
+| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                                         | Must Have   | 6             |
+| 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.                 | Should Have | 3             |
+| 7 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | Should Have | 2             |
+| 8 | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | Should Have | 3             |
+| 9 | As a Artist, I want to redesign the main charecter to make them look more paranoid.                                                     | Must Have   | 5             |
+|   |                                                                                                                                         |             |               |
 
 ## Sprint 2 (Draft)
 
