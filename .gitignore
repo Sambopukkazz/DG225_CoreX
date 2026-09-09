@@ -399,3 +399,18 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Build output
+bin/
+obj/
+# MonoGame Content Pipeline
+Content/bin/
+Content/obj/
+
+# Obsidian (personal workspace)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+# OS
+.DS_Store
+Thumbs.db
