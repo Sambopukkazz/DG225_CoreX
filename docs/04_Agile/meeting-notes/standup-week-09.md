@@ -5,28 +5,24 @@
 
 ## รายงานความคืบหน้าประจาสัปดาห์ (3 คำถามหลัก)
 
-| สมาชิก (Domain) | อาทิตย์ที่ผ่านมาทำอะไรมาบ้าง (Done) | อาทิตย์นี้จะทำอะไร (Plan) |
-ปัญหา/อุปสรรคที่พบ (Blockers) |
-|---|---|---|---|
-| สมชาย (Programmer) | เขียนโค้ดเดินซ้าย-ขวาเสร็จ และทดสอบ Import Sprite เข้า
-MonoGame | ทำระบบกระโดดและตรวจการชนกับพื้น (Collision) | ยังคานวณ Gravity ไม่สมูท
-ตัวละครตกทะลุพื้นเป็นบางจังหวะ |
-| สมหญิง (Designer) | ร่าง Layout Tilemap ด่าน 1 ใน Tiled ขนาด 32x32 |
-จัดวาง Collision Layer ให้ตรงกับ Tilemap | รอขนาด Tile Size ที่โปรแกรมเมอร์ต้องการยืนยัน
-|
-| สมศักดิ์ (Programmer) | วางโครงสร้าง ScreenManager และหน้า Title Screen |
-เชื่อมต่อระบบเปลี่ยน State ระหว่าง Title Screen และ Gameplay | โค้ด MonoGame บน
-macOS มีปัญหาเรื่อง Font Rendering |
--------------------------------------------------
+| สมาชิก (Domain)    | อาทิตย์ที่ผ่านมาทำอะไรมาบ้าง (Done) | อาทิตย์นี้จะทำอะไร (Plan) | ปัญหา/อุปสรรคที่พบ (Blockers) |
+| ------------------------ | --------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------- |
+| นาถวัฒน์(Artist) | Redesign Charecter idle                                         | Redesign Charecter walk Animation           | ไม่สวย ไม่พอใจ                    |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+
+---
 
 ## Action Items & Blockers Resolution
 
-- [ ] [ช่วยสมชายแก้สมการ Gravity และ Jump Physics] [status:: doing]
-  [owner:: สมศักดิ์] [due:: 2026-09-10]
-- [ ] [ยืนยันขนาด Tile Size ให้สมหญิง] [status:: done] [owner:: สมชาย]
-  [due:: 2026-09-08]
-- [ ] [ทดสอบ Cross-platform Font บน Windows/macOS] [status:: todo]
-  [owner:: สมศักดิ์] [due:: 2026-09-12]
+- [ ] [Rename Assets ให้ designer and programmer] [status:: done]
+  [owner:: นาถวัฒน์] [due:: 2026-09-8]
 
 ---
 
