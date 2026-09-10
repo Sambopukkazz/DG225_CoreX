@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public static class InputManager {
         private static Vector2 _direction;
         public static Vector2 Direction { get { return _direction; } }

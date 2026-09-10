@@ -7,13 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using MonoGame.Extended.Timers;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class GameObject {
 
         public Transform2 Transform { get; private set; }
         public Vector2 Origin { get; set; }
-        public Matrix WorldMatrix { get; private set; }
-
+        //public Matrix WorldMatrix { get; private set; }
         public GameObject Parent { get; private set; }
         public readonly List<GameObject> Children;
 
@@ -26,7 +25,7 @@ namespace Imaginophonia {
         public GameObject(string name, string tag) {
             Transform = new();
             Origin = Vector2.Zero;
-            WorldMatrix = Matrix.Identity;
+            //WorldMatrix = Matrix.Identity;
             Children = new();
             _active = true;
             Visible = true;

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class MainGame : Game {
         private static MainGame s_instance;
         public static MainGame Instance => s_instance;
@@ -30,7 +30,7 @@ namespace Imaginophonia {
 
             Graphics.ApplyChanges();
 
-            Window.Title = "Imaginophobias";
+            Window.Title = "Imaginophobia";
 
             Content = base.Content;
             Content.RootDirectory = "Content";

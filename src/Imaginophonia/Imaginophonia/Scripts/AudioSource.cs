@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class AudioSource : GameObject,IDisposable {
         public SoundEffectInstance Sound { get; private set; }
         private AudioEmitter _emitter;

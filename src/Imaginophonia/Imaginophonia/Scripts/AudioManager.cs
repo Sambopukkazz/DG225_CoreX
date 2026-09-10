@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class AudioManager : IDisposable {
         private static AudioManager s_instance;
         public static AudioManager Instance => s_instance;

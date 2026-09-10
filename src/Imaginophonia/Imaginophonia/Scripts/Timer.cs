@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class Timer {
         private readonly string Name;
         private readonly float _timeLength;

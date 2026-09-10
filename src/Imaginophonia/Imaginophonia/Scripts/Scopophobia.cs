@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class Scopophobia : GameObject, IMoveable{
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
@@ -17,7 +17,7 @@ namespace Imaginophonia {
             }
         }
 
-        public void Update() {
+        public override void Update() {
             Velocity = MoveSpeed * Direction;
             Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
         }
