@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public static class Time {
         public static float DeltaTime { get; private set; }
         public static float TimeScale { get; set; }

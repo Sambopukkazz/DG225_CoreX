@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public class LightManager {
         public static PenumbraComponent Penumbra { get; private set; }
         public LightManager() {

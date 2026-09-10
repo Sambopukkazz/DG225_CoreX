@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace Imaginophonia {
+namespace Imaginophobia {
     public interface IMoveable {
         public float MoveSpeed { get; }
         public Vector2 Velocity { get; }

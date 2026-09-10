@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Animations;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Collisions;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
@@ -18,24 +19,23 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Imaginophonia {
-    public class Player : GameObject, IMoveable{
-
+namespace Imaginophobia {
+    public class Player : GameObject, IMoveable, ICollisionActor{
+        public int Id { get; }
+        public CollisionShape2D Shape { get; private set; }
+        private readonly Vector2 _size;
         private AnimatedSprite _animatedSprite;
         public AudioListener Listener { get; private set; }
         private PointLight _light;
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float MoveSpeed { get; private set; } = 100f;
-
-        public float Alpha { get; set; }
-
         private enum CharacterState { Idle, Walking }
         private CharacterState _characterState;
-
+        private int _previousFrame;
         public SpriteEffects Effect { get; set; }
 
-        private int _previousFrame;
+        
 
         
         public Player() : base("Player", "Player"){
@@ -48,7 +48,6 @@ namespace Imaginophonia {
                 for(int i = 1; i < 8; i++) {
                     if(i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
                     else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
-
                 }
             });
 
@@ -59,13 +58,19 @@ namespace Imaginophonia {
 
             _animatedSprite = new AnimatedSprite(spriteSheet,"idle");
 
+            _size = new Vector2(60,120);
+
+            //SetUpLight
             _light = new PointLight();
             _light.Color = Color.FromHSV(150f,0.5f,0.5f);
             LightManager.Penumbra.Lights.Add(_light);
 
+            //Listener
             Listener = new AudioListener();
 
             Transform.Position = new Vector2(0,800);
+
+            UpdateShape();
         }
 
         public override void Update() {
@@ -93,7 +98,8 @@ namespace Imaginophonia {
 
                 }
             }
-            
+
+            UpdateShape();
             //base.Update();
         }
 
@@ -131,6 +137,16 @@ namespace Imaginophonia {
             //}
         }
 
+        public void Move(Vector2 delta) {
+            Transform.Position += delta;
+            UpdateShape();
+        }
+
+        private void UpdateShape() {
+            BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
+            Shape = new CollisionShape2D(bounds);
+        }
+
         private void Testing() {
             if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
                 _light.Scale += new Vector2(10, 10);
@@ -155,6 +171,9 @@ namespace Imaginophonia {
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
                 _light.Intensity -= 0.01f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.NumPad5)) {
+                Visible = true;
             }
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
                 Time.AddTimer(5);
