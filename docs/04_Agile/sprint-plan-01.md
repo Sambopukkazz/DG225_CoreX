@@ -83,9 +83,8 @@
 
 ### Story 8 — [Spatial Sound effect]
 
-- [x] [Pan effect]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status::✅ Done]
-- [x] [Doppler effect]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status::✅ Done]
- 
+- [X] [Pan effect]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status::✅ Done]
+- [X] [Doppler effect]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status::✅ Done]
 - [ ] [Test and adjust]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: 🔲 Todo]
 
 ### Story 9 — [Redesign main character]
@@ -95,13 +94,60 @@
 
 ---
 
-## Daily Notes
+## Weekly Notes
 
 ### [วันที่]
 
-**เมื่อวาน:** ...
-**วันนี้:** ...
-**Blocked:** ...
+**สัปดาห์ก่อน**
+
+**Draft**
+
+- ทำ map demo ให้ลองเดินไปมา ลองปรับค่าต่างๆ ใน ldtk
+
+**Mon**
+
+- Redesign ตัวละคร
+
+**Ken**
+
+- ลองใช้ gum
+
+**Techin**
+
+- merge repo ของเกมกับ gdd เข้าด้วยกัน
+- ทำระบบจัดการ collision
+- สร้าง class scene
+- ทำระบบสร้าง collision และแสงตาม map
+
+**สัปดาห์ต่อไป**
+
+**Draft**
+
+- ใช้ layer ชื่อเหมือนกัน
+- spotlight ตั้ง pivot เป็น bottom center
+- เลือกใช้เป็น 1 ไฟล์ 1 ห้อง
+- ขนาดกำแพงไม่ต้องใหญ่ (16 x 1080 ก็ได้ แต่ต้องตั้ง pivot เป็นซ้ายบน)
+- ดูเรื่อง tileset rules
+- ดูเรื่อง enum
+- เปลี่ยนค่าตัวแปร spotlight (scaleX, scaleY, Intensity, Rotation. Color)
+
+**Mon**
+
+เรื่องที่จะทำต่อ
+
+- redesign background
+- walking, idle animation
+- ทำหน้าปกเกม
+
+**Ken**
+
+- ทดลองใส่รูปใน gum
+
+**Techin**
+
+- ทำ skill check minigame
+- ทำ connect the dots minigame
+- ทำระบบจัดการ scene
 
 ---
 
