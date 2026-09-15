@@ -12,6 +12,15 @@
 | เตชินท์ (Programmer) | สร้าง player ให้เดินซ้ายขวาได้ + มีอนิเมชั่น                                               | ทดสอบ Collsion                                                                                      |                                                |
 |                              | ทำ Manager ให้ระบบต่างๆ ได้แก่ Game, Audio, Input                                                       | SceneManager                                                                                             |                                                |
 |                              | สร้าง Class AudioSource ที่ทำงานร่วมกับ AudioManger<br />สามารถเล่นเสียงแบบ 3D ได้ | Scene Class ที่สามารถ Build<br />Light และ Collision ตามที่วาง<br />ไว้ใน LDtk |                                                |
+| นาถวัฒน์(Artist) | Redesign Charecter idle                                         | Redesign Charecter walk Animation           | ไม่สวย ไม่พอใจ                    |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
+|                          |                                                                 |                                             |                                                |
 
 ---
 
@@ -19,8 +28,11 @@
 
 - [ ] [ทดสอบ level ที่ธีนันทนัชสร้างมา] [status:: doing]
   [owner:: เตชินท์] [due:: 2026-09-10]
-- [ ] [ปรับรูปแบบการวางแมพใน LDtk ของ ธีนันทนัช] [status:: done] [owner:: เตชินท์]
+- [ ] [ปรับรูปแบบการวางแมพใน LDtk ของ ธีนันทนัช] [status:: done] 
+  [owner:: เตชินท์]
   [due:: 2026-09-06]
+- [ ] [Rename Assets ให้ designer and programmer] [status:: done]
+  [owner:: นาถวัฒน์] [due:: 2026-09-8]
 
 ---
 
