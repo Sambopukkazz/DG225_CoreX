@@ -6,3 +6,6 @@ obj/
 .vs/
 *.user
 *.suo
+src/Imaginophonia/Imaginophonia/obj/Debug/net9.0/Imaginophobia.AssemblyInfo.cs
+src/Imaginophonia/Imaginophonia/obj/Debug/net9.0/Imaginophobia.AssemblyInfoInputs.cache
+src/Imaginophonia/Imaginophonia/obj/Debug/net9.0/Imaginophobia.assets.cache
