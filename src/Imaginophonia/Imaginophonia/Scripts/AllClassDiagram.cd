@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Imaginophonia.AudioManager" Collapsed="true">
+    <Position X="12.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAJAAAgCAABgAQAgAAIhIBAAAAAQAgQACAAAABIAA=</HashCode>
+      <FileName>Scripts\AudioManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Imaginophonia.AudioSource" Collapsed="true">
+    <Position X="7.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAACQAAgAAADAAABAQAAAAAAAABAgEEAAAAAA=</HashCode>
+      <FileName>Scripts\AudioSource.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Imaginophonia.CollisionManager" Collapsed="true">
+    <Position X="14" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scripts\CollisionManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.GameManager" Collapsed="true">
+    <Position X="14" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAACAAAAAgAAAAAACAAAEAQAAAAAAAAAACAIgAA=</HashCode>
+      <FileName>Scripts\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.GameObject" Collapsed="true">
+    <Position X="6.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAgEgAAAQAEQAQAAAJAAAAoAAAQAIgAAAA=</HashCode>
+      <FileName>Scripts\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.InputManager" Collapsed="true">
+    <Position X="14" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Scripts\InputManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.LightManager" Collapsed="true">
+    <Position X="12.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAABAAAA=</HashCode>
+      <FileName>Scripts\LightManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.Player" Collapsed="true">
+    <Position X="5" Y="5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Imaginophonia.Player.CharacterState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Scripts\Player.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AEQAAAAIAAgAAhAAACAAAAQAAAABABDAAAAAACAMAgA=</HashCode>
+      <FileName>Scripts\Player.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Imaginophonia.Scene" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAQAAAgAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Scripts\Scene.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.SceneManager" Collapsed="true">
+    <Position X="12.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAAAAAAAAAAAABACAAAUAAEgAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Scripts\SceneManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.Scopophobia" Collapsed="true">
+    <Position X="5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAABAAACAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Scripts\Scopophobia.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Imaginophonia.Time" Collapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAAAAAAIBABAAAAAAAAAAAAAAAAAAAAAEgAA=</HashCode>
+      <FileName>Scripts\Time.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.Timer" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAABBAAAAAAAAAQAAAAABBAAAAIQAAAAAAA=</HashCode>
+      <FileName>Scripts\Timer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Imaginophonia.Trigger" Collapsed="true">
+    <Position X="7.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scripts\Trigger.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Imaginophonia.Wall" Collapsed="true">
+    <Position X="7.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scripts\Wall.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Imaginophonia.IMoveable" Collapsed="true">
+    <Position X="3" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAACAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Scripts\IMoveable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
