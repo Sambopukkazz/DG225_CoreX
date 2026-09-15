@@ -5,4 +5,16 @@ bin/
 obj/
 Content/bin/
 Content/obj/
+<<<<<<< HEAD
 *.mgcontent
+=======
+
+# Obsidian (personal workspace)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+# OS
+.DS_Store
+Thumbs.db
+#dalwdn
+>>>>>>> dev
