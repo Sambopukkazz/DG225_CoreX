@@ -3,9 +3,15 @@
 # ==========================================
 bin/
 obj/
-.vs/
-*.user
-*.suo
-src/Imaginophonia/Imaginophonia/obj/Debug/net9.0/Imaginophobia.AssemblyInfo.cs
-src/Imaginophonia/Imaginophonia/obj/Debug/net9.0/Imaginophobia.AssemblyInfoInputs.cache
-src/Imaginophonia/Imaginophonia/obj/Debug/net9.0/Imaginophobia.assets.cache
+# MonoGame Content Pipeline
+Content/bin/
+Content/obj/
+
+# Obsidian (personal workspace)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+# OS
+.DS_Store
+Thumbs.db
+#dalwdn
