@@ -15,7 +15,7 @@ namespace Imaginophobia {
         public string Tag { get; }
 
         public Trigger(Vector2 pos, Vector2 size, string tag) {
-            Id = 1;
+            Id = 2;
             Tag = tag;
             BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(pos, size);
             Shape = new CollisionShape2D(bounds);

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 
 namespace Imaginophobia {
     public class Scopophobia : GameObject, IMoveable{

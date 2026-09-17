@@ -1,6 +1,8 @@
-﻿using MonoGame.Extended;
+﻿using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Collisions.Layers;
+using MonoGame.Extended.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +33,10 @@ namespace Imaginophobia {
             _collisionWorld.AddLayer("enemies", enemyLayer);
         }
         public void Update(Player player) {
-            _collisionWorld.RebuildDynamicLayers();
+            //_collisionWorld.RebuildDynamicLayers();
 
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "walls")) {
-                player.Move(collision.Result.MinimumTranslationVector);
+                player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
             }
 
             
@@ -42,7 +44,9 @@ namespace Imaginophobia {
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
                 if(trigger.Tag == "Locker") {
-                    player.Visible = false;
+                    if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
+                        player.ToggleHide();
+                    }
                 }
             }
         }

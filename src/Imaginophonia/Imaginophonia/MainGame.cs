@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 
@@ -12,8 +13,7 @@ namespace Imaginophobia {
         public static new GraphicsDevice GraphicsDevice { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static new ContentManager Content { get; private set; }
-
-        GameManager _gameManager;
+        ScreenManager _screenManager;
 
         public MainGame() {
             if (s_instance != null) {
@@ -43,13 +43,17 @@ namespace Imaginophobia {
             GraphicsDevice = base.GraphicsDevice;
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-
+            _screenManager = new ScreenManager();
             BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
-            _gameManager = new(viewportAdapter);
-
+            //_gameManager = new(viewportAdapter);
+            var screen = new GameplayScreen(viewportAdapter);
+            
+            Components.Add(_screenManager);
             Components.Add(LightManager.Penumbra);
-
+            
             base.Initialize();
+
+            _screenManager.ShowScreen(screen);
         }
 
         protected override void LoadContent() {
@@ -61,9 +65,6 @@ namespace Imaginophobia {
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             // TODO: Add your update logic here
-            InputManager.Update();
-
-            _gameManager.Update(gameTime);
 
             Time.Update(gameTime);
 
@@ -79,14 +80,13 @@ namespace Imaginophobia {
             //SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
             //SpriteBatch.End();
-            _gameManager.Draw();
 
             base.Draw(gameTime);
         }
 
         protected override void UnloadContent() {
             // Dispose of the audio controller.
-            AudioManager.Instance.Dispose();
+            AudioManager.Instance?.Dispose();
 
             base.UnloadContent();
         }
