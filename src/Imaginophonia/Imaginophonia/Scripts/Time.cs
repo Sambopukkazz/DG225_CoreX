@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Imaginophobia {
     public static class Time {
@@ -19,7 +20,7 @@ namespace Imaginophobia {
             ElapsedTime = gameTime.ElapsedGameTime;
 
             foreach (Timer timer in Timers.ToList()) {
-                timer?.Update();
+                timer.Update();
                 if(timer.TimeLeft <= 0) {
                     Timers.Remove(timer);
                 }
@@ -28,6 +29,14 @@ namespace Imaginophobia {
 
         public static void AddTimer(float second) {
             Timer timer = new(second);
+            Timers.Add(timer);
+        }
+        public static void AddTimer(float second, string name) {
+            Timer timer = new(second, name);
+            Timers.Add(timer);
+        }
+        public static void AddTimer(Action method, float second) {
+            Timer timer = new(method,second);
             Timers.Add(timer);
         }
     }

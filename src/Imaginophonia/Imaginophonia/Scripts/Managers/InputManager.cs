@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
+using MonoGame.Extended.Input.InputListeners;
 using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -12,7 +13,8 @@ using System.Timers;
 namespace Imaginophobia {
     public static class InputManager {
         private static Vector2 _direction;
-        public static Vector2 Direction { get { return _direction; } }
+        public static Vector2 Direction => _direction;
+        private static Keys _keyPressed;
 
         public static void Update() {
             KeyboardExtended.Update();

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tilemaps;
 using MonoGame.Extended.Tilemaps.Rendering;
 using MonoGame.Extended.Timers;
@@ -24,8 +25,6 @@ namespace Imaginophobia {
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
 
-        
-
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
             _audioManager = new AudioManager();
@@ -39,6 +38,7 @@ namespace Imaginophobia {
             _sceneManager.LoadScene(SceneName.electricalroom.ToString(), _camera, _collisionManager, _lightManager);
         }
         public void Update(GameTime gameTime) {
+            InputManager.Update();
 
             _player.Update();
 

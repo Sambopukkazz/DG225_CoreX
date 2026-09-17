@@ -11,7 +11,9 @@ namespace Imaginophobia {
     public class LightManager {
         public static PenumbraComponent Penumbra { get; private set; }
         public LightManager() {
-            Penumbra = new PenumbraComponent(MainGame.Instance);
+            if(Penumbra == null) {
+                Penumbra = new PenumbraComponent(MainGame.Instance);
+            }
 
             Penumbra.AmbientColor = Color.FromHSL(10, 0, 20);
         }

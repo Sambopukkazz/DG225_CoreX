@@ -30,12 +30,12 @@ namespace Imaginophobia {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float MoveSpeed { get; private set; } = 100f;
+        private int _previousFrame;
         private enum CharacterState { Idle, Walking }
         private CharacterState _characterState;
-        private int _previousFrame;
         public SpriteEffects Effect { get; set; }
 
-        
+        private bool _readyToHide;
 
         
         public Player() : base("Player", "Player"){
@@ -58,7 +58,7 @@ namespace Imaginophobia {
 
             _animatedSprite = new AnimatedSprite(spriteSheet,"idle");
 
-            _size = new Vector2(60,120);
+            _size = new Vector2(100,240);
 
             //SetUpLight
             _light = new PointLight();
@@ -74,7 +74,6 @@ namespace Imaginophobia {
         }
 
         public override void Update() {
-            //else _characterState = CharacterState.Idle;
             Direction = InputManager.Direction;
             Velocity = MoveSpeed * InputManager.Direction;
             Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
@@ -100,16 +99,15 @@ namespace Imaginophobia {
             }
 
             UpdateShape();
-            //base.Update();
         }
 
         public override void Draw() {
+            //BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
+            //MainGame.SpriteBatch.FillRectangle(_origin,_size, Color.Red);
             if (Visible) {
                 MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position,0,Transform.Scale * 4);
             }
             DebugTest();
-
-            base.Draw();
         }
 
         private void Animate() {
@@ -137,22 +135,42 @@ namespace Imaginophobia {
             //}
         }
 
-        public void Move(Vector2 delta) {
+        public void CollideWithWallMove(Vector2 delta) {
             Transform.Position += delta;
             UpdateShape();
         }
 
         private void UpdateShape() {
-            BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
+            _origin.X = Transform.Position.X - (_size.X / 2f);
+            _origin.Y = Transform.Position.Y - (_size.Y /2f);
+            BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(_origin, _size);
             Shape = new CollisionShape2D(bounds);
         }
 
+        public void ToggleHide() {
+            if (Visible) {
+                SetActive(false);
+                Visible = false;
+                Time.AddTimer(ToggleHide, 3);
+            }
+            else {
+                SetActive(true);
+                Visible = true;
+            }
+        }
+
         private void Testing() {
+            if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
+                _light.Scale -= new Vector2(0, 10);
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
+                _light.Scale += new Vector2(0, 10);
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-                _light.Scale += new Vector2(10, 10);
+                _light.Scale += new Vector2(10, 0);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-                _light.Scale -= new Vector2(10, 10);
+                _light.Scale -= new Vector2(10, 0);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
                 _light.Radius += 100;
@@ -166,12 +184,12 @@ namespace Imaginophobia {
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
                 _light.Enabled = false;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-                _light.Intensity += 0.01f;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-                _light.Intensity -= 0.01f;
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
+            //    _light.Intensity += 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
+            //    _light.Intensity -= 0.01f;
+            //}
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad5)) {
                 Visible = true;
             }
@@ -182,7 +200,6 @@ namespace Imaginophobia {
 
         private void DebugTest() {
             
-
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
             MainGame.SpriteBatch.DrawString(_font, $"Light radius: {_light.Radius}\nLight scale: {_light.Scale.X}.{_light.Scale.Y}\nLight intensity: {_light.Intensity}", new Vector2(150, 100), Color.White);
             MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 200), Color.White);

@@ -11,7 +11,8 @@ namespace Imaginophobia {
     public class GameObject {
 
         public Transform2 Transform { get; private set; }
-        public Vector2 Origin { get; set; }
+        protected Vector2 _origin;
+        public Vector2 Origin => _origin;
         //public Matrix WorldMatrix { get; private set; }
         public GameObject Parent { get; private set; }
         public readonly List<GameObject> Children;
@@ -24,7 +25,7 @@ namespace Imaginophobia {
 
         public GameObject(string name, string tag) {
             Transform = new();
-            Origin = Vector2.Zero;
+            _origin = Vector2.Zero;
             //WorldMatrix = Matrix.Identity;
             Children = new();
             _active = true;

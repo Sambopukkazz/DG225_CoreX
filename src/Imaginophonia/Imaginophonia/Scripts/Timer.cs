@@ -11,6 +11,8 @@ namespace Imaginophobia {
         public float TimeLeft { get; private set; }
         private bool _active;
         public bool Repeat { get; set; }
+        public event EventHandler OnTimerCompleted;
+        private Action _method;
 
         public Timer(float timeLength) { 
             _timeLength = timeLength;
@@ -25,11 +27,23 @@ namespace Imaginophobia {
             _active = true;
         }
 
+        public Timer(Action method,float timeLength) {
+            _method = method;
+            _timeLength = timeLength;
+            TimeLeft = timeLength;
+            _active = true;
+        }
+
         public void Update() {
             if (!_active) return;
             TimeLeft -= Time.DeltaTime;
 
             if (TimeLeft <= 0) {
+                if(_method != null) {
+                    _method();
+                }
+                OnTimerCompleted?.Invoke(this, EventArgs.Empty);
+
                 if (Repeat) {
                     Reset();
                 }

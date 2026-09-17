@@ -23,7 +23,6 @@ namespace Imaginophobia {
             TilemapObjectLayer objectLayer = TileMap.Layers["Collision"] as TilemapObjectLayer;
 
             foreach (TilemapRectangleObject rect in objectLayer.GetObjects<TilemapRectangleObject>()) {
-                // Use as collision zones, trigger areas, etc.
                 if (rect.Name == "InvisWall") {
                     collisionManager.AddCollision(new Wall(rect.Position, rect.Size), "walls");
                 }
@@ -37,23 +36,24 @@ namespace Imaginophobia {
             TilemapObjectLayer objectLayer = TileMap.Layers["Lighting"] as TilemapObjectLayer;
 
             foreach (TilemapRectangleObject rect in objectLayer.GetObjects<TilemapRectangleObject>()) {
-                // Use as collision zones, trigger areas, etc.
                 if (rect.Name == "PointLight") {
                     PointLight pointLight = new PointLight();
                     pointLight.Position = rect.Position;
                     pointLight.Intensity = rect.Properties.GetFloat("Intensity");
-                    float scale = rect.Properties.GetFloat("Scale");
-                    pointLight.Scale = new Vector2(scale, scale);
+                    float scaleX = rect.Properties.GetFloat("ScaleX");
+                    float scaleY = rect.Properties.GetFloat("ScaleY");
+                    pointLight.Scale = new Vector2(scaleX, scaleY);
                     pointLight.Color = rect.Properties.GetColor("Color");
                     lightManager.AddLight(pointLight);
                 }
                 else if (rect.Name == "SpotLight") {
                     Spotlight spotlight = new Spotlight();
-                    spotlight.Rotation = MathHelper.ToRadians(90);
+                    spotlight.Rotation = MathHelper.ToRadians(rect.Properties.GetFloat("Rotation"));
                     spotlight.Position = rect.Position;
                     spotlight.Intensity = rect.Properties.GetFloat("Intensity");
-                    float scale = rect.Properties.GetFloat("Scale");
-                    spotlight.Scale = new Vector2(scale, scale);
+                    float scaleX = rect.Properties.GetFloat("ScaleX");
+                    float scaleY = rect.Properties.GetFloat("ScaleY");
+                    spotlight.Scale = new Vector2(scaleX, scaleY);
                     spotlight.Color = rect.Properties.GetColor("Color");
                     lightManager.AddLight(spotlight);
                 }
