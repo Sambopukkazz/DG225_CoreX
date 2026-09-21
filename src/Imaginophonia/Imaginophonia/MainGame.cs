@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.ViewportAdapters;
 using System;
@@ -13,7 +15,7 @@ namespace Imaginophobia {
         public static new GraphicsDevice GraphicsDevice { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static new ContentManager Content { get; private set; }
-        ScreenManager _screenManager;
+        public static ScreenManager ScreenManager;
 
         public MainGame() {
             if (s_instance != null) {
@@ -43,17 +45,17 @@ namespace Imaginophobia {
             GraphicsDevice = base.GraphicsDevice;
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            _screenManager = new ScreenManager();
+            ScreenManager = new ScreenManager();
             BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
             //_gameManager = new(viewportAdapter);
             var screen = new GameplayScreen(viewportAdapter);
             
-            Components.Add(_screenManager);
+            Components.Add(ScreenManager);
             Components.Add(LightManager.Penumbra);
             
             base.Initialize();
 
-            _screenManager.ShowScreen(screen);
+            ScreenManager.ShowScreen(screen);
         }
 
         protected override void LoadContent() {
@@ -65,6 +67,12 @@ namespace Imaginophobia {
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             // TODO: Add your update logic here
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
+                ScreenManager.ShowScreen(new SkillCheckScreen());
+            }
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.L)) {
+                ScreenManager.CloseScreen();
+            }
 
             Time.Update(gameTime);
 

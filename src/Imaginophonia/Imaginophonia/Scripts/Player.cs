@@ -23,31 +23,57 @@ namespace Imaginophobia {
     public class Player : GameObject, IMoveable, ICollisionActor{
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
+        public Ray2D Ray { get; private set; }
         private readonly Vector2 _size;
         private AnimatedSprite _animatedSprite;
         public AudioListener Listener { get; private set; }
-        private PointLight _light;
+        private PointLight _scotopicLight;
+        private Spotlight _flashLight;
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
+        private Vector2 _flashlightOffset;
         public float MoveSpeed { get; private set; } = 100f;
         private int _previousFrame;
-        private enum CharacterState { Idle, Walking }
+        private enum CharacterState { Normal, Anxious, Insane }
         private CharacterState _characterState;
-        public SpriteEffects Effect { get; set; }
+        private bool _lockFacingDirection;
+        private float _sanity;
 
+        public bool AllowMovement { get; set; }
         private bool _readyToHide;
+        private float _hideCoolDown = 3f;
+        public bool ReadyToOpenDoor { get; set; }
+        private bool _readyToRepair;
+        public bool CanRepair => _readyToRepair;
+        public bool CanInteract { get; set; }
 
-        
+
         public Player() : base("Player", "Player"){
             //Set up animation
             Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
             SpriteSheet spriteSheet = new("player", atlas);
 
-            spriteSheet.DefineAnimation("walk", builder => {
+            spriteSheet.DefineAnimation("walk-forward", builder => {
                 builder.IsLooping(true);
                 for(int i = 1; i < 8; i++) {
-                    if(i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
                     else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+                }
+            });
+
+            spriteSheet.DefineAnimation("sneak-forward", builder => {
+                builder.IsLooping(true);
+                for (int i = 1; i < 8; i++) {
+                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+                }
+            });
+
+            spriteSheet.DefineAnimation("sneak-backward", builder => {
+                builder.IsLooping(true);
+                for (int i = 7; i > 0; i--) {
+                    if (i == 1) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
                 }
             });
 
@@ -60,45 +86,72 @@ namespace Imaginophobia {
 
             _size = new Vector2(100,240);
 
-            //SetUpLight
-            _light = new PointLight();
-            _light.Color = Color.FromHSV(150f,0.5f,0.5f);
-            LightManager.Penumbra.Lights.Add(_light);
+            //SetUp Light
+            _scotopicLight = new PointLight() {
+                Color = Color.FromHSV(150f, 0.5f, 0.5f),
+                Scale = new Vector2(50, 50),
+                Intensity = 1,
+            };
+
+            _flashLight = new Spotlight() {
+                Color = Color.FromHSV(150f, 0.5f, 0.5f),
+                Scale = new Vector2(100, 50),
+                Intensity = 1,
+                Enabled = false
+            };
+            _flashlightOffset = new Vector2(-10,10);
+
+            LightManager.Penumbra.Lights.Add(_scotopicLight);
+            LightManager.Penumbra.Lights.Add(_flashLight);
 
             //Listener
             Listener = new AudioListener();
 
-            Transform.Position = new Vector2(0,800);
-
+            _readyToHide = true;
+            _readyToRepair = true;
+            ReadyToOpenDoor = true;
+            AllowMovement = true;
             UpdateShape();
         }
 
         public override void Update() {
-            Direction = InputManager.Direction;
-            Velocity = MoveSpeed * InputManager.Direction;
-            Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
-            //Transform.Position += new Vector2(Velocity.X * Time.DeltaTime, Velocity.Y * Time.DeltaTime);
+            if (AllowMovement) {
+                Direction = InputManager.Direction;
+                Velocity = MoveSpeed * InputManager.Direction;
+                _lockFacingDirection = false;
 
-            _light.Position = Transform.Position;
-            Testing();
-
-            Listener.Position = new Vector3(Transform.Position, 0);
-            Animate();
-            _animatedSprite.Update(Time.ElapsedTime);
-
-            if (_animatedSprite.CurrentAnimation == "walk" && _animatedSprite.Controller.CurrentFrame != _previousFrame) {
-                switch (_animatedSprite.Controller.CurrentFrame) {
-                    case 2:
-                    case 4:
-                    case 6:
-                        AudioManager.Instance.PlayStepsSFX(Transform.Position);
-                        _previousFrame = _animatedSprite.Controller.CurrentFrame;
-                        break;
-
+                if (KeyboardExtended.GetState().IsKeyDown(Keys.LeftControl)) {
+                    Velocity /= 1.7f;
+                    _lockFacingDirection = true;
                 }
-            }
+                if (KeyboardExtended.GetState().WasKeyPressed(Keys.F)) {
+                    ToggleFlashLight();
+                }
 
-            UpdateShape();
+                Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
+                //Transform.Position += new Vector2(Velocity.X * Time.DeltaTime, Velocity.Y * Time.DeltaTime);
+
+                _scotopicLight.Position = Transform.Position;
+                _flashLight.Position = Transform.Position;
+                Testing();
+
+                Listener.Position = new Vector3(Transform.Position, 0);
+                Animate();
+                _animatedSprite.Update(Time.ElapsedTime);
+
+                if ((_animatedSprite.CurrentAnimation == "walk-forward" || _animatedSprite.CurrentAnimation == "sneak-backward" || _animatedSprite.CurrentAnimation == "sneak-forward") && _animatedSprite.Controller.CurrentFrame != _previousFrame) {
+                    switch (_animatedSprite.Controller.CurrentFrame) {
+                        case 2:
+                        case 4:
+                        case 6:
+                            AudioManager.Instance.PlayStepsSFX(Transform.Position);
+                            _previousFrame = _animatedSprite.Controller.CurrentFrame;
+                            break;
+                    }
+                }
+
+                UpdateShape();
+            }
         }
 
         public override void Draw() {
@@ -111,15 +164,22 @@ namespace Imaginophobia {
         }
 
         private void Animate() {
-            if (InputManager.Direction.X < 0) _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
-            else if (InputManager.Direction.X > 0) _animatedSprite.Effect = SpriteEffects.None;
+            if (InputManager.Direction.X < 0 && !_lockFacingDirection) _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
+            else if (InputManager.Direction.X > 0 && !_lockFacingDirection) _animatedSprite.Effect = SpriteEffects.None;
 
-            if (InputManager.Direction != Vector2.Zero && _characterState != CharacterState.Walking) {
-                _characterState = CharacterState.Walking;
-                _animatedSprite.SetAnimation("walk");
+            if (!_lockFacingDirection && InputManager.Direction != Vector2.Zero && _animatedSprite.CurrentAnimation != "walk-forward") {
+                _animatedSprite.SetAnimation("walk-forward");
             }
-            else if (InputManager.Direction == Vector2.Zero && _characterState != CharacterState.Idle) {
-                _characterState = CharacterState.Idle;
+            else if (_lockFacingDirection && InputManager.Direction != Vector2.Zero) {
+                if(_animatedSprite.CurrentAnimation != "sneak-backward" && ((_animatedSprite.Effect == SpriteEffects.None && InputManager.Direction.X < 0) || (_animatedSprite.Effect == SpriteEffects.FlipHorizontally && InputManager.Direction.X > 0))) {
+                    _animatedSprite.SetAnimation("sneak-backward");
+                }
+                else if (_animatedSprite.CurrentAnimation != "sneak-forward" && ((_animatedSprite.Effect == SpriteEffects.None && InputManager.Direction.X > 0) || (_animatedSprite.Effect == SpriteEffects.FlipHorizontally && InputManager.Direction.X < 0))) {
+                    _animatedSprite.SetAnimation("sneak-forward");
+                }
+                
+            }
+            else if (InputManager.Direction == Vector2.Zero && _animatedSprite.CurrentAnimation != "idle") {
                 _animatedSprite.SetAnimation("idle");
                 _previousFrame = 0;
             }
@@ -148,41 +208,76 @@ namespace Imaginophobia {
         }
 
         public void ToggleHide() {
-            if (Visible) {
+            if (Visible && _readyToHide) {
                 SetActive(false);
-                Visible = false;
+                AllowMovement = false;
+                _readyToHide = false;
                 Time.AddTimer(ToggleHide, 3);
             }
-            else {
+            else if (!Active) {
                 SetActive(true);
-                Visible = true;
+                AllowMovement = true;
+                Time.AddTimer(SetReadyToHide, _hideCoolDown);
             }
+            Visible = Active;
+            _scotopicLight.Enabled = Active;
+        }
+
+        public void SetReadyToHide() {
+            _readyToHide = true;
+        }
+
+        public void ToggleFlashLight() {
+            if (_flashLight.Enabled) {
+                _flashLight.Enabled = false;
+            }
+            else {
+                _flashLight.Enabled = true;
+            }
+        }
+
+        public void ToggleRepair() {
+            //unfiniseh
+            if (Visible && _readyToHide) {
+                AllowMovement = false;
+                _readyToRepair = false;
+                Time.AddTimer(ToggleHide, 3);
+            }
+            else if (!Active) {
+                AllowMovement = true;
+                _readyToRepair = false;
+            }
+            _scotopicLight.Enabled = Active;
+        }
+
+        public void LoadScenePosition(Vector2 pos) {
+            Transform.Position = pos;
         }
 
         private void Testing() {
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-                _light.Scale -= new Vector2(0, 10);
+                _scotopicLight.Scale -= new Vector2(0, 10);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-                _light.Scale += new Vector2(0, 10);
+                _scotopicLight.Scale += new Vector2(0, 10);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-                _light.Scale += new Vector2(10, 0);
+                _scotopicLight.Scale += new Vector2(10, 0);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-                _light.Scale -= new Vector2(10, 0);
+                _scotopicLight.Scale -= new Vector2(10, 0);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-                _light.Radius += 100;
+                _scotopicLight.Intensity += 0.01f;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-                _light.Radius -= 100;
+                _scotopicLight.Intensity -= 0.01f;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-                _light.Enabled = true;
+                _scotopicLight.Enabled = true;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
-                _light.Enabled = false;
+                _scotopicLight.Enabled = false;
             }
             //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
             //    _light.Intensity += 0.01f;
@@ -201,9 +296,11 @@ namespace Imaginophobia {
         private void DebugTest() {
             
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"Light radius: {_light.Radius}\nLight scale: {_light.Scale.X}.{_light.Scale.Y}\nLight intensity: {_light.Intensity}", new Vector2(150, 100), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 200), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 300), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {Transform.Position} ", new Vector2(150, 150), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 150), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 300), Color.White);
 
             foreach (Timer timer in Time.Timers) {
                 MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);

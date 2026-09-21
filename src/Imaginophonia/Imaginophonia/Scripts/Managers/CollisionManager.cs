@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public class CollisionManager {
         private CollisionWorld2D _collisionWorld;
+        private List<ICollisionActor> _colliders;
+
+        public event Action<string> CallLoadScene;
 
         public CollisionManager() {
             Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
@@ -24,13 +27,15 @@ namespace Imaginophobia {
                 IsDynamic = false
             };
             Layer enemyLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-                IsDynamic = false
+                IsDynamic = true
             };
 
             _collisionWorld = new CollisionWorld2D(defaultLayer);
             _collisionWorld.AddLayer("walls", wallLayer);
             _collisionWorld.AddLayer("triggers", triggerLayer);
             _collisionWorld.AddLayer("enemies", enemyLayer);
+
+            _colliders = new List<ICollisionActor>();
         }
         public void Update(Player player) {
             //_collisionWorld.RebuildDynamicLayers();
@@ -39,8 +44,10 @@ namespace Imaginophobia {
                 player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
             }
 
-            
+
             //if(_collisionWorld.)
+            player.CanInteract = false;
+
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
                 if(trigger.Tag == "Locker") {
@@ -48,14 +55,65 @@ namespace Imaginophobia {
                         player.ToggleHide();
                     }
                 }
+                else if(trigger.Tag == "Valve") {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
+                        //Skill Check
+                        MainGame.ScreenManager.ShowScreen(new SkillCheckScreen());
+                        player.ToggleRepair();
+                    }
+                    
+                }
+                else if (trigger.Tag == "Panel") {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
+                        //Connect the dot
+                        MainGame.ScreenManager.ShowScreen(new SkillCheckScreen());
+                        player.ToggleRepair();
+                    }
+                    
+                }
+                else if (trigger.Tag == "Door") {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
+                        //Load to next scene
+                        CallLoadScene?.Invoke(trigger.Name);
+                    }
+                }
+
+                //Make player acknowledge that they can interact
+                if(trigger.Interactable)player.CanInteract = true;
+            }
+
+            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "enemies")) {
+                GameObject enemy = (GameObject)collision.Other;
+                enemy.SetActive(false);
             }
         }
-        public void AddCollision(ICollisionActor actor) {
+        public void AddCollider(ICollisionActor actor) {
             //Default Layer
             _collisionWorld.Insert(actor);
         }
-        public void AddCollision(ICollisionActor actor, string layer) {
+        public void AddCollider(ICollisionActor actor, string layer) {
             _collisionWorld.Insert(actor, layer);
+            _colliders.Add(actor);
+        }
+
+        public void ClearCollider() {
+            foreach(var collider in _colliders) {
+                _collisionWorld.Remove(collider);
+            }
+            _colliders.Clear();
+            
+            //_collisionWorld.RemoveLayer("triggers");
+            //_collisionWorld.RemoveLayer("walls");
+
+            //Layer wallLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
+            //    IsDynamic = false
+            //};
+            //Layer triggerLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
+            //    IsDynamic = false
+            //};
+
+            //_collisionWorld.AddLayer("walls", wallLayer);
+            //_collisionWorld.AddLayer("triggers", triggerLayer);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tilemaps;
 using MonoGame.Extended.Tilemaps.Rendering;
@@ -25,6 +27,9 @@ namespace Imaginophobia {
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
 
+        //temp UI
+        private Texture2D _spacebar;
+
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
             _audioManager = new AudioManager();
@@ -32,11 +37,17 @@ namespace Imaginophobia {
             _player = new Player();
 
             _collisionManager = new CollisionManager();
-            _collisionManager.AddCollision(_player);
+            _collisionManager.AddCollider(_player);
+            _collisionManager.CallLoadScene += OnCallLoadScene;
 
             _sceneManager = new SceneManager();
-            _sceneManager.LoadScene(SceneName.electricalroom.ToString(), _camera, _collisionManager, _lightManager);
+            _sceneManager.SceneLoaded += OnSceneLoaded;
+            _sceneManager.LoadScene(SceneName.electricalroom2.ToString(), _camera, _collisionManager, _lightManager);
+
+            //temp
+            _spacebar = MainGame.Content.Load<Texture2D>("UI/ui_spacebar");
         }
+
         public void Update(GameTime gameTime) {
             InputManager.Update();
 
@@ -48,30 +59,39 @@ namespace Imaginophobia {
 
             _collisionManager.Update(_player);
 
-            Matrix transformMatrix = _camera.GetViewMatrix();
-
-            _lightManager.Update(transformMatrix);
+            _lightManager.Update(_camera.GetViewMatrix());
 
             _audioManager.Update(_player);
 
         }
 
-        public void Draw() {
+        public void Draw(GameTime gameTime) {
             LightManager.Penumbra.BeginDraw();
 
             MainGame.GraphicsDevice.Clear(Color.White);
 
-            Matrix transformMatrix = _camera.GetViewMatrix();
-
             _sceneManager.Draw(_camera);
 
-            MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: transformMatrix);
-
+            MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
             _player.Draw();
+
+            if (_player.CanInteract) {
+                MainGame.SpriteBatch.Draw(_spacebar, new Vector2(960 - 300, 540 + 350), Color.White);
+            }
+
             AudioManager.Instance.Draw();
 
             MainGame.SpriteBatch.End();
 
         }
+
+        private void OnCallLoadScene(string sceneName) {
+            _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+        }
+
+        private void OnSceneLoaded(Vector2 spawnPosition) {
+            _player.LoadScenePosition(spawnPosition);
+        }
+        
     }
 }
