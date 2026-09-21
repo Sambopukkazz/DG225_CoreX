@@ -80,20 +80,13 @@ namespace Imaginophobia {
                 Sound.Pan = MathHelper.Clamp(directionFromListener.X, -1f, 1f);
             }
 
-            if(emitter == null) {
-                float vEmitter = Vector2.Dot(Vector2.Zero, directionFromListener);
-                float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
-                float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
-
-                Sound.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
+            float vEmitter = Vector2.Dot(Vector2.Zero, directionFromListener);
+            if (emitter != null) {
+                vEmitter = Vector2.Dot(emitter.Velocity, directionFromListener);
             }
-            else {
-                float vEmitter = Vector2.Dot(emitter.Velocity, directionFromListener);
-                float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
-                float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
-
-                Sound.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
-            }
+            float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
+            float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
+            Sound.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
         }
 
         ~AudioSource() => Dispose(false);

@@ -27,13 +27,15 @@ namespace Imaginophobia {
             }
         }
 
-        public static void AddTimer(float second) {
+        public static Timer AddTimer(float second) {
             Timer timer = new(second);
             Timers.Add(timer);
+            return timer;
         }
-        public static void AddTimer(float second, string name) {
+        public static Timer AddTimer(float second, string name) {
             Timer timer = new(second, name);
             Timers.Add(timer);
+            return timer;
         }
         public static void AddTimer(Action method, float second) {
             Timer timer = new(method,second);

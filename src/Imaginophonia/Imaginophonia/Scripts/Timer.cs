@@ -42,6 +42,7 @@ namespace Imaginophobia {
                 if(_method != null) {
                     _method();
                 }
+
                 OnTimerCompleted?.Invoke(this, EventArgs.Empty);
 
                 if (Repeat) {

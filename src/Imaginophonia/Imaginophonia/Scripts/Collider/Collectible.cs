@@ -14,8 +14,9 @@ namespace Imaginophobia {
         public int Id { get; }
         public CollisionShape2D Shape { get; }
         public string Tag { get; }
-        public Collectible(Vector2 pos, Vector2 size, string tag) {
-            Id = 2;
+
+        public Collectible(int id, Vector2 pos, Vector2 size, string tag) {
+            Id = id;
             Tag = tag;
             BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(pos, size);
             Shape = new CollisionShape2D(bounds);

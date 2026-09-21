@@ -121,19 +121,52 @@
 /processorParam:Version=3.8.5.0
 /build:Phobias/Scopophobia-Entity.png
 
-#begin Tilemap/electricalroom.ldtk
+#begin Tilemaps/electricalroom.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor
 /processorParam:LevelName=
 /processorParam:Version=6.1.1.0
-/build:Tilemap/electricalroom.ldtk
+/build:Tilemaps/electricalroom.ldtk
 
-#begin Tilemap/testmapfr.ldtk
+#begin Tilemaps/electricalroom2.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor
 /processorParam:LevelName=
 /processorParam:Version=6.1.1.0
-/build:Tilemap/testmapfr.ldtk
+/build:Tilemaps/electricalroom2.ldtk
+
+#begin Tilemaps/sewer.ldtk
+/importer:LDtkTilemapImporter
+/processor:TilemapProcessor
+/processorParam:LevelName=
+/processorParam:Version=6.1.1.0
+/build:Tilemaps/sewer.ldtk
+
+#begin UI/Needle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:UI/Needle.png
+
+#begin UI/Radial Circle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:UI/Radial Circle.png
 
 #begin UI/ui_spacebar.png
 /importer:TextureImporter

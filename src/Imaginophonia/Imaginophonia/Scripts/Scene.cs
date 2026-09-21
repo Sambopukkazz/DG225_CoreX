@@ -11,50 +11,65 @@ namespace Imaginophobia {
     public class Scene {
         public string Name { get; private set; }
         public Tilemap TileMap { get; }
+        public List<SpawnPoint> PlayerSpawnPoints { get; }
 
-        public Scene(string name, CollisionManager collisionManager, LightManager lightManager) {
-            Name = name;
-            TileMap = MainGame.Content.Load<Tilemap>($"Tilemap/{name}");
+        public Scene(string sceneName, CollisionManager collisionManager, LightManager lightManager) {
+            Name = sceneName;
+            TileMap = MainGame.Content.Load<Tilemap>($"Tilemaps/{sceneName}");
+            PlayerSpawnPoints = new List<SpawnPoint>();
             BuildCollision(collisionManager);
             BuildLight(lightManager);
         }
 
         private void BuildCollision(CollisionManager collisionManager) {
+            collisionManager.ClearCollider();
+
             TilemapObjectLayer objectLayer = TileMap.Layers["Collision"] as TilemapObjectLayer;
 
-            foreach (TilemapRectangleObject rect in objectLayer.GetObjects<TilemapRectangleObject>()) {
-                if (rect.Name == "InvisWall") {
-                    collisionManager.AddCollision(new Wall(rect.Position, rect.Size), "walls");
+            foreach (TilemapRectangleObject entity in objectLayer.GetObjects<TilemapRectangleObject>()) {
+                if (entity.Class == "Wall") {
+                    collisionManager.AddCollider(new Wall(entity.Id, entity.Position, entity.Size), "walls");
                 }
-                else if (rect.Name == "ElectricalPanel" || rect.Name == "Locker") {
-                    collisionManager.AddCollision(new Trigger(rect.Position, rect.Size, rect.Class), "triggers");
+                else if (entity.Class == "Panel" || entity.Class == "Locker") {
+                    collisionManager.AddCollider(new Trigger(entity.Id, entity.Position, entity.Size, entity.Class), "triggers");
+                }
+                else if (entity.Class == "Door") {
+                    string destination = entity.Properties.GetString("Destination");
+                    collisionManager.AddCollider(new Trigger(entity.Id, entity.Position, entity.Size, entity.Class, destination), "triggers");
+                }
+                else if (entity.Class == "Spawner") {
+                    string origin = entity.Properties.GetString("Origin");
+                    PlayerSpawnPoints.Add(new SpawnPoint(origin,entity.Position));
                 }
             }
         }
 
         private void BuildLight(LightManager lightManager) {
+            lightManager.ClearLight();
+
             TilemapObjectLayer objectLayer = TileMap.Layers["Lighting"] as TilemapObjectLayer;
 
-            foreach (TilemapRectangleObject rect in objectLayer.GetObjects<TilemapRectangleObject>()) {
-                if (rect.Name == "PointLight") {
+            foreach (TilemapRectangleObject entity in objectLayer.GetObjects<TilemapRectangleObject>()) {
+                if (entity.Name == "PointLight") {
                     PointLight pointLight = new PointLight();
-                    pointLight.Position = rect.Position;
-                    pointLight.Intensity = rect.Properties.GetFloat("Intensity");
-                    float scaleX = rect.Properties.GetFloat("ScaleX");
-                    float scaleY = rect.Properties.GetFloat("ScaleY");
-                    pointLight.Scale = new Vector2(scaleX, scaleY);
-                    pointLight.Color = rect.Properties.GetColor("Color");
+                    pointLight.Position = entity.Position;
+                    pointLight.Intensity = entity.Properties.GetFloat("Intensity");
+                    float scale = entity.Properties.GetFloat("Scale");
+                    //float scaleX = entity.Properties.GetFloat("ScaleX");
+                    //float scaleY = entity.Properties.GetFloat("ScaleY");
+                    pointLight.Scale = new Vector2(scale, scale);
+                    pointLight.Color = entity.Properties.GetColor("Color");
                     lightManager.AddLight(pointLight);
                 }
-                else if (rect.Name == "SpotLight") {
+                else if (entity.Name == "SpotLight") {
                     Spotlight spotlight = new Spotlight();
-                    spotlight.Rotation = MathHelper.ToRadians(rect.Properties.GetFloat("Rotation"));
-                    spotlight.Position = rect.Position;
-                    spotlight.Intensity = rect.Properties.GetFloat("Intensity");
-                    float scaleX = rect.Properties.GetFloat("ScaleX");
-                    float scaleY = rect.Properties.GetFloat("ScaleY");
+                    spotlight.Rotation = MathHelper.ToRadians(entity.Properties.GetFloat("Rotation"));
+                    spotlight.Position = entity.Position;
+                    spotlight.Intensity = entity.Properties.GetFloat("Intensity");
+                    float scaleX = entity.Properties.GetFloat("ScaleX");
+                    float scaleY = entity.Properties.GetFloat("ScaleY");
                     spotlight.Scale = new Vector2(scaleX, scaleY);
-                    spotlight.Color = rect.Properties.GetColor("Color");
+                    spotlight.Color = entity.Properties.GetColor("Color");
                     lightManager.AddLight(spotlight);
                 }
             }

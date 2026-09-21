@@ -18,6 +18,7 @@ namespace Imaginophobia {
         public readonly List<GameObject> Children;
 
         private bool _active;
+
         public bool Active => _active;
         public bool Visible { get; set; }
         public string Tag { get; protected set; }
@@ -77,8 +78,7 @@ namespace Imaginophobia {
                 child.Parent = null;
             }
         }
-
-        public void SetActive(bool status) { 
+        public void SetActive(bool status) {
             _active = status;
         }
     }
