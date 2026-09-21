@@ -50,12 +50,12 @@ namespace Imaginophobia {
 
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
-                if(trigger.Tag == "Locker") {
+                if(trigger.Tag == "hideout") {
                     if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         player.ToggleHide();
                     }
                 }
-                else if(trigger.Tag == "Valve") {
+                else if(trigger.Tag == "skillcheck") {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
                         //Skill Check
                         MainGame.ScreenManager.ShowScreen(new SkillCheckScreen());
@@ -63,7 +63,7 @@ namespace Imaginophobia {
                     }
                     
                 }
-                else if (trigger.Tag == "Panel") {
+                else if (trigger.Tag == "dots") {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
                         //Connect the dot
                         MainGame.ScreenManager.ShowScreen(new SkillCheckScreen());
@@ -71,7 +71,7 @@ namespace Imaginophobia {
                     }
                     
                 }
-                else if (trigger.Tag == "Door") {
+                else if (trigger.Tag == "door") {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         //Load to next scene
                         CallLoadScene?.Invoke(trigger.Name);
