@@ -8,7 +8,7 @@
 
 # Sprint [2] Plan
 
-**Sprint Goal:** [เกมลเ่นได้โดยมีการเปลี่ยนแปลง/พัฒนามากกว่าเกมใน Jam]
+**Sprint Goal:** [เกมเล่นได้โดยมีการเปลี่ยนแปลง/พัฒนามากกว่าเกมใน Jam]
 **ระยะเวลา:** [2026-09-13] — [2026-09-26]
 **Team:**
 เตชินท์ เจริญสิงห์ 682110116 (Techin)
@@ -50,7 +50,7 @@
 ### Story 2 — [Redesign main character]
 
 - [ ] [Player walk animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 40hrs]  [status::🔄 In Progress]
-- [ ] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: 🔲 Todo]
+- [ ] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
 
 ### Story 3 — [Enemy behavior]
 
@@ -90,7 +90,6 @@
 ---
 
 ## Weekly Notes
-
 
 ## Links
 
