@@ -1,4 +1,4 @@
-# Weekly Stand-up Meeting — Week 09
+# Weekly Stand-up Meeting — Week 08
 
 **วันที่ประชุม:** 2026-09-08 | **Sprint:** Sprint 1
 -------------------------------------------------------
@@ -24,12 +24,12 @@
   [owner:: เตชินท์] [due:: 2026-09-06]
 - [X] [Rename Assets ให้ designer and programmer] [status:: done]
   [owner:: นาถวัฒน์] [due:: 2026-09-8]
-- [X] [add entity ใน LDtk เพื่อที่ให้โค้น้ำไปใช้ต่อ] [status:: done]
+- [X] [add entity ใน LDtk เพื่อที่ให้ไปืดสอบต่อ] [status:: done]
   [owner:: ธีนันทนัช] [due:: 2026-09-8]
 - [ ] [หา inspiration ในการสร้างแมพช่วยเกี่ยวกับ mood board] [status:: doing]
-  [owner:: ธีนันทนัช] [due:: 2026-09-8]
+  [owner:: ธีนันทนัช] [due:: 2026-09-15]
 - [ ] [คิด concept sound design เพื่อให้ไปทำต่อหรือหาต่อ] [status:: todo]
-  [owner:: ธีนันทนัช] [due:: 2026-09-8]
+  [owner:: ธีนันทนัช] [due:: 2026-09-15]
 
 ---
 

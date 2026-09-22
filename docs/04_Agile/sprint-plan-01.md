@@ -46,13 +46,13 @@
 ### Story 1 — [Player controls and acitons]
 
 - [X] [Player Class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [ ] [InputManager Class]  [owner:: เตชินท์ 116]  [estimate:: 2hrs]  [status::✅ Done]
+- [X] [InputManager Class]  [owner:: เตชินท์ 116]  [estimate:: 2hrs]  [status::✅ Done]
 
 ### Story 2 — [Collosion + Interactable]
 
 - [X] [Research and choose suitable collision system]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: ✅ Done]
-- [ ] [Test basic collision]  [owner:: เตชินท์ 116]  [estimate:: 4hrs]  [status:: 🔄 In Progress]
-- [ ] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
+- [X] [Test basic collision]  [owner:: เตชินท์ 116]  [estimate:: 4hrs]  [status:: ✅ Done]
+- [X] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: ✅ Done]
 
 ### Story 3 — [Enemy behavior]
 
@@ -62,13 +62,12 @@
 ### Story 4 — [Map creation]
 
 - [X] [Build simple test map]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [ ] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: 🔄 In Progress]
-- [ ] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: 🔄 In Progress]
+- [X] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: ✅ Done]
 
 ### Story 5 — [Transform phobias to enemies mechanics]
 
 - [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔲 Todo]
-- [ ] [Task ย่อย]  [owner:: ชื่อ]  [estimate:: Nh]  [status:: 🔲 Todo]
 
 ### Story 6 — [Menu and settings]
 
@@ -76,7 +75,7 @@
 - [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
 - [ ] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: 🔲 Todo]
 
-### Story 7 — [Sound effect]
+### Story 7 — [Sound effect triggers]
 
 - [X] [AudioManager class]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status:: ✅ Done]
 - [ ] [Implement sound effect triggers]  [owner:: เตชินท์ 116]  [estimate:: 15h]  [status:: 🔄 In Progress]
@@ -85,18 +84,18 @@
 
 - [X] [Pan effect]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status::✅ Done]
 - [X] [Doppler effect]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status::✅ Done]
-- [ ] [Test and adjust]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+- [X] [Test and adjust]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: ✅ Done]
 
 ### Story 9 — [Redesign main character]
 
 - [ ] [Player walk animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 40hrs]  [status::🔄 In Progress]
-- [ ] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: 🔲 Todo]
+- [X] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
 
 ---
 
 ## Weekly Notes
 
-## **สัปดาห์ก่อน**
+### [2026-09-20]
 
 **Draft**
 
@@ -130,8 +129,6 @@
 - เปลี่ยนค่าตัวแปร spotlight (scaleX, scaleY, Intensity, Rotation. Color)
 
 **Mon**
-
-เรื่องที่จะทำต่อ
 
 - redesign background
 - walking, idle animation
