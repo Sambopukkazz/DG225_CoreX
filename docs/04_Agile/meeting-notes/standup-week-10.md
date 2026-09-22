@@ -1,6 +1,6 @@
-# Weekly Stand-up Meeting — Week 10
+# Weekly Stand-up Meeting — Week 11
 
-**วันที่ประชุม:** 2026-09-12 | **Sprint:** Sprint 1
+**วันที่ประชุม:** 2026-09-20 | **Sprint:** Sprint 2
 -------------------------------------------------------
 
 ## รายงานความคืบหน้าประจำสัปดาห์ (3 คำถามหลัก)
@@ -37,7 +37,5 @@
 
 ## Related Documents
 
-- [[[docs/04_Agile/sprint-plan-01|Sprint 1 Plan]]([docs/04_Agile/sprint-plan-01]()) "[Sprint 1 Plan]([docs/04_Agile/sprint-plan-01]())")]
-- [Test](docs/04_Agile/sprint-plan-01 "Sprint [1] Plan")
--  [An Internal Link to a Section Heading](/docs/04_Agile/sprint-plan-01)
-- [[docs/04_Agile/02-sprint-backlog|Sprint Backlog]]
+- [[docs/04_Agile/sprint-plan-01|Sprint 1 Plan]]
+- [[docs/agile/02-sprint-backlog|Sprint Backlog]]
