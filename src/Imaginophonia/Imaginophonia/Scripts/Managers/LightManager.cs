@@ -15,7 +15,7 @@ namespace Imaginophobia {
             if(Penumbra == null) {
                 Penumbra = new PenumbraComponent(MainGame.Instance);
             }
-            Penumbra.AmbientColor = Color.FromHSL(10, 0, 20);
+            Penumbra.AmbientColor = ColorHelper.FromHex("#242323");
 
             _lights = new List<Light>();
         }

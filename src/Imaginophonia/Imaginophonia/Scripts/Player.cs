@@ -32,7 +32,7 @@ namespace Imaginophobia {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         private Vector2 _flashlightOffset;
-        public float MoveSpeed { get; private set; } = 1000f;
+        public float MoveSpeed { get; private set; } = 250f;
         private int _previousFrame;
         private enum CharacterState { Normal, Anxious, Insane }
         private CharacterState _characterState;
@@ -89,13 +89,13 @@ namespace Imaginophobia {
             //SetUp Light
             _scotopicLight = new PointLight() {
                 Color = Color.FromHSV(150f, 0.5f, 0.5f),
-                Scale = new Vector2(50, 50),
-                Intensity = 1,
+                Scale = new Vector2(500, 500),
+                Intensity = 0.5f,
             };
 
             _flashLight = new Spotlight() {
                 Color = Color.FromHSV(150f, 0.5f, 0.5f),
-                Scale = new Vector2(100, 50),
+                Scale = new Vector2(1000, 1750),
                 Intensity = 1,
                 Enabled = false
             };

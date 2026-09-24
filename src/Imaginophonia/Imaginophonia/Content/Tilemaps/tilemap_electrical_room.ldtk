@@ -748,7 +748,7 @@
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": { "id": "V_Int", "params": [16705377] },
+					"defaultOverride": { "id": "V_Int", "params": [16773797] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -1157,18 +1157,18 @@
 							"__pivot": [0.5,1],
 							"__tags": ["light"],
 							"__tile": null,
-							"__smartColor": "#FEE761",
+							"__smartColor": "#FFF2A5",
 							"iid": "e530f280-96d0-11f1-96a2-bfffc109ec95",
 							"width": 120,
 							"height": 120,
 							"defUid": 22,
 							"px": [778,475],
 							"fieldInstances": [
-								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.8, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "ScaleX", "__type": "Float", "__value": 1000, "__tile": null, "defUid": 28, "realEditorValues": [] },
-								{ "__identifier": "ScaleY", "__type": "Float", "__value": 750, "__tile": null, "defUid": 29, "realEditorValues": [] },
+								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.5, "__tile": null, "defUid": 27, "realEditorValues": [{ "id": "V_Float", "params": [0.5] }] },
+								{ "__identifier": "ScaleX", "__type": "Float", "__value": 750, "__tile": null, "defUid": 28, "realEditorValues": [{ "id": "V_Float", "params": [750] }] },
+								{ "__identifier": "ScaleY", "__type": "Float", "__value": 1250, "__tile": null, "defUid": 29, "realEditorValues": [{ "id": "V_Float", "params": [1250] }] },
 								{ "__identifier": "Rotation", "__type": "Float", "__value": 90, "__tile": null, "defUid": 30, "realEditorValues": [] },
-								{ "__identifier": "Color", "__type": "Color", "__value": "#FEE761", "__tile": null, "defUid": 31, "realEditorValues": [] }
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFF2A5", "__tile": null, "defUid": 31, "realEditorValues": [null] }
 							],
 							"__worldX": 778,
 							"__worldY": 475
@@ -1179,18 +1179,18 @@
 							"__pivot": [0.5,1],
 							"__tags": ["light"],
 							"__tile": null,
-							"__smartColor": "#FEE761",
+							"__smartColor": "#FFF2A5",
 							"iid": "e9393450-96d0-11f1-96a2-7980e0c4e862",
 							"width": 120,
 							"height": 120,
 							"defUid": 22,
 							"px": [1258,465],
 							"fieldInstances": [
-								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.8, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "ScaleX", "__type": "Float", "__value": 1000, "__tile": null, "defUid": 28, "realEditorValues": [] },
-								{ "__identifier": "ScaleY", "__type": "Float", "__value": 750, "__tile": null, "defUid": 29, "realEditorValues": [] },
+								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.5, "__tile": null, "defUid": 27, "realEditorValues": [{ "id": "V_Float", "params": [0.5] }] },
+								{ "__identifier": "ScaleX", "__type": "Float", "__value": 750, "__tile": null, "defUid": 28, "realEditorValues": [{ "id": "V_Float", "params": [750] }] },
+								{ "__identifier": "ScaleY", "__type": "Float", "__value": 1250, "__tile": null, "defUid": 29, "realEditorValues": [{ "id": "V_Float", "params": [1250] }] },
 								{ "__identifier": "Rotation", "__type": "Float", "__value": 90, "__tile": null, "defUid": 30, "realEditorValues": [] },
-								{ "__identifier": "Color", "__type": "Color", "__value": "#FEE761", "__tile": null, "defUid": 31, "realEditorValues": [] }
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FFF2A5", "__tile": null, "defUid": 31, "realEditorValues": [] }
 							],
 							"__worldX": 1258,
 							"__worldY": 465
