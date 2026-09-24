@@ -60,7 +60,7 @@ namespace Imaginophobia {
                     }
                 }
                 else if(trigger.Tag == "skillcheck") {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
                         //Skill Check
                         SpinTheValveScreen screen = new SpinTheValveScreen();
                         screen.ExitMiniGame += OnExitMiniGame;
@@ -70,7 +70,7 @@ namespace Imaginophobia {
                     
                 }
                 else if (trigger.Tag == "dots") {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
                         //Connect the dot
                         SkillCheckScreen screen = new SkillCheckScreen();
                         screen.ExitMiniGame += OnExitMiniGame;

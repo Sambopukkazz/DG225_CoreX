@@ -92,10 +92,10 @@ namespace Imaginophobia {
         public override void Draw(GameTime gameTime) {
             var center = new Vector2((MainGame.GraphicsDevice.Viewport.Width/2f) - _fillZone.Width/2f, (MainGame.GraphicsDevice.Viewport.Height/2f) - _fillZone.Height / 2f);
             MainGame.SpriteBatch.Begin();
-            BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"Fill Angle {_innerFillZoneAngle}", new Vector2(150, 100), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Needle Angle {_needleAngle}", new Vector2(150, 150), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Outer Start Angle: {_outerNeedleStartAngle}/m Needle Angle: {_outerNeedleAngle}", new Vector2(150, 200), Color.White);
+            //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            //MainGame.SpriteBatch.DrawString(_font, $"Fill Angle {_innerFillZoneAngle}", new Vector2(150, 100), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Needle Angle {_needleAngle}", new Vector2(150, 150), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Outer Start Angle: {_outerNeedleStartAngle}/m Needle Angle: {_outerNeedleAngle}", new Vector2(150, 200), Color.White);
 
             MainGame.SpriteBatch.Draw(_fillZone, _centerOrigin, null, Color.White, MathHelper.ToRadians(_innerFillZoneAngle), _fillZoneOrigin, 1, SpriteEffects.None, 0);
             MainGame.SpriteBatch.Draw(_needle, _needlePos, null, Color.White, MathHelper.ToRadians(_needleAngle), _needleOrigin, 1, SpriteEffects.None, 0);

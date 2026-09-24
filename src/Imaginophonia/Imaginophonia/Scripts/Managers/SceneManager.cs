@@ -51,8 +51,6 @@ namespace Imaginophobia {
             _renderer.LoadTilemap(_activeScene.TileMap);
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
 
-            foreach(SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
-                if (spawnPoint.Name == _lastSceneName || spawnPoint.Name == "Start") {
             if (_activeScene.Name == "sewer") {
                 AudioManager.Instance.PlayAmbiance("sewer");
             }
@@ -61,7 +59,7 @@ namespace Imaginophobia {
             }
 
             foreach (SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
-                if (spawnPoint.Name == _lastSceneName || spawnPoint.Name == "") {
+                if (spawnPoint.Name == _lastSceneName || spawnPoint.Name == "Start") {
                     SceneLoaded?.Invoke(spawnPoint.Position);
                     _activeScene.PlayerSpawnPoints.Clear();
                     return;

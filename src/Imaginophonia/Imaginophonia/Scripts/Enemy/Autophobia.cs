@@ -53,7 +53,7 @@ namespace Imaginophobia {
                     case 3:
                     case 5:
                     case 7:
-                        AudioManager.Instance.PlayStepsSFX(Transform.Position, 10, 1200);
+                        AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition, 10, 1200);
                         _previousFrame = _animatedSprite.Controller.CurrentFrame;
                         break;
                 }

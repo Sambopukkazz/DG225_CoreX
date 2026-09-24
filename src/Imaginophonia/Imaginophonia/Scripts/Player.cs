@@ -172,6 +172,10 @@ namespace Imaginophobia {
 
             if (_flashLight.Enabled) {
                 Battery -= 0.5f * Time.DeltaTime;
+                _eyeSightLength = 800;
+            }
+            else {
+                _eyeSightLength = 100;
             }
         }
 
@@ -216,7 +220,7 @@ namespace Imaginophobia {
                     case 3:
                     case 5:
                     case 7:
-                        AudioManager.Instance.PlayStepsSFX(Transform.Position);
+                        AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition);
                         _previousFrame = _animatedSprite.Controller.CurrentFrame;
                         break;
                 }
@@ -280,18 +284,16 @@ namespace Imaginophobia {
                 AllowMovement = false;
                 _readyToRepair = false;
                 _animatedSprite.SetAnimation("back");
+                _flashLight.Enabled = false;
             }
             else if (!_readyToRepair) {
                 AllowMovement = true;
                 _readyToRepair = true;
                 _animatedSprite.SetAnimation("idle");
             }
-            _flashLight.Enabled = _readyToRepair;
         }
 
         public void LoadScenePosition(Vector2 pos) {
-            //temp
-            pos.Y -= 100;
             Transform.Position = pos;
         }
 
