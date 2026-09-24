@@ -13,6 +13,7 @@ using MonoGame.Extended.Particles;
 using Penumbra;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -20,10 +21,13 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
-    public class Player : GameObject, IMoveable, ICollisionActor{
+    public class Player : GameObject, IAudioApplicable, ICollisionActor{
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
-        public Ray2D Ray { get; private set; }
+        private readonly Vector2 _eyeLevel;
+        private LineSegment2D _eyeSight;
+        public LineSegment2D EyeSight => _eyeSight;
+        private float _eyeSightLength;
         private readonly Vector2 _size;
         private AnimatedSprite _animatedSprite;
         public AudioListener Listener { get; private set; }
@@ -46,6 +50,7 @@ namespace Imaginophobia {
         private bool _readyToRepair;
         public bool CanRepair => _readyToRepair;
         public bool CanInteract { get; set; }
+        private Timer _timer;
 
 
         public Player() : base("Player", "Player"){
@@ -82,9 +87,12 @@ namespace Imaginophobia {
                 .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
             });
 
-            _animatedSprite = new AnimatedSprite(spriteSheet,"idle");
+            spriteSheet.DefineAnimation("back", builder => {
+                builder.IsLooping(false)
+                .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
+            });
 
-            _size = new Vector2(100,240);
+            _animatedSprite = new AnimatedSprite(spriteSheet,"idle");
 
             //SetUp Light
             _scotopicLight = new PointLight() {
@@ -106,11 +114,19 @@ namespace Imaginophobia {
 
             //Listener
             Listener = new AudioListener();
+            _size = new Vector2(100, 240);
+            Transform.Scale = Vector2.One * 4;
+
+            //Eyesight
+            _eyeLevel = new Vector2(20,-70);
+            _eyeSight = new LineSegment2D();
+            _eyeSightLength = 100;
 
             _readyToHide = true;
             _readyToRepair = true;
             ReadyToOpenDoor = true;
             AllowMovement = true;
+
             UpdateShape();
         }
 
@@ -133,33 +149,38 @@ namespace Imaginophobia {
 
                 _scotopicLight.Position = Transform.Position;
                 _flashLight.Position = Transform.Position;
-                Testing();
+                UpdateDebug();
 
                 Listener.Position = new Vector3(Transform.Position, 0);
                 Animate();
                 _animatedSprite.Update(Time.ElapsedTime);
 
-                if ((_animatedSprite.CurrentAnimation == "walk-forward" || _animatedSprite.CurrentAnimation == "sneak-backward" || _animatedSprite.CurrentAnimation == "sneak-forward") && _animatedSprite.Controller.CurrentFrame != _previousFrame) {
-                    switch (_animatedSprite.Controller.CurrentFrame) {
-                        case 2:
-                        case 4:
-                        case 6:
-                            AudioManager.Instance.PlayStepsSFX(Transform.Position);
-                            _previousFrame = _animatedSprite.Controller.CurrentFrame;
-                            break;
-                    }
-                }
-
                 UpdateShape();
             }
+
+            _eyeSight.Start = Transform.Position + _eyeLevel;
+            float direction;
+            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
+                direction = -1;
+            }
+            else {
+                direction = 1;
+            }
+            _eyeSight.End = new Vector2(Transform.Position.X + _eyeLevel.X + _eyeSightLength * direction, Transform.Position.Y + _eyeLevel.Y);
         }
 
         public override void Draw() {
             //BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
             //MainGame.SpriteBatch.FillRectangle(_origin,_size, Color.Red);
             if (Visible) {
-                MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position,0,Transform.Scale * 4);
+                MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale);
+                MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
             }
+            else {
+                MainGame.SpriteBatch.FillRectangle(Transform.Position.X + 50, Transform.Position.Y, 15, 120, Color.DarkGray);
+                MainGame.SpriteBatch.FillRectangle(Transform.Position.X + 50, Transform.Position.Y, 15, _timer.TimeLeft * 40, Color.LightBlue);
+            }
+            
             DebugTest();
         }
 
@@ -182,6 +203,17 @@ namespace Imaginophobia {
             else if (InputManager.Direction == Vector2.Zero && _animatedSprite.CurrentAnimation != "idle") {
                 _animatedSprite.SetAnimation("idle");
                 _previousFrame = 0;
+            }
+
+            if ((_animatedSprite.CurrentAnimation == "walk-forward" || _animatedSprite.CurrentAnimation == "sneak-backward" || _animatedSprite.CurrentAnimation == "sneak-forward") && _animatedSprite.Controller.CurrentFrame != _previousFrame) {
+                switch (_animatedSprite.Controller.CurrentFrame) {
+                    case 3:
+                    case 5:
+                    case 7:
+                        AudioManager.Instance.PlayStepsSFX(Transform.Position);
+                        _previousFrame = _animatedSprite.Controller.CurrentFrame;
+                        break;
+                }
             }
 
             //if (!_animatedSprite.Controller.IsAnimating) {
@@ -212,7 +244,7 @@ namespace Imaginophobia {
                 SetActive(false);
                 AllowMovement = false;
                 _readyToHide = false;
-                Time.AddTimer(ToggleHide, 3);
+                _timer = Time.AddTimer(ToggleHide, 3);
             }
             else if (!Active) {
                 SetActive(true);
@@ -238,23 +270,26 @@ namespace Imaginophobia {
 
         public void ToggleRepair() {
             //unfiniseh
-            if (Visible && _readyToHide) {
+            if (_readyToRepair) {
                 AllowMovement = false;
                 _readyToRepair = false;
-                Time.AddTimer(ToggleHide, 3);
+                _animatedSprite.SetAnimation("back");
             }
-            else if (!Active) {
+            else if (!_readyToRepair) {
                 AllowMovement = true;
-                _readyToRepair = false;
+                _readyToRepair = true;
+                _animatedSprite.SetAnimation("idle");
             }
-            _scotopicLight.Enabled = Active;
+            _flashLight.Enabled = _readyToRepair;
         }
 
         public void LoadScenePosition(Vector2 pos) {
+            //temp
+            pos.Y -= 100;
             Transform.Position = pos;
         }
 
-        private void Testing() {
+        private void UpdateDebug() {
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
                 _scotopicLight.Scale -= new Vector2(0, 10);
             }
@@ -296,8 +331,8 @@ namespace Imaginophobia {
         private void DebugTest() {
             
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {Transform.Position} ", new Vector2(150, 150), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {Transform.Position} ", new Vector2(150, 150), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 150), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 300), Color.White);
