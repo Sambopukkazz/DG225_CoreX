@@ -43,7 +43,7 @@ namespace Imaginophobia {
 
             _sceneManager = new SceneManager();
             _sceneManager.SceneLoaded += OnSceneLoaded;
-            _sceneManager.LoadScene(SceneName.electricalroom2.ToString(), _camera, _collisionManager, _lightManager);
+            _sceneManager.LoadScene(SceneName.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
             _enemyManager = new EnemyManager(_player);
             _enemyManager.EnemySpawned += OnEnemySpawned;

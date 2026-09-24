@@ -13,7 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
     public class SceneManager {
-        public enum SceneName { electricalroom, electricalroom2, sewer }
+        public enum SceneName { tilemap_electrical_room, tilemap_electrical_room_2, tilemap_sewer }
         private SceneName _sceneName;
         private static Scene _activeScene;
         public static Scene GetActiveScene() => _activeScene;
@@ -51,6 +51,8 @@ namespace Imaginophobia {
             _renderer.LoadTilemap(_activeScene.TileMap);
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
 
+            foreach(SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
+                if (spawnPoint.Name == _lastSceneName || spawnPoint.Name == "Start") {
             if (_activeScene.Name == "sewer") {
                 AudioManager.Instance.PlayAmbiance("sewer");
             }
