@@ -14,6 +14,7 @@ namespace Imaginophobia {
         public LightManager() {
             if(Penumbra == null) {
                 Penumbra = new PenumbraComponent(MainGame.Instance);
+                Penumbra.Initialize();
             }
             Penumbra.AmbientColor = Color.FromHSL(10, 0, 20);
 
@@ -29,7 +30,7 @@ namespace Imaginophobia {
             _lights.Add(light);
         }
 
-        public void ClearLight() {
+        public void ClearLights() {
             foreach(Light light in _lights) {
                 Penumbra.Lights.Remove(light);
             }

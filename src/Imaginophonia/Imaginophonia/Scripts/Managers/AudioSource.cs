@@ -26,10 +26,10 @@ namespace Imaginophobia {
             _emitter = new();
             _emitter.Position = new Vector3(pos, 0);
         }
-        public AudioSource(Vector2 pos, float minDist, float maxDist) : base("AudioSource", "AudioSource3D") {
+        public AudioSource(Vector2 pos, float innerRadius, float outerRadius) : base("AudioSource", "AudioSource3D") {
             Transform.Position = pos;
-            _innerRadius = minDist;
-            _outerRadius = maxDist;
+            _innerRadius = innerRadius;
+            _outerRadius = outerRadius;
 
             _emitter = new();
             _emitter.Position = new Vector3(pos, 0);
@@ -42,13 +42,13 @@ namespace Imaginophobia {
         }
 
         public override void Draw() {
-            MainGame.SpriteBatch.DrawCircle(Transform.Position, _innerRadius, 120, Color.Black);
-            MainGame.SpriteBatch.DrawCircle(Transform.Position, _outerRadius, 120, Color.Black);
+            MainGame.SpriteBatch.DrawCircle(Transform.Position, _innerRadius, 120, Color.White);
+            MainGame.SpriteBatch.DrawCircle(Transform.Position, _outerRadius, 120, Color.White);
 
             base.Draw();
         }
 
-        public void PlayLoopSFX(SoundEffect soundEffect, float volume = 1) {
+        public void PlayLoop(SoundEffect soundEffect, float volume = 1) {
             Sound = soundEffect.CreateInstance();
             _duration = (float)soundEffect.Duration.TotalSeconds;
             Sound.IsLooped = true;
@@ -62,7 +62,7 @@ namespace Imaginophobia {
         }
 
         public void UpdateSpatialAudio(Player player) {
-            IMoveable emitter = (IMoveable)Parent;
+            IAudioApplicable emitter = (IAudioApplicable)Parent;
 
             float distance = Vector3.Distance(player.Listener.Position, _emitter.Position);
 

@@ -22,7 +22,7 @@ namespace Imaginophobia {
         }
 
         private void BuildCollision(CollisionManager collisionManager) {
-            collisionManager.ClearCollider();
+            collisionManager.ClearColliders();
 
             TilemapObjectLayer objectLayer = TileMap.Layers["Collision"] as TilemapObjectLayer;
 
@@ -45,7 +45,7 @@ namespace Imaginophobia {
         }
 
         private void BuildLight(LightManager lightManager) {
-            lightManager.ClearLight();
+            lightManager.ClearLights();
 
             TilemapObjectLayer objectLayer = TileMap.Layers["Lighting"] as TilemapObjectLayer;
 

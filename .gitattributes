@@ -1,12 +1,12 @@
-# Auto detect text files and perform LF normalization
+# Auto detect text files and perform CRLF normalization
 * text=auto
 
-*.cs text eol=lf
-*.csproj text
-*.sln text
-*.mgcb text
-*.spritefont text
-*.fx text
+*.cs text eol=crlf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.mgcb text eol=crlf
+*.spritefont text eol=crlf
+*.fx text eol=crlf
 
 # ----------------------------------------------------------------------
 # Git LFS (Large File Storage) Tracking

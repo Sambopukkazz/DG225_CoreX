@@ -4,6 +4,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Collisions.Layers;
 using MonoGame.Extended.Input;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,12 +39,11 @@ namespace Imaginophobia {
             _colliders = new List<ICollisionActor>();
         }
         public void Update(Player player) {
-            //_collisionWorld.RebuildDynamicLayers();
+            _collisionWorld.RebuildDynamicLayers();
 
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "walls")) {
                 player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
             }
-
 
             //if(_collisionWorld.)
             player.CanInteract = false;
@@ -58,7 +58,7 @@ namespace Imaginophobia {
                 else if(trigger.Tag == "Valve") {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
                         //Skill Check
-                        MainGame.ScreenManager.ShowScreen(new SkillCheckScreen());
+                        MainGame.ScreenManager.ShowScreen(new SpinTheValveScreen());
                         player.ToggleRepair();
                     }
                     
@@ -83,8 +83,25 @@ namespace Imaginophobia {
             }
 
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "enemies")) {
-                GameObject enemy = (GameObject)collision.Other;
-                enemy.SetActive(false);
+                if (player.Active) {
+                    GameObject enemy = (GameObject)collision.Other;
+                    Time.AddTimer(5);
+                    enemy.SetActive(false);
+                    _collisionWorld.Remove(collision.Other);
+                    _colliders.Remove(collision.Other);
+                    //lose sanity
+                }
+            }
+
+            for (int i = _colliders.Count - 1; i >= 0; i--) {
+                if (player.Active) {
+                    if (_colliders[i].GetType().Name == "Autophobia" && _colliders[i].Shape.Intersects(player.EyeSight)) {
+                        _collisionWorld.Remove(_colliders[i]);
+                        GameObject enemy = (GameObject)_colliders[i];
+                        enemy.SetActive(false);
+                        _colliders.RemoveAt(i);
+                    }
+                }
             }
         }
         public void AddCollider(ICollisionActor actor) {
@@ -96,7 +113,11 @@ namespace Imaginophobia {
             _colliders.Add(actor);
         }
 
-        public void ClearCollider() {
+        public void RemoveCollider(ICollisionActor actor) {
+            _collisionWorld.Remove(actor);
+        }
+
+        public void ClearColliders() {
             foreach(var collider in _colliders) {
                 _collisionWorld.Remove(collider);
             }
