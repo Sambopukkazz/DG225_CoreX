@@ -11,7 +11,7 @@
 	"iid": "5a1edbb0-96d0-11f1-93ef-4321a3e5f74f",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 33,
+	"nextUid": 35,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -83,7 +83,7 @@
 			"uid": 16,
 			"doc": null,
 			"uiColor": null,
-			"gridSize": 120,
+			"gridSize": 5,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
@@ -290,7 +290,7 @@
 		{
 			"identifier": "ElectricalPanel",
 			"uid": 11,
-			"tags": ["Panel"],
+			"tags": ["dots"],
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
@@ -325,7 +325,7 @@
 		{
 			"identifier": "Locker",
 			"uid": 12,
-			"tags": ["Locker"],
+			"tags": ["hideout"],
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
@@ -360,7 +360,7 @@
 		{
 			"identifier": "PointLight",
 			"uid": 15,
-			"tags": ["PointLight"],
+			"tags": ["light"],
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
@@ -388,7 +388,7 @@
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
+			"pivotX": 0.5,
 			"pivotY": 0,
 			"fieldDefs": [
 				{
@@ -507,7 +507,7 @@
 		{
 			"identifier": "InvisWall",
 			"uid": 20,
-			"tags": ["Wall"],
+			"tags": ["wall"],
 			"exportToToc": false,
 			"allowOutOfBounds": true,
 			"doc": null,
@@ -542,7 +542,7 @@
 		{
 			"identifier": "SpotLight",
 			"uid": 22,
-			"tags": ["SpotLight"],
+			"tags": ["light"],
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
@@ -556,7 +556,7 @@
 			"maxHeight": null,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
-			"fillOpacity": 1,
+			"fillOpacity": 0.5,
 			"lineOpacity": 1,
 			"hollow": false,
 			"color": "#EAD4AA",
@@ -570,8 +570,8 @@
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
+			"pivotX": 0.5,
+			"pivotY": 1,
 			"fieldDefs": [
 				{
 					"identifier": "Intensity",
@@ -600,7 +600,7 @@
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": null,
+					"defaultOverride": { "id": "V_Float", "params": [0.8] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -612,7 +612,7 @@
 				},
 				{
 					"identifier": "ScaleX",
-					"doc": null,
+					"doc": "length",
 					"__type": "Float",
 					"uid": 28,
 					"type": "F_Float",
@@ -637,7 +637,7 @@
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": null,
+					"defaultOverride": { "id": "V_Float", "params": [1000] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -649,7 +649,7 @@
 				},
 				{
 					"identifier": "ScaleY",
-					"doc": null,
+					"doc": "width",
 					"__type": "Float",
 					"uid": 29,
 					"type": "F_Float",
@@ -674,7 +674,7 @@
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": null,
+					"defaultOverride": { "id": "V_Float", "params": [750] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -711,7 +711,7 @@
 					"max": null,
 					"regex": null,
 					"acceptFileTypes": null,
-					"defaultOverride": null,
+					"defaultOverride": { "id": "V_Float", "params": [90] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": true,
@@ -761,14 +761,14 @@
 			]
 		},
 		{
-			"identifier": "SpawnPoint",
+			"identifier": "PlayerSpawnPoint",
 			"uid": 24,
-			"tags": ["Spawner"],
+			"tags": ["spawn"],
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
-			"width": 120,
-			"height": 120,
+			"width": 100,
+			"height": 240,
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -791,14 +791,52 @@
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
-			"fieldDefs": []
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "Origin",
+					"doc": null,
+					"__type": "String",
+					"uid": 33,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		},
 		{
-			"identifier": "Door",
+			"identifier": "LoadNextScene",
 			"uid": 32,
-			"tags": ["Door"],
+			"tags": ["door"],
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
@@ -828,7 +866,45 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0,
 			"pivotY": 0,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "Destination",
+					"doc": null,
+					"__type": "String",
+					"uid": 34,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -938,11 +1014,7 @@
 				"averageColors": "f1238333f1238333f12383338333833383331337a444a444a444a444c4442333233323332333377737773777377737773777f654f654f654f654a544a554b6545655433343335444000000008554565424440000322232220000f654f654f654f654565554443665f444f444f444f444f444255525554444f444f444f444000000000000245424540000000000000000f444f4440333000000000000000000000000"
 			}
 		}
-	], "enums": [{ "identifier": "Enemy", "uid": 23, "values": [
-		{ "id": "Autophobia", "tileRect": null, "color": 12470831 },
-		{ "id": "NyctoPhobia", "tileRect": null, "color": 14120515 },
-		{ "id": "Scopophobia", "tileRect": null, "color": 15389866 }
-	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
+	], "enums": [{ "identifier": "Enemy", "uid": 23, "values": [], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
@@ -1058,9 +1130,9 @@
 				{
 					"__identifier": "Lighting",
 					"__type": "Entities",
-					"__cWid": 16,
-					"__cHei": 9,
-					"__gridSize": 120,
+					"__cWid": 384,
+					"__cHei": 216,
+					"__gridSize": 5,
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
@@ -1081,47 +1153,47 @@
 					"entityInstances": [
 						{
 							"__identifier": "SpotLight",
-							"__grid": [6,3],
-							"__pivot": [0,0],
-							"__tags": ["SpotLight"],
+							"__grid": [155,94],
+							"__pivot": [0.5,1],
+							"__tags": ["light"],
 							"__tile": null,
-							"__smartColor": "#C62A3B",
-							"iid": "da1422e0-96d0-11f1-9362-f57a0fb076ba",
+							"__smartColor": "#FEE761",
+							"iid": "e530f280-96d0-11f1-96a2-bfffc109ec95",
 							"width": 120,
 							"height": 120,
 							"defUid": 22,
-							"px": [720,360],
+							"px": [778,475],
 							"fieldInstances": [
-								{ "__identifier": "Intensity", "__type": "Float", "__value": 1, "__tile": null, "defUid": 27, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
-								{ "__identifier": "ScaleX", "__type": "Float", "__value": 1000, "__tile": null, "defUid": 28, "realEditorValues": [{ "id": "V_Float", "params": [1000] }] },
-								{ "__identifier": "ScaleY", "__type": "Float", "__value": 1000, "__tile": null, "defUid": 29, "realEditorValues": [{ "id": "V_Float", "params": [1000] }] },
-								{ "__identifier": "Rotation", "__type": "Float", "__value": 90, "__tile": null, "defUid": 30, "realEditorValues": [{ "id": "V_Float", "params": [90] }] },
-								{ "__identifier": "Color", "__type": "Color", "__value": "#C62A3B", "__tile": null, "defUid": 31, "realEditorValues": [{ "id": "V_Int", "params": [12986939] }] }
+								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.8, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "ScaleX", "__type": "Float", "__value": 1000, "__tile": null, "defUid": 28, "realEditorValues": [] },
+								{ "__identifier": "ScaleY", "__type": "Float", "__value": 750, "__tile": null, "defUid": 29, "realEditorValues": [] },
+								{ "__identifier": "Rotation", "__type": "Float", "__value": 90, "__tile": null, "defUid": 30, "realEditorValues": [] },
+								{ "__identifier": "Color", "__type": "Color", "__value": "#FEE761", "__tile": null, "defUid": 31, "realEditorValues": [] }
 							],
-							"__worldX": 720,
-							"__worldY": 360
+							"__worldX": 778,
+							"__worldY": 475
 						},
 						{
 							"__identifier": "SpotLight",
-							"__grid": [10,3],
-							"__pivot": [0,0],
-							"__tags": ["SpotLight"],
+							"__grid": [251,92],
+							"__pivot": [0.5,1],
+							"__tags": ["light"],
 							"__tile": null,
 							"__smartColor": "#FEE761",
-							"iid": "da5d60e0-96d0-11f1-9362-17e320afe46c",
+							"iid": "e9393450-96d0-11f1-96a2-7980e0c4e862",
 							"width": 120,
 							"height": 120,
 							"defUid": 22,
-							"px": [1200,360],
+							"px": [1258,465],
 							"fieldInstances": [
-								{ "__identifier": "Intensity", "__type": "Float", "__value": 0, "__tile": null, "defUid": 27, "realEditorValues": [] },
-								{ "__identifier": "ScaleX", "__type": "Float", "__value": 0, "__tile": null, "defUid": 28, "realEditorValues": [] },
-								{ "__identifier": "ScaleY", "__type": "Float", "__value": 0, "__tile": null, "defUid": 29, "realEditorValues": [] },
-								{ "__identifier": "Rotation", "__type": "Float", "__value": 0, "__tile": null, "defUid": 30, "realEditorValues": [] },
+								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.8, "__tile": null, "defUid": 27, "realEditorValues": [] },
+								{ "__identifier": "ScaleX", "__type": "Float", "__value": 1000, "__tile": null, "defUid": 28, "realEditorValues": [] },
+								{ "__identifier": "ScaleY", "__type": "Float", "__value": 750, "__tile": null, "defUid": 29, "realEditorValues": [] },
+								{ "__identifier": "Rotation", "__type": "Float", "__value": 90, "__tile": null, "defUid": 30, "realEditorValues": [] },
 								{ "__identifier": "Color", "__type": "Color", "__value": "#FEE761", "__tile": null, "defUid": 31, "realEditorValues": [] }
 							],
-							"__worldX": 1200,
-							"__worldY": 360
+							"__worldX": 1258,
+							"__worldY": 465
 						}
 					]
 				},
@@ -1153,7 +1225,7 @@
 							"__identifier": "ElectricalPanel",
 							"__grid": [48,41],
 							"__pivot": [0,0],
-							"__tags": ["Panel"],
+							"__tags": ["dots"],
 							"__tile": null,
 							"__smartColor": "#FEE761",
 							"iid": "d180e4a0-96d0-11f1-b5d5-2b4285ab682d",
@@ -1169,7 +1241,7 @@
 							"__identifier": "Locker",
 							"__grid": [75,38],
 							"__pivot": [0,0],
-							"__tags": ["Locker"],
+							"__tags": ["hideout"],
 							"__tile": null,
 							"__smartColor": "#E43B44",
 							"iid": "13618460-96d0-11f1-b5d5-bf34053d8f73",
@@ -1185,7 +1257,7 @@
 							"__identifier": "InvisWall",
 							"__grid": [120,0],
 							"__pivot": [0,0],
-							"__tags": ["Wall"],
+							"__tags": ["wall"],
 							"__tile": null,
 							"__smartColor": "#0099DB",
 							"iid": "dfdf1b50-96d0-11f1-b5d5-d195b5942464",
@@ -1201,7 +1273,7 @@
 							"__identifier": "InvisWall",
 							"__grid": [-1,0],
 							"__pivot": [0,0],
-							"__tags": ["Wall"],
+							"__tags": ["wall"],
 							"__tile": null,
 							"__smartColor": "#0099DB",
 							"iid": "e1a3d5c0-96d0-11f1-b5d5-7914ed5eb4c4",
@@ -1214,10 +1286,10 @@
 							"__worldY": 0
 						},
 						{
-							"__identifier": "Door",
+							"__identifier": "LoadNextScene",
 							"__grid": [0,38],
 							"__pivot": [0,0],
-							"__tags": ["Door"],
+							"__tags": ["door"],
 							"__tile": null,
 							"__smartColor": "#B86F50",
 							"iid": "1e72c580-96d0-11f1-9362-e3e056ce1f0c",
@@ -1225,9 +1297,50 @@
 							"height": 352,
 							"defUid": 32,
 							"px": [0,608],
-							"fieldInstances": [],
+							"fieldInstances": [{ "__identifier": "Destination", "__type": "String", "__value": "tilemap_sewer", "__tile": null, "defUid": 34, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["tilemap_sewer"]
+							}] }],
 							"__worldX": 0,
 							"__worldY": 608
+						},
+						{
+							"__identifier": "PlayerSpawnPoint",
+							"__grid": [11,52],
+							"__pivot": [0.5,0.5],
+							"__tags": ["spawn"],
+							"__tile": null,
+							"__smartColor": "#E4A672",
+							"iid": "ddfebcc0-96d0-11f1-8078-7d1087abec3a",
+							"width": 100,
+							"height": 240,
+							"defUid": 24,
+							"px": [184,832],
+							"fieldInstances": [{ "__identifier": "Origin", "__type": "String", "__value": "tilemap_sewer", "__tile": null, "defUid": 33, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["tilemap_sewer"]
+							}] }],
+							"__worldX": 184,
+							"__worldY": 832
+						},
+						{
+							"__identifier": "PlayerSpawnPoint",
+							"__grid": [101,52],
+							"__pivot": [0.5,0.5],
+							"__tags": ["spawn"],
+							"__tile": null,
+							"__smartColor": "#E4A672",
+							"iid": "e1785320-96d0-11f1-8078-ad1cef585b5b",
+							"width": 100,
+							"height": 240,
+							"defUid": 24,
+							"px": [1624,832],
+							"fieldInstances": [{ "__identifier": "Origin", "__type": "String", "__value": "Start", "__tile": null, "defUid": 33, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Start"]
+							}] }],
+							"__worldX": 1624,
+							"__worldY": 832
 						}
 					]
 				},

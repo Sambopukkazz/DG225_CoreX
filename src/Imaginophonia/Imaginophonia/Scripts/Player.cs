@@ -32,7 +32,7 @@ namespace Imaginophobia {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         private Vector2 _flashlightOffset;
-        public float MoveSpeed { get; private set; } = 100f;
+        public float MoveSpeed { get; private set; } = 1000f;
         private int _previousFrame;
         private enum CharacterState { Normal, Anxious, Insane }
         private CharacterState _characterState;

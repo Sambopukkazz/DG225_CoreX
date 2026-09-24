@@ -30,7 +30,7 @@ namespace Imaginophobia {
                 if (entity.Class == "wall") {
                     collisionManager.AddCollider(new Wall(entity.Id, entity.Position, entity.Size), "walls");
                 }
-                else if (entity.Class == "dots" || entity.Class == "hideout") {
+                else if (entity.Class == "dots" || entity.Class == "hideout" || entity.Class == "skillcheck") {
                     collisionManager.AddCollider(new Trigger(entity.Id, entity.Position, entity.Size, entity.Class), "triggers");
                 }
                 else if (entity.Class == "door") {

@@ -121,26 +121,26 @@
 /processorParam:Version=3.8.5.0
 /build:Phobias/Scopophobia-Entity.png
 
-#begin Tilemaps/electricalroom.ldtk
+#begin Tilemaps/tilemap_electrical_room_2.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor
 /processorParam:LevelName=
 /processorParam:Version=6.1.1.0
-/build:Tilemaps/electricalroom.ldtk
+/build:Tilemaps/tilemap_electrical_room_2.ldtk
 
-#begin Tilemaps/electricalroom2.ldtk
+#begin Tilemaps/tilemap_electrical_room.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor
 /processorParam:LevelName=
 /processorParam:Version=6.1.1.0
-/build:Tilemaps/electricalroom2.ldtk
+/build:Tilemaps/tilemap_electrical_room.ldtk
 
-#begin Tilemaps/sewer.ldtk
+#begin Tilemaps/tilemap_sewer.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor
 /processorParam:LevelName=
 /processorParam:Version=6.1.1.0
-/build:Tilemaps/sewer.ldtk
+/build:Tilemaps/tilemap_sewer.ldtk
 
 #begin UI/Needle.png
 /importer:TextureImporter
