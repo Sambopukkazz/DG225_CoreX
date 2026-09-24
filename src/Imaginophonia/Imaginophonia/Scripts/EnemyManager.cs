@@ -15,7 +15,7 @@ namespace Imaginophobia {
         public List<GameObject> enemies;
         private float SpawnInterval = 5;
         private int _autophobiaSpawnChance = 30; // 0-100
-        private int _scopophobiaSpawnChance = 5;
+        private int _scopophobiaSpawnChance = 10;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
         public event Action<ICollisionActor> EnemySpawned;
@@ -74,25 +74,44 @@ namespace Imaginophobia {
         public void SpawnEnemy() {
             Vector2 pos = _player.Transform.Position;
             int posOffset = _rand.Next(100, 500);
+            bool spawnLeft;
             if (_rand.Next(0,10) < 5) {
                 pos.X = _worldBound.Left - posOffset;
+                spawnLeft = true;
             }
             else {
                 pos.X = _worldBound.Right + posOffset;
+                spawnLeft = false;
             }
 
             GameObject enemy;
-            int[] spawnNumber = new int[_autophobiaSpawnChance];
-            for (int i = 0; i< spawnNumber.Length; i++) {
-                spawnNumber[i] = _rand.Next(0, 101);
+            int[] autophobiaNumber = new int[_autophobiaSpawnChance];
+            for (int i = 0; i< autophobiaNumber.Length; i++) {
+                autophobiaNumber[i] = _rand.Next(0, 101);
+            }
+
+            int[] scopophobiaNumber = new int[_scopophobiaSpawnChance];
+            for (int i = 0; i < scopophobiaNumber.Length; i++) {
+                scopophobiaNumber[i] = _rand.Next(0, 101);
             }
 
             int randomNumber = _rand.Next(0, 101);
-            if (spawnNumber.Contains<int>(randomNumber)) {
-                //Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                Scopophobia autophobia = new Scopophobia(pos,_player,_scopophobiaTexture);
+            if (autophobiaNumber.Contains<int>(randomNumber)) {
+                Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
                 enemies.Add(autophobia);
                 EnemySpawned?.Invoke(autophobia);
+            }
+            else if (scopophobiaNumber.Contains<int>(randomNumber)) {
+                if (spawnLeft) {
+                    pos.X -= 1920;
+                }
+                else {
+                    pos.X += 1920;
+                }
+                
+                Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
+                enemies.Add(scopophobia);
+                EnemySpawned?.Invoke(scopophobia);
             }
 
             if (_continueSpawnEnemy) {

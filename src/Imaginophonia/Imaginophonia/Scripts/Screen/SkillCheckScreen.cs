@@ -37,6 +37,7 @@ namespace Imaginophobia {
         private int _needleSweepAngle = 3;
         private float _progressValue;
         private bool _innerActive;
+        public event Action ExitMiniGame;
 
         public bool SkillCheckIsActive;
         public SkillCheckScreen() {
@@ -83,6 +84,7 @@ namespace Imaginophobia {
                 if(_progressValue == 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
                     Time.AddTimer(this.ScreenManager.CloseScreen, 0.5f);
                     SkillCheckIsActive = false;
+                    ExitMiniGame?.Invoke();
                 }
             }
         }

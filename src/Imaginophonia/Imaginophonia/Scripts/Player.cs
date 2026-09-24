@@ -36,13 +36,13 @@ namespace Imaginophobia {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         private Vector2 _flashlightOffset;
-        public float MoveSpeed { get; private set; } = 100f;
+        public float MoveSpeed { get; private set; } = 200f;
         private int _previousFrame;
         private enum CharacterState { Normal, Anxious, Insane }
         private CharacterState _characterState;
         private bool _lockFacingDirection;
-        private float _sanity;
-
+        public float Sanity { get; set; } = 100;
+        public float Battery { get; set; } = 100;
         public bool AllowMovement { get; set; }
         private bool _readyToHide;
         private float _hideCoolDown = 3f;
@@ -162,11 +162,17 @@ namespace Imaginophobia {
             float direction;
             if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
                 direction = -1;
+                _flashLight.Rotation = MathHelper.ToRadians(180);
             }
             else {
                 direction = 1;
+                _flashLight.Rotation = 0;
             }
             _eyeSight.End = new Vector2(Transform.Position.X + _eyeLevel.X + _eyeSightLength * direction, Transform.Position.Y + _eyeLevel.Y);
+
+            if (_flashLight.Enabled) {
+                Battery -= 0.5f * Time.DeltaTime;
+            }
         }
 
         public override void Draw() {
@@ -337,9 +343,9 @@ namespace Imaginophobia {
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 300), Color.White);
 
-            foreach (Timer timer in Time.Timers) {
-                MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
-            }
+            //foreach (Timer timer in Time.Timers) {
+            //    MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
+            //}
         }
     }
 }
