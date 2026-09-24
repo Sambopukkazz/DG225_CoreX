@@ -13,6 +13,7 @@ namespace Imaginophobia {
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
         private readonly Vector2 _size;
+        private bool _startMovement;
 
         private Texture2D _texture;
 
@@ -29,24 +30,29 @@ namespace Imaginophobia {
                 Direction = Vector2.UnitX;
             }
 
-            Transform.Position = new Vector2(pos.X,pos.Y -900);
+            Transform.Position = new Vector2(pos.X, pos.Y -220);
             Transform.Scale = Vector2.One * 4;
             _size = new Vector2(480, 110) * Transform.Scale;
 
-            AudioManager.Instance.Play3DSfx(Transform.Position,"scopophobia");
+            AudioManager.Instance.Play3DSFX(_origin,"scopophobia");
+            UpdateShape();
+            
 
+            Time.AddTimer(StartMovement, 8);
             Time.AddTimer(SetActive, 15f);
         }
 
         public override void Update() {
-            Velocity = MoveSpeed * Direction;
-            Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
+            if (_startMovement) {
+                Velocity = MoveSpeed * Direction;
+                Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
 
-            UpdateShape();
+                UpdateShape();
+            }
         }
 
         public override void Draw() {
-            MainGame.SpriteBatch.FillRectangle(Transform.Position, _size, Color.Red);
+            //MainGame.SpriteBatch.FillRectangle(Transform.Position, _size, Color.Red);
             SpriteEffects effect;
             if (Direction.X < 0) {
                 effect = SpriteEffects.FlipHorizontally;
@@ -62,6 +68,10 @@ namespace Imaginophobia {
             _origin.Y = Transform.Position.Y + (_size.Y / 2f);
             BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
             Shape = new CollisionShape2D(bounds);
+        }
+
+        private void StartMovement() {
+            _startMovement = true;
         }
     }
 }

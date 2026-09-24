@@ -25,7 +25,12 @@ namespace Imaginophobia {
         private float _mouseAngle;
         private float _lastMouseAngle;
         private bool _isSpinning;
-        
+        private float _needleAngle;
+        private float _needleSpeed;
+        private float _angularSpeed;
+        private float _progressValue;
+        public event Action ExitMiniGame;
+
 
         public bool SkillCheckIsActive;
         public SpinTheValveScreen() {
@@ -33,6 +38,8 @@ namespace Imaginophobia {
             _valveOrigin = new Vector2(_valveTexture.Width / 2f, _valveTexture.Height / 2f);
             StartSkillCheck();
             SkillCheckIsActive = true;
+
+            RandomNeedleSpeed();
         }
 
         public override void Update(GameTime gameTime) {
@@ -53,9 +60,10 @@ namespace Imaginophobia {
                         }
                     }
                     else {
-                        float angularVelocity = MathHelper.WrapAngle(_mouseAngle - _lastMouseAngle);
-                        _targetAngle += angularVelocity;
+                        _angularSpeed = MathHelper.WrapAngle(_mouseAngle - _lastMouseAngle);
+                        _targetAngle += _angularSpeed;
                         _lastMouseAngle = _mouseAngle;
+                        
                     }
                 }
                 else {
@@ -63,21 +71,41 @@ namespace Imaginophobia {
                 }
                 _valveAngle = MathHelper.Lerp(_valveAngle, _targetAngle, _rotationSpeed * Time.DeltaTime);
                 _targetAngle = MathHelper.Lerp(_targetAngle, _valveAngle, _rotationSpeed * 2 * Time.DeltaTime);
+                
 
-                if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
+                _needleAngle += (_needleSpeed / 38f) + (_angularSpeed / 100f);
+                _needleAngle = MathHelper.Clamp(_needleAngle, MathHelper.ToRadians(225), MathHelper.ToRadians(313));
+
+                if (_needleAngle > MathHelper.ToRadians(255) && _needleAngle < MathHelper.ToRadians(285)) {
+                    _progressValue += 20f * Time.DeltaTime;
+                }
+                else if (_needleAngle >= MathHelper.ToRadians(285) && _needleAngle <= MathHelper.ToRadians(313)) {
+                    _progressValue -= 35f * Time.DeltaTime;
+                }
+                else if (_needleAngle >= MathHelper.ToRadians(225) && _needleAngle <= MathHelper.ToRadians(255)) {
+                    _progressValue -= 15f * Time.DeltaTime;
+                }
+
+                _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
+
+                if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
                     Time.AddTimer(this.ScreenManager.CloseScreen, 0.5f);
                     SkillCheckIsActive = false;
+                    ExitMiniGame?.Invoke();
                 }
             }
-
-            
         }
 
         public override void Draw(GameTime gameTime) {
             MainGame.SpriteBatch.Begin();
-            
 
+            MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-135), MathHelper.ToRadians(30), 20, Color.Yellow, 10);
+            MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-105), MathHelper.ToRadians(30), 20, Color.Green, 10);
+            MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-75), MathHelper.ToRadians(30), 20, Color.Red, 10);
+            MainGame.SpriteBatch.DrawArc(_centerOrigin, 315, _needleAngle, MathHelper.ToRadians(2), 20, Color.White, 40f);
             MainGame.SpriteBatch.Draw(_valveTexture, _centerOrigin, null, Color.White, _valveAngle, _valveOrigin, 8, SpriteEffects.None, 0);
+            MainGame.SpriteBatch.FillRectangle(860, 800, 200, 15, Color.DarkGray);
+            MainGame.SpriteBatch.FillRectangle(860, 800, _progressValue, 15, Color.GreenYellow);
             MainGame.SpriteBatch.End();
         }
 
@@ -92,12 +120,17 @@ namespace Imaginophobia {
             
         }
 
-        private void RandomZone() {
-            
+        private void RandomNeedleSpeed() {
+            Random rand = new Random();
+            _needleSpeed = MathHelper.ToRadians(rand.Next(-10, 10));
+
+            Time.AddTimer(RandomNeedleSpeed, 5);
         }
 
         private void EvaluateInput() {
             
         }
+
+
     }
 }

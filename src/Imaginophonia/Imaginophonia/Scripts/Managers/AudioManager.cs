@@ -140,7 +140,7 @@ namespace Imaginophobia {
             }
         }
 
-        public void Play3DSfx(Vector2 pos, string name) {
+        public void Play3DSFX(Vector2 pos, string name) {
             AudioSource audioSource = new(pos);
             _activeAudioSources.Add(audioSource);
 

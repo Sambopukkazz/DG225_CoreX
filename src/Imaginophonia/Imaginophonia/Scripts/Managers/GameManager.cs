@@ -37,13 +37,13 @@ namespace Imaginophobia {
             _lightManager = new LightManager();
             _player = new Player();
 
-            _collisionManager = new CollisionManager();
+            _collisionManager = new CollisionManager(_player);
             _collisionManager.AddCollider(_player);
             _collisionManager.CallLoadScene += OnCallLoadScene;
 
             _sceneManager = new SceneManager();
             _sceneManager.SceneLoaded += OnSceneLoaded;
-            _sceneManager.LoadScene(SceneName.sewer.ToString(), _camera, _collisionManager, _lightManager);
+            _sceneManager.LoadScene(SceneName.electricalroom2.ToString(), _camera, _collisionManager, _lightManager);
 
             _enemyManager = new EnemyManager(_player);
             _enemyManager.EnemySpawned += OnEnemySpawned;
@@ -67,7 +67,7 @@ namespace Imaginophobia {
 
             _sceneManager.Update(gameTime);
 
-            _collisionManager.Update(_player);
+            _collisionManager.Update();
 
             _lightManager.Update(_camera.GetViewMatrix());
 
@@ -95,6 +95,8 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.Begin();
 
             AudioManager.Instance.Draw();
+
+            _uiManager.Draw();
 
             MainGame.SpriteBatch.End();
         }

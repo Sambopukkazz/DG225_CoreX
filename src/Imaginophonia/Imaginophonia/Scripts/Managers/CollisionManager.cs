@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Collisions.Layers;
 using MonoGame.Extended.Input;
+using MonoGame.Extended.Screens;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,10 +15,11 @@ namespace Imaginophobia {
     public class CollisionManager {
         private CollisionWorld2D _collisionWorld;
         private List<ICollisionActor> _colliders;
+        private Player _player;
 
         public event Action<string> CallLoadScene;
 
-        public CollisionManager() {
+        public CollisionManager(Player player) {
             Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
                 IsDynamic = true
             };
@@ -37,37 +39,43 @@ namespace Imaginophobia {
             _collisionWorld.AddLayer("enemies", enemyLayer);
 
             _colliders = new List<ICollisionActor>();
+
+            _player = player;
         }
-        public void Update(Player player) {
+        public void Update() {
             _collisionWorld.RebuildDynamicLayers();
 
-            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "walls")) {
-                player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
+            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "walls")) {
+                _player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
             }
 
             //if(_collisionWorld.)
-            player.CanInteract = false;
+            _player.CanInteract = false;
 
-            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "triggers")) {
+            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
                 if(trigger.Tag == "Locker") {
                     if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
-                        player.ToggleHide();
+                        _player.ToggleHide();
                     }
                 }
                 else if(trigger.Tag == "Valve") {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
                         //Skill Check
-                        MainGame.ScreenManager.ShowScreen(new SpinTheValveScreen());
-                        player.ToggleRepair();
+                        SpinTheValveScreen screen = new SpinTheValveScreen();
+                        screen.ExitMiniGame += OnExitMiniGame;
+                        MainGame.ScreenManager.ShowScreen(screen);
+                        _player.ToggleRepair();
                     }
                     
                 }
                 else if (trigger.Tag == "Panel") {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && player.CanRepair) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
                         //Connect the dot
-                        MainGame.ScreenManager.ShowScreen(new SkillCheckScreen());
-                        player.ToggleRepair();
+                        SkillCheckScreen screen = new SkillCheckScreen();
+                        screen.ExitMiniGame += OnExitMiniGame;
+                        MainGame.ScreenManager.ShowScreen(screen);
+                        _player.ToggleRepair();
                     }
                     
                 }
@@ -79,23 +87,25 @@ namespace Imaginophobia {
                 }
 
                 //Make player acknowledge that they can interact
-                if(trigger.Interactable)player.CanInteract = true;
+                if(trigger.Interactable)_player.CanInteract = true;
             }
 
-            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(player, "enemies")) {
-                if (player.Active) {
+            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "enemies")) {
+                if (_player.Active) {
                     GameObject enemy = (GameObject)collision.Other;
-                    Time.AddTimer(5);
-                    enemy.SetActive(false);
+                    if(enemy.Name == "Autophobia") {
+                        enemy.SetActive(false);
+                    }
                     _collisionWorld.Remove(collision.Other);
                     _colliders.Remove(collision.Other);
                     //lose sanity
+                    _player.Sanity -= 2;
                 }
             }
 
             for (int i = _colliders.Count - 1; i >= 0; i--) {
-                if (player.Active) {
-                    if (_colliders[i].GetType().Name == "Autophobia" && _colliders[i].Shape.Intersects(player.EyeSight)) {
+                if (_player.Active) {
+                    if (_colliders[i].GetType().Name == "Autophobia" && _colliders[i].Shape.Intersects(_player.EyeSight)) {
                         _collisionWorld.Remove(_colliders[i]);
                         GameObject enemy = (GameObject)_colliders[i];
                         enemy.SetActive(false);
@@ -135,6 +145,10 @@ namespace Imaginophobia {
 
             //_collisionWorld.AddLayer("walls", wallLayer);
             //_collisionWorld.AddLayer("triggers", triggerLayer);
+        }
+
+        public void OnExitMiniGame() {
+            _player.ToggleRepair();
         }
     }
 }
