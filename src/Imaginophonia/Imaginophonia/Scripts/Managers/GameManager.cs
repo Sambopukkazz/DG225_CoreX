@@ -42,7 +42,7 @@ namespace Imaginophobia {
 
             _sceneManager = new SceneManager();
             _sceneManager.SceneLoaded += OnSceneLoaded;
-            _sceneManager.LoadScene(SceneName.electricalroom2.ToString(), _camera, _collisionManager, _lightManager);
+            _sceneManager.LoadScene(SceneName.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
             //temp
             _spacebar = MainGame.Content.Load<Texture2D>("UI/ui_spacebar");
