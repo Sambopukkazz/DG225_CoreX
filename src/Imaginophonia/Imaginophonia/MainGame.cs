@@ -51,8 +51,8 @@ namespace Imaginophobia {
             var screen = new GameplayScreen(viewportAdapter);
             
             Components.Add(ScreenManager);
-            Components.Add(LightManager.Penumbra);
-            
+            //Components.Add(LightManager.Penumbra);
+
             base.Initialize();
 
             ScreenManager.ShowScreen(screen);
@@ -68,7 +68,7 @@ namespace Imaginophobia {
 
             // TODO: Add your update logic here
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
-                ScreenManager.ShowScreen(new SkillCheckScreen());
+                ScreenManager.ShowScreen(new SpinTheValveScreen());
             }
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.L)) {
                 ScreenManager.CloseScreen();
