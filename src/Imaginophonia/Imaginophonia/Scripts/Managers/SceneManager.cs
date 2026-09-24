@@ -18,30 +18,31 @@ namespace Imaginophobia {
         private static Scene _activeScene;
         public static Scene GetActiveScene() => _activeScene;
         private string _lastSceneName;
-        private List<Scene> _loadedScene;
         private TilemapSpriteBatchRenderer _renderer;
-        private FadeTransition _fadeTransition;
+        //private FadeTransition _fadeTransition;
         public event Action<Vector2> SceneLoaded;
 
         public SceneManager() {
             _renderer = new TilemapSpriteBatchRenderer();
-            _loadedScene = new List<Scene>();
-            _fadeTransition = new FadeTransition(MainGame.GraphicsDevice,Color.Black);
+            //_fadeTransition = new FadeTransition(MainGame.GraphicsDevice, Color.Black);
         }
 
         public void Update(GameTime gameTime) {
-            _renderer.Update(gameTime);
+            //_renderer.Update(gameTime); only if we have animated sprite
         }
 
         public void Draw(OrthographicCamera camera) {
-            _renderer.Draw(MainGame.SpriteBatch, camera);
+            _renderer.Draw(MainGame.SpriteBatch, camera); 
+        }
+
+        private void Debug() {
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.Begin();
-            MainGame.SpriteBatch.DrawString(_font, $"SpawnPoint Count {_activeScene?.PlayerSpawnPoints.Count}", new Vector2(150, 200), Color.White);
-            foreach (SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
-                MainGame.SpriteBatch.DrawString(_font, $"SpawnPoint Pos {spawnPoint.Position}", new Vector2(150, 250 + 50 * _activeScene.PlayerSpawnPoints.IndexOf(spawnPoint)), Color.White);
-            }
-            MainGame.SpriteBatch.End();
+            //MainGame.SpriteBatch.Begin();
+            //MainGame.SpriteBatch.DrawString(_font, $"SpawnPoint Count {_activeScene?.PlayerSpawnPoints.Count}", new Vector2(150, 200), Color.White);
+            //foreach (SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
+            //    MainGame.SpriteBatch.DrawString(_font, $"SpawnPoint Pos {spawnPoint.Position}", new Vector2(150, 250 + 50 * _activeScene.PlayerSpawnPoints.IndexOf(spawnPoint)), Color.White);
+            //}
+            //MainGame.SpriteBatch.End();
         }
 
         public void LoadScene(string sceneName, OrthographicCamera camera, CollisionManager collisionManager, LightManager lightManager) {
@@ -52,11 +53,20 @@ namespace Imaginophobia {
 
             foreach(SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
                 if (spawnPoint.Name == _lastSceneName || spawnPoint.Name == "Start") {
+            if (_activeScene.Name == "sewer") {
+                AudioManager.Instance.PlayAmbiance("sewer");
+            }
+            else {
+                AudioManager.Instance.PlayAmbiance("test");
+            }
+
+            foreach (SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {
+                if (spawnPoint.Name == _lastSceneName || spawnPoint.Name == "") {
                     SceneLoaded?.Invoke(spawnPoint.Position);
+                    _activeScene.PlayerSpawnPoints.Clear();
                     return;
                 }
             }
-            
         }
 
         private void UnloadScene() {

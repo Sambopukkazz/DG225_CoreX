@@ -37,9 +37,10 @@ namespace Imaginophobia {
             Timers.Add(timer);
             return timer;
         }
-        public static void AddTimer(Action method, float second) {
+        public static Timer AddTimer(Action method, float second) {
             Timer timer = new(method,second);
             Timers.Add(timer);
+            return timer;
         }
     }
 }

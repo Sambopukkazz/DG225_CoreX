@@ -78,6 +78,10 @@ namespace Imaginophobia {
                 child.Parent = null;
             }
         }
+
+        public void SetActive() {
+            _active = false;
+        }
         public void SetActive(bool status) {
             _active = status;
         }

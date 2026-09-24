@@ -18,6 +18,7 @@ namespace Imaginophobia {
 
         public static void Update() {
             KeyboardExtended.Update();
+            MouseExtended.Update();
 
             KeyboardStateExtended keyboardState = KeyboardExtended.GetState();
             _direction = Vector2.Zero;

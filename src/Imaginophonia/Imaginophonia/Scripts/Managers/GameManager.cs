@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
@@ -26,9 +27,9 @@ namespace Imaginophobia {
         private LightManager _lightManager;
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
-
-        //temp UI
-        private Texture2D _spacebar;
+        private EnemyManager _enemyManager;
+        private UIManager _uiManager;
+        private DialogueManager _dialogueManager;
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
@@ -36,7 +37,7 @@ namespace Imaginophobia {
             _lightManager = new LightManager();
             _player = new Player();
 
-            _collisionManager = new CollisionManager();
+            _collisionManager = new CollisionManager(_player);
             _collisionManager.AddCollider(_player);
             _collisionManager.CallLoadScene += OnCallLoadScene;
 
@@ -44,8 +45,15 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(SceneName.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
+            _enemyManager = new EnemyManager(_player);
+            _enemyManager.EnemySpawned += OnEnemySpawned;
+            _enemyManager.SpawnEnemy();
+
+            _uiManager = new UIManager(_player);
+
+            _dialogueManager = new DialogueManager();
             //temp
-            _spacebar = MainGame.Content.Load<Texture2D>("UI/ui_spacebar");
+            
         }
 
         public void Update(GameTime gameTime) {
@@ -53,16 +61,19 @@ namespace Imaginophobia {
 
             _player.Update();
 
+            _enemyManager.Update(_camera.WorldBounds);
+
             _camera.LookAt(new Vector2(_player.Transform.Position.X, _player.Transform.Position.Y -260));
 
             _sceneManager.Update(gameTime);
 
-            _collisionManager.Update(_player);
+            _collisionManager.Update();
 
             _lightManager.Update(_camera.GetViewMatrix());
 
             _audioManager.Update(_player);
 
+            _uiManager.Update();
         }
 
         public void Draw(GameTime gameTime) {
@@ -71,27 +82,37 @@ namespace Imaginophobia {
             MainGame.GraphicsDevice.Clear(Color.White);
 
             _sceneManager.Draw(_camera);
+            Matrix traformMatrix = _camera.GetViewMatrix();
 
-            MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: _camera.GetViewMatrix());
+            MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: traformMatrix);
             _player.Draw();
+            _enemyManager.Draw();
 
-            if (_player.CanInteract) {
-                MainGame.SpriteBatch.Draw(_spacebar, new Vector2(960 - 300, 540 + 350), Color.White);
-            }
+            MainGame.SpriteBatch.End();
+            //End lightning
+            LightManager.Penumbra.Draw(gameTime);
+
+            MainGame.SpriteBatch.Begin();
 
             AudioManager.Instance.Draw();
 
-            MainGame.SpriteBatch.End();
+            _uiManager.Draw();
 
+            MainGame.SpriteBatch.End();
         }
 
         private void OnCallLoadScene(string sceneName) {
+            _enemyManager.ClearEnemies();
             _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
         }
 
         private void OnSceneLoaded(Vector2 spawnPosition) {
             _player.LoadScenePosition(spawnPosition);
+            
         }
         
+        private void OnEnemySpawned(ICollisionActor enemy) {
+            _collisionManager.AddCollider(enemy, "enemies");
+        }
     }
 }
