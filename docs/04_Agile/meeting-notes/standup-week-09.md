@@ -1,4 +1,4 @@
-# Weekly Stand-up Meeting — Week 10
+# Weekly Stand-up Meeting — Week 9
 
 **วันที่ประชุม:** 2026-09-12 | **Sprint:** Sprint 1
 -------------------------------------------------------
@@ -21,23 +21,16 @@
 ## Action Items & Blockers Resolution
 
 - [ ] [ทดสอบ level ที่ธีนันทนัชสร้างมา] [status:: doing]
-  [owner:: เตชินท์] [due:: 2026-09-10]
-- [ ] [ปรับรูปแบบการวางแมพใน LDtk ของ ธีนันทนัช] [status:: done]
-  [owner:: เตชินท์] [due:: 2026-09-06]
-- [ ] [Rename Assets ให้ designer and programmer] [status:: done]
-  [owner:: นาถวัฒน์] [due:: 2026-09-8]
-- [ ] [add entity ใน LDtk เพื่อที่ให้โค้น้ำไปใช้ต่อ] [status:: done]
-  [owner:: ธีนันทนัช] [due:: 2026-09-8]
+  [owner:: เตชินท์] [due:: 2026-09-19]
 - [ ] [หา inspiration ในการสร้างแมพช่วยเกี่ยวกับ mood board] [status:: doing]
-  [owner:: ธีนันทนัช] [due:: 2026-09-8]
+  [owner:: ธีนันทนัช] [due:: 2026-09-19]
 - [ ] [คิด concept sound design เพื่อให้ไปทำต่อหรือหาต่อ] [status:: todo]
-  [owner:: ธีนันทนัช] [due:: 2026-09-8]
+  [owner:: ธีนันทนัช] [due:: 2026-09-19]
 
 ---
 
 ## Related Documents
 
 - [[[docs/04_Agile/sprint-plan-01|Sprint 1 Plan]]([docs/04_Agile/sprint-plan-01]()) "[Sprint 1 Plan]([docs/04_Agile/sprint-plan-01]())")]
-- [Test](docs/04_Agile/sprint-plan-01 "Sprint [1] Plan")
--  [An Internal Link to a Section Heading](/docs/04_Agile/sprint-plan-01)
+- [An Internal Link to a Section Heading](/docs/04_Agile/sprint-plan-01)
 - [[docs/04_Agile/02-sprint-backlog|Sprint Backlog]]
