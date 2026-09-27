@@ -1,7 +1,7 @@
-# Sprint [2] Plan
+# Sprint [3] Plan
 
 **Sprint Goal:** [เกมเล่นได้โดยมีการเปลี่ยนแปลง/พัฒนามากกว่าเกมใน Jam]
-**ระยะเวลา:** [2026-09-13] — [2026-09-26]
+**ระยะเวลา:** [2026-09-27] — [2026-11-02]
 **Team:**
 เตชินท์ เจริญสิงห์ 682110116
 ธีนันทนัช ปานานนท์ 682110120
@@ -14,13 +14,13 @@
 
 | # | User Story                                                                                                              | รับผิดชอบ                    | MoSCoW      | Estimate (SP) | Status         |
 | - | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------- | ------------- | -------------- |
-| 1 | As a player, I want to see my remaining lives                                                                           | เตชินท์                        | Should Have | 2             | ✅ Done        |
-| 2 | As an artist, I want to redesign some of the assets to make them clearer and batter guide the player.                   | นาถวัฒน์                      | Must Have   | 3             | 🔄 In Progress |
-| 3 | As a designer, i want to test out lightings so that the games feel more immersive.                                      | ธีนันทนัช                    | Must Have   | 2             | 🔄 In Progress |
-| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives.                      | ธีนันทนัช + เตชินท์ | Must Have   | 3             | ✅ Done        |
+| 1 | As a player, I want to see my remaining lives                                                                           | เตชินท์                        | Should Have | 2             | 🔄 In Progress |
+| 2 | As a Artist, I want to redesign some of the assets to make them clearer and batter guide the player.                    | นาถวัฒน์                      | Should Have | 3             | 🔄 In Progress |
+| 3 | As a designer, i want to test out lightings so that the games feel more immersive                                       | ธีนันทนัช                    | Must Have   | 2             | 🔄 In Progress |
+| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | ธีนันทนัช + เตชินท์ | Must Have   | 3             | ✅ Done        |
 | 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | ธีนันทนัช                    | Must Have   | 6             | 🔲 Todo        |
 | 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | พรภวิษย์                      | Should Have | 3             | 🔄 In Progress |
-| 7 | As a player, I want entities to chase me, so that I feel challenged.                                                    | เตชินท์                        | Must Have   | 2             | ✅ Done        |
+| 7 | As a player, I want entities to chase me, so that I feel challenged.                                                    | เตชินท์                        | Must Have   | 2             | 🔄 In Progress |
 | 8 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | เตชินท์                        | Must Have   | 2             | ✅ Done        |
 
 ## Status Legend
@@ -42,7 +42,7 @@
 ### Story 2 — [Redesign main character]
 
 - [ ] [Player walk animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 40hrs]  [status::🔄 In Progress]
-- [X] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
+- [ ] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
 
 ### Story 3 — [Enemy behavior]
 
@@ -66,14 +66,18 @@
 - [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
 - [ ] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: 🔲 Todo]
 
-### Story 7 — [Enemy behavior]
+### Story 7 — [Sound effect]
 
-- [X] [Enemy base class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [X] [Implement predesign enemy]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: ✅ Done]
+- [X] [AudioManager class]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status:: ✅ Done]
+- [ ] [Implement sound effect triggers]  [owner:: เตชินท์ 116]  [estimate:: 15h]  [status:: 🔄 In Progress]
 
-### Story 8 — [Collosion + Interactable]
+### Story 8 — [Spatial Sound effect]
 
-- [X] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: ✅ Done]
+- [X] [Pan effect]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status::✅ Done]
+- [X] [Doppler effect]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status::✅ Done]
+- [ ] [Test and adjust]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+
+### Story 9 — []
 
 ---
 
