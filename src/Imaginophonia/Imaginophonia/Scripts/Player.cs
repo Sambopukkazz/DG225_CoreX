@@ -185,10 +185,7 @@ namespace Imaginophobia {
             if (Visible) {
                 MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale);
                 MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
-            }
-            else {
-                MainGame.SpriteBatch.FillRectangle(Transform.Position.X + 50, Transform.Position.Y, 15, 120, Color.DarkGray);
-                MainGame.SpriteBatch.FillRectangle(Transform.Position.X + 50, Transform.Position.Y, 15, _timer.TimeLeft * 40, Color.LightBlue);
+                //MainGame.SpriteBatch.DrawPoint(new Vector2(Listener.Position.X, Listener.Position.Y), Color.Red, 100);
             }
             
             DebugTest();
@@ -273,13 +270,12 @@ namespace Imaginophobia {
             if (_flashLight.Enabled) {
                 _flashLight.Enabled = false;
             }
-            else {
+            else if (!_flashLight.Enabled) {
                 _flashLight.Enabled = true;
             }
         }
 
         public void ToggleRepair() {
-            //unfiniseh
             if (_readyToRepair) {
                 AllowMovement = false;
                 _readyToRepair = false;
@@ -337,13 +333,12 @@ namespace Imaginophobia {
         }
 
         private void DebugTest() {
-            
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {Transform.Position} ", new Vector2(150, 150), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {Transform.Position} ", new Vector2(150, 500), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 150), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 300), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);
 
             //foreach (Timer timer in Time.Timers) {
             //    MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);

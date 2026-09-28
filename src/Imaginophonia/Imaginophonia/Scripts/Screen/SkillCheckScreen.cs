@@ -37,14 +37,15 @@ namespace Imaginophobia {
         private int _needleSweepAngle = 3;
         private float _progressValue;
         private bool _innerActive;
-        public event Action ExitMiniGame;
+        private Player _player;
 
         public bool SkillCheckIsActive;
-        public SkillCheckScreen() {
+        public SkillCheckScreen(Player player) {
             _fillZone = MainGame.Content.Load<Texture2D>("UI/Radial Circle");
             _needle = MainGame.Content.Load<Texture2D>("UI/Needle");
             _fillZoneOrigin = new Vector2(_fillZone.Width / 2f, _fillZone.Height / 2f);
             _needleOrigin = new Vector2(_needle.Width / 2f, _needle.Height / 2f);
+            _player = player;
             StartSkillCheck();
         }
 
@@ -84,7 +85,7 @@ namespace Imaginophobia {
                 if(_progressValue == 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
                     Time.AddTimer(this.ScreenManager.CloseScreen, 0.5f);
                     SkillCheckIsActive = false;
-                    ExitMiniGame?.Invoke();
+                    _player.ToggleRepair();
                 }
             }
         }

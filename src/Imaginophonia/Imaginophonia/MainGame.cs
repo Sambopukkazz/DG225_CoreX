@@ -50,12 +50,13 @@ namespace Imaginophobia {
             //_gameManager = new(viewportAdapter);
             var screen = new GameplayScreen(viewportAdapter);
             
-            Components.Add(ScreenManager);
+
+            ScreenManager.ShowScreen(screen);
+            ScreenManager.Initialize();
+            //Components.Add(ScreenManager);
             //Components.Add(LightManager.Penumbra);
 
             base.Initialize();
-
-            ScreenManager.ShowScreen(screen);
         }
 
         protected override void LoadContent() {
@@ -67,14 +68,10 @@ namespace Imaginophobia {
             //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             // TODO: Add your update logic here
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
-                ScreenManager.ShowScreen(new SpinTheValveScreen());
-            }
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.L)) {
-                ScreenManager.CloseScreen();
-            }
-
+            
             Time.Update(gameTime);
+
+            ScreenManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -86,7 +83,7 @@ namespace Imaginophobia {
 
             //// TODO: Add your drawing code here
             //SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
+            ScreenManager.Draw(gameTime);
             //SpriteBatch.End();
 
             base.Draw(gameTime);

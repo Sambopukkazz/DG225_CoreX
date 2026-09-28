@@ -54,32 +54,30 @@ namespace Imaginophobia {
 
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
-                if(trigger.Tag == "hideout") {
+                if(trigger.CompareTag("hideout")) {
                     if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         _player.ToggleHide();
                     }
                 }
-                else if(trigger.Tag == "skillcheck") {
+                else if(trigger.CompareTag("skillcheck")) {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
                         //Skill Check
-                        SpinTheValveScreen screen = new SpinTheValveScreen();
-                        screen.ExitMiniGame += OnExitMiniGame;
+                        Screen screen = new SpinTheValveScreen(_player);
                         MainGame.ScreenManager.ShowScreen(screen);
                         _player.ToggleRepair();
                     }
                     
                 }
-                else if (trigger.Tag == "dots") {
+                else if (trigger.CompareTag("dots")) {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
                         //Connect the dot
-                        SkillCheckScreen screen = new SkillCheckScreen();
-                        screen.ExitMiniGame += OnExitMiniGame;
+                        Screen screen = new ConnectTheDotsScreen(_player);
                         MainGame.ScreenManager.ShowScreen(screen);
                         _player.ToggleRepair();
                     }
                     
                 }
-                else if (trigger.Tag == "door") {
+                else if (trigger.CompareTag("door")) {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         //Load to next scene
                         CallLoadScene?.Invoke(trigger.Name);
@@ -125,6 +123,7 @@ namespace Imaginophobia {
 
         public void RemoveCollider(ICollisionActor actor) {
             _collisionWorld.Remove(actor);
+            _colliders.Remove(actor);
         }
 
         public void ClearColliders() {
@@ -145,10 +144,6 @@ namespace Imaginophobia {
 
             //_collisionWorld.AddLayer("walls", wallLayer);
             //_collisionWorld.AddLayer("triggers", triggerLayer);
-        }
-
-        public void OnExitMiniGame() {
-            _player.ToggleRepair();
         }
     }
 }

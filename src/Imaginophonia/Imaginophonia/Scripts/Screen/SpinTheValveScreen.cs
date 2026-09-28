@@ -29,46 +29,22 @@ namespace Imaginophobia {
         private float _needleSpeed;
         private float _angularSpeed;
         private float _progressValue;
-        public event Action ExitMiniGame;
-
+        private Player _player;
 
         public bool SkillCheckIsActive;
-        public SpinTheValveScreen() {
+        public SpinTheValveScreen(Player player) {
             _valveTexture = MainGame.Content.Load<Texture2D>("UI/sprite_valve");
             _valveOrigin = new Vector2(_valveTexture.Width / 2f, _valveTexture.Height / 2f);
-            StartSkillCheck();
             SkillCheckIsActive = true;
+            _player = player;
 
             RandomNeedleSpeed();
         }
 
         public override void Update(GameTime gameTime) {
             if (SkillCheckIsActive) {
-                MouseStateExtended mouseStateExtended = MouseExtended.GetState();
-                float deltaX = mouseStateExtended.X - _centerOrigin.X;
-                float deltaY = mouseStateExtended.Y - _centerOrigin.Y;
+                CalculateInput();
 
-                if (mouseStateExtended.LeftButton == ButtonState.Pressed) {
-                    _mouseAngle = (float)Math.Atan2(deltaY, deltaX);
-                    if (!_isSpinning) {
-                        float distance = new Vector2(deltaX, deltaY).Length();
-                        float valveRadius = _valveTexture.Width * 8 / 2f;
-
-                        if (distance < valveRadius) {
-                            _isSpinning = true;
-                            _lastMouseAngle = _mouseAngle;
-                        }
-                    }
-                    else {
-                        _angularSpeed = MathHelper.WrapAngle(_mouseAngle - _lastMouseAngle);
-                        _targetAngle += _angularSpeed;
-                        _lastMouseAngle = _mouseAngle;
-                        
-                    }
-                }
-                else {
-                    _isSpinning = false;
-                }
                 _valveAngle = MathHelper.Lerp(_valveAngle, _targetAngle, _rotationSpeed * Time.DeltaTime);
                 _targetAngle = MathHelper.Lerp(_targetAngle, _valveAngle, _rotationSpeed * 2 * Time.DeltaTime);
                 
@@ -91,7 +67,7 @@ namespace Imaginophobia {
                 if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
                     Time.AddTimer(this.ScreenManager.CloseScreen, 0.5f);
                     SkillCheckIsActive = false;
-                    ExitMiniGame?.Invoke();
+                    _player.ToggleRepair();
                 }
             }
         }
@@ -116,10 +92,6 @@ namespace Imaginophobia {
             //MainGame.SpriteBatch.DrawString(_font, $"Outer Start Angle: {_outerNeedleStartAngle}/m Needle Angle: {_outerNeedleAngle}", new Vector2(150, 200), Color.White);
         }
 
-        public void StartSkillCheck() {
-            
-        }
-
         private void RandomNeedleSpeed() {
             Random rand = new Random();
             _needleSpeed = MathHelper.ToRadians(rand.Next(-10, 10));
@@ -127,8 +99,32 @@ namespace Imaginophobia {
             Time.AddTimer(RandomNeedleSpeed, 5);
         }
 
-        private void EvaluateInput() {
-            
+        private void CalculateInput() {
+            MouseStateExtended mouseStateExtended = MouseExtended.GetState();
+            float deltaX = mouseStateExtended.X - _centerOrigin.X;
+            float deltaY = mouseStateExtended.Y - _centerOrigin.Y;
+
+            if (mouseStateExtended.LeftButton == ButtonState.Pressed) {
+                _mouseAngle = (float)Math.Atan2(deltaY, deltaX);
+                if (!_isSpinning) {
+                    float distance = new Vector2(deltaX, deltaY).Length();
+                    float valveRadius = _valveTexture.Width * 8 / 2f;
+
+                    if (distance < valveRadius) {
+                        _isSpinning = true;
+                        _lastMouseAngle = _mouseAngle;
+                    }
+                }
+                else {
+                    _angularSpeed = MathHelper.WrapAngle(_mouseAngle - _lastMouseAngle);
+                    _targetAngle += _angularSpeed;
+                    _lastMouseAngle = _mouseAngle;
+
+                }
+            }
+            else {
+                _isSpinning = false;
+            }
         }
 
 

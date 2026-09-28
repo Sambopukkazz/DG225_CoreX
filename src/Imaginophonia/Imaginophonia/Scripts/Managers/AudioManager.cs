@@ -1,11 +1,13 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework;
+using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
     public class AudioManager : IDisposable {
@@ -108,13 +110,15 @@ namespace Imaginophobia {
 
         public void Draw() {
             if (_debugging) {
-                foreach(AudioSource audioSource in _activeAudioSources) {
+                //BitmapFont font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+                foreach (AudioSource audioSource in _activeAudioSources) {
                     audioSource.Draw();
+                    //MainGame.SpriteBatch.DrawString(font, $"\nSource Pos:{audioSource.Transform.LocalMatrix}", new Vector2(100, 500 + (40 * _activeAudioSources.IndexOf(audioSource))), Color.White);
                 }
             }
         }
 
-        public void PlaySFX(Vector2 pos, string name, bool repeat = false) {
+        public void PlaySFX(Vector2 pos, string name, bool repeat = false, string source = null) {
             AudioSource audioSource = new(pos);
             _activeAudioSources.Add(audioSource);
 

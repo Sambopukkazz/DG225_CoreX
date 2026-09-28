@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public class DialogueManager {
         Queue<string> dialogues;
+
         public DialogueManager() {
             
         }

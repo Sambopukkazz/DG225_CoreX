@@ -48,7 +48,7 @@ namespace Imaginophobia {
                 .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
             });
 
-            _continueSpawnEnemy = true;
+            _continueSpawnEnemy = false;
         }
 
         public void Update(Rectangle worldBound) {

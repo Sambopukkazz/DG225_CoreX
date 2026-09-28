@@ -62,8 +62,7 @@ namespace Imaginophobia {
             _player.Update();
 
             _enemyManager.Update(_camera.WorldBounds);
-
-            _camera.LookAt(new Vector2(_player.Transform.Position.X, _player.Transform.Position.Y -260));
+            _camera.LookAt(new Vector2(_player.Transform.Position.X, _player.Transform.Position.Y));
 
             _sceneManager.Update(gameTime);
 
@@ -87,14 +86,13 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: traformMatrix);
             _player.Draw();
             _enemyManager.Draw();
+            AudioManager.Instance.Draw();
 
             MainGame.SpriteBatch.End();
             //End lightning
             LightManager.Penumbra.Draw(gameTime);
-
+            //Draw static object that doesn't move with camera
             MainGame.SpriteBatch.Begin();
-
-            AudioManager.Instance.Draw();
 
             _uiManager.Draw();
 

@@ -37,7 +37,6 @@ namespace Imaginophobia {
 
         public override void Update() {
             base.Update();
-
             _emitter.Position = new Vector3(Transform.Position.X, Transform.Position.Y, 0);
         }
 
