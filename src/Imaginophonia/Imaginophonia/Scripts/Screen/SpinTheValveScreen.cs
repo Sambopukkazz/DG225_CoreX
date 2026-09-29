@@ -65,9 +65,9 @@ namespace Imaginophobia {
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
 
                 if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
-                    Time.AddTimer(this.ScreenManager.CloseScreen, 0.5f);
                     SkillCheckIsActive = false;
                     _player.ToggleRepair();
+                    this.ScreenManager.CloseScreen();                   
                 }
             }
         }
