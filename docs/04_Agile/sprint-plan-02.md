@@ -16,9 +16,9 @@
 | - | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------- | ------------- | -------------- |
 | 1 | As a player, I want to see my remaining lives                                                                           | เตชินท์                        | Should Have | 2             | ✅ Done        |
 | 2 | As an artist, I want to redesign some of the assets to make them clearer and batter guide the player.                   | นาถวัฒน์                      | Must Have   | 3             | 🔄 In Progress |
-| 3 | As a designer, i want to test out lightings so that the games feel more immersive.                                      | ธีนันทนัช                    | Must Have   | 2             | 🔄 In Progress |
+| 3 | As a designer, i want to test out lightings so that the games feel more immersive.                                      | ธีนันทนัช                    | Must Have   | 2             | ✅ Done        |
 | 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives.                      | ธีนันทนัช + เตชินท์ | Must Have   | 3             | ✅ Done        |
-| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | ธีนันทนัช                    | Must Have   | 6             | 🔲 Todo        |
+| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | ธีนันทนัช                    | Must Have   | 6             | 🔄 In Progress |
 | 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | พรภวิษย์                      | Should Have | 3             | 🔄 In Progress |
 | 7 | As a player, I want entities to chase me, so that I feel challenged.                                                    | เตชินท์                        | Must Have   | 2             | ✅ Done        |
 | 8 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | เตชินท์                        | Must Have   | 2             | ✅ Done        |
@@ -44,21 +44,21 @@
 - [ ] [Player walk animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 40hrs]  [status::🔄 In Progress]
 - [X] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
 
-### Story 3 — [Enemy behavior]
+### Story 3 — [Lightings]
 
-- [ ] [Enemy base class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: 🔄 In Progress]
-- [ ] [Implement predesign enemy]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
+- [X] [Make Entities in LDtk]  [owner:: ธีนันทนัช 120]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [Testing it out in the real game]  [owner:: ธีนันทนัช 120]  [estimate:: 8hrs]  [status:: ✅ Done]
 
 ### Story 4 — [Map creation]
 
 - [X] [Build simple test map]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [ ] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: 🔄 In Progress]
-- [ ] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: 🔄 In Progress]
+- [X] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: ✅ Done]
 
 ### Story 5 — [Transform phobias to enemies mechanics]
 
-- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔲 Todo]
-- [ ] [Task ย่อย]  [owner:: ชื่อ]  [estimate:: Nh]  [status:: 🔲 Todo]
+- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [ ] [Turn them into enemies and create a mechanic around it]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔄 In Progress]
 
 ### Story 6 — [Menu and settings]
 
