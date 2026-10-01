@@ -5,13 +5,13 @@
 
 ## Sprint Goal ทำสำเร็จหรือไม่?
 
-| Goal ที่ทำเสร็จ   | Goal ที่ทำไม่เสร็จ        |
-| --------------------------- | -------------------------------------- |
-| Player controls and acitons | Redesign main character                |
-| Collosion + Interactable    | Sound effect triggers                  |
-| Map creation                | Menu and settings                      |
-| Spatial Sound effect        | Transform phobias to enemies mechanics |
-|                             | Enemy behavior                         |
+| Goal ที่ทำเสร็จ | Goal ที่ทำไม่เสร็จ        |
+| ------------------------- | -------------------------------------- |
+| Lightings                 | Redesign main character                |
+| Collision + Interactable  | Sanity System                          |
+| Map creation              | Menu and settings                      |
+| Enemy Behavior            | Transform phobias to enemies mechanics |
+|                           |                                        |
 
 ---
 
@@ -20,10 +20,13 @@
 ### Went Well
 
 - มีความคืบหน้าจากแต่ละคนที่เห็นได้ชัด
+- ทำหลายอย่างทันใน sprint
+- มีการจดบันทึกการประชุมที่ละเอียดขึ้น
 
 ### Improvement
 
 - การทำงานไม่ตรงตาม Capacity จริง ต้องมีการปรับ Capacity
+- เวลาไม่พอ น้อยกว่าที่คาดการณ์ไว้มาก
 
 ---
 
