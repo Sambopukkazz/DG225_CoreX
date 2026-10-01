@@ -28,6 +28,8 @@
 | 5 | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | ได้ยินเสียงแทรกซ้ายขวา                                                             | 3             | 1      |
 | 6 | As a developer,i want the game have skill heal Sanity                                                                                  | สกิลที่เพิ่มค่าสติ                                                                     | 2             | ---    |
 | 7 | As an artist, I want to redesign the mini-game UI                                                                                      | ปรับ UI มินิเกม ให้ดูดีมากขึ้น                                                 | 3             | 3      |
+| 8 | As a designer, I want to add tutorials for players, so that they understand how to play the game easily.                                | ตอนเข้าด่านจะมี tutorial สอนเล่น + design ui ในหน้า minigame ต่างๆ      | 2             | 3      |
+| 9 | As a designer, I want to overhaul game's menu, so that it's more clean and understandable to use.                                       | จัดระเบียบปุ่มต่างๆใน menu                                                          | 3             | 3      |
 
 ## Nice to Have
 

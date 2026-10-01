@@ -14,7 +14,7 @@
 
 | # | User Story                                                                                                              | รับผิดชอบ                    | MoSCoW      | Estimate (SP) | Status         |
 | - | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------- | ------------- | -------------- |
-| 1 | As a player, I want to see my remaining lives                                                                           | เตชินท์                        | Should Have | 2             | ✅ Done        |
+| 1 | As a player, I want to see my remaining lives                                                                           | เตชินท์                        | Should Have | 2             | 🔄 In Progress |
 | 2 | As an artist, I want to redesign some of the assets to make them clearer and batter guide the player.                   | นาถวัฒน์                      | Must Have   | 3             | 🔄 In Progress |
 | 3 | As a designer, i want to test out lightings so that the games feel more immersive.                                      | ธีนันทนัช                    | Must Have   | 2             | ✅ Done        |
 | 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives.                      | ธีนันทนัช + เตชินท์ | Must Have   | 3             | ✅ Done        |
