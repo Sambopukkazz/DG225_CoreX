@@ -50,11 +50,11 @@
 - [ ] [Enemy base class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: 🔄 In Progress]
 - [ ] [Implement predesign enemy]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
 
-### Story 4 — [Map creation]
+### Story 4 — [Menu and settings]
 
-- [X] [Build simple test map]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [X] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: 🔄 In Progress]
-- [X] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: 🔄 In Progress]
+- [ ] [Start Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hrs]  [status:: ✅ In Progress]
+- [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
+- [ ] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: 🔲 Todo]
 
 ### Story 5 — [Transform phobias to enemies mechanics]
 
@@ -63,9 +63,7 @@
 
 ### Story 6 — [Menu and settings]
 
-- [ ] [Start Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hrs]  [status:: 🔄 In Progress]
-- [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
-- [ ] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+- [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔄 In Progress]
 
 ### Story 7 — [Sound effect]
 

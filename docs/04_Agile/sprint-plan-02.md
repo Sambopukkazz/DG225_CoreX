@@ -62,9 +62,9 @@
 
 ### Story 6 — [Menu and settings]
 
-- [ ] [Start Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hrs]  [status:: 🔄 In Progress]
+- [X] [Start Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hrs]  [status:: ✅ Done]
 - [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
-- [ ] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+- [X] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: ✅ Done]
 
 ### Story 7 — [Enemy behavior]
 
