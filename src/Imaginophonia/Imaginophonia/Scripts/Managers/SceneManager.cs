@@ -50,6 +50,7 @@ namespace Imaginophobia {
             _activeScene = new Scene(sceneName, collisionManager, lightManager);
             _renderer.LoadTilemap(_activeScene.TileMap);
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
+            camera.IsZoomClampedToWorldBounds = true;
 
             if (_activeScene.Name == "sewer") {
                 AudioManager.Instance.PlayAmbiance("sewer");

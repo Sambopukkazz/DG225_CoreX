@@ -14,30 +14,37 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class ConnectTheDotsScreen : Screen {
-        private int _column = 10;
-        private int _row = 10;
-        private int _gridSize = 64;
+        private int _column = 6;
+        private int _row = 6;
+        private int _gridSize = 100;
+        
         private Vector2 _gridPos;
         private GridCell[,] _cells;
         private List<WirePath> _completedPaths;
         private WirePath _currentPath;
         private Player _player;
+        private List<Color> _colors;
+        private DotsGenerator _dotsGenerator;
 
         public ConnectTheDotsScreen(Player player) {
             _cells = new GridCell[_column, _row];      
-            _gridPos = new Vector2(600, 200);
+            _gridPos = new Vector2((MainGame.GraphicsDevice.Viewport.Width / 2) - (_gridSize * _column / 2), (MainGame.GraphicsDevice.Viewport.Height / 2) - (_gridSize * _row / 2));
             _completedPaths = new List<WirePath>();
+            _colors = new List<Color>();
 
             CreateGrid();
-            AddDot(0,2,Color.Red);
-            AddDot(0,8, Color.Red);
-            AddDot(7, 9, Color.Blue);
-            AddDot(2, 6, Color.Blue);
+
+            _dotsGenerator = new DotsGenerator(_row, _column, AddDot);
+            _dotsGenerator.GenerateDots();
 
             _player = player;
         }
 
         public override void Update(GameTime gameTime) {
+            //if (_dotsGenerator.IsGeneratingDots) {
+            //    //_dotsGenerator.Update();
+            //}
+
             MouseStateExtended mouseStateExtended = MouseExtended.GetState();
             Point? hoveredPoint = ScreenToGrid(new Vector2(mouseStateExtended.X, mouseStateExtended.Y));
 
@@ -52,7 +59,6 @@ namespace Imaginophobia {
 
                             _currentPath = new WirePath { Color = cell.Color };
                             _currentPath.Points.Add(pos);
-                            _completedPaths.Add(_currentPath);
                         }
                     }
                     else if (!_currentPath.IsComplete) {
@@ -61,16 +67,13 @@ namespace Imaginophobia {
                 }
             }
             else if (mouseStateExtended.WasButtonReleased(MouseButton.Left)) {
-                if (_currentPath != null && !_currentPath.IsComplete) {
-                    _completedPaths.Remove(_currentPath);
-                }
                 _currentPath = null;
             }
             else if (mouseStateExtended.WasButtonPressed(MouseButton.Right)) {
                 _completedPaths.Clear();
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _completedPaths.Count == _colors.Count) {
                 this.ScreenManager.CloseScreen();
                 _player.ToggleRepair();
             }
@@ -80,8 +83,8 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.Begin();
             for (int x = 0; x < _column; x++) {
                 for (int y = 0; y < _row; y++) {
-                    Rectangle gridRect = new Rectangle((int)_gridPos.X + x * _gridSize,(int)_gridPos.Y + y * _gridSize, _gridSize - 2, _gridSize - 2);
-                    MainGame.SpriteBatch.DrawRectangle(gridRect, Color.DarkGray * 0.3f);
+                    Rectangle gridRect = new Rectangle((int)_gridPos.X + x * _gridSize,(int)_gridPos.Y + y * _gridSize, _gridSize - 1, _gridSize - 1);
+                    MainGame.SpriteBatch.DrawRectangle(gridRect, Color.DarkGray);
                 }
             }
 
@@ -95,20 +98,29 @@ namespace Imaginophobia {
                 }
             }
 
+            if (_currentPath != null) {
+                for (int i = 0; i < _currentPath.Points.Count - 1; i++) {
+                    Vector2 start = GetCellCenter(_currentPath.Points[i]);
+                    Vector2 end = GetCellCenter(_currentPath.Points[i + 1]);
+
+                    DrawLineSegment(start, end, _currentPath.Color, thickness: 12);
+                }
+            }
+
             for (int x = 0; x < _column; x++) {
                 for (int y = 0; y < _row; y++) {
                     GridCell cell = _cells[x, y];
                     if (cell.IsEndpoint) {
                         Vector2 center = GetCellCenter(new Point(x, y));
                         Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
-                        MainGame.SpriteBatch.DrawRectangle(dotRect, cell.Color);
+                        MainGame.SpriteBatch.DrawCircle(center, 20, 100, cell.Color, 5);
                     }
                 }
             }
             MainGame.SpriteBatch.End();
         }
 
-        private void DrawLineSegment(Vector2 point1, Vector2 point2, Color color, int thickness) {
+        public void DrawLineSegment(Vector2 point1, Vector2 point2, Color color, int thickness) {
             MainGame.SpriteBatch.DrawLine(point1, point2, color, thickness);
         }
 
@@ -126,6 +138,9 @@ namespace Imaginophobia {
         public void AddDot(int x, int y, Color color) {
             _cells[x, y].Color = color;
             _cells[x, y].IsEndpoint = true;
+            if (_colors.Contains(color) == false) {
+                _colors.Add(color);
+            }
         }
 
         public Point? ScreenToGrid(Vector2 mousePos) {
@@ -138,7 +153,7 @@ namespace Imaginophobia {
             return null;
         }
 
-        private void TryExtendPath(WirePath path, Point nextPoint) {
+        public void TryExtendPath(WirePath path, Point nextPoint) {
             Point lastPoint = path.Points[path.Points.Count - 1];
 
             int distance = Math.Abs(nextPoint.X - lastPoint.X) + Math.Abs(nextPoint.Y - lastPoint.Y);
@@ -173,7 +188,7 @@ namespace Imaginophobia {
             }
         }
 
-        private Vector2 GetCellCenter(Point pos) {
+        public Vector2 GetCellCenter(Point pos) {
             Vector2 center = new Vector2(_gridPos.X + pos.X * _gridSize + _gridSize / 2f, _gridPos.Y + pos.Y * _gridSize + _gridSize / 2f);
             return center;
         }

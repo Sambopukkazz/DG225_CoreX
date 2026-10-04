@@ -62,7 +62,15 @@ namespace Imaginophobia {
             _player.Update();
 
             _enemyManager.Update(_camera.WorldBounds);
-            _camera.LookAt(new Vector2(_player.Transform.Position.X, _player.Transform.Position.Y));
+
+            _camera.LookAt(_player.CameraTarget);
+            if(_camera.Zoom != _player.FocusLevel && _player.FocusLevel > _camera.Zoom) {
+                _camera.Zoom = MathHelper.Lerp(_camera.Zoom, _player.FocusLevel, 0.05f);
+            }
+            else if (_camera.Zoom != _player.FocusLevel && _player.FocusLevel < _camera.Zoom) {
+                _camera.Zoom = MathHelper.Lerp(_camera.Zoom, _player.FocusLevel, 0.1f);
+            }
+            
 
             _sceneManager.Update(gameTime);
 
@@ -91,6 +99,7 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.End();
             //End lightning
             LightManager.Penumbra.Draw(gameTime);
+
             //Draw static object that doesn't move with camera
             MainGame.SpriteBatch.Begin();
 

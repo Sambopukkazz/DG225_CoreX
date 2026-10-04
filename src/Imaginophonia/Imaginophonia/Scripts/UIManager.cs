@@ -36,6 +36,8 @@ namespace Imaginophobia {
                 MainGame.SpriteBatch.Draw(_spacebar, _spaceBarPos, Color.White);
             }
 
+            MainGame.SpriteBatch.FillRectangle(new Rectangle(0,0,1920,480),Color.Black);
+
             //MainGame.SpriteBatch.FillRectangle(Transform.Position.X + 50, Transform.Position.Y, 15, 120, Color.DarkGray);
             //MainGame.SpriteBatch.FillRectangle(Transform.Position.X + 50, Transform.Position.Y, 15, _timer.TimeLeft * 40, Color.LightBlue);
 

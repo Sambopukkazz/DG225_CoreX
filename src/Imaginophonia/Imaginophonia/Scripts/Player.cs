@@ -11,6 +11,7 @@ using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Particles;
 using Penumbra;
+using RenderingLibrary;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,6 +51,8 @@ namespace Imaginophobia {
         private bool _readyToRepair;
         public bool CanRepair => _readyToRepair;
         public bool CanInteract { get; set; }
+        public float FocusLevel;
+        public Vector2 CameraTarget;
         private Timer _timer;
 
 
@@ -145,30 +148,57 @@ namespace Imaginophobia {
                 }
 
                 Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
+                Listener.Position = new Vector3(Transform.Position, 0);
                 //Transform.Position += new Vector2(Velocity.X * Time.DeltaTime, Velocity.Y * Time.DeltaTime);
 
                 _scotopicLight.Position = Transform.Position;
                 _flashLight.Position = Transform.Position;
-                UpdateDebug();
 
-                Listener.Position = new Vector3(Transform.Position, 0);
+                UpdateDebug();
+                
                 Animate();
                 _animatedSprite.Update(Time.ElapsedTime);
 
                 UpdateShape();
             }
 
-            _eyeSight.Start = Transform.Position + _eyeLevel;
-            float direction;
-            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
-                direction = -1;
-                _flashLight.Rotation = MathHelper.ToRadians(180);
+            if (_readyToRepair == false) {
+                FocusLevel = 1.25f;
             }
             else {
-                direction = 1;
-                _flashLight.Rotation = 0;
+                FocusLevel = 1;
             }
-            _eyeSight.End = new Vector2(Transform.Position.X + _eyeLevel.X + _eyeSightLength * direction, Transform.Position.Y + _eyeLevel.Y);
+
+            if (KeyboardExtended.GetState().IsKeyDown(Keys.A) && _readyToRepair == false) {
+                CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
+            }
+            else if (KeyboardExtended.GetState().IsKeyDown(Keys.D) && _readyToRepair == false) {
+                CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X + 400, 0.1f);
+            }
+            else {
+                if (_readyToRepair == false) {
+                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X, 0.01f); ;
+                }
+                else {
+                    CameraTarget = Transform.Position;
+                }
+                
+            }
+
+
+            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
+                _flashLight.Rotation = MathHelper.ToRadians(180);
+                _eyeSight.Start.X = Transform.Position.X - _eyeLevel.X;
+                _eyeSight.Start.Y = Transform.Position.Y + _eyeLevel.Y;
+                _eyeSight.End.X = Transform.Position.X - _eyeLevel.X - _eyeSightLength;
+                _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
+            }
+            else if (_animatedSprite.Effect == SpriteEffects.None) {
+                _flashLight.Rotation = 0;
+                _eyeSight.Start = Transform.Position + _eyeLevel;
+                _eyeSight.End.X = Transform.Position.X + _eyeLevel.X + _eyeSightLength;
+                _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
+            }
 
             if (_flashLight.Enabled) {
                 Battery -= 0.5f * Time.DeltaTime;
