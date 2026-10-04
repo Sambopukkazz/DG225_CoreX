@@ -7,15 +7,15 @@
 
 ## Must Have (MVP)
 
-| # | User Story                                                                                                              | Acceptance Criteria                                                                     | Estimate (SP) | Sprint |
-| - | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------- | ------ |
-| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                | เดินซ้ายขวาได้ ไม่เดินทะลุกำแพง                           | 1             | 1      |
-| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | เดินเข้าใกล้ของแล้วมีปุ้มแจ้ง กดแล้วทำ objective   | 2             | —     |
-| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                    | หาดโดนแล้วสามารถตายได้                                            | 2             | —     |
-| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | สามารถเข้าออกประตุได้ มี objective วางไว้ใน map          | 3             | —     |
-| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | คิด concept phobia ให้สามารถโจมตี player ได้                        | 6             | —     |
-| 6 | As a Artist, I want to redesign the main charecter to make them look more paranoid.                                     | ปรับตัวละครหลักให้ดูมีความหวาดระแวงมากขึ้น    | 5             | 1      |
-| 7 | As a Artist, I want to redesign some of the assets to make them clearer and batter guide the player.                   | ปรับ Aessets ให้จัดเจนและนำทางผู้เล่นได้ระดับนึง | 3             | 2      |
+| # | User Story                                                                                                              | Acceptance Criteria                                                                    | Estimate (SP) | Sprint |
+| - | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------- | ------ |
+| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                | เดินซ้ายขวาได้ ไม่เดินทะลุกำแพง                          | 1             | 1      |
+| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters. | เดินเข้าใกล้ของแล้วมีปุ้มแจ้ง กดแล้วทำ objective  | 2             | —     |
+| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                    | หากโดนมอนแล้วสามารถตายได้                                     | 2             | —     |
+| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                       | สามารถเข้าออกประตุได้ มี objective วางไว้ใน map         | 3             | —     |
+| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | คิด concept phobia ให้สามารถโจมตี player ได้                       | 6             | —     |
+| 6 | As an artist, I want to redesign the main charecter to make them look more paranoid.                                    | ปรับตัวละครหลักให้ดูมีความหวาดระแวงมากขึ้น   | 5             | 1      |
+| 7 | As an artist, I want to redesign some of the assets to make them clearer and batter guide the player.                  | ปรับ Assets ให้จัดเจนและนำทางผู้เล่นได้ระดับนึง | 3             | 2      |
 
 ## Should Have
 
@@ -27,7 +27,9 @@
 | 4 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                         | 2             | —     |
 | 5 | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | ได้ยินเสียงแทรกซ้ายขวา                                                             | 3             | 1      |
 | 6 | As a developer,i want the game have skill heal Sanity                                                                                  | สกิลที่เพิ่มค่าสติ                                                                     | 2             | ---    |
-| 7 | As a Artist, I want to redesign the mini-game UI                                                                                       | ปรับ UI มินิเกม ให้ดูดีมากขึ้น                                                 | 3             | 3      |
+| 7 | As an artist, I want to redesign the mini-game UI                                                                                      | ปรับ UI มินิเกม ให้ดูดีมากขึ้น                                                 | 3             | 3      |
+| 8 | As a designer, I want to add tutorials for players, so that they understand how to play the game easily.                                | ตอนเข้าด่านจะมี tutorial สอนเล่น + design ui ในหน้า minigame ต่างๆ      | 2             | 3      |
+| 9 | As a designer, I want to overhaul game's menu, so that it's more clean and understandable to use.                                       | จัดระเบียบปุ่มต่างๆใน menu                                                          | 3             | 3      |
 
 ## Nice to Have
 
@@ -37,7 +39,8 @@
 | 2 | As a designer, I want to make a balance sheet of entities, so that I can understand the balance                 | สร้าง spreadsheet ที่มีขอมูล entity ต่าง ๆ สามารถดูค่าต่างแล้วไปปรับในโค้ดได้ดดยไม่มีปัญหา | 3             | —     |
 | 3 | As a developer, I want to make my game's menu and gui to look nice, so that it looks appealing.                 | design ui ให้สวยและเช้ากับ theme                                                                                                              | 1             | —     |
 | 4 | As a designer,iI want to make mini map                                                                          | มีmini map อยู่บริเวณมุมบนขวา                                                                                                             | 4             |        |
-| 5 | As a Artist, I want to create a nomal map for an assets to make lighting look more realistic.                   | ทำ Assets ให้มี nomal map ทำให้แสงตกกระทบดุสมจริงมากขึ้น                                                                 | 3             |        |
+| 5 | As an artist, I want to create a nomal map for an assets to make lighting look more realistic.                  | ทำ Assets ให้มี nomal map ทำให้แสงตกกระทบดุสมจริงมากขึ้น                                                                 | 3             |        |
+| 6 | As a developer, I want the UI to be more interactive                                                            | ทำให้มีอนิเมชั่นตอนเลือกปุ่มต่างๆ                                                                                            | 2             |        |
 
 ## MoSCoW Legend
 
