@@ -13,12 +13,13 @@
 
 ```mermaid
 gantt
-    title Project Timeline — Sprint 1-3
+    title Project Timeline — Sprint 1-4
     dateFormat  YYYY-MM-DD
     section Sprints
     Sprint 1 :s1, 2026-08-29, 14d
     Sprint 2 :s2, after s1, 14d
-    Sprint 3 :s3, after s2, 21d
+    Sprint 3 :s3, after s2, 14d
+    Sprint 4 :s4, after s3, 22d
 
 ```
 

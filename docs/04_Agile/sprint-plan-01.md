@@ -37,51 +37,51 @@
 
 ### Story 1 — [Player controls and acitons]
 
-- [X] [Player Class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [X] [InputManager Class]  [owner:: เตชินท์ 116]  [estimate:: 2hrs]  [status::✅ Done]
+- [X] [Player Class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [InputManager Class]  [owner:: เตชินท์]  [estimate:: 2hrs]  [status::✅ Done]
 
 ### Story 2 — [Collosion + Interactable]
 
-- [X] [Research and choose suitable collision system]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: ✅ Done]
-- [X] [Test basic collision]  [owner:: เตชินท์ 116]  [estimate:: 4hrs]  [status:: ✅ Done]
-- [ ] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: 🔲 Todo]
+- [X] [Research and choose suitable collision system]  [owner:: เตชินท์]  [estimate:: 6hrs]  [status:: ✅ Done]
+- [X] [Test basic collision]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status:: ✅ Done]
+- [ ] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: 🔲 Todo]
 
 ### Story 3 — [Enemy behavior]
 
-- [ ] [Enemy base class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: 🔄 In Progress]
-- [ ] [Implement predesign enemy]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
+- [ ] [Enemy base class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: 🔄 In Progress]
+- [ ] [Implement predesign enemy]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
 
 ### Story 4 — [Map creation]
 
-- [X] [Build simple test map]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [X] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [X] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: ✅ Done]
+- [X] [Build simple test map]  [owner:: ธีนันทนัช]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Mock map layout]  [owner:: ธีนันทนัช]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Check map usability and revise it]  [owner:: เตชินท์]  [estimate:: 14hrs]  [status:: ✅ Done]
 
 ### Story 5 — [Transform phobias to enemies mechanics]
 
-- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔲 Todo]
+- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔲 Todo]
 
 ### Story 6 — [Menu and settings]
 
-- [ ] [Start Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hrs]  [status:: 🔄 In Progress]
-- [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
-- [ ] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+- [ ] [Start Menu]  [owner:: พรภวิษย์]  [estimate:: 18hrs]  [status:: 🔄 In Progress]
+- [ ] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status:: 🔲 Todo]
+- [ ] [Pause Screen]  [owner:: พรภวิษย์]  [estimate:: 6hrs]  [status:: 🔲 Todo]
 
 ### Story 7 — [Sound effect triggers]
 
-- [X] [AudioManager class]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status:: ✅ Done]
-- [ ] [Implement sound effect triggers]  [owner:: เตชินท์ 116]  [estimate:: 15h]  [status:: 🔄 In Progress]
+- [X] [AudioManager class]  [owner:: เตชินท์]  [estimate:: 7hrs]  [status:: ✅ Done]
+- [ ] [Implement sound effect triggers]  [owner:: เตชินท์]  [estimate:: 15h]  [status:: 🔄 In Progress]
 
 ### Story 8 — [Spatial Sound effect]
 
-- [X] [Pan effect]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status::✅ Done]
-- [X] [Doppler effect]  [owner:: เตชินท์ 116]  [estimate:: 7hrs]  [status::✅ Done]
-- [X] [Test and adjust]  [owner:: เตชินท์ 116]  [estimate:: 6hrs]  [status:: ✅ Done]
+- [X] [Pan effect]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status::✅ Done]
+- [X] [Doppler effect]  [owner:: เตชินท์]  [estimate:: 7hrs]  [status::✅ Done]
+- [X] [Test and adjust]  [owner:: เตชินท์]  [estimate:: 6hrs]  [status:: ✅ Done]
 
 ### Story 9 — [Redesign main character]
 
-- [ ] [Player walk animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 40hrs]  [status::🔄 In Progress]
-- [X] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
+- [ ] [Player walk animation]  [owner:: นาถวัฒน์]  [estimate:: 40hrs]  [status::🔄 In Progress]
+- [X] [Player idle animation]  [owner:: นาถวัฒน์]  [estimate:: 20hrs]  [status:: ✅ Done]
 
 ---
 
@@ -100,19 +100,19 @@
 - ดูเรื่อง enum
 - เปลี่ยนค่าตัวแปร spotlight (scaleX, scaleY, Intensity, Rotation. Color)
 
-**Mon**
+นาถวัฒน์
 
 - redesign background
 - walking, idle animation
 - ทำหน้าปกเกม
 - Redesign ตัวละคร
 
-**Ken**
+พรภวิษย์
 
 - ลองใช้ gum
 - ทดลองใส่รูปใน gum
 
-**Techin**
+เตชินท์
 
 - merge repo ของเกมกับ gdd เข้าด้วยกัน
 - ทำระบบจัดการ collision

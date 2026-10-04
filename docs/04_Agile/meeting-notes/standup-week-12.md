@@ -1,6 +1,6 @@
-# Weekly Stand-up Meeting — Week 11
+# Weekly Stand-up Meeting — Week 12
 
-**วันที่ประชุม:** 2026-09-26 | **Sprint:** Sprint 2
+**วันที่ประชุม:** 2026-10-04 | **Sprint:** Sprint 3
 -------------------------------------------------------
 
 ## รายงานความคืบหน้าประจำสัปดาห์ (3 คำถามหลัก)
@@ -21,11 +21,11 @@
 
 ## Action Items & Blockers Resolution
 
-- [X] [ปรับ Minigame Skill Check] [status:: done]
+- [X] [ทำ Minigame Connect the dots] [status:: done]
   [owner:: เตชินท์] [due:: 2026-10-03]
-- [X] [ทำระบบจัดการศัตรู] [status:: done]
+- [ ] [ทำระบบจัดการข้อความที่แสดงในเกม] [status:: doing]
   [owner:: เตชินท์] [due:: 2026-10-03]
-- [X] [ทำให้มอนโจมตีผู้เล่น] [status:: done]
+- [ ] [ทำ shader แสง +เอฟเฟคกะพริบตา] [status:: doing]
   [owner:: เตชินท์] [due:: 2026-10-03]
 - [ ] [ทำ Walk Animation เพิ่มเติม] [status:: doing]
   [owner:: นาถวัฒน์] [due:: 2026-10-03]
@@ -34,5 +34,5 @@
 
 ## Related Documents
 
-- [Sprint 2 Plan](../sprint-plan-02.md)
+- [Sprint 3 Plan](../sprint-plan-03.md)
 - [Sprint Backlog](../02-sprint-backlog.md)

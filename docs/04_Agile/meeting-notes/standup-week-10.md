@@ -20,20 +20,20 @@
 
 - [X] [ทดสอบ level ที่ธีนันทนัชสร้างมา] [status:: done]
   [owner:: เตชินท์] [due:: 2026-09-19]
-- [ ] [ทำ Minigame Connect the dots] [status:: todo]
+- [X] [ปรับ Minigame Skill Check] [status:: done]
   [owner:: เตชินท์] [due:: 2026-09-27]
-- [ ] [ทำระบบจัดการศัตรู] [status:: doing]
+- [X] [ทำระบบจัดการศัตรู] [status:: done]
   [owner:: เตชินท์] [due:: 2026-09-27]
-- [ ] [ปรับแสงในเกมให้เหมาะสม] [status:: doing]
+- [X] [ปรับแสงในเกมให้เหมาะสม] [status:: done]
   [owner:: ธีนันทนัช] [due:: 2026-09-27]
 - [ ] [ทำ Walk Animation] [status:: doing]
   [owner:: นาถวัฒน์] [due:: 2026-09-27]
-- [ ] [ทำ UI ให้สามารถกดได้และมีการเปลี่ยนหน้าจอ] [status::doing]
+- [X] [ทำ UI ให้สามารถกดได้และมีการเปลี่ยนหน้าจอ] [status::done]
   [owner:: พรภวิษย์] [due:: 2026-09-27]
 
 ---
 
 ## Related Documents
 
-- [[docs/04_Agile/sprint-plan-01|Sprint 1 Plan]]
-- [[docs/agile/02-sprint-backlog|Sprint Backlog]]
+- [Sprint 2 Plan](../sprint-plan-02.md)
+- [Sprint Backlog](../02-sprint-backlog.md)
