@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
@@ -30,6 +31,9 @@ namespace Imaginophobia {
         private EnemyManager _enemyManager;
         private UIManager _uiManager;
         private DialogueManager _dialogueManager;
+        private CameraShaker _cameraShaker;
+        //temp
+        
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
@@ -53,7 +57,8 @@ namespace Imaginophobia {
 
             _dialogueManager = new DialogueManager();
             //temp
-            
+            _cameraShaker = new CameraShaker();
+
         }
 
         public void Update(GameTime gameTime) {
@@ -63,14 +68,15 @@ namespace Imaginophobia {
 
             _enemyManager.Update(_camera.WorldBounds);
 
-            _camera.LookAt(_player.CameraTarget);
-            if(_camera.Zoom != _player.FocusLevel && _player.FocusLevel > _camera.Zoom) {
+            _camera.LookAt(_player.CameraTarget + _cameraShaker.ShakeOffset);
+
+            if (_camera.Zoom != _player.FocusLevel && _player.FocusLevel > _camera.Zoom) {
                 _camera.Zoom = MathHelper.Lerp(_camera.Zoom, _player.FocusLevel, 0.05f);
             }
             else if (_camera.Zoom != _player.FocusLevel && _player.FocusLevel < _camera.Zoom) {
                 _camera.Zoom = MathHelper.Lerp(_camera.Zoom, _player.FocusLevel, 0.1f);
             }
-            
+
 
             _sceneManager.Update(gameTime);
 
@@ -81,6 +87,10 @@ namespace Imaginophobia {
             _audioManager.Update(_player);
 
             _uiManager.Update();
+
+            _cameraShaker.Update(gameTime);
+
+            DebugUpdate();
         }
 
         public void Draw(GameTime gameTime) {
@@ -100,12 +110,9 @@ namespace Imaginophobia {
             //End lightning
             LightManager.Penumbra.Draw(gameTime);
 
+
             //Draw static object that doesn't move with camera
-            MainGame.SpriteBatch.Begin();
-
             _uiManager.Draw();
-
-            MainGame.SpriteBatch.End();
         }
 
         private void OnCallLoadScene(string sceneName) {
@@ -120,6 +127,43 @@ namespace Imaginophobia {
         
         private void OnEnemySpawned(ICollisionActor enemy) {
             _collisionManager.AddCollider(enemy, "enemies");
+        }
+
+        private void DebugUpdate() {
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
+                _cameraShaker.Shake(5f, 1f);
+            }
+            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.Right)) {
+            //    _camera.Zoom += 0.05f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+            //    VignetteOverlay.Scale += new Vector2(0.01f, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+            //    VignetteOverlay.Scale -= new Vector2(0.01f, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
+            //    VignetteOverlay.Softness += 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
+            //    VignetteOverlay.Softness -= 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad8)) {
+            //    _vignetteOverlay.Sharpness += 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad2)) {
+            //    _vignetteOverlay.Sharpness -= 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
+            //    VignetteOverlay.Color = Color.Red;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad0)) {
+            //    VignetteOverlay.Color = Color.Black;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
+            //    _scotopicLight.Enabled = false;
+            //}
+
         }
     }
 }

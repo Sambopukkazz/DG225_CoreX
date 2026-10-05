@@ -38,7 +38,7 @@ namespace Imaginophobia {
         public virtual void Update() {
             if (Parent != null) {
                 //WorldMatrix = Transform.LocalMatrix * Parent.Transform.WorldMatrix;
-                Transform = Parent.Transform;
+                Transform.Position = Parent.Origin;
             }
             else {
                 //WorldMatrix = Transform.LocalMatrix;
@@ -60,12 +60,15 @@ namespace Imaginophobia {
             }
         }
 
-        public void Destroy(GameObject gameObject) {
+        public static void Destroy(GameObject gameObject) {
             gameObject = null;
         }
-        public void Destroy(GameObject gameObject,float time) {
+
+        public static void Destroy(GameObject gameObject,float time) {
             gameObject = null;
         }
+
+        public virtual void OnDestroyed() { }
 
         public void AddChild(GameObject child) {
             child.Parent?.RemoveChild(child);

@@ -57,6 +57,7 @@ namespace Imaginophobia {
 
         private SoundEffect[] _steps;
         private int _stepOrder;
+        private Dictionary<string, SoundEffect> NameSFX;
         private SoundEffect[] tempFx;
         private Song[] tempSong;
 
@@ -95,7 +96,7 @@ namespace Imaginophobia {
                 AudioSource audioSource = _activeAudioSources[i];
                 audioSource.Update();
 
-                if (audioSource.Sound.State == SoundState.Stopped) {
+                if (audioSource.Sound.State == SoundState.Stopped || audioSource.Active == false) {
                     if (!audioSource.IsDisposed) {
                         audioSource.Dispose();
                     }
@@ -144,8 +145,8 @@ namespace Imaginophobia {
             }
         }
 
-        public void Play3DSFX(Vector2 pos, string name) {
-            AudioSource audioSource = new(pos);
+        public AudioSource Play3DSFX(Vector2 pos, string name, float innerRadius = 10, float outerRadius = 80) {
+            AudioSource audioSource = new(pos, innerRadius, outerRadius);
             _activeAudioSources.Add(audioSource);
 
             SoundEffect soundEffect = null;
@@ -156,6 +157,8 @@ namespace Imaginophobia {
             if (soundEffect != null) {
                 audioSource.PlayOneShot(soundEffect);
             }
+
+            return audioSource;
         }
 
         public void PlayStepsSFX(Vector2 pos, float innerRadius  = 10, float outerRadius = 80) {

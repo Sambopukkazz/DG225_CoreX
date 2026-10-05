@@ -24,7 +24,6 @@ namespace Imaginophobia {
         private WirePath _currentPath;
         private Player _player;
         private List<Color> _colors;
-        private DotsGenerator _dotsGenerator;
 
         public ConnectTheDotsScreen(Player player) {
             _cells = new GridCell[_column, _row];      
@@ -34,8 +33,7 @@ namespace Imaginophobia {
 
             CreateGrid();
 
-            _dotsGenerator = new DotsGenerator(_row, _column, AddDot);
-            _dotsGenerator.GenerateDots();
+            DotsGenerator dotsGenerator = new DotsGenerator(_row, _column, AddDot);
 
             _player = player;
         }

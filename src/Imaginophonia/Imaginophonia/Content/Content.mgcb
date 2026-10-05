@@ -198,6 +198,14 @@
 /processorParam:Version=3.8.5.0
 /build:Phobias/Scopophobia-Entity.png
 
+#begin Shaders/Vignette.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/processorParam:Version=3.8.5.0
+/build:Shaders/Vignette.fx
+
 #begin Tilemaps/tilemap_electrical_room_2.ldtk
 /importer:LDtkTilemapImporter
 /processor:TilemapProcessor

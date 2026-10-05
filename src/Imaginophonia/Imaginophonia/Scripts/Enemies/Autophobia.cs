@@ -16,6 +16,7 @@ namespace Imaginophobia {
         public float MoveSpeed { get; private set; } = 300f;
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
+        public bool AllowMovement { get; set; } = true;
         private readonly Vector2 _size;
 
         private AnimatedSprite _animatedSprite;
@@ -44,21 +45,23 @@ namespace Imaginophobia {
         }
 
         public override void Update() {
-            Velocity = MoveSpeed * Direction;
-            Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
+            if (AllowMovement) {
+                Velocity = MoveSpeed * Direction;
+                Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
 
-            _animatedSprite.Update(Time.ElapsedTime);
-            if(_animatedSprite.Controller.CurrentFrame != _previousFrame) {
-                switch (_animatedSprite.Controller.CurrentFrame) {
-                    case 3:
-                    case 5:
-                    case 7:
-                        AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition, 10, 1200);
-                        _previousFrame = _animatedSprite.Controller.CurrentFrame;
-                        break;
+                _animatedSprite.Update(Time.ElapsedTime);
+                if (_animatedSprite.Controller.CurrentFrame != _previousFrame) {
+                    switch (_animatedSprite.Controller.CurrentFrame) {
+                        case 3:
+                        case 5:
+                        case 7:
+                            AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition, 10, 1200);
+                            _previousFrame = _animatedSprite.Controller.CurrentFrame;
+                            break;
+                    }
                 }
+                UpdateShape();
             }
-            UpdateShape();
         }
 
         public override void Draw() {

@@ -12,13 +12,14 @@ namespace Imaginophobia {
         public float MoveSpeed { get; private set; } = 2600f;
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
+        private AudioSource _audioSource;
         private readonly Vector2 _size;
         private bool _startMovement;
 
         private Texture2D _texture;
 
         public Scopophobia(Vector2 pos, GameObject player, Texture2D texture) : base("Scopophobia", "Enemy") {
-            this._texture = texture;
+            _texture = texture;
             BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(pos, _size);
             Shape = new CollisionShape2D(bounds);
 
@@ -34,7 +35,8 @@ namespace Imaginophobia {
             Transform.Scale = Vector2.One * 4;
             _size = new Vector2(480, 110) * Transform.Scale;
 
-            AudioManager.Instance.Play3DSFX(_origin,"scopophobia");
+            _audioSource = AudioManager.Instance.Play3DSFX(_origin,"scopophobia", 600, 15000);
+            AddChild(_audioSource);
             UpdateShape();
             
 
@@ -49,6 +51,8 @@ namespace Imaginophobia {
 
                 UpdateShape();
             }
+
+            base.Update();
         }
 
         public override void Draw() {
@@ -72,6 +76,11 @@ namespace Imaginophobia {
 
         private void StartMovement() {
             _startMovement = true;
+        }
+
+        public override void OnDestroyed() {
+            _audioSource.SetActive(false);
+            Destroy(this);
         }
     }
 }

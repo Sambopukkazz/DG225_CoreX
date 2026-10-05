@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class Timer {
-        private readonly string Name;
+        public readonly string Name;
         private readonly float _timeLength;
         public float TimeLeft { get; private set; }
         private bool _active;
@@ -28,6 +28,14 @@ namespace Imaginophobia {
         }
 
         public Timer(Action method,float timeLength) {
+            _method = method;
+            _timeLength = timeLength;
+            TimeLeft = timeLength;
+            _active = true;
+        }
+
+        public Timer(Action method, float timeLength, string name) {
+            Name = name;
             _method = method;
             _timeLength = timeLength;
             TimeLeft = timeLength;

@@ -39,8 +39,10 @@ namespace Imaginophobia {
         private Vector2 _flashlightOffset;
         public float MoveSpeed { get; private set; } = 250f;
         private int _previousFrame;
-        private enum CharacterState { Normal, Anxious, Insane }
+        private enum CharacterState { Normal = 75, Anxious = 50, Insane = 25 }
         private CharacterState _characterState;
+        public enum CharacterAction { Repairing, Checking, Walking, Sneaking, Idle }
+        public CharacterAction PlayerAction { get; private set; }
         private bool _lockFacingDirection;
         public float Sanity { get; set; } = 100;
         public float Battery { get; set; } = 100;
@@ -51,51 +53,14 @@ namespace Imaginophobia {
         private bool _readyToRepair;
         public bool CanRepair => _readyToRepair;
         public bool CanInteract { get; set; }
-        public float FocusLevel;
+        public float FocusLevel { get; private set; }
         public Vector2 CameraTarget;
-        private Timer _timer;
+        public Timer CooldownTimer;
+        public bool Blink { get; set; }
 
 
         public Player() : base("Player", "Player"){
-            //Set up animation
-            Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
-            SpriteSheet spriteSheet = new("player", atlas);
-
-            spriteSheet.DefineAnimation("walk-forward", builder => {
-                builder.IsLooping(true);
-                for(int i = 1; i < 8; i++) {
-                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
-                }
-            });
-
-            spriteSheet.DefineAnimation("sneak-forward", builder => {
-                builder.IsLooping(true);
-                for (int i = 1; i < 8; i++) {
-                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
-                }
-            });
-
-            spriteSheet.DefineAnimation("sneak-backward", builder => {
-                builder.IsLooping(true);
-                for (int i = 7; i > 0; i--) {
-                    if (i == 1) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
-                }
-            });
-
-            spriteSheet.DefineAnimation("idle", builder => {
-                builder.IsLooping(false)
-                .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
-            });
-
-            spriteSheet.DefineAnimation("back", builder => {
-                builder.IsLooping(false)
-                .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
-            });
-
-            _animatedSprite = new AnimatedSprite(spriteSheet,"idle");
+            SetUpAnimation();
 
             //SetUp Light
             _scotopicLight = new PointLight() {
@@ -143,16 +108,14 @@ namespace Imaginophobia {
                     Velocity /= 1.7f;
                     _lockFacingDirection = true;
                 }
-                if (KeyboardExtended.GetState().WasKeyPressed(Keys.F)) {
-                    ToggleFlashLight();
-                }
+                
 
                 Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
                 Listener.Position = new Vector3(Transform.Position, 0);
                 //Transform.Position += new Vector2(Velocity.X * Time.DeltaTime, Velocity.Y * Time.DeltaTime);
 
                 _scotopicLight.Position = Transform.Position;
-                _flashLight.Position = Transform.Position;
+                _flashLight.Position = Transform.Position + _flashlightOffset;
 
                 UpdateDebug();
                 
@@ -162,27 +125,35 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (_readyToRepair == false) {
-                FocusLevel = 1.25f;
-            }
-            else {
-                FocusLevel = 1;
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && _animatedSprite.CurrentAnimation != "back") {
+                ToggleFlashLight();
             }
 
-            if (KeyboardExtended.GetState().IsKeyDown(Keys.A) && _readyToRepair == false) {
-                CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
-            }
-            else if (KeyboardExtended.GetState().IsKeyDown(Keys.D) && _readyToRepair == false) {
-                CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X + 400, 0.1f);
-            }
-            else {
-                if (_readyToRepair == false) {
-                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X, 0.01f); ;
+            if (_readyToRepair == false) {
+                if (KeyboardExtended.GetState().IsKeyDown(Keys.A)) {
+                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
+                    _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
+                    _animatedSprite.SetAnimation("check");
+                    PlayerAction = CharacterAction.Checking;
+                }
+                else if (KeyboardExtended.GetState().IsKeyDown(Keys.D)) {
+                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X + 400, 0.1f);
+                    _animatedSprite.Effect = SpriteEffects.None;
+                    _animatedSprite.SetAnimation("check");
+                    PlayerAction = CharacterAction.Checking;
                 }
                 else {
-                    CameraTarget = Transform.Position;
+                    _animatedSprite.SetAnimation("back");
+                    if (_flashLight.Enabled) {
+                        _flashLight.Enabled = false;
+                    }
+                    PlayerAction = CharacterAction.Repairing;
+                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X, 0.01f);
+                    _eyeSightLength = 0;
                 }
-                
+            }
+            else {
+                CameraTarget = Transform.Position;
             }
 
 
@@ -221,6 +192,101 @@ namespace Imaginophobia {
             DebugTest();
         }
 
+        private void SetUpAnimation() {
+            //Set up animation
+            Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
+            SpriteSheet spriteSheet = new("player", atlas);
+
+
+            spriteSheet.DefineAnimation("walk-forward", builder => {
+                builder.IsLooping(true);
+                for (int i = 1; i < 8; i++) {
+                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+                }
+            });
+
+            spriteSheet.DefineAnimation("sneak-forward", builder => {
+                builder.IsLooping(true);
+                for (int i = 1; i < 8; i++) {
+                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+                }
+            });
+
+            spriteSheet.DefineAnimation("sneak-backward", builder => {
+                builder.IsLooping(true);
+                for (int i = 7; i > 0; i--) {
+                    if (i == 1) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+                }
+            });
+
+            spriteSheet.DefineAnimation("idle", builder => {
+                builder.IsLooping(false)
+                .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
+            });
+
+            spriteSheet.DefineAnimation("back", builder => {
+                builder.IsLooping(false)
+                .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
+            });
+
+            spriteSheet.DefineAnimation("check", builder => {
+                builder.IsLooping(false)
+                .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
+            });
+
+            _animatedSprite = new AnimatedSprite(spriteSheet, "idle");
+        }
+
+        //private void SetUpAnimation() {
+        //    //Set up animation
+        //    Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
+        //    SpriteSheet spriteSheet = new("player", atlas);
+        //    int walkFrameCount = 13;
+        //    int idleFrameCount = 12;
+
+        //    spriteSheet.DefineAnimation("walk-forward", builder => {
+        //        builder.IsLooping(true);
+        //        for (int i = 1; i <= walkFrameCount; i++) {
+        //            if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
+        //            else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.1));
+        //        }
+        //    });
+
+        //    spriteSheet.DefineAnimation("sneak-forward", builder => {
+        //        builder.IsLooping(true);
+        //        for (int i = 1; i <= 5; i++) {
+        //            if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
+        //            else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
+        //        }
+        //    });
+
+        //    spriteSheet.DefineAnimation("sneak-backward", builder => {
+        //        builder.IsLooping(true);
+        //        for (int i = 5; i > 0; i--) {
+        //            if (i == 1) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
+        //            else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
+        //        }
+        //    });
+
+        //    spriteSheet.DefineAnimation("idle", builder => {
+        //        builder.IsLooping(true);
+        //        for (int i = 1; i <= idleFrameCount; i++) {
+        //            if (i == idleFrameCount) builder.AddFrame($"sprite_idle_{i:D2}", TimeSpan.FromSeconds(0));
+        //            else builder.AddFrame($"sprite_idle_{i:D2}", TimeSpan.FromSeconds(0.4));
+        //        }
+        //    });
+
+        //    //spriteSheet.DefineAnimation("back", builder => {
+        //    //    builder.IsLooping(false)
+        //    //    .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
+        //    //});
+
+        //    _animatedSprite = new AnimatedSprite(spriteSheet, "idle");
+        //}
+
         private void Animate() {
             if (InputManager.Direction.X < 0 && !_lockFacingDirection) _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
             else if (InputManager.Direction.X > 0 && !_lockFacingDirection) _animatedSprite.Effect = SpriteEffects.None;
@@ -247,7 +313,7 @@ namespace Imaginophobia {
                     case 3:
                     case 5:
                     case 7:
-                        AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition);
+                        AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition,10,150);
                         _previousFrame = _animatedSprite.Controller.CurrentFrame;
                         break;
                 }
@@ -281,12 +347,14 @@ namespace Imaginophobia {
                 SetActive(false);
                 AllowMovement = false;
                 _readyToHide = false;
-                _timer = Time.AddTimer(ToggleHide, 3);
+                FocusLevel = 1.25f;
+                CooldownTimer = Time.AddTimer(ToggleHide, 3, "hideTime");
             }
             else if (!Active) {
                 SetActive(true);
                 AllowMovement = true;
-                Time.AddTimer(SetReadyToHide, _hideCoolDown);
+                FocusLevel = 1;
+                CooldownTimer = Time.AddTimer(SetReadyToHide, _hideCoolDown, "cooldownTime");
             }
             Visible = Active;
             _scotopicLight.Enabled = Active;
@@ -294,6 +362,7 @@ namespace Imaginophobia {
 
         public void SetReadyToHide() {
             _readyToHide = true;
+            CooldownTimer = null;
         }
 
         public void ToggleFlashLight() {
@@ -311,11 +380,15 @@ namespace Imaginophobia {
                 _readyToRepair = false;
                 _animatedSprite.SetAnimation("back");
                 _flashLight.Enabled = false;
+                CanInteract = false;
+                FocusLevel = 1.25f;
             }
             else if (!_readyToRepair) {
                 AllowMovement = true;
                 _readyToRepair = true;
                 _animatedSprite.SetAnimation("idle");
+                CanInteract = true;
+                FocusLevel = 1;
             }
         }
 
@@ -324,30 +397,30 @@ namespace Imaginophobia {
         }
 
         private void UpdateDebug() {
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-                _scotopicLight.Scale -= new Vector2(0, 10);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-                _scotopicLight.Scale += new Vector2(0, 10);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-                _scotopicLight.Scale += new Vector2(10, 0);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-                _scotopicLight.Scale -= new Vector2(10, 0);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-                _scotopicLight.Intensity += 0.01f;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-                _scotopicLight.Intensity -= 0.01f;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-                _scotopicLight.Enabled = true;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
-                _scotopicLight.Enabled = false;
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
+            //    _flashLight.Scale += new Vector2(0, 10);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
+            //    _flashLight.Scale -= new Vector2(0, 10);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+            //    _flashLight.Scale += new Vector2(10, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+            //    _flashLight.Scale -= new Vector2(10, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
+            //    _scotopicLight.Intensity += 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
+            //    _scotopicLight.Intensity -= 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
+            //    _scotopicLight.Enabled = true;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
+            //    _scotopicLight.Enabled = false;
+            //}
             //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
             //    _light.Intensity += 0.01f;
             //}

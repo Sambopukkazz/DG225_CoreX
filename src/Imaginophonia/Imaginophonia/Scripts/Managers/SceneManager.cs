@@ -52,7 +52,7 @@ namespace Imaginophobia {
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
             camera.IsZoomClampedToWorldBounds = true;
 
-            if (_activeScene.Name == "sewer") {
+            if (_activeScene.Name == "tilemap_sewer") {
                 AudioManager.Instance.PlayAmbiance("sewer");
             }
             else {

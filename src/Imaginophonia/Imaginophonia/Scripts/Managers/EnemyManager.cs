@@ -1,14 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Gum.Forms.Controls.Games;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonoGame.Extended.Collisions;
 
 namespace Imaginophobia {
     public class EnemyManager {
@@ -47,17 +48,26 @@ namespace Imaginophobia {
                 builder.IsLooping(false)
                 .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
             });
-
-            _continueSpawnEnemy = false;
         }
 
         public void Update(Rectangle worldBound) {
             for (int i = enemies.Count - 1; i >= 0; i--) {
                 if (enemies[i].Active == false) {
+                    enemies[i].OnDestroyed();
                     enemies.RemoveAt(i);
                     continue;
                 }
                 enemies[i].Update();
+            }
+
+            if (SceneManager.GetActiveScene().Name == "tilemap_sewer") {
+                if(_continueSpawnEnemy == false) {
+                    _continueSpawnEnemy = true;
+                    SpawnEnemy();
+                }
+            }
+            else {
+                _continueSpawnEnemy = false;
             }
 
             if(_worldBound != worldBound) {
@@ -72,49 +82,49 @@ namespace Imaginophobia {
         }
 
         public void SpawnEnemy() {
-            Vector2 pos = _player.Transform.Position;
-            int posOffset = _rand.Next(100, 500);
-            bool spawnLeft;
-            if (_rand.Next(0,10) < 5) {
-                pos.X = _worldBound.Left - posOffset;
-                spawnLeft = true;
-            }
-            else {
-                pos.X = _worldBound.Right + posOffset;
-                spawnLeft = false;
-            }
-
-            GameObject enemy;
-            int[] autophobiaNumber = new int[_autophobiaSpawnChance];
-            for (int i = 0; i< autophobiaNumber.Length; i++) {
-                autophobiaNumber[i] = _rand.Next(0, 101);
-            }
-
-            int[] scopophobiaNumber = new int[_scopophobiaSpawnChance];
-            for (int i = 0; i < scopophobiaNumber.Length; i++) {
-                scopophobiaNumber[i] = _rand.Next(0, 101);
-            }
-
-            int randomNumber = _rand.Next(0, 101);
-            if (autophobiaNumber.Contains<int>(randomNumber)) {
-                Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                enemies.Add(autophobia);
-                EnemySpawned?.Invoke(autophobia);
-            }
-            else if (scopophobiaNumber.Contains<int>(randomNumber)) {
-                if (spawnLeft) {
-                    pos.X -= 1920;
+            if (_continueSpawnEnemy) {
+                Vector2 pos = _player.Transform.Position;
+                int posOffset = _rand.Next(100, 500);
+                bool spawnLeft;
+                if (_rand.Next(0, 10) < 5) {
+                    pos.X = _worldBound.Left - posOffset;
+                    spawnLeft = true;
                 }
                 else {
-                    pos.X += 1920;
+                    pos.X = _worldBound.Right + posOffset;
+                    spawnLeft = false;
                 }
-                
-                Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
-                enemies.Add(scopophobia);
-                EnemySpawned?.Invoke(scopophobia);
-            }
 
-            if (_continueSpawnEnemy) {
+                GameObject enemy;
+                int[] autophobiaNumber = new int[_autophobiaSpawnChance];
+                for (int i = 0; i < autophobiaNumber.Length; i++) {
+                    autophobiaNumber[i] = _rand.Next(0, 101);
+                }
+
+                int[] scopophobiaNumber = new int[_scopophobiaSpawnChance];
+                for (int i = 0; i < scopophobiaNumber.Length; i++) {
+                    scopophobiaNumber[i] = _rand.Next(0, 101);
+                }
+
+                int randomNumber = _rand.Next(0, 101);
+                if (autophobiaNumber.Contains<int>(randomNumber)) {
+                    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
+                    enemies.Add(autophobia);
+                    EnemySpawned?.Invoke(autophobia);
+                }
+                else if (scopophobiaNumber.Contains<int>(randomNumber)) {
+                    if (spawnLeft) {
+                        pos.X -= 1920;
+                    }
+                    else {
+                        pos.X += 1920;
+                    }
+
+                    Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
+                    enemies.Add(scopophobia);
+                    EnemySpawned?.Invoke(scopophobia);
+                }
+
                 Time.AddTimer(SpawnEnemy, SpawnInterval);
             }
         }
@@ -124,6 +134,9 @@ namespace Imaginophobia {
         }
 
         public void ClearEnemies() {
+            foreach (GameObject enemy in enemies) {
+                enemy.OnDestroyed();
+            }
             enemies.Clear();
         }
     }

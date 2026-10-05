@@ -31,18 +31,18 @@ namespace Imaginophobia {
         private float _progressValue;
         private Player _player;
 
-        public bool SkillCheckIsActive;
+        public bool MinigameActive;
         public SpinTheValveScreen(Player player) {
             _valveTexture = MainGame.Content.Load<Texture2D>("UI/sprite_valve");
             _valveOrigin = new Vector2(_valveTexture.Width / 2f, _valveTexture.Height / 2f);
-            SkillCheckIsActive = true;
+            MinigameActive = true;
             _player = player;
 
             RandomNeedleSpeed();
         }
 
         public override void Update(GameTime gameTime) {
-            if (SkillCheckIsActive) {
+            if (MinigameActive) {
                 CalculateInput();
 
                 _valveAngle = MathHelper.Lerp(_valveAngle, _targetAngle, _rotationSpeed * Time.DeltaTime);
@@ -65,24 +65,35 @@ namespace Imaginophobia {
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
 
                 if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
-                    SkillCheckIsActive = false;
+                    MinigameActive = false;
                     _player.ToggleRepair();
                     this.ScreenManager.CloseScreen();                   
                 }
             }
+
+            if (_player.PlayerAction == Player.CharacterAction.Checking) {
+                MinigameActive = false;
+            }
+            else {
+                MinigameActive = true;
+            }
         }
 
         public override void Draw(GameTime gameTime) {
-            MainGame.SpriteBatch.Begin();
+            if (MinigameActive) {
+                MainGame.SpriteBatch.Begin();
 
-            MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-135), MathHelper.ToRadians(30), 20, Color.Yellow, 10);
-            MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-105), MathHelper.ToRadians(30), 20, Color.Green, 10);
-            MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-75), MathHelper.ToRadians(30), 20, Color.Red, 10);
-            MainGame.SpriteBatch.DrawArc(_centerOrigin, 315, _needleAngle, MathHelper.ToRadians(2), 20, Color.White, 40f);
-            MainGame.SpriteBatch.Draw(_valveTexture, _centerOrigin, null, Color.White, _valveAngle, _valveOrigin, 8, SpriteEffects.None, 0);
-            MainGame.SpriteBatch.FillRectangle(860, 800, 200, 15, Color.DarkGray);
-            MainGame.SpriteBatch.FillRectangle(860, 800, _progressValue, 15, Color.GreenYellow);
-            MainGame.SpriteBatch.End();
+                MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-135), MathHelper.ToRadians(30), 20, Color.Yellow, 10);
+                MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-105), MathHelper.ToRadians(30), 20, Color.Green, 10);
+                MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-75), MathHelper.ToRadians(30), 20, Color.Red, 10);
+                MainGame.SpriteBatch.DrawArc(_centerOrigin, 315, _needleAngle, MathHelper.ToRadians(2), 20, Color.White, 40f);
+                MainGame.SpriteBatch.Draw(_valveTexture, _centerOrigin, null, Color.White, _valveAngle, _valveOrigin, 8, SpriteEffects.None, 0);
+                MainGame.SpriteBatch.FillRectangle(860, 800, 200, 15, Color.DarkGray);
+                MainGame.SpriteBatch.FillRectangle(860, 800, _progressValue, 15, Color.GreenYellow);
+
+                MainGame.SpriteBatch.End();
+            }
+            
         }
 
         private void Debug() {

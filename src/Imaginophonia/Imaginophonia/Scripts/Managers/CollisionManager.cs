@@ -93,11 +93,15 @@ namespace Imaginophobia {
                     GameObject enemy = (GameObject)collision.Other;
                     if(enemy.Name == "Autophobia") {
                         enemy.SetActive(false);
+                        _player.Sanity -= 10;
+                    }
+                    else {
+                        _player.Sanity -= 25;
                     }
                     _collisionWorld.Remove(collision.Other);
                     _colliders.Remove(collision.Other);
                     //lose sanity
-                    _player.Sanity -= 2;
+                    
                 }
             }
 
@@ -105,9 +109,12 @@ namespace Imaginophobia {
                 if (_player.Active) {
                     if (_colliders[i].GetType().Name == "Autophobia" && _colliders[i].Shape.Intersects(_player.EyeSight)) {
                         _collisionWorld.Remove(_colliders[i]);
-                        GameObject enemy = (GameObject)_colliders[i];
-                        enemy.SetActive(false);
+                        Autophobia enemy = (Autophobia)_colliders[i];
+                        Time.AddTimer(enemy.SetActive, 0.25f);
+                        enemy.AllowMovement = false;
                         _colliders.RemoveAt(i);
+                        //Trigger Blink
+                        _player.Blink = true;
                     }
                 }
             }
