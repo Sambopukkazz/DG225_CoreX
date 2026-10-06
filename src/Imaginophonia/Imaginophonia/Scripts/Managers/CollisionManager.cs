@@ -55,7 +55,14 @@ namespace Imaginophobia {
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
                 if(trigger.CompareTag("hideout")) {
+                    if (_player.CurrentAction != CharacterAction.Hiding) {
+                        _player.CurrentAction = CharacterAction.ReadyToHide;
+                    }
                     if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
+                        if (_player.CurrentAction != CharacterAction.Hiding && _player.CooldownTimer == null) {
+                            _player.PreviousPos = _player.Transform.Position;
+                            _player.Transform.Position = trigger.Shape.BoundingBox.Center;
+                        }
                         _player.ToggleHide();
                     }
                 }

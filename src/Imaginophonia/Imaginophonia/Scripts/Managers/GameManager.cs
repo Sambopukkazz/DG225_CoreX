@@ -53,7 +53,7 @@ namespace Imaginophobia {
             _enemyManager.EnemySpawned += OnEnemySpawned;
             _enemyManager.SpawnEnemy();
 
-            _uiManager = new UIManager(_player);
+            _uiManager = new UIManager(_player, _camera);
 
             _dialogueManager = new DialogueManager();
             //temp

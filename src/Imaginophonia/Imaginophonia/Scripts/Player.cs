@@ -39,10 +39,8 @@ namespace Imaginophobia {
         private Vector2 _flashlightOffset;
         public float MoveSpeed { get; private set; } = 250f;
         private int _previousFrame;
-        private enum CharacterState { Normal = 75, Anxious = 50, Insane = 25 }
-        private CharacterState _characterState;
-        public enum CharacterAction { Repairing, Checking, Walking, Sneaking, Idle }
-        public CharacterAction PlayerAction { get; private set; }
+        public SanityState SanityState { get; set; }
+        public CharacterAction CurrentAction { get; set; }
         private bool _lockFacingDirection;
         public float Sanity { get; set; } = 100;
         public float Battery { get; set; } = 100;
@@ -57,6 +55,8 @@ namespace Imaginophobia {
         public Vector2 CameraTarget;
         public Timer CooldownTimer;
         public bool Blink { get; set; }
+        public event Action StateChanged;
+        public Vector2 PreviousPos { get; set; }
 
 
         public Player() : base("Player", "Player"){
@@ -107,6 +107,7 @@ namespace Imaginophobia {
                 if (KeyboardExtended.GetState().IsKeyDown(Keys.LeftControl)) {
                     Velocity /= 1.7f;
                     _lockFacingDirection = true;
+                    CurrentAction = CharacterAction.Sneaking;
                 }
                 
 
@@ -134,20 +135,20 @@ namespace Imaginophobia {
                     CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
                     _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
                     _animatedSprite.SetAnimation("check");
-                    PlayerAction = CharacterAction.Checking;
+                    CurrentAction = CharacterAction.Checking;
                 }
                 else if (KeyboardExtended.GetState().IsKeyDown(Keys.D)) {
                     CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X + 400, 0.1f);
                     _animatedSprite.Effect = SpriteEffects.None;
                     _animatedSprite.SetAnimation("check");
-                    PlayerAction = CharacterAction.Checking;
+                    CurrentAction = CharacterAction.Checking;
                 }
                 else {
                     _animatedSprite.SetAnimation("back");
                     if (_flashLight.Enabled) {
                         _flashLight.Enabled = false;
                     }
-                    PlayerAction = CharacterAction.Repairing;
+                    CurrentAction = CharacterAction.Repairing;
                     CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X, 0.01f);
                     _eyeSightLength = 0;
                 }
@@ -172,12 +173,14 @@ namespace Imaginophobia {
             }
 
             if (_flashLight.Enabled) {
-                Battery -= 0.5f * Time.DeltaTime;
+                Battery -= 3f * Time.DeltaTime;
                 _eyeSightLength = 800;
             }
             else {
                 _eyeSightLength = 100;
             }
+
+            CheckSanityStage();
         }
 
         public override void Draw() {
@@ -288,8 +291,14 @@ namespace Imaginophobia {
         //}
 
         private void Animate() {
-            if (InputManager.Direction.X < 0 && !_lockFacingDirection) _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
-            else if (InputManager.Direction.X > 0 && !_lockFacingDirection) _animatedSprite.Effect = SpriteEffects.None;
+            if (InputManager.Direction.X < 0 && !_lockFacingDirection) {
+                _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
+                CurrentAction = CharacterAction.Walking;
+            }
+            else if (InputManager.Direction.X > 0 && !_lockFacingDirection) {
+                _animatedSprite.Effect = SpriteEffects.None;
+                CurrentAction = CharacterAction.Walking;
+            }
 
             if (!_lockFacingDirection && InputManager.Direction != Vector2.Zero && _animatedSprite.CurrentAnimation != "walk-forward") {
                 _animatedSprite.SetAnimation("walk-forward");
@@ -305,6 +314,7 @@ namespace Imaginophobia {
             }
             else if (InputManager.Direction == Vector2.Zero && _animatedSprite.CurrentAnimation != "idle") {
                 _animatedSprite.SetAnimation("idle");
+                CurrentAction = CharacterAction.Idle;
                 _previousFrame = 0;
             }
 
@@ -348,12 +358,15 @@ namespace Imaginophobia {
                 AllowMovement = false;
                 _readyToHide = false;
                 FocusLevel = 1.25f;
+                CurrentAction = CharacterAction.Hiding;
                 CooldownTimer = Time.AddTimer(ToggleHide, 3, "hideTime");
             }
-            else if (!Active) {
+            else if (CurrentAction == CharacterAction.Hiding) {
                 SetActive(true);
                 AllowMovement = true;
                 FocusLevel = 1;
+                CurrentAction = CharacterAction.Idle;
+                Transform.Position = PreviousPos;
                 CooldownTimer = Time.AddTimer(SetReadyToHide, _hideCoolDown, "cooldownTime");
             }
             Visible = Active;
@@ -389,6 +402,21 @@ namespace Imaginophobia {
                 _animatedSprite.SetAnimation("idle");
                 CanInteract = true;
                 FocusLevel = 1;
+            }
+        }
+
+        public void CheckSanityStage() {
+            if (Sanity <= ((float)SanityState.Anxious) && SanityState == SanityState.Anxious) {
+                SanityState = SanityState.Insane;
+                StateChanged?.Invoke();
+            }
+            else if (Sanity <= ((float)SanityState.Normal) && SanityState == SanityState.Normal) {
+                SanityState = SanityState.Anxious;
+                StateChanged?.Invoke();
+            }
+            else if (Sanity > (float)SanityState.Normal && SanityState != SanityState.Normal) {
+                SanityState = SanityState.Normal;
+                StateChanged?.Invoke();
             }
         }
 
@@ -437,7 +465,7 @@ namespace Imaginophobia {
 
         private void DebugTest() {
             BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {Transform.Position} ", new Vector2(150, 500), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 150), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);

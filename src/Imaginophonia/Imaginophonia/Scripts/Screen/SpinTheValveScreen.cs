@@ -71,7 +71,7 @@ namespace Imaginophobia {
                 }
             }
 
-            if (_player.PlayerAction == Player.CharacterAction.Checking) {
+            if (_player.CurrentAction == CharacterAction.Checking) {
                 MinigameActive = false;
             }
             else {

@@ -42,6 +42,7 @@ namespace Imaginophobia {
             }
 
             _size = new Vector2(100, 240);
+            Time.AddTimer(SetActive, 28f);
         }
 
         public override void Update() {
