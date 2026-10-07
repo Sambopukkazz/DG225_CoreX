@@ -7,19 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class FadeOverlay {
+    public class VignetteOverlay {
         private readonly Effect _shader;
         private readonly Texture2D _blankTexture;
         
         // Settings parameters
         public Vector2 Center { get; set; } = new Vector2(960, 540);
-        public Vector2 Scale { get; set; } = new Vector2(0.5f, 0.5f);
+        public Vector2 Scale { get; set; } = new Vector2(0.9f, 0.5f);
         public float Softness { get; set; } = 0.25f;
         public Color Color { get; set; } = Color.Black;
         public string Shape { get; set; } = "Ellipse";
         public float CameraZoom { get; set; } = 1.0f;
 
-        public FadeOverlay() {
+        public VignetteOverlay() {
             _shader = MainGame.Content.Load<Effect>("Shaders/Vignette");
 
             _blankTexture = new Texture2D(MainGame.GraphicsDevice, 1, 1);
@@ -36,10 +36,8 @@ namespace Imaginophobia {
 
             Vector2 adjustedScale = Scale * CameraZoom;
 
-            if (Shape == "Ellipse")
-                _shader.CurrentTechnique = _shader.Techniques["EllipseMask"];
-            else if (Shape == "Rectangle")
-                _shader.CurrentTechnique = _shader.Techniques["RectangleMask"];
+            _shader.CurrentTechnique = _shader.Techniques["EllipseMask"];
+
 
             // 2. Map structural values directly onto the shader uniforms
             _shader.Parameters["Center"]?.SetValue(normalizedCenter);

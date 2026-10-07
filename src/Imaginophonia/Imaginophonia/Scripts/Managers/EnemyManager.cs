@@ -83,7 +83,13 @@ namespace Imaginophobia {
 
         public void SpawnEnemy() {
             if (_continueSpawnEnemy) {
-                Vector2 pos = _player.Transform.Position;
+                Vector2 pos;
+                if (_player.CurrentAction == CharacterAction.Hiding) {
+                    pos = _player.PreviousPos;
+                }
+                else {
+                    pos = _player.Transform.Position;
+                }
                 int posOffset = _rand.Next(100, 500);
                 bool spawnLeft;
                 if (_rand.Next(0, 10) < 5) {

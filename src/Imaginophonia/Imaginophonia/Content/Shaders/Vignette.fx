@@ -27,7 +27,7 @@ struct VertexShaderOutput
     float2 TextureCoordinates : TEXCOORD0;
 };
 
-float4 EllipsePS(VertexShaderOutput input) : COLOR
+float4 MainPS(VertexShaderOutput input) : COLOR
 {
     float2 delta = (input.TextureCoordinates - Center) / Scale;
     float dist = length(delta);
@@ -39,46 +39,10 @@ float4 EllipsePS(VertexShaderOutput input) : COLOR
     return float4(Color.rgb * finalAlpha, finalAlpha);
 }
 
-float4 RectanglePS(VertexShaderOutput input) : COLOR
-{
-    float2 uv = input.TextureCoordinates;
-    
-    // Define our 4 borders
-    float leftEdge = Center.x - Scale.x;
-    float rightEdge = Center.x + Scale.x;
-    float topEdge = Center.y - Scale.y;
-    float bottomEdge = Center.y + Scale.y; // In MonoGame, Y goes DOWN (so + is bottom)
-    
-    // 0.002 gives a tiny bit of anti-aliasing to the sharp edges so they don't look pixelated
-    float crisp = 0.002;
-    
-    // Calculate masks for each side. (1.0 = color overlay, 0.0 = clear)
-    float alphaLeft = 1.0 - smoothstep(leftEdge - crisp, leftEdge, uv.x);
-    float alphaRight = smoothstep(rightEdge, rightEdge + crisp, uv.x);
-    float alphaTop = 1.0 - smoothstep(topEdge - crisp, topEdge, uv.y);
-    
-    // The bottom edge specifically uses your FadeSoftness!
-    float alphaBottom = smoothstep(bottomEdge, bottomEdge + FadeSoftness, uv.y);
-    
-    // Combine them all. If the pixel triggers ANY edge, we clamp it to 1.0 (saturate)
-    float maskAlpha = saturate(alphaLeft + alphaRight + alphaTop + alphaBottom);
-
-    float finalAlpha = maskAlpha * Color.a;
-    return float4(Color.rgb * finalAlpha, finalAlpha);
-}
-
 technique EllipseMask
 {
     pass P0
     {
-        PixelShader = compile PS_SHADERMODEL EllipsePS();
-    }
-}
-
-technique RectangleMask
-{
-    pass P0
-    {
-        PixelShader = compile PS_SHADERMODEL RectanglePS();
+        PixelShader = compile PS_SHADERMODEL MainPS();
     }
 }

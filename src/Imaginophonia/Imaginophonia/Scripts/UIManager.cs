@@ -21,22 +21,20 @@ namespace Imaginophobia {
         private Rectangle _spaceBarBackgroundRect;
         private Player _player;
         private OrthographicCamera _camera;
-        private FadeOverlay _vignetteOverlay;
-        public FadeOverlay RectangleFadeOverlay;
+        private VignetteOverlay _vignetteOverlay;
+        private VignetteOverlay _blinkOverlay;
+        private BottomFadeOverlay _rectangleFadeOverlay;
         private readonly Tweener _tweener;
         private CharacterAction _previousAction;
-        private float _blinkSpeed;
+        private float _blinkSpeed = 0.4f;
 
         public UIManager(Player player, OrthographicCamera camera) {
             _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
             _spacebar = MainGame.Content.Load<Texture2D>("UI/ui_spacebar");
 
-            _vignetteOverlay = new FadeOverlay();
-            RectangleFadeOverlay = new FadeOverlay() {
-                Center = new Vector2(500, 800),
-                Shape = "Rectangle",
-                Scale = new Vector2(100,100)
-            };
+            _vignetteOverlay = new VignetteOverlay();
+            _blinkOverlay = new VignetteOverlay();
+            _rectangleFadeOverlay = new BottomFadeOverlay();
 
             _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, (int)(600 * 0.75f), (int)(100 * 0.75f));
 
@@ -51,7 +49,7 @@ namespace Imaginophobia {
         public void Update() {
             //VignetteOverlay.Scale = new Vector2(VignetteOverlay.Scale.X, MathHelper.Lerp(VignetteOverlay.Scale.Y, 0, 0.01f));
             ZoomVignette();
-            _vignetteOverlay.CameraZoom = _camera.Zoom;
+            
             //if (_player.CurrentAction == CharacterAction.Hiding) {
             //    _vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
             //    _vignetteOverlay.Scale = new Vector2(0.1f, 0.2f);
@@ -72,7 +70,8 @@ namespace Imaginophobia {
 
         public void Draw() {
             _vignetteOverlay.Render();
-            RectangleFadeOverlay.Render();
+            _blinkOverlay.Render();
+            _rectangleFadeOverlay.Render();
 
             MainGame.SpriteBatch.Begin();
             DebugDraw();
@@ -115,66 +114,70 @@ namespace Imaginophobia {
 
         private void OnSanityStateChanged() {
             if (_player.SanityState == SanityState.Anxious) {
-                _blinkSpeed = 0.5f;
-                _vignetteOverlay.Scale = new Vector2(0.5f, 0.5f);
+                _tweener.TweenTo(target: _vignetteOverlay, exprif (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
+                _vignetteOverlay.Color = ColorHelper.FromHex("#2c0000");
+            }ession: vignette => vignette.Scale, toValue: new Vector2(0.5f, 0.5f), duration: 2)
+                .Easing(EasingFunctions.Linear);
             }
-            else if (_player.SanityState == SanityState.Normal) {
-                _blinkSpeed = 0.4f;
-                _vignetteOverlay.Scale = new Vector2(0.9f, 0.5f);
+            else if (_player.SanityState == SanityState.Insane) {
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.45f), duration: 4)
+                .Easing(EasingFunctions.Linear);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Color, toValue: ColorHelper.FromHex("#2c0000"), duration: 4)
+                .Easing(EasingFunctions.Linear);
             }
         }
 
         private void DebugUpdate() {
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-                _vignetteOverlay.Scale -= new Vector2(0, 0.01f);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-                _vignetteOverlay.Scale += new Vector2(0, 0.01f);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-                _vignetteOverlay.Scale += new Vector2(0.01f, 0);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-                _vignetteOverlay.Scale -= new Vector2(0.01f, 0);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-                _vignetteOverlay.Softness += 0.01f;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-                _vignetteOverlay.Softness -= 0.01f;
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
+            //    _vignetteOverlay.Scale -= new Vector2(0, 0.01f);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
+            //    _vignetteOverlay.Scale += new Vector2(0, 0.01f);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
+            //    _vignetteOverlay.Scale += new Vector2(0.01f, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
+            //    _vignetteOverlay.Scale -= new Vector2(0.01f, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
+            //    _vignetteOverlay.Softness += 0.01f;
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
+            //    _vignetteOverlay.Softness -= 0.01f;
+            //}
 
-            if (Keyboard.GetState().IsKeyDown(Keys.I)) {
-                RectangleFadeOverlay.Scale -= new Vector2(0, 0.01f);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.K)) {
-                RectangleFadeOverlay.Scale += new Vector2(0, 0.01f);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.L)) {
-                RectangleFadeOverlay.Scale += new Vector2(0.01f, 0);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.J)) {
-                RectangleFadeOverlay.Scale -= new Vector2(0.01f, 0);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.T)) {
-                RectangleFadeOverlay.Softness += 0.01f;
-            }
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.G)) {
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
-                .Easing(EasingFunctions.Linear);
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.I)) {
+            //    RectangleFadeOverlay.Scale -= new Vector2(0, 0.01f);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.K)) {
+            //    RectangleFadeOverlay.Scale += new Vector2(0, 0.01f);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.L)) {
+            //    RectangleFadeOverlay.Scale += new Vector2(0.01f, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.J)) {
+            //    RectangleFadeOverlay.Scale -= new Vector2(0.01f, 0);
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.T)) {
+            //    RectangleFadeOverlay.Softness += 0.01f;
+            //}
+            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.G)) {
+            //    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
+            //    .Easing(EasingFunctions.Linear);
+            //}
             //if (Keyboard.GetState().IsKeyDown(Keys.NumPad8)) {
             //    _vignetteOverlay.Sharpness += 0.01f;
             //}
             //if (Keyboard.GetState().IsKeyDown(Keys.NumPad2)) {
             //    _vignetteOverlay.Sharpness -= 0.01f;
             //}
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-                _vignetteOverlay.Color = Color.Red;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad0)) {
-                _vignetteOverlay.Color = Color.Black;
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
+            //    _vignetteOverlay.Color = ColorHelper.FromHex("#2c0000");
+            //}
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad0)) {
+            //    _vignetteOverlay.Color = Color.Black;
+            //}
             //if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
             //    _scotopicLight.Enabled = false;
             //}
@@ -182,29 +185,53 @@ namespace Imaginophobia {
         }
 
         public void BlinkFx() {
-            _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
+            _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
                 .Repeat(1)
                 .AutoReverse()
                 .Easing(EasingFunctions.Linear);
         }
 
         public void ZoomVignette() {
+            if (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking) {
+                _vignetteOverlay.CameraZoom = _camera.Zoom;
+            }
+            if (_player.CurrentAction == CharacterAction.Hiding) {
+                //_vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
+                .Easing(EasingFunctions.Linear);
+            }
             if (_previousAction == CharacterAction.ReadyToHide && _player.CurrentAction == CharacterAction.Hiding) {
-                _vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
+                //_vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
+                //_tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
+                //.Easing(EasingFunctions.Linear);
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.1f, 0.2f), duration: 3)
                 .Easing(EasingFunctions.Linear);
             }
             else if ((_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.Idle) || (_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.ReadyToHide)) {
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
+                //_vignetteOverlay.Center = new Vector2(960, 540);
+                if (_player.SanityState == SanityState.Normal) {
+                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
+                .   Easing(EasingFunctions.Linear);
+                }
+                else if (_player.SanityState == SanityState.Anxious) {
+                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.5f, 0.5f), duration: 3)
+                .   Easing(EasingFunctions.Linear);
+                }
+                else if (_player.SanityState == SanityState.Insane) {
+                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.4f, 0.45f), duration: 3)
                 .Easing(EasingFunctions.Linear);
+                }
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: new Vector2(960, 540), duration: 3)
+                .Easing(EasingFunctions.Linear);
+
             }
             
         }
 
         private void DebugDraw() {
-            BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"Scale {_vignetteOverlay.Scale} ", new Vector2(150, 500), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Brightness: {_vignetteOverlay.Softness}", new Vector2(150, 50), Color.White);
+            //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            //MainGame.SpriteBatch.DrawString(_font, $"Scale {_vignetteOverlay.Scale} ", new Vector2(150, 500), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Brightness: {_vignetteOverlay.Softness}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Sharpenss {_vignetteOverlay.Sharpness}", new Vector2(150, 150), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);

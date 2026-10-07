@@ -126,7 +126,7 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && _animatedSprite.CurrentAnimation != "back") {
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && _animatedSprite.CurrentAnimation != "back" && CurrentAction != CharacterAction.Hiding) {
                 ToggleFlashLight();
             }
 
@@ -392,6 +392,7 @@ namespace Imaginophobia {
                 AllowMovement = false;
                 _readyToRepair = false;
                 _animatedSprite.SetAnimation("back");
+                CurrentAction = CharacterAction.Repairing;
                 _flashLight.Enabled = false;
                 CanInteract = false;
                 FocusLevel = 1.25f;
@@ -400,6 +401,7 @@ namespace Imaginophobia {
                 AllowMovement = true;
                 _readyToRepair = true;
                 _animatedSprite.SetAnimation("idle");
+                CurrentAction = CharacterAction.Idle;
                 CanInteract = true;
                 FocusLevel = 1;
             }
@@ -455,17 +457,17 @@ namespace Imaginophobia {
             //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
             //    _light.Intensity -= 0.01f;
             //}
-            if (Keyboard.GetState().IsKeyDown(Keys.NumPad5)) {
-                Visible = true;
-            }
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
-                Time.AddTimer(5);
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad5)) {
+            //    Visible = true;
+            //}
+            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
+            //    Time.AddTimer(5);
+            //}
         }
 
         private void DebugTest() {
-            BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
+            //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            //MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 150), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
