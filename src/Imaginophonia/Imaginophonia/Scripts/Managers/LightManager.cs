@@ -11,6 +11,7 @@ namespace Imaginophobia {
     public class LightManager {
         public static PenumbraComponent Penumbra { get; private set; }
         private List<Light> _lights;
+        private List<LightArea> _lightAreas;
         public LightManager() {
             if(Penumbra == null) {
                 Penumbra = new PenumbraComponent(MainGame.Instance);
@@ -19,10 +20,15 @@ namespace Imaginophobia {
             Penumbra.AmbientColor = ColorHelper.FromHex("#242323");
 
             _lights = new List<Light>();
+            _lightAreas = new List<LightArea>();
         }
 
         public void Update(Matrix transformMatrix) {
             Penumbra.Transform = transformMatrix;
+
+            foreach (LightArea lightArea in _lightAreas) {
+                lightArea.Update();
+            }
         }
 
         public void AddLight(Light light) {
@@ -30,21 +36,21 @@ namespace Imaginophobia {
             _lights.Add(light);
         }
 
+        public void AddLight(LightArea lightArea) {
+            Penumbra.Lights.Add(lightArea.Light);
+            _lightAreas.Add(lightArea);
+        }
+
         public void ClearLights() {
             foreach(Light light in _lights) {
                 Penumbra.Lights.Remove(light);
             }
             _lights.Clear();
-        }
 
-        public void StartBlinking(Light light) {
-            if (light.Enabled) {
-                light.Enabled = false;
+            foreach (LightArea lightArea in _lightAreas) {
+                Penumbra.Lights.Remove(lightArea.Light);
             }
-            else {
-                light.Enabled = true;
-            }
-            Time.AddTimer(5f);
+            _lightAreas.Clear();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Imaginophobia {
             TileMap = MainGame.Content.Load<Tilemap>($"Tilemaps/{sceneName}");
             PlayerSpawnPoints = new List<SpawnPoint>();
             BuildCollision(collisionManager);
-            BuildLight(lightManager);
+            BuildLight(lightManager, collisionManager);
         }
 
         private void BuildCollision(CollisionManager collisionManager) {
@@ -44,7 +44,7 @@ namespace Imaginophobia {
             }
         }
 
-        private void BuildLight(LightManager lightManager) {
+        private void BuildLight(LightManager lightManager , CollisionManager collisionManager) {
             lightManager.ClearLights();
 
             TilemapObjectLayer objectLayer = TileMap.Layers["Lighting"] as TilemapObjectLayer;
@@ -60,7 +60,13 @@ namespace Imaginophobia {
                         //float scaleY = entity.Properties.GetFloat("ScaleY");
                         pointLight.Scale = new Vector2(scale, scale);
                         pointLight.Color = entity.Properties.GetColor("Color");
-                        lightManager.AddLight(pointLight);
+
+                        LightArea lightArea = new LightArea(pointLight, entity.Position, entity.Id, entity.Class);
+                        lightManager.AddLight(lightArea);
+                        collisionManager.AddCollider(lightArea, "lights");
+
+
+
                     }
                     else if (entity.Name == "SpotLight") {
                         Spotlight spotlight = new Spotlight();

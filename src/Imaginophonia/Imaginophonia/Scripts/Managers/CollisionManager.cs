@@ -32,11 +32,19 @@ namespace Imaginophobia {
             Layer enemyLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
                 IsDynamic = true
             };
+            Layer lightLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
+                IsDynamic = false
+            };
 
             _collisionWorld = new CollisionWorld2D(defaultLayer);
             _collisionWorld.AddLayer("walls", wallLayer);
             _collisionWorld.AddLayer("triggers", triggerLayer);
             _collisionWorld.AddLayer("enemies", enemyLayer);
+            _collisionWorld.AddLayer("lights", lightLayer);
+
+            _collisionWorld.DisableCollisionBetweenLayers("enemies", "walls");
+            _collisionWorld.DisableCollisionBetweenLayers("lights", "walls");
+            _collisionWorld.EnableCollisionBetweenLayers("enemies", "lights");
 
             _colliders = new List<ICollisionActor>();
 
@@ -45,13 +53,14 @@ namespace Imaginophobia {
         public void Update() {
             _collisionWorld.RebuildDynamicLayers();
 
+            //Player with walls
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "walls")) {
                 _player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
             }
 
             //if(_collisionWorld.)
             _player.CanInteract = false;
-
+            //Player with Minigame triggers
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
                 if(trigger.CompareTag("hideout")) {
@@ -97,6 +106,7 @@ namespace Imaginophobia {
                 if(trigger.Interactable)_player.CanInteract = true;
             }
 
+            //Player with enemies
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "enemies")) {
                 if (_player.Active) {
                     GameObject enemy = (GameObject)collision.Other;
@@ -115,6 +125,7 @@ namespace Imaginophobia {
                 }
             }
 
+            //Player's eyesight with autophobia
             for (int i = _colliders.Count - 1; i >= 0; i--) {
                 if (_player.Active) {
                     if (_colliders[i].GetType().Name == "Autophobia" && _colliders[i].Shape.Intersects(_player.EyeSight)) {
@@ -126,6 +137,29 @@ namespace Imaginophobia {
                         //Trigger Blink
                         _player.Blink = true;
                     }
+                }
+            }
+
+            //Player with light
+            foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "lights")) {
+                LightArea lightArea = (LightArea)collision.Other;
+                if (lightArea.On == false && lightArea.IsFlickering == false) {
+                    _player.Sanity -= 1 * Time.DeltaTime;
+                }
+                //LightArea lightArea = (LightArea)collision.Other;
+                //lightArea.TurnOn();
+            }
+
+            //Enemy with light
+            foreach (CollisionPair2D collision in _collisionWorld.QueryCollisionPairs("enemies", "lights")) {
+                LightArea lightArea = (LightArea)collision.Second;
+                GameObject enemy = (GameObject)collision.First;
+
+                if (enemy.Name == "Autophobia") {
+                    lightArea.StartFlicker();
+                }
+                else {
+                    lightArea.TurnOff();
                 }
             }
         }
