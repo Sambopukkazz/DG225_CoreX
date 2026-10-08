@@ -66,7 +66,7 @@ namespace Imaginophobia {
         }
 
         public override void Draw() {
-            MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale * 4);
+            MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale * 3);
         }
 
         private void UpdateShape() {

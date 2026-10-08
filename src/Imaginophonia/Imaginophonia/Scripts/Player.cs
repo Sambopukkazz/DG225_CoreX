@@ -75,7 +75,7 @@ namespace Imaginophobia {
                 Intensity = 1,
                 Enabled = false
             };
-            _flashlightOffset = new Vector2(-10,10);
+            _flashlightOffset = new Vector2(80,-10);
 
             LightManager.Penumbra.Lights.Add(_scotopicLight);
             LightManager.Penumbra.Lights.Add(_flashLight);
@@ -83,7 +83,7 @@ namespace Imaginophobia {
             //Listener
             Listener = new AudioListener();
             _size = new Vector2(100, 240);
-            Transform.Scale = Vector2.One * 4;
+            Transform.Scale = Vector2.One * 3f;
 
             //Eyesight
             _eyeLevel = new Vector2(20,-70);
@@ -159,6 +159,7 @@ namespace Imaginophobia {
 
 
             if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
+                _flashlightOffset.X = -80;
                 _flashLight.Rotation = MathHelper.ToRadians(180);
                 _eyeSight.Start.X = Transform.Position.X - _eyeLevel.X;
                 _eyeSight.Start.Y = Transform.Position.Y + _eyeLevel.Y;
@@ -166,6 +167,7 @@ namespace Imaginophobia {
                 _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
             }
             else if (_animatedSprite.Effect == SpriteEffects.None) {
+                _flashlightOffset.X = 80;
                 _flashLight.Rotation = 0;
                 _eyeSight.Start = Transform.Position + _eyeLevel;
                 _eyeSight.End.X = Transform.Position.X + _eyeLevel.X + _eyeSightLength;
@@ -173,11 +175,14 @@ namespace Imaginophobia {
             }
 
             if (_flashLight.Enabled) {
-                Battery -= 3f * Time.DeltaTime;
+                if (Battery <= 0) {
+                    _flashLight.Enabled = false;
+                }
+                Battery -= 2f * Time.DeltaTime;
                 _eyeSightLength = 800;
             }
             else {
-                _eyeSightLength = 100;
+                _eyeSightLength = 0;
             }
 
             CheckSanityStage();
@@ -185,49 +190,101 @@ namespace Imaginophobia {
 
         public override void Draw() {
             //BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
-            //MainGame.SpriteBatch.FillRectangle(_origin,_size, Color.Red);
+            //MainGame.SpriteBatch.FillRectangle(_origin, _size, Color.Red);
             if (Visible) {
                 MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale);
-                MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
+                //MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
                 //MainGame.SpriteBatch.DrawPoint(new Vector2(Listener.Position.X, Listener.Position.Y), Color.Red, 100);
             }
             
             DebugTest();
         }
 
+        ////private void SetUpAnimation() {
+        ////    //Set up animation
+        ////    Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
+        ////    SpriteSheet spriteSheet = new("player", atlas);
+
+
+        ////    spriteSheet.DefineAnimation("walk-forward", builder => {
+        ////        builder.IsLooping(true);
+        ////        for (int i = 1; i < 8; i++) {
+        ////            if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+        ////            else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+        ////        }
+        ////    });
+
+        ////    spriteSheet.DefineAnimation("sneak-forward", builder => {
+        ////        builder.IsLooping(true);
+        ////        for (int i = 1; i < 8; i++) {
+        ////            if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+        ////            else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+        ////        }
+        ////    });
+
+        ////    spriteSheet.DefineAnimation("sneak-backward", builder => {
+        ////        builder.IsLooping(true);
+        ////        for (int i = 7; i > 0; i--) {
+        ////            if (i == 1) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+        ////            else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+        ////        }
+        ////    });
+
+        ////    spriteSheet.DefineAnimation("idle", builder => {
+        ////        builder.IsLooping(false)
+        ////        .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
+        ////    });
+
+        ////    spriteSheet.DefineAnimation("back", builder => {
+        ////        builder.IsLooping(false)
+        ////        .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
+        ////    });
+
+        ////    spriteSheet.DefineAnimation("check", builder => {
+        ////        builder.IsLooping(false)
+        ////        .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
+        ////    });
+
+        ////    _animatedSprite = new AnimatedSprite(spriteSheet, "idle");
+        ////}
+
         private void SetUpAnimation() {
             //Set up animation
             Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
             SpriteSheet spriteSheet = new("player", atlas);
-
+            int walkFrameCount = 9;
+            int idleFrameCount = 12;
 
             spriteSheet.DefineAnimation("walk-forward", builder => {
                 builder.IsLooping(true);
-                for (int i = 1; i < 8; i++) {
-                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+                for (int i = 1; i <= walkFrameCount; i++) {
+                    if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
                 }
             });
 
             spriteSheet.DefineAnimation("sneak-forward", builder => {
                 builder.IsLooping(true);
-                for (int i = 1; i < 8; i++) {
-                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+                for (int i = 1; i <= walkFrameCount; i++) {
+                    if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.2));
                 }
             });
 
             spriteSheet.DefineAnimation("sneak-backward", builder => {
                 builder.IsLooping(true);
-                for (int i = 7; i > 0; i--) {
-                    if (i == 1) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
+                for (int i = walkFrameCount; i > 0; i--) {
+                    if (i == 1) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.2));
                 }
             });
 
             spriteSheet.DefineAnimation("idle", builder => {
-                builder.IsLooping(false)
-                .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
+                builder.IsLooping(true);
+                for (int i = 1; i <= idleFrameCount; i++) {
+                    if (i == idleFrameCount) builder.AddFrame($"sprite_idle_{i:D2}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_idle_{i:D2}", TimeSpan.FromSeconds(0.4));
+                }
             });
 
             spriteSheet.DefineAnimation("back", builder => {
@@ -237,58 +294,11 @@ namespace Imaginophobia {
 
             spriteSheet.DefineAnimation("check", builder => {
                 builder.IsLooping(false)
-                .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
+                .AddFrame("sprite_idle_01", TimeSpan.FromSeconds(0));
             });
 
             _animatedSprite = new AnimatedSprite(spriteSheet, "idle");
         }
-
-        //private void SetUpAnimation() {
-        //    //Set up animation
-        //    Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
-        //    SpriteSheet spriteSheet = new("player", atlas);
-        //    int walkFrameCount = 13;
-        //    int idleFrameCount = 12;
-
-        //    spriteSheet.DefineAnimation("walk-forward", builder => {
-        //        builder.IsLooping(true);
-        //        for (int i = 1; i <= walkFrameCount; i++) {
-        //            if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
-        //            else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.1));
-        //        }
-        //    });
-
-        //    spriteSheet.DefineAnimation("sneak-forward", builder => {
-        //        builder.IsLooping(true);
-        //        for (int i = 1; i <= 5; i++) {
-        //            if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
-        //            else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
-        //        }
-        //    });
-
-        //    spriteSheet.DefineAnimation("sneak-backward", builder => {
-        //        builder.IsLooping(true);
-        //        for (int i = 5; i > 0; i--) {
-        //            if (i == 1) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
-        //            else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
-        //        }
-        //    });
-
-        //    spriteSheet.DefineAnimation("idle", builder => {
-        //        builder.IsLooping(true);
-        //        for (int i = 1; i <= idleFrameCount; i++) {
-        //            if (i == idleFrameCount) builder.AddFrame($"sprite_idle_{i:D2}", TimeSpan.FromSeconds(0));
-        //            else builder.AddFrame($"sprite_idle_{i:D2}", TimeSpan.FromSeconds(0.4));
-        //        }
-        //    });
-
-        //    //spriteSheet.DefineAnimation("back", builder => {
-        //    //    builder.IsLooping(false)
-        //    //    .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
-        //    //});
-
-        //    _animatedSprite = new AnimatedSprite(spriteSheet, "idle");
-        //}
 
         private void Animate() {
             if (InputManager.Direction.X < 0 && !_lockFacingDirection) {
@@ -359,17 +369,28 @@ namespace Imaginophobia {
                 _readyToHide = false;
                 FocusLevel = 1.25f;
                 CurrentAction = CharacterAction.Hiding;
-                CooldownTimer = Time.AddTimer(ToggleHide, 3, "hideTime");
-                AudioManager.Instance.PlaySFX(Sound.CloseLocker);
+                if(CooldownTimer != null) {
+                    CooldownTimer.ToggleActive();
+                }
+                CooldownTimer = Time.AddTimer(ToggleHide, 8, "hideTime");
+                AudioManager.Instance.PlaySFX(Sound.LockerClose);
             }
             else if (CurrentAction == CharacterAction.Hiding) {
+                //temp
+                if (UIManager.stage == 5) {
+                    UIManager.stage = 7;
+                }
+                //temopend
                 SetActive(true);
                 AllowMovement = true;
                 FocusLevel = 1;
                 CurrentAction = CharacterAction.Idle;
                 Transform.Position = PreviousPos;
+                if (CooldownTimer != null) {
+                    CooldownTimer.ToggleActive();
+                }
                 CooldownTimer = Time.AddTimer(SetReadyToHide, _hideCoolDown, "cooldownTime");
-                AudioManager.Instance.PlaySFX(Sound.OpenLocker);
+                AudioManager.Instance.PlaySFX(Sound.LockerOpen);
             }
             Visible = Active;
             _scotopicLight.Enabled = Active;
@@ -384,7 +405,7 @@ namespace Imaginophobia {
             if (_flashLight.Enabled) {
                 _flashLight.Enabled = false;
             }
-            else if (!_flashLight.Enabled) {
+            else if (!_flashLight.Enabled && Battery > 0) {
                 _flashLight.Enabled = true;
             }
         }
@@ -478,6 +499,11 @@ namespace Imaginophobia {
             //foreach (Timer timer in Time.Timers) {
             //    MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
             //}
+        }
+
+        public void Reset() {
+            Sanity = 100;
+            Battery = 100;
         }
     }
 }

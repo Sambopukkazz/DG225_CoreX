@@ -53,6 +53,14 @@ namespace Imaginophobia {
         public void Update() {
             _collisionWorld.RebuildDynamicLayers();
 
+            foreach (var collider in _colliders) {
+                if(collider == null) {
+                    _collisionWorld.Remove(collider);
+                    _colliders.Remove(collider);
+                    break;
+                }
+            }
+
             //Player with walls
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "walls")) {
                 _player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
@@ -98,7 +106,19 @@ namespace Imaginophobia {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         //Load to next scene
                         //AudioManager.Instance.PlaySFX(Sound.OpenDoor);
-                        CallLoadScene?.Invoke(trigger.Name);
+                        if (_colliders.Exists(enemy => enemy.Id == 999)) {
+                            AudioManager.Instance.PlaySFX(Sound.DoorStuck);
+                        }
+                        else {
+                            //temp
+                            if (UIManager.stage == 7) {
+                                UIManager.stage = 8;
+                            }
+                            //tempend
+                            CallLoadScene?.Invoke(trigger.Name);
+                        }
+                        
+                        
                     }
                 }
 
@@ -114,12 +134,14 @@ namespace Imaginophobia {
                         enemy.SetActive(false);
                         _player.Sanity -= 10;
                         AudioManager.Instance.PlaySFX(Sound.AutoIndicator);
+                        _collisionWorld.Remove(collision.Other);
+                        _colliders.Remove(collision.Other);
                     }
-                    else {
+                    else if (enemy.Name == "Scopophobia" && enemy.Visible) {
                         _player.Sanity -= 25;
+                        enemy.Visible = false;
                     }
-                    _collisionWorld.Remove(collision.Other);
-                    _colliders.Remove(collision.Other);
+                    
                     //lose sanity
                     
                 }

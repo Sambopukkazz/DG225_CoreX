@@ -10,6 +10,7 @@ namespace Imaginophobia {
         private readonly float _timeLength;
         public float TimeLeft { get; private set; }
         private bool _active;
+        public bool Active => _active;
         public bool Repeat { get; set; }
         public event EventHandler OnTimerCompleted;
         private Action _method;
@@ -57,13 +58,13 @@ namespace Imaginophobia {
                     Reset();
                 }
                 else {
-                    Toggle();
+                    ToggleActive();
                     TimeLeft = 0;
                 }
             }
         }
 
-        public void Toggle() {
+        public void ToggleActive() {
             if (_active) {
                 _active = false;
             }

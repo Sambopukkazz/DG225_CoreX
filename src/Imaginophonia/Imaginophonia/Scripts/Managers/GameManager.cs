@@ -90,6 +90,11 @@ namespace Imaginophobia {
 
             _cameraShaker.Update(gameTime);
 
+            if (_player.Sanity <= 0) {
+                _player.Reset();
+                Restart();
+            }
+
             DebugUpdate();
         }
 
@@ -115,6 +120,10 @@ namespace Imaginophobia {
             _uiManager.Draw();
         }
 
+        private void Restart() {
+            _sceneManager.LoadScene(SceneName.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
+        }
+
         private void OnCallLoadScene(string sceneName) {
             _enemyManager.ClearEnemies();
             _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
@@ -122,7 +131,7 @@ namespace Imaginophobia {
 
         private void OnSceneLoaded(Vector2 spawnPosition) {
             _player.LoadScenePosition(spawnPosition);
-            AudioManager.Instance.PlaySFX(Sound.CloseDoor);
+            AudioManager.Instance.PlaySFX(Sound.DoorClose);
         }
         
         private void OnEnemySpawned(ICollisionActor enemy) {

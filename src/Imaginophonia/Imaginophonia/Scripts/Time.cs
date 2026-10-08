@@ -21,7 +21,7 @@ namespace Imaginophobia {
 
             foreach (Timer timer in Timers.ToList()) {
                 timer.Update();
-                if(timer.TimeLeft <= 0) {
+                if(timer.TimeLeft <= 0 || timer.Active == false) {
                     Timers.Remove(timer);
                 }
             }
@@ -47,6 +47,11 @@ namespace Imaginophobia {
             Timer timer = new(method, seconds, name);
             Timers.Add(timer);
             return timer;
+        }
+
+        public static void RemoveTimer(Timer timer) {
+            Timers.Remove(timer);
+            timer = null;
         }
     }
 }

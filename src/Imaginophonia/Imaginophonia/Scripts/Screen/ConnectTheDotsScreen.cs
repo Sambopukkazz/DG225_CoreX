@@ -36,6 +36,11 @@ namespace Imaginophobia {
             DotsGenerator dotsGenerator = new DotsGenerator(_row, _column, AddDot);
 
             _player = player;
+            //temp
+            if (UIManager.stage > 7) {
+                UIManager.stage = 4;
+            }
+            
         }
 
         public override void Update(GameTime gameTime) {
@@ -74,6 +79,18 @@ namespace Imaginophobia {
             }
 
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _completedPaths.Count == _colors.Count) {
+                //temp
+                if(_completedPaths.Count == _colors.Count) {
+                    if (UIManager.stage == 2) {
+                        UIManager.stage = 5;
+                    }
+                    else {
+                        UIManager.stage = 6;
+                    }
+                }
+                
+                
+                //endtemp
                 AudioManager.Instance.PlaySFX(Sound.ElecComplete);
                 this.ScreenManager.CloseScreen();
                 _player.ToggleRepair();

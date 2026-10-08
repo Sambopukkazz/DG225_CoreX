@@ -27,6 +27,9 @@ namespace Imaginophobia {
         private readonly Tweener _tweener;
         private CharacterAction _previousAction;
         private float _blinkSpeed = 0.4f;
+        //temp
+        public static float stage;
+        List<Keys> ggKey;
 
         public UIManager(Player player, OrthographicCamera camera) {
             _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
@@ -44,12 +47,29 @@ namespace Imaginophobia {
             _player.StateChanged += OnSanityStateChanged;
 
             _camera = camera;
+
+            //temp
+            ggKey = new List<Keys>();
         }
 
         public void Update() {
             //VignetteOverlay.Scale = new Vector2(VignetteOverlay.Scale.X, MathHelper.Lerp(VignetteOverlay.Scale.Y, 0, 0.01f));
             ZoomVignette();
             
+            //temp
+            foreach (Keys keyPressed in KeyboardExtended.GetState().GetPressedKeys().ToList()) {
+                if (ggKey.Contains(keyPressed) == false) {
+                    ggKey.Add(keyPressed);
+                }
+            }
+
+            if(ggKey.Contains(Keys.A) && ggKey.Contains(Keys.D) && ggKey.Contains(Keys.F) && stage == 0) {
+                stage++;
+            }
+            else if (stage == 1 && _player.CurrentAction == CharacterAction.Repairing) {
+                stage++;
+            }
+            //end temp
             //if (_player.CurrentAction == CharacterAction.Hiding) {
             //    _vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
             //    _vignetteOverlay.Scale = new Vector2(0.1f, 0.2f);
@@ -76,7 +96,37 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.Begin();
             DebugDraw();
 
-            MainGame.SpriteBatch.DrawString(_font, $"Objective : Fix everything and leave\nSanity : {_player.Sanity}\nBattery : {_player.Battery}", new Vector2(100, 100), Color.White);
+            //temp
+            string dialogue = "";
+            if (stage == 0) {
+                dialogue = "Press A/D to walk around. F to open a flashlight";
+            }
+            else if (stage == 1) {
+                dialogue = "Head to the electrical panel to do a task";
+            }
+            else if (stage == 2) {
+                dialogue = "Connect all the dots. \nYou can press A/D to look left and right while you are doing the task, \nand Q to leave the task";
+            }
+            else if (stage == 3) {
+                dialogue = "Spin the valve and stay on the green gauge";
+            }
+            else if (stage == 4) {
+                dialogue = "Connect all the dots";
+            }
+            else if (stage == 5) {
+                dialogue = "Enter the locker to hide";
+            }
+            else if (stage == 6) {
+                dialogue = "";
+            }
+            else if (stage == 7) {
+                dialogue = "Leave the room on the left side to go fix pipe. Look for valve";
+            }
+            else if (stage == 8) {
+                dialogue = "test";
+            }
+            MainGame.SpriteBatch.DrawString(_font, dialogue, new Vector2(700, 100), Color.White);
+            //endtemp
             //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {_player.Transform.Position} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {_player.Transform.WorldPosition} ", new Vector2(150, 420), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {_player.Listener.Position.X}", new Vector2(150, 440), Color.White);
@@ -87,24 +137,37 @@ namespace Imaginophobia {
 
                 if (_player.CooldownTimer != null && (_player.CurrentAction == CharacterAction.ReadyToHide || _player.CurrentAction == CharacterAction.Hiding)) {
                     Color color;
+                    float timeFactor;
                     if (_player.CooldownTimer.Name == "cooldownTime") {
                         color = ColorHelper.FromHex("#a40e0e64");
+                        timeFactor = 150;
                     }
                     else {
                         color = ColorHelper.FromHex("#0e61a464");
+                        timeFactor = 56.25f;
                     }
-                    MainGame.SpriteBatch.FillRectangle(960 - 225, 540 + 400, _player.CooldownTimer.TimeLeft * 150, 75, color);
+                    MainGame.SpriteBatch.FillRectangle(960 - 225, 540 + 400, _player.CooldownTimer.TimeLeft * timeFactor, 75, color);
                 }
             }
 
-            
+            Color colorasd = Color.White;
+            if(_player.SanityState == SanityState.Anxious) {
+                colorasd = Color.Yellow;
+            }
+            else if (_player.SanityState == SanityState.Insane) {
+                colorasd = Color.Red;
+            }
+            MainGame.SpriteBatch.DrawString(_font, $"Sanity: ", new Vector2(100, 100), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"Battery: ", new Vector2(100, 150), Color.White);
+            MainGame.SpriteBatch.DrawRectangle(210, 100, 300, 20, Color.White);
+            MainGame.SpriteBatch.FillRectangle(210, 100, 3 * _player.Sanity, 20, colorasd);
+            MainGame.SpriteBatch.DrawRectangle(210, 150, 300, 20, Color.White);
+            MainGame.SpriteBatch.FillRectangle(210, 150, 3 * _player.Battery, 20, Color.White);
 
             MainGame.SpriteBatch.End();
             
 
             //MainGame.SpriteBatch.FillRectangle(new Rectangle(0,0,1920,480),Color.Black);
-
-            
 
 
             //foreach (Timer timer in Time.Timers) {
@@ -121,6 +184,12 @@ namespace Imaginophobia {
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.45f), duration: 4)
                 .Easing(EasingFunctions.Linear);
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Color, toValue: ColorHelper.FromHex("#2c0000"), duration: 4)
+                .Easing(EasingFunctions.Linear);
+            }
+            else if (_player.SanityState == SanityState.Normal) {
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 1)
+                .Easing(EasingFunctions.Linear);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Color, toValue: Color.Black, duration: 1)
                 .Easing(EasingFunctions.Linear);
             }
         }
@@ -202,7 +271,7 @@ namespace Imaginophobia {
                 //_vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
                 //_tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
                 //.Easing(EasingFunctions.Linear);
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.1f, 0.2f), duration: 3)
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.1f, 0.2f), duration: 8)
                 .Easing(EasingFunctions.Linear);
             }
             else if ((_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.Idle) || (_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.ReadyToHide)) {

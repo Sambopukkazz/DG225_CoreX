@@ -16,7 +16,7 @@ namespace Imaginophobia {
         public List<GameObject> enemies;
         private float SpawnInterval = 5;
         private int _autophobiaSpawnChance = 30; // 0-100
-        private int _scopophobiaSpawnChance = 10;
+        private int _scopophobiaSpawnChance = 5;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
         public event Action<ICollisionActor> EnemySpawned;
@@ -63,7 +63,8 @@ namespace Imaginophobia {
             if (SceneManager.GetActiveScene().Name == "tilemap_sewer") {
                 if(_continueSpawnEnemy == false) {
                     _continueSpawnEnemy = true;
-                    SpawnEnemy();
+                    Time.AddTimer(SpawnEnemy, 2f);
+                    
                 }
             }
             else {
@@ -85,10 +86,10 @@ namespace Imaginophobia {
             if (_continueSpawnEnemy) {
                 Vector2 pos;
                 if (_player.CurrentAction == CharacterAction.Hiding) {
-                    pos = _player.PreviousPos;
+                    pos.Y = _player.PreviousPos.Y;
                 }
                 else {
-                    pos = _player.Transform.Position;
+                    pos.Y = _player.Transform.Position.Y;
                 }
                 int posOffset = _rand.Next(100, 500);
                 bool spawnLeft;

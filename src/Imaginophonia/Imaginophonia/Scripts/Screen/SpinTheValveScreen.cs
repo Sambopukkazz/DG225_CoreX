@@ -39,6 +39,10 @@ namespace Imaginophobia {
             _player = player;
 
             RandomNeedleSpeed();
+            //temp
+            if (UIManager.stage > 2) {
+                UIManager.stage = 3;
+            }
         }
 
         public override void Update(GameTime gameTime) {
@@ -67,6 +71,9 @@ namespace Imaginophobia {
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
 
                 if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
+                    //temp
+                    UIManager.stage = 6;
+                    //endtemp
                     MinigameActive = false;
                     AudioManager.Instance.PlaySFX(Sound.PipeComplete);
                     _player.ToggleRepair();
@@ -108,7 +115,7 @@ namespace Imaginophobia {
 
         private void RandomNeedleSpeed() {
             Random rand = new Random();
-            _needleSpeed = MathHelper.ToRadians(rand.Next(-10, 10));
+            _needleSpeed = MathHelper.ToRadians(rand.Next(-8, 8));
 
             Time.AddTimer(RandomNeedleSpeed, 5);
         }

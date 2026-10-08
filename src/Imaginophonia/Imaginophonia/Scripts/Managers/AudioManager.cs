@@ -71,10 +71,11 @@ namespace Imaginophobia {
 
             //Load Sound Effect
             NameSFX = new Dictionary<Sound, SoundEffect> {
-                { Sound.CloseDoor, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_close") },
-                { Sound.OpenDoor, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_open") },
-                { Sound.CloseLocker, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_close") },
-                { Sound.OpenLocker, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_open") },
+                { Sound.DoorClose, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_close") },
+                { Sound.DoorOpen, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_open") },
+                { Sound.DoorStuck, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_stuck") },
+                { Sound.LockerClose, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_close") },
+                { Sound.LockerOpen, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_open") },
                 { Sound.PipeComplete, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
                 { Sound.PipeFail, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
                 { Sound.PipeRepairing, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
@@ -119,12 +120,13 @@ namespace Imaginophobia {
         }
 
         public void Draw() {
-            if (_debugging) {
-                //BitmapFont font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-                foreach (AudioSource audioSource in _activeAudioSources) {
-                    audioSource.Draw();
-                    //MainGame.SpriteBatch.DrawString(font, $"\nSource Pos:{audioSource.Transform.LocalMatrix}", new Vector2(100, 500 + (40 * _activeAudioSources.IndexOf(audioSource))), Color.White);
-                }
+            if (!_debugging) {
+                return;
+            }
+            //BitmapFont font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            foreach (AudioSource audioSource in _activeAudioSources) {
+                audioSource.Draw();
+                //MainGame.SpriteBatch.DrawString(font, $"\nSource Pos:{audioSource.Transform.LocalMatrix}", new Vector2(100, 500 + (40 * _activeAudioSources.IndexOf(audioSource))), Color.White);
             }
         }
 

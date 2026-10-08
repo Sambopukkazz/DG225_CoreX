@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public enum Sound {
-        CloseDoor,
-        OpenDoor,
-        CloseLocker,
-        OpenLocker,
+        DoorClose,
+        DoorOpen,
+        DoorStuck,
+        LockerClose,
+        LockerOpen,
         PipeComplete,
         PipeFail,
         PipeRepairing,

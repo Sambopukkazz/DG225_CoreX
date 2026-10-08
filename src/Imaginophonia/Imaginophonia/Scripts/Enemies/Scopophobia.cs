@@ -10,7 +10,7 @@ namespace Imaginophobia {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float MoveSpeed { get; private set; } = 2600f;
-        public int Id { get; }
+        public int Id { get; } = 999;
         public CollisionShape2D Shape { get; private set; }
         private AudioSource _audioSource;
         private readonly Vector2 _size;
