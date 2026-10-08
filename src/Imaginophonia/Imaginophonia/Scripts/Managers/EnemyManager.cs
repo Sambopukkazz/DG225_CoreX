@@ -102,6 +102,7 @@ namespace Imaginophobia {
                 }
 
                 GameObject enemy;
+
                 int[] autophobiaNumber = new int[_autophobiaSpawnChance];
                 for (int i = 0; i < autophobiaNumber.Length; i++) {
                     autophobiaNumber[i] = _rand.Next(0, 101);
@@ -118,14 +119,13 @@ namespace Imaginophobia {
                     enemies.Add(autophobia);
                     EnemySpawned?.Invoke(autophobia);
                 }
-                else if (scopophobiaNumber.Contains<int>(randomNumber)) {
+                else if (scopophobiaNumber.Contains<int>(randomNumber) && enemies.Exists(enem => enem.GetType().Name == "Scopophobia") == false) {
                     if (spawnLeft) {
                         pos.X -= 1920;
                     }
                     else {
                         pos.X += 1920;
                     }
-
                     Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
                     enemies.Add(scopophobia);
                     EnemySpawned?.Invoke(scopophobia);

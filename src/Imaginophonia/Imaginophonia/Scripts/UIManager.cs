@@ -114,9 +114,7 @@ namespace Imaginophobia {
 
         private void OnSanityStateChanged() {
             if (_player.SanityState == SanityState.Anxious) {
-                _tweener.TweenTo(target: _vignetteOverlay, exprif (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-                _vignetteOverlay.Color = ColorHelper.FromHex("#2c0000");
-            }ession: vignette => vignette.Scale, toValue: new Vector2(0.5f, 0.5f), duration: 2)
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.5f, 0.5f), duration: 2)
                 .Easing(EasingFunctions.Linear);
             }
             else if (_player.SanityState == SanityState.Insane) {

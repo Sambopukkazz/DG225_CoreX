@@ -122,7 +122,7 @@ namespace Imaginophobia {
 
         private void OnSceneLoaded(Vector2 spawnPosition) {
             _player.LoadScenePosition(spawnPosition);
-            
+            AudioManager.Instance.PlaySFX(Sound.CloseDoor);
         }
         
         private void OnEnemySpawned(ICollisionActor enemy) {

@@ -58,7 +58,7 @@ namespace Imaginophobia {
 
         private SoundEffect[] _steps;
         private int _stepOrder;
-        private Dictionary<string, SoundEffect> NameSFX;
+        private Dictionary<Sound, SoundEffect> NameSFX;
         private Song[] _amb;
 
         public AudioManager() {
@@ -70,18 +70,22 @@ namespace Imaginophobia {
             _activeAudioSources = new List<AudioSource>();
 
             //Load Sound Effect
-            NameSFX = new Dictionary<string, SoundEffect> {
-                { "sfx_door_close", MainGame.Content.Load<SoundEffect>("Audio/sfx_door_close") },
-                { "sfx_door_open", MainGame.Content.Load<SoundEffect>("Audio/sfx_door_open") },
-                { "sfx_locker_close", MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_close") },
-                { "sfx_locker_open", MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_open") },
-                { "sfx_pipe_complete", MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
-                { "sfx_pipe_failed", MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
-                { "sfx_pipe_repairing", MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
-                { "sfx_pipe_success", MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_success") },
-                { "sfx_door_close", MainGame.Content.Load<SoundEffect>("Audio/sfx_door_close") }
+            NameSFX = new Dictionary<Sound, SoundEffect> {
+                { Sound.CloseDoor, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_close") },
+                { Sound.OpenDoor, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_open") },
+                { Sound.CloseLocker, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_close") },
+                { Sound.OpenLocker, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_open") },
+                { Sound.PipeComplete, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
+                { Sound.PipeFail, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
+                { Sound.PipeRepairing, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
+                { Sound.PipeSuccess, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_success") },
+                { Sound.ElecComplete, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_complete") },
+                { Sound.ElecFail, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_failed") },
+                { Sound.ElecRepairing, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
+                { Sound.ElecSuccess, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_success") },
+                { Sound.ScopoIndicator, MainGame.Content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
+                { Sound.AutoIndicator, MainGame.Content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
             };
-
 
             _steps = new SoundEffect[8];
 
@@ -92,16 +96,6 @@ namespace Imaginophobia {
             _amb = new Song[2];
             _amb[0] = MainGame.Content.Load<Song>($"Audio/amb_electricroom");
             _amb[1] = MainGame.Content.Load<Song>($"Audio/amb_sewer");
-
-            tempFx[0] = 
-            tempFx[1] = MainGame.Content.Load<SoundEffect>($);
-            tempFx[2] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_locker_close");
-            tempFx[3] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_locker_open");
-            tempFx[4] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_pipe_complete");
-            tempFx[5] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_pipe_failed");
-            tempFx[6] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_pipe_repairing");
-            tempFx[7] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_pipe_success");
-            tempFx[8] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_scopophobia_indicator");
         }
 
         ~AudioManager() => Dispose(false);
@@ -111,7 +105,7 @@ namespace Imaginophobia {
                 AudioSource audioSource = _activeAudioSources[i];
                 audioSource.Update();
 
-                if (audioSource.Sound.State == SoundState.Stopped || audioSource.Active == false) {
+                if (audioSource.AudioPlayer.State == SoundState.Stopped || audioSource.Active == false) {
                     if (!audioSource.IsDisposed) {
                         audioSource.Dispose();
                     }
@@ -134,24 +128,16 @@ namespace Imaginophobia {
             }
         }
 
-        public void PlaySFX(Vector2 pos, string name, bool repeat = false, string source = null) {
-            AudioSource audioSource = new(pos);
+        public void PlaySFX(Sound name, bool repeat = false, bool playAfterLastCompleted = false) {
+            if (playAfterLastCompleted == true && _activeAudioSources.Exists(audio => audio.Name == name.ToString()) == true) {
+                return;
+            }
+
+            AudioSource audioSource = new AudioSource(name);
             _activeAudioSources.Add(audioSource);
 
-            SoundEffect soundEffect = tempFx[0];
-            if (name == "locker-open") {
-                soundEffect = tempFx[3];
-            }
-            else if (name == "locker-close") {
-                soundEffect = tempFx[2];
-            }
-            else if (name == "door-close") {
-                soundEffect = tempFx[1];
-            }
-            else if (name == "door-close") {
-                soundEffect = tempFx[0];
-            }
-
+            SoundEffect soundEffect = NameSFX[name];
+            
             if (repeat) {
                 audioSource.PlayLoop(soundEffect);
             }
@@ -160,14 +146,11 @@ namespace Imaginophobia {
             }
         }
 
-        public AudioSource Play3DSFX(Vector2 pos, string name, float innerRadius = 10, float outerRadius = 80) {
+        public AudioSource Play3DSFX(Vector2 pos, Sound name, float innerRadius = 10, float outerRadius = 80) {
             AudioSource audioSource = new(pos, innerRadius, outerRadius);
             _activeAudioSources.Add(audioSource);
 
-            SoundEffect soundEffect = null;
-            if (name == "scopophobia") {
-                soundEffect = tempFx[8];
-            }
+            SoundEffect soundEffect = NameSFX[name];
 
             if (soundEffect != null) {
                 audioSource.PlayOneShot(soundEffect);
@@ -204,13 +187,21 @@ namespace Imaginophobia {
             MediaPlayer.IsRepeating = true;
         }
 
+        public void StopSFX(Sound name) {
+            if (_activeAudioSources.Exists(audio => audio.Name == name.ToString())) {
+                foreach (var audioSource in _activeAudioSources.Where(audio => audio.Name == name.ToString())) {
+                    audioSource.SetActive(false);
+                }
+            }
+        }
+
         public void PauseAudio() {
             // Pause any active songs playing.
             MediaPlayer.Pause();
 
             // Pause any active sound effects.
             foreach (AudioSource audioSource in _activeAudioSources) {
-                audioSource.Sound.Pause();
+                audioSource.AudioPlayer.Pause();
             }
         }
 
@@ -220,7 +211,7 @@ namespace Imaginophobia {
 
             // Resume any active sound effects.
             foreach (AudioSource audioSource in _activeAudioSources) {
-                audioSource.Sound.Resume();
+                audioSource.AudioPlayer.Resume();
             }
         }
 

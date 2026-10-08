@@ -28,6 +28,13 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/amb_sewer.MP3
 
+#begin Audio/sfx_autophobia_indicator.MP3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_autophobia_indicator.MP3
+
 #begin Audio/sfx_door_close.MP3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -41,6 +48,34 @@
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_door_open.MP3
+
+#begin Audio/sfx_electric_complete.MP3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_electric_complete.MP3
+
+#begin Audio/sfx_electric_failed.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_electric_failed.mp3
+
+#begin Audio/sfx_electric_repairing.MP3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_electric_repairing.MP3
+
+#begin Audio/sfx_electric_success.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_electric_success.mp3
 
 #begin Audio/sfx_locker_close.MP3
 /importer:Mp3Importer

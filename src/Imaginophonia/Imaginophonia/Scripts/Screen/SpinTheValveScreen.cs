@@ -57,15 +57,18 @@ namespace Imaginophobia {
                 }
                 else if (_needleAngle >= MathHelper.ToRadians(285) && _needleAngle <= MathHelper.ToRadians(313)) {
                     _progressValue -= 35f * Time.DeltaTime;
+                    AudioManager.Instance.PlaySFX(Sound.PipeFail, false, true);
                 }
                 else if (_needleAngle >= MathHelper.ToRadians(225) && _needleAngle <= MathHelper.ToRadians(255)) {
                     _progressValue -= 15f * Time.DeltaTime;
+                    AudioManager.Instance.PlaySFX(Sound.PipeFail, false, true);
                 }
 
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
 
                 if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
                     MinigameActive = false;
+                    AudioManager.Instance.PlaySFX(Sound.PipeComplete);
                     _player.ToggleRepair();
                     this.ScreenManager.CloseScreen();                   
                 }
@@ -130,7 +133,7 @@ namespace Imaginophobia {
                     _angularSpeed = MathHelper.WrapAngle(_mouseAngle - _lastMouseAngle);
                     _targetAngle += _angularSpeed;
                     _lastMouseAngle = _mouseAngle;
-
+                    AudioManager.Instance.PlaySFX(Sound.PipeRepairing, false, true);
                 }
             }
             else {

@@ -80,6 +80,7 @@ namespace Imaginophobia {
                         //Connect the dot
                         Screen screen = new ConnectTheDotsScreen(_player);
                         MainGame.ScreenManager.ShowScreen(screen);
+                        AudioManager.Instance.PlaySFX(Sound.ElecRepairing);
                         _player.ToggleRepair();
                     }
                     
@@ -87,6 +88,7 @@ namespace Imaginophobia {
                 else if (trigger.CompareTag("door")) {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         //Load to next scene
+                        //AudioManager.Instance.PlaySFX(Sound.OpenDoor);
                         CallLoadScene?.Invoke(trigger.Name);
                     }
                 }
@@ -101,6 +103,7 @@ namespace Imaginophobia {
                     if(enemy.Name == "Autophobia") {
                         enemy.SetActive(false);
                         _player.Sanity -= 10;
+                        AudioManager.Instance.PlaySFX(Sound.AutoIndicator);
                     }
                     else {
                         _player.Sanity -= 25;

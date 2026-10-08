@@ -360,6 +360,7 @@ namespace Imaginophobia {
                 FocusLevel = 1.25f;
                 CurrentAction = CharacterAction.Hiding;
                 CooldownTimer = Time.AddTimer(ToggleHide, 3, "hideTime");
+                AudioManager.Instance.PlaySFX(Sound.CloseLocker);
             }
             else if (CurrentAction == CharacterAction.Hiding) {
                 SetActive(true);
@@ -368,6 +369,7 @@ namespace Imaginophobia {
                 CurrentAction = CharacterAction.Idle;
                 Transform.Position = PreviousPos;
                 CooldownTimer = Time.AddTimer(SetReadyToHide, _hideCoolDown, "cooldownTime");
+                AudioManager.Instance.PlaySFX(Sound.OpenLocker);
             }
             Visible = Active;
             _scotopicLight.Enabled = Active;

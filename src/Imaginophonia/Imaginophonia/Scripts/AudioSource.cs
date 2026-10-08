@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class AudioSource : GameObject,IDisposable {
-        public SoundEffectInstance Sound { get; private set; }
+        public SoundEffectInstance AudioPlayer { get; private set; }
         private AudioEmitter _emitter;
 
         private float _duration;
@@ -21,10 +21,8 @@ namespace Imaginophobia {
 
         public bool IsDisposed { get; private set; }
 
-        public AudioSource(Vector2 pos) : base ("AudioSource", "AudioSource") {
-            Transform.Position = pos;
-            _emitter = new();
-            _emitter.Position = new Vector3(pos, 0);
+        public AudioSource(Sound name) : base (name.ToString(), "AudioSource") {
+            Transform.Position = Vector2.Zero;
         }
         public AudioSource(Vector2 pos, float innerRadius, float outerRadius) : base("AudioSource", "AudioSource3D") {
             Transform.Position = pos;
@@ -37,7 +35,9 @@ namespace Imaginophobia {
 
         public override void Update() {
             base.Update();
-            _emitter.Position = new Vector3(Transform.Position.X, Transform.Position.Y, 0);
+            if (_emitter != null) {
+                _emitter.Position = new Vector3(Transform.Position.X, Transform.Position.Y, 0);
+            }
         }
 
         public override void Draw() {
@@ -48,16 +48,16 @@ namespace Imaginophobia {
         }
 
         public void PlayLoop(SoundEffect soundEffect, float volume = 1) {
-            Sound = soundEffect.CreateInstance();
+            AudioPlayer = soundEffect.CreateInstance();
             _duration = (float)soundEffect.Duration.TotalSeconds;
-            Sound.IsLooped = true;
-            Sound.Play();
+            AudioPlayer.IsLooped = true;
+            AudioPlayer.Play();
         }
 
         public void PlayOneShot(SoundEffect soundEffect, float volume = 1) {
-            Sound = soundEffect.CreateInstance();
+            AudioPlayer = soundEffect.CreateInstance();
             _duration = (float)soundEffect.Duration.TotalSeconds;
-            Sound.Play();
+            AudioPlayer.Play();
         }
 
         public void UpdateSpatialAudio(Player player) {
@@ -66,17 +66,17 @@ namespace Imaginophobia {
             float distance = Vector3.Distance(player.Listener.Position, _emitter.Position);
 
             float volume = 1f - MathHelper.Clamp((distance - _innerRadius) / (_outerRadius - _innerRadius), 0f, 1f);
-            Sound.Volume = volume;
+            AudioPlayer.Volume = volume;
 
             Vector2 directionFromListener = new Vector2(_emitter.Position.X - player.Listener.Position.X, _emitter.Position.Y - player.Listener.Position.Y);
             
             //CircleF.Contains(new CircleF(Transform.Position, _innerRadius), new Vector2(Player.Listener.Position.X, Player.Listener.Position.Y)
             if (directionFromListener == Vector2.Zero || ((player.Listener.Position.X >= (_emitter.Position.X - _innerRadius)) && (player.Listener.Position.X <= (_emitter.Position.X + _innerRadius)))) {
-                Sound.Pan = 0;
+                AudioPlayer.Pan = 0;
             }
             else if (directionFromListener != Vector2.Zero) {
                 directionFromListener.Normalize();
-                Sound.Pan = MathHelper.Clamp(directionFromListener.X, -1f, 1f);
+                AudioPlayer.Pan = MathHelper.Clamp(directionFromListener.X, -1f, 1f);
             }
 
             float vEmitter = Vector2.Dot(Vector2.Zero, directionFromListener);
@@ -85,7 +85,7 @@ namespace Imaginophobia {
             }
             float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
             float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
-            Sound.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
+            AudioPlayer.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
         }
 
         ~AudioSource() => Dispose(false);
@@ -101,7 +101,7 @@ namespace Imaginophobia {
             }
 
             if (disposing) {
-                Sound?.Dispose();
+                AudioPlayer?.Dispose();
             }
 
             IsDisposed = true;

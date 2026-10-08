@@ -53,6 +53,7 @@ namespace Imaginophobia {
                     if (_currentPath == null) {
                         GridCell cell = _cells[pos.X, pos.Y];
                         if (cell.IsEndpoint && cell.Color != Color.White) {
+                            AudioManager.Instance.PlaySFX(Sound.ElecFail);
                             _completedPaths.RemoveAll(path => path.Color == cell.Color);
 
                             _currentPath = new WirePath { Color = cell.Color };
@@ -69,9 +70,11 @@ namespace Imaginophobia {
             }
             else if (mouseStateExtended.WasButtonPressed(MouseButton.Right)) {
                 _completedPaths.Clear();
+                AudioManager.Instance.PlaySFX(Sound.ElecFail);
             }
 
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _completedPaths.Count == _colors.Count) {
+                AudioManager.Instance.PlaySFX(Sound.ElecComplete);
                 this.ScreenManager.CloseScreen();
                 _player.ToggleRepair();
             }
@@ -182,6 +185,7 @@ namespace Imaginophobia {
                 if (targetCell.IsEndpoint && targetCell.Color == path.Color && path.Points.Count > 1) {
                     path.IsComplete = true;
                     _completedPaths.Add(path);
+                    AudioManager.Instance.PlaySFX(Sound.ElecSuccess);
                 }
             }
         }
