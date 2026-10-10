@@ -1,7 +1,7 @@
-# Sprint [3] Plan
+# Sprint [4] Plan
 
 **Sprint Goal:** [เกมเล่นได้และมีจุดจบที่ชัดเจน ผู้เล่นเข้าใจว่าต้องทำอะไรต่อในแต่ละช่วงของเกม]
-**ระยะเวลา:** [2026-09-27] — [2026-11-02]
+**ระยะเวลา:** [2026-10-11] — [2026-11-02]
 **Team:**
 เตชินท์ เจริญสิงห์ 682110116
 ธีนันทนัช ปานานนท์ 682110120
@@ -12,17 +12,14 @@
 
 ## Sprint Backlog
 
-| # | User Story                                                                                                                | รับผิดชอบ | MoSCoW      | Estimate (SP) | Status         |
-| - | ------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------- | ------------- | -------------- |
-| 1 | As a player, I want to see my remaining lives                                                                             | เตชินท์     | Should Have | 2             | 🔄 In Progress |
-| 2 | As a Artist, I want to redesign some of the assets to make them clearer and batter guide the player.                      | นาถวัฒน์   | Should Have | 3             | 🔄 In Progress |
-| 3 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                           | ธีนันทนัช | Must Have   | 6             | 🔄 In Progress |
-| 4 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.   | พรภวิษย์   | Should Have | 3             | 🔄 In Progress |
-| 5 | As a player, I want entities to chase me, so that I feel challenged.                                                      | เตชินท์     | Must Have   | 2             | 🔄 In Progress |
-| 6 | As an artist, I want redesign the mini-game UI to make it look better.                                                   | นาถวัฒน์   | Should Have | 3             | 🔄 In Progress |
-| 7 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with | เตชินท์     | Should Have | 2             | 🔄 In Progress |
-| 8 | As a designer, I want to add tutorials for players, so that they understand how to play the game easily                   | ธีนันทนัช | Should Have | 2             | 🔄 In Progress |
-| 9 | As a designer, I want to overhaul game's menu, so that it's more clean and understandable to use.                         | ธีนันทนัช | Should Have | 3             | 🔄 In Progress |
+| # | User Story                                                                                                                 | รับผิดชอบ | MoSCoW       | Estimate (SP) | Status         |
+| - | -------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------ | ------------- | -------------- |
+| 1 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                            | ธีนันทนัช | Must Have    | 6             | 🔄 In Progress |
+| 2 | As an artist, I want redesign the mini-game UI to make it look better.                                                    | ธีนันทนัช | Should Have  | 3             | 🔄 In Progress |
+| 3 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with. | เตชินท์     | Should Have  | 2             | 🔄 In Progress |
+| 4 | As a designer, I want to make a balance sheet of entities, so that I can understand the balancing.                         | ธีนันทนัช | Nice to Have | 1             | 🔄 In Progress |
+| 5 | As a designer, I want to add sounds to the game to make the game more interesting.                                         | พรภวิษย์   | Should Have  | 2             | 🔄 In Progress |
+| 6 | As a developer, I want to add deathscreen/winscreen, so that the player knows if they win/lose.                            | ธีนันทนัช | Should Have  | 4             | 🔄 In Progress |
 
 ## Status Legend
 
@@ -35,52 +32,36 @@
 
 ## Tasks
 
-### Story 1 — [Better UI]
+### Story 1 — [Transform phobias to enemies mechanics]
 
-- [X] [Player Class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [X] [InputManager Class]  [owner:: เตชินท์]  [estimate:: 2hrs]  [status::✅ Done]
+- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [ ] [Turn them into enemies and create a mechanic around it]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
 
-### Story 2 — [Redesign main character]
+### Story 2 — [Redesign Minigame UI]
 
-- [X] [Player walk animation]  [owner:: นาถวัฒน์]  [estimate:: 40hrs]  [status::✅ Done]
-- [X] [Player idle animation]  [owner:: นาถวัฒน์]  [estimate:: 20hrs]  [status:: ✅ Done]
+- [ ] [Find the size for buttons in menu UI to give it to artist]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [ ] [Draw assets for minigames]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
 
-### Story 3 — [Enemy behavior]
-
-- [ ] [Enemy base class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: 🔄 In Progress]
-- [ ] [Implement predesign enemy]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
-
-### Story 4 — [Menu and settings]
-
-- [X] [Start Menu]  [owner:: พรภวิษย์]  [estimate:: 18hrs]  [status:: ✅ In Progress]
-- [X] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status::✅ In Progress]
-- [X] [Pause Screen]  [owner:: พรภวิษย์]  [estimate:: 6hrs]  [status:: ✅ In Progress]
-
-### Story 5 — [์Nyctophobia]
-
-- [ ] [Dark area triggers]  [owner:: ธีนันทนัช]  [estimate:: 5]  [status:: 🔄 In Progress]
-- [ ] [Vignette effect]  [owner:: ธีนันทนัช]  [estimate:: 3]  [status:: 🔄 In Progress]
-
-### Story 6 — [Menu and settings]
-
-- [ ] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status:: 🔄 In Progress]
-
-### Story 7 — [Highlights shader]
+### Story 3 — [Highlights shader]
 
 - [ ] [Follow tutorials]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status:: 🔲 Todo]
 - [ ] [Implement highlights shader]  [owner:: เตชินท์]  [estimate:: 9h]  [status:: 🔲 Todo]
 
-### Story 8 — [Tutorial]
+### Story 4 — [Balance sheet]
 
-- [ ] [How texts will appear when entering the game and its concept.]  [owner:: ธีนันทนัช]  [estimate:: 8 hrs]  [status::🔄 In Progress]
-- [ ] [How tutorial will progress (what will happen if player do this/that, guiding players what to do)]  [owner:: ธีนันทนัช]  [estimate:: 8 hrs]  [status::🔄 In Progress]
-- [ ] [Minigame UI (showing what button to press)]  [owner:: ธีนันทนัช]  [estimate:: 8 hrs]  [status:: 🔄 In Progress]
+- [ ] [Make separated sheets for each categories]  [owner:: ธีนันทนัช]  [estimate:: 4hrs]  [status:: ✅ Done]
+- [ ] [Make the values in the sheet usable for calculati          on]  [owner:: ธีนันทนัช]  [estimate:: 9h]  [status:: ✅ Done]
 
-### Story 9 — [Game Menu]
+### Story 5 — [Sound Design]
 
-- [ ] [adjusting buttons location]  [owner:: ธีนันทนัช]  [estimate:: 3hrs]  [status::🔄 In Progress]
-- [ ] [Pause menu rearrange]  [owner:: ธีนันทนัช]  [estimate:: 7hrs]  [status::🔄 In Progress]
-- [ ] [Review]  [owner:: ธีนันทนัช]  [estimate:: 1 hrs]  [status:: 🔄 In Progress]
+- [ ] [Find sounds]  [owner:: พรภวิษย์]  [estimate:: 5]  [status:: 🔄 In Progress]
+- [ ] [Save sources of the sounds]  [owner:: พรภวิษย์]  [estimate:: 3]  [status:: 🔄 In Progress]
+- [ ] [Rename audio files to fit the naming convention]  [owner:: พรภวิษย์]  [estimate:: 3]  [status:: 🔄 In Progress]
+
+### Story 6 — [Death/Win screen UI]
+
+- [ ] [Death UI]  [owner:: ธีนันทนัช]  [estimate:: 20hrs]  [status:: 🔄 In Progress]
+- [ ] [Victory UI]  [owner:: ธีนันทนัช]  [estimate:: 20hrs]  [status:: 🔄 In Progress]
 
 ---
 

@@ -13,8 +13,9 @@
 |                                                   | ทดสอบการเล่นเสียงในการ Interact ต่างๆเบื้องต้น | สืบค้นวิธีทำไฟล์ json เบื้องต้น       |                                                  |
 | นาถวัฒน์ (Artist)                         | Walk animation                                                                     | Walk animation เพิ่มเติม                              | ปรับแต่งท่าทางให้สมบูรณ์ |
 |                                                   |                                                                                    | Fix idle                                                       |                                                  |
-| ธีนันทนัช (Designer)                    | ทดลองเปลี่ยนค่าแสงต่างๆ                                     | คิด tutorial                                                | -                                                |
-|                                                   |                                                                                    | จัด layout หน้าmenu รวมถึง ui ในเกม          |                                                  |
+| ธีนันทนัช (Designer)                    | คิด tutorial                                                                    | playtest/balancing                                             | -                                                |
+|                                                   | จัด layout หน้าmenu รวมถึง ui ในเกม                              | ทำ ui เกม                                                 | scrollviewer not working properly                |
+|                                                   |                                                                                    | ทำ ost เกม                                                |                                                  |
 | พรภวิษย์ (UI Designer and Sound engineer) | ทํา UI กดปุ่มเเล้วเปลี่ยนหน้า                             | หาเสียง Jumpscare                                       | **โ**ค้ดมีปัญหา                 |
 
 ---
