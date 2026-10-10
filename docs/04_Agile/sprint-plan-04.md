@@ -53,8 +53,8 @@
 ### Story 4 — [Menu and settings]
 
 - [X] [Start Menu]  [owner:: พรภวิษย์]  [estimate:: 18hrs]  [status:: ✅ In Progress]
-- [ ] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status:: 🔲 Todo]
-- [ ] [Pause Screen]  [owner:: พรภวิษย์]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+- [X] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status::✅ In Progress]
+- [X] [Pause Screen]  [owner:: พรภวิษย์]  [estimate:: 6hrs]  [status:: ✅ In Progress]
 
 ### Story 5 — [์Nyctophobia]
 
