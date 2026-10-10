@@ -18,7 +18,7 @@
 
 ## Action Items & Blockers Resolution
 
-- [ ] [ทดสอบ level ที่ธีนันทนัชสร้างมา] [status:: doing]
+- [X] [ทดสอบ level ที่ธีนันทนัชสร้างมา] [status:: done]
   [owner:: เตชินท์] [due:: 2026-09-10]
 - [X] [ปรับรูปแบบการวางแมพใน LDtk ของ ธีนันทนัช] [status:: done]
   [owner:: เตชินท์] [due:: 2026-09-06]
@@ -35,5 +35,5 @@
 
 ## Related Documents
 
-- [[docs/agile/sprint-plan-01|Sprint 1 Plan]]
-- [[docs/agile/02-sprint-backlog|Sprint Backlog]]
+- [Sprint 1 Plan](../sprint-plan-01.md)
+- [Sprint Backlog](../02-sprint-backlog.md)

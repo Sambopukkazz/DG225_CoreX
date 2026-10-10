@@ -34,46 +34,46 @@
 
 ## Tasks
 
-### Story 1 — [Player controls and acitons]
+### Story 1 — [Demo UI]
 
-- [X] [Player Class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [ ] [InputManager Class]  [owner:: เตชินท์ 116]  [estimate:: 2hrs]  [status::✅ Done]
+- [X] [Sanity variable]  [owner:: เตชินท์]  [estimate:: 1hrs]  [status:: ✅ Done]
+- [X] [Reduce sanity on hit]  [owner:: เตชินท์]  [estimate:: 1hrs]  [status::✅ Done]
+- [X] [Simple sanity display]  [owner:: เตชินท์]  [estimate:: 1hrs]  [status::✅ Done]
 
 ### Story 2 — [Redesign main character]
 
-- [ ] [Player walk animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 40hrs]  [status::🔄 In Progress]
-- [X] [Player idle animation]  [owner:: นาถวัฒน์ 125]  [estimate:: 20hrs]  [status:: ✅ Done]
+- [ ] [Player walk animation]  [owner:: นาถวัฒน์]  [estimate:: 40hrs]  [status::🔄 In Progress]
+- [X] [Player idle animation]  [owner:: นาถวัฒน์]  [estimate:: 20hrs]  [status:: ✅ Done]
 
 ### Story 3 — [Lightings]
 
-- [X] [Make Entities in LDtk]  [owner:: ธีนันทนัช 120]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [X] [Testing it out in the real game]  [owner:: ธีนันทนัช 120]  [estimate:: 8hrs]  [status:: ✅ Done]
+- [X] [Make Entities in LDtk]  [owner:: ธีนันทนัช]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [Testing it out in the real game]  [owner:: ธีนันทนัช]  [estimate:: 8hrs]  [status:: ✅ Done]
 
 ### Story 4 — [Map creation]
 
-- [X] [Build simple test map]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [X] [Mock map layout]  [owner:: ธีนันทนัช 120]  [estimate:: 15hrs]  [status:: ✅ Done]
-- [X] [Check map usability and revise it]  [owner:: เตชินท์ 116]  [estimate:: 14hrs]  [status:: ✅ Done]
+- [X] [Revised map layout]  [owner:: ธีนันทนัช]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Check map usability]  [owner:: เตชินท์]  [estimate:: 14hrs]  [status:: ✅ Done]
 
 ### Story 5 — [Transform phobias to enemies mechanics]
 
-- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔄 In Progress]
-- [ ] [Turn them into enemies and create a mechanic around it]  [owner:: ธีนันทนัช 120]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [ ] [Turn them into enemies and create a mechanic around it]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
 
 ### Story 6 — [Menu and settings]
 
-- [X] [Start Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 18hrs]  [status:: ✅ Done]
-- [ ] [Setting Menu]  [owner:: พรภวิษย์ 132]  [estimate:: 20hrs]  [status:: 🔲 Todo]
-- [X] [Pause Screen]  [owner:: พรภวิษย์ 132]  [estimate:: 6hrs]  [status:: ✅ Done]
+- [X] [Start Menu]  [owner:: พรภวิษย์]  [estimate:: 18hrs]  [status:: ✅ Done]
+- [ ] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status:: 🔲 Todo]
+- [X] [Pause Screen]  [owner:: พรภวิษย์]  [estimate:: 6hrs]  [status:: ✅ Done]
 
 ### Story 7 — [Enemy behavior]
 
-- [X] [Enemy base class]  [owner:: เตชินท์ 116]  [estimate:: 3hrs]  [status:: ✅ Done]
-- [X] [Implement predesign enemy]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: ✅ Done]
+- [X] [Enemy base class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [Implement predesign enemy]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: ✅ Done]
 
 ### Story 8 — [Collosion + Interactable]
 
-- [X] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์ 116]  [estimate:: 8hrs]  [status:: ✅ Done]
+- [X] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: ✅ Done]
 
 ---
 
