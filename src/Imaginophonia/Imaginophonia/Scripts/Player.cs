@@ -260,6 +260,7 @@ namespace Imaginophobia {
                 for (int i = 1; i <= walkFrameCount; i++) {
                     if (i == walkFrameCount) builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0));
                     else builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
+                    //builder.AddFrame($"sprite_walk_{i:D2}", TimeSpan.FromSeconds(0.15));
                 }
             });
 
@@ -330,9 +331,8 @@ namespace Imaginophobia {
 
             if ((_animatedSprite.CurrentAnimation == "walk-forward" || _animatedSprite.CurrentAnimation == "sneak-backward" || _animatedSprite.CurrentAnimation == "sneak-forward") && _animatedSprite.Controller.CurrentFrame != _previousFrame) {
                 switch (_animatedSprite.Controller.CurrentFrame) {
-                    case 3:
-                    case 5:
-                    case 7:
+                    case 15:
+                    case 19:
                         AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition,10,150);
                         _previousFrame = _animatedSprite.Controller.CurrentFrame;
                         break;
@@ -489,10 +489,10 @@ namespace Imaginophobia {
         }
 
         private void DebugTest() {
-            //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            //MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
+            BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 150), Color.White);
+            MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 450), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);
 

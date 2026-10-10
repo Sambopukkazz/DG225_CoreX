@@ -13,10 +13,8 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
     public class SceneManager {
-        public enum SceneName { tilemap_electrical_room, tilemap_electrical_room_2, tilemap_sewer }
-        private SceneName _sceneName;
-        private static Scene _activeScene;
-        public static Scene GetActiveScene() => _activeScene;
+        private static SceneBuilder _activeScene;
+        public static SceneBuilder GetActiveScene() => _activeScene;
         private string _lastSceneName;
         private TilemapSpriteBatchRenderer _renderer;
         //private FadeTransition _fadeTransition;
@@ -47,7 +45,7 @@ namespace Imaginophobia {
 
         public void LoadScene(string sceneName, OrthographicCamera camera, CollisionManager collisionManager, LightManager lightManager) {
             UnloadScene();
-            _activeScene = new Scene(sceneName, collisionManager, lightManager);
+            _activeScene = new SceneBuilder(sceneName, collisionManager, lightManager);
             _renderer.LoadTilemap(_activeScene.TileMap);
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
             camera.IsZoomClampedToWorldBounds = true;

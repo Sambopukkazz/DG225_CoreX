@@ -16,7 +16,6 @@ namespace Imaginophobia {
         private CollisionWorld2D _collisionWorld;
         private List<ICollisionActor> _colliders;
         private Player _player;
-
         public event Action<string> CallLoadScene;
 
         public CollisionManager(Player player) {
@@ -52,14 +51,6 @@ namespace Imaginophobia {
         }
         public void Update() {
             _collisionWorld.RebuildDynamicLayers();
-
-            foreach (var collider in _colliders) {
-                if(collider == null) {
-                    _collisionWorld.Remove(collider);
-                    _colliders.Remove(collider);
-                    break;
-                }
-            }
 
             //Player with walls
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "walls")) {
@@ -117,8 +108,6 @@ namespace Imaginophobia {
                             //tempend
                             CallLoadScene?.Invoke(trigger.Name);
                         }
-                        
-                        
                     }
                 }
 
@@ -134,16 +123,17 @@ namespace Imaginophobia {
                         enemy.SetActive(false);
                         _player.Sanity -= 10;
                         AudioManager.Instance.PlaySFX(Sound.AutoIndicator);
-                        _collisionWorld.Remove(collision.Other);
-                        _colliders.Remove(collision.Other);
+                        RemoveCollider(collision.Other);
                     }
                     else if (enemy.Name == "Scopophobia" && enemy.Visible) {
                         _player.Sanity -= 25;
                         enemy.Visible = false;
+                        _colliders.Remove(collision.Other);
                     }
-                    
-                    //lose sanity
-                    
+                    //else if (enemy.Name == "Scopophobia" && enemy.Visible) {
+                    //    _player.Sanity -= 25;
+                    //    enemy.Visible = false;
+                    //}                               
                 }
             }
 

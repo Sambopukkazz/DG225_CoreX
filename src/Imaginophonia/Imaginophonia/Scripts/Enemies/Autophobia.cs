@@ -53,9 +53,8 @@ namespace Imaginophobia {
                 _animatedSprite.Update(Time.ElapsedTime);
                 if (_animatedSprite.Controller.CurrentFrame != _previousFrame) {
                     switch (_animatedSprite.Controller.CurrentFrame) {
-                        case 3:
-                        case 5:
-                        case 7:
+                        case 15:
+                        case 19:
                             AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition, 10, 1200);
                             _previousFrame = _animatedSprite.Controller.CurrentFrame;
                             break;

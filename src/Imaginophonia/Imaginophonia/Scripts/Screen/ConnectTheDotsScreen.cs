@@ -24,6 +24,7 @@ namespace Imaginophobia {
         private WirePath _currentPath;
         private Player _player;
         private List<Color> _colors;
+        public bool MinigameActive;
 
         public ConnectTheDotsScreen(Player player) {
             _cells = new GridCell[_column, _row];      
@@ -36,6 +37,7 @@ namespace Imaginophobia {
             DotsGenerator dotsGenerator = new DotsGenerator(_row, _column, AddDot);
 
             _player = player;
+            MinigameActive = true;
             //temp
             if (UIManager.stage > 7) {
                 UIManager.stage = 4;
@@ -48,34 +50,36 @@ namespace Imaginophobia {
             //    //_dotsGenerator.Update();
             //}
 
-            MouseStateExtended mouseStateExtended = MouseExtended.GetState();
-            Point? hoveredPoint = ScreenToGrid(new Vector2(mouseStateExtended.X, mouseStateExtended.Y));
+            if (MinigameActive) {
+                MouseStateExtended mouseStateExtended = MouseExtended.GetState();
+                Point? hoveredPoint = ScreenToGrid(new Vector2(mouseStateExtended.X, mouseStateExtended.Y));
 
-            if (mouseStateExtended.IsButtonDown(MouseButton.Left)) {
-                if (hoveredPoint.HasValue) {
-                    Point pos = hoveredPoint.Value;
+                if (mouseStateExtended.IsButtonDown(MouseButton.Left)) {
+                    if (hoveredPoint.HasValue) {
+                        Point pos = hoveredPoint.Value;
 
-                    if (_currentPath == null) {
-                        GridCell cell = _cells[pos.X, pos.Y];
-                        if (cell.IsEndpoint && cell.Color != Color.White) {
-                            AudioManager.Instance.PlaySFX(Sound.ElecFail);
-                            _completedPaths.RemoveAll(path => path.Color == cell.Color);
+                        if (_currentPath == null) {
+                            GridCell cell = _cells[pos.X, pos.Y];
+                            if (cell.IsEndpoint && cell.Color != Color.White) {
+                                AudioManager.Instance.PlaySFX(Sound.ElecFail);
+                                _completedPaths.RemoveAll(path => path.Color == cell.Color);
 
-                            _currentPath = new WirePath { Color = cell.Color };
-                            _currentPath.Points.Add(pos);
+                                _currentPath = new WirePath { Color = cell.Color };
+                                _currentPath.Points.Add(pos);
+                            }
+                        }
+                        else if (!_currentPath.IsComplete) {
+                            TryExtendPath(_currentPath, pos);
                         }
                     }
-                    else if (!_currentPath.IsComplete) {
-                        TryExtendPath(_currentPath, pos);
-                    }
                 }
-            }
-            else if (mouseStateExtended.WasButtonReleased(MouseButton.Left)) {
-                _currentPath = null;
-            }
-            else if (mouseStateExtended.WasButtonPressed(MouseButton.Right)) {
-                _completedPaths.Clear();
-                AudioManager.Instance.PlaySFX(Sound.ElecFail);
+                else if (mouseStateExtended.WasButtonReleased(MouseButton.Left)) {
+                    _currentPath = null;
+                }
+                else if (mouseStateExtended.WasButtonPressed(MouseButton.Right)) {
+                    _completedPaths.Clear();
+                    AudioManager.Instance.PlaySFX(Sound.ElecFail);
+                }
             }
 
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _completedPaths.Count == _colors.Count) {
@@ -94,6 +98,13 @@ namespace Imaginophobia {
                 AudioManager.Instance.PlaySFX(Sound.ElecComplete);
                 this.ScreenManager.CloseScreen();
                 _player.ToggleRepair();
+            }
+
+            if (_player.CurrentAction == CharacterAction.Checking) {
+                MinigameActive = false;
+            }
+            else {
+                MinigameActive = true;
             }
         }
 

@@ -47,7 +47,7 @@ namespace Imaginophobia {
 
             _sceneManager = new SceneManager();
             _sceneManager.SceneLoaded += OnSceneLoaded;
-            _sceneManager.LoadScene(SceneName.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
+            _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
             _enemyManager = new EnemyManager(_player);
             _enemyManager.EnemySpawned += OnEnemySpawned;
@@ -121,7 +121,8 @@ namespace Imaginophobia {
         }
 
         private void Restart() {
-            _sceneManager.LoadScene(SceneName.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
+            _enemyManager.ClearEnemies();
+            _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
         }
 
         private void OnCallLoadScene(string sceneName) {

@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class Scene {
+    public class SceneBuilder {
         public string Name { get; private set; }
         public Tilemap TileMap { get; }
         public List<SpawnPoint> PlayerSpawnPoints { get; }
 
-        public Scene(string sceneName, CollisionManager collisionManager, LightManager lightManager) {
+        public SceneBuilder(string sceneName, CollisionManager collisionManager, LightManager lightManager) {
             Name = sceneName;
             TileMap = MainGame.Content.Load<Tilemap>($"Tilemaps/{sceneName}");
             PlayerSpawnPoints = new List<SpawnPoint>();

@@ -18,7 +18,7 @@ namespace Imaginophobia {
         private float _previousAmbientVolume;
         private float _previousSoundEffectVolume;
         public bool IsMuted { get; private set; }
-        private bool _debugging = true;
+        private bool _debugging = false;
 
         public float AmbVolume {
             get {
@@ -120,7 +120,7 @@ namespace Imaginophobia {
         }
 
         public void Draw() {
-            if (!_debugging) {
+            if (_debugging == false) {
                 return;
             }
             //BitmapFont font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");

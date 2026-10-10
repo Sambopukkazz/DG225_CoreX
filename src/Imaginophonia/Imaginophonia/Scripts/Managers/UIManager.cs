@@ -177,14 +177,14 @@ namespace Imaginophobia {
 
         private void OnSanityStateChanged() {
             if (_player.SanityState == SanityState.Anxious) {
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.5f, 0.5f), duration: 2)
-                .Easing(EasingFunctions.Linear);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.55f, 0.4f), duration: 3)
+                .Easing(EasingFunctions.QuadraticOut);
             }
             else if (_player.SanityState == SanityState.Insane) {
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.45f), duration: 4)
-                .Easing(EasingFunctions.Linear);
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Color, toValue: ColorHelper.FromHex("#2c0000"), duration: 4)
-                .Easing(EasingFunctions.Linear);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.35f), duration: 2)
+                .Easing(EasingFunctions.ExponentialOut);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Color, toValue: ColorHelper.FromHex("#2e0202"), duration: 2)
+                .Easing(EasingFunctions.ExponentialOut);
             }
             else if (_player.SanityState == SanityState.Normal) {
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 1)
@@ -271,22 +271,22 @@ namespace Imaginophobia {
                 //_vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
                 //_tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
                 //.Easing(EasingFunctions.Linear);
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.1f, 0.2f), duration: 8)
-                .Easing(EasingFunctions.Linear);
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.4f, 0.1f), duration: 4)
+                .Easing(EasingFunctions.ExponentialOut);
             }
             else if ((_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.Idle) || (_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.ReadyToHide)) {
                 //_vignetteOverlay.Center = new Vector2(960, 540);
                 if (_player.SanityState == SanityState.Normal) {
-                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
-                .   Easing(EasingFunctions.Linear);
+                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 4)
+                .   Easing(EasingFunctions.ExponentialOut);
                 }
                 else if (_player.SanityState == SanityState.Anxious) {
-                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.5f, 0.5f), duration: 3)
-                .   Easing(EasingFunctions.Linear);
+                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.55f, 0.4f), duration: 3)
+                .   Easing(EasingFunctions.ExponentialOut);
                 }
                 else if (_player.SanityState == SanityState.Insane) {
-                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.4f, 0.45f), duration: 3)
-                .Easing(EasingFunctions.Linear);
+                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.35f), duration: 1)
+                .Easing(EasingFunctions.BackOut);
                 }
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: new Vector2(960, 540), duration: 3)
                 .Easing(EasingFunctions.Linear);

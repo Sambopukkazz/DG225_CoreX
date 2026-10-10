@@ -15,8 +15,8 @@ namespace Imaginophobia {
     public class EnemyManager {
         public List<GameObject> enemies;
         private float SpawnInterval = 5;
-        private int _autophobiaSpawnChance = 30; // 0-100
-        private int _scopophobiaSpawnChance = 5;
+        private int _autophobiaSpawnChance = 0; // 0-100
+        private int _scopophobiaSpawnChance = 100;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
         public event Action<ICollisionActor> EnemySpawned;
@@ -38,9 +38,9 @@ namespace Imaginophobia {
 
             _autophobiaSpriteSheet.DefineAnimation("walk-forward", builder => {
                 builder.IsLooping(true);
-                for (int i = 1; i < 8; i++) {
-                    if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
+                for (int i = 1; i <= 9; i++) {
+                    if (i == 9) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.13));
                 }
             });
             
