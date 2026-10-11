@@ -12,11 +12,13 @@ namespace Imaginophobia {
         public string Name { get; private set; }
         public Tilemap TileMap { get; }
         public List<SpawnPoint> PlayerSpawnPoints { get; }
+        public List<Trigger> Triggers { get; }
 
         public SceneBuilder(string sceneName, CollisionManager collisionManager, LightManager lightManager) {
             Name = sceneName;
             TileMap = MainGame.Content.Load<Tilemap>($"Tilemaps/{sceneName}");
             PlayerSpawnPoints = new List<SpawnPoint>();
+            Triggers = new List<Trigger>();
             BuildCollision(collisionManager);
             BuildLight(lightManager, collisionManager);
         }
@@ -31,7 +33,9 @@ namespace Imaginophobia {
                     collisionManager.AddCollider(new Wall(entity.Id, entity.Position, entity.Size), "walls");
                 }
                 else if (entity.Class == "dots" || entity.Class == "hideout" || entity.Class == "skillcheck") {
-                    collisionManager.AddCollider(new Trigger(entity.Id, entity.Position, entity.Size, entity.Class), "triggers");
+                    Trigger trigger = new Trigger(entity.Id, entity.Position, entity.Size, entity.Class);
+                    collisionManager.AddCollider(trigger, "triggers");
+                    Triggers.Add(trigger);
                 }
                 else if (entity.Class == "door") {
                     string destination = entity.Properties.GetString("Destination");

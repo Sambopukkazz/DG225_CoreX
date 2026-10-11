@@ -5,6 +5,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using RenderingLibrary.Math.Geometry;
+using SharpCompress.Compressors.ZStandard.Unsafe;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,26 +18,35 @@ namespace Imaginophobia {
         private int _column = 6;
         private int _row = 6;
         private int _gridSize = 100;
+        private int _maxRepairStage = 5;
+        private float _progressValue;
         
         private Vector2 _gridPos;
         private GridCell[,] _cells;
         private List<WirePath> _completedPaths;
         private WirePath _currentPath;
-        private Player _player;
+        private DotsGenerator _dotsGenerator;
+
         private List<Color> _colors;
         public bool MinigameActive;
+        private Player _player;
+        private Trigger _trigger;
 
-        public ConnectTheDotsScreen(Player player) {
+        public ConnectTheDotsScreen(Player player, Trigger trigger) {
             _cells = new GridCell[_column, _row];      
             _gridPos = new Vector2((MainGame.GraphicsDevice.Viewport.Width / 2) - (_gridSize * _column / 2), (MainGame.GraphicsDevice.Viewport.Height / 2) - (_gridSize * _row / 2));
             _completedPaths = new List<WirePath>();
             _colors = new List<Color>();
+            _progressValue = trigger.Progress;
+
+
 
             CreateGrid();
 
-            DotsGenerator dotsGenerator = new DotsGenerator(_row, _column, AddDot);
+            _dotsGenerator = new DotsGenerator(_row, _column, AddDot);
 
             _player = player;
+            _trigger = trigger;
             MinigameActive = true;
             //temp
             if (UIManager.stage > 7) {
@@ -81,20 +91,30 @@ namespace Imaginophobia {
                     AudioManager.Instance.PlaySFX(Sound.ElecFail);
                 }
             }
+            if (_completedPaths.Count == _colors.Count) {
+                _progressValue += 200 / _maxRepairStage;
+                CleanUp();
+                _dotsGenerator.PlotMap();
+            }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _completedPaths.Count == _colors.Count) {
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _progressValue >= 200) {
                 //temp
-                if(_completedPaths.Count == _colors.Count) {
-                    if (UIManager.stage == 2) {
-                        UIManager.stage = 5;
-                    }
-                    else {
-                        UIManager.stage = 6;
-                    }
-                }
+                //if(_completedPaths.Count == _colors.Count) {
+                //    if (UIManager.stage == 2) {
+                //        UIManager.stage = 5;
+                //    }
+                //    else {
+                //        UIManager.stage = 6;
+                //    }
+                //}
+                _trigger.Progress = _progressValue;
                 
                 
                 //endtemp
+                if (_progressValue >= 200) {
+                    _trigger.Interactable = false;
+                    SaveManager.TurnAllLightsOn();
+                }
                 AudioManager.Instance.PlaySFX(Sound.ElecComplete);
                 this.ScreenManager.CloseScreen();
                 _player.ToggleRepair();
@@ -146,6 +166,9 @@ namespace Imaginophobia {
                     }
                 }
             }
+
+            MainGame.SpriteBatch.FillRectangle(860, 950, 200, 15, Color.DarkGray);
+            MainGame.SpriteBatch.FillRectangle(860, 950, _progressValue, 15, Color.GreenYellow);
             MainGame.SpriteBatch.End();
         }
 
@@ -221,6 +244,16 @@ namespace Imaginophobia {
         public Vector2 GetCellCenter(Point pos) {
             Vector2 center = new Vector2(_gridPos.X + pos.X * _gridSize + _gridSize / 2f, _gridPos.Y + pos.Y * _gridSize + _gridSize / 2f);
             return center;
+        }
+
+        public void CleanUp() {
+            _completedPaths.Clear();
+            _currentPath = null;
+            _colors.Clear();
+            foreach (var cell in _cells) {
+                cell.Color = Color.White;
+                cell.IsEndpoint = false;
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Imaginophobia {
         private float _blinkSpeed = 0.4f;
         //temp
         public static float stage;
-        List<Keys> ggKey;
+        List<Keys> pressedKey;
 
         public UIManager(Player player, OrthographicCamera camera) {
             _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
@@ -49,7 +49,7 @@ namespace Imaginophobia {
             _camera = camera;
 
             //temp
-            ggKey = new List<Keys>();
+            pressedKey = new List<Keys>();
         }
 
         public void Update() {
@@ -58,12 +58,12 @@ namespace Imaginophobia {
             
             //temp
             foreach (Keys keyPressed in KeyboardExtended.GetState().GetPressedKeys().ToList()) {
-                if (ggKey.Contains(keyPressed) == false) {
-                    ggKey.Add(keyPressed);
+                if (pressedKey.Contains(keyPressed) == false) {
+                    pressedKey.Add(keyPressed);
                 }
             }
 
-            if(ggKey.Contains(Keys.A) && ggKey.Contains(Keys.D) && ggKey.Contains(Keys.F) && stage == 0) {
+            if(pressedKey.Contains(Keys.A) && pressedKey.Contains(Keys.D) && pressedKey.Contains(Keys.F) && stage == 0) {
                 stage++;
             }
             else if (stage == 1 && _player.CurrentAction == CharacterAction.Repairing) {

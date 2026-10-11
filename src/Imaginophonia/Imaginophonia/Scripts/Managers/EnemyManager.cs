@@ -13,20 +13,23 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class EnemyManager {
-        public List<GameObject> enemies;
+        public List<GameObject> Enemies;
         private float SpawnInterval = 5;
-        private int _autophobiaSpawnChance = 0; // 0-100
-        private int _scopophobiaSpawnChance = 100;
+        private int _autophobiaSpawnChance = 30; // 0-100
+        private int _scopophobiaSpawnChance = 5;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
         public event Action<ICollisionActor> EnemySpawned;
+        public event Action<ICollisionActor> EnemyRemoved;
         private Random _rand;
         private bool _continueSpawnEnemy;
         private Player _player;
         Rectangle _worldBound;
 
+        public bool HasActiveScopophobia() => Enemies.Exists(e => e is Scopophobia);
+
         public EnemyManager(Player player) {
-            enemies = new List<GameObject>();
+            Enemies = new List<GameObject>();
             _player = player;
             _rand = new Random();
 
@@ -51,13 +54,14 @@ namespace Imaginophobia {
         }
 
         public void Update(Rectangle worldBound) {
-            for (int i = enemies.Count - 1; i >= 0; i--) {
-                if (enemies[i].Active == false) {
-                    enemies[i].OnDestroyed();
-                    enemies.RemoveAt(i);
+            for (int i = Enemies.Count - 1; i >= 0; i--) {
+                if (Enemies[i].Active == false) {
+                    if (Enemies[i] is ICollisionActor actor) EnemyRemoved?.Invoke(actor);
+                    Enemies[i].OnDestroyed();
+                    Enemies.RemoveAt(i);
                     continue;
                 }
-                enemies[i].Update();
+                Enemies[i].Update();
             }
 
             if (SceneManager.GetActiveScene().Name == "tilemap_sewer") {
@@ -77,8 +81,8 @@ namespace Imaginophobia {
         }
 
         public void Draw() {
-            for (int i = enemies.Count - 1; i >= 0; i--) {
-                enemies[i].Draw();
+            for (int i = Enemies.Count - 1; i >= 0; i--) {
+                Enemies[i].Draw();
             }
         }
 
@@ -117,10 +121,10 @@ namespace Imaginophobia {
                 int randomNumber = _rand.Next(0, 101);
                 if (autophobiaNumber.Contains<int>(randomNumber)) {
                     Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                    enemies.Add(autophobia);
+                    Enemies.Add(autophobia);
                     EnemySpawned?.Invoke(autophobia);
                 }
-                else if (scopophobiaNumber.Contains<int>(randomNumber) && enemies.Exists(enem => enem.GetType().Name == "Scopophobia") == false) {
+                else if (scopophobiaNumber.Contains<int>(randomNumber) && Enemies.Exists(enem => enem.GetType().Name == "Scopophobia") == false) {
                     if (spawnLeft) {
                         pos.X -= 1920;
                     }
@@ -128,7 +132,7 @@ namespace Imaginophobia {
                         pos.X += 1920;
                     }
                     Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
-                    enemies.Add(scopophobia);
+                    Enemies.Add(scopophobia);
                     EnemySpawned?.Invoke(scopophobia);
                 }
 
@@ -141,10 +145,10 @@ namespace Imaginophobia {
         }
 
         public void ClearEnemies() {
-            foreach (GameObject enemy in enemies) {
+            foreach (GameObject enemy in Enemies) {
                 enemy.OnDestroyed();
             }
-            enemies.Clear();
+            Enemies.Clear();
         }
     }
 }

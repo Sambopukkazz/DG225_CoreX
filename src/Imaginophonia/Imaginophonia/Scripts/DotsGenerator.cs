@@ -24,10 +24,14 @@ namespace Imaginophobia {
             _row = row;
             _column = column;
             _addDot = addDot;
+            PlotMap();
+        }
+
+        public void PlotMap() {
             GeneratedDotsMap candidate = null;
 
             for (int attempt = 0; attempt < _maxAttempts; attempt++) {
-                candidate = GenerateDots();
+                candidate = TryGenerateDotsMap();
 
                 if (candidate != null && IsValidHardLevel(candidate)) {
                     break;
@@ -44,7 +48,7 @@ namespace Imaginophobia {
             }
         }
 
-        public GeneratedDotsMap GenerateDots() {
+        public GeneratedDotsMap TryGenerateDotsMap() {
             int[,] grid = new int[_column, _row];
 
             Dictionary<int, List<Point>> colorPaths = new Dictionary<int, List<Point>>();

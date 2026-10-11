@@ -24,7 +24,7 @@ namespace Imaginophobia {
     public class GameManager {
         private OrthographicCamera _camera;
         private Player _player;
-        private AudioManager _audioManager;
+        //private AudioManager _audioManager;
         private LightManager _lightManager;
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
@@ -37,21 +37,22 @@ namespace Imaginophobia {
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
-            _audioManager = new AudioManager();
+            AudioManager audioManager = new AudioManager();
             _lightManager = new LightManager();
             _player = new Player();
 
-            _collisionManager = new CollisionManager(_player);
-            _collisionManager.AddCollider(_player);
-            _collisionManager.CallLoadScene += OnCallLoadScene;
+            _enemyManager = new EnemyManager(_player);
+            _enemyManager.EnemySpawned += OnEnemySpawned;
+            _enemyManager.EnemyRemoved += OnEnemyRemoved;
 
+            _collisionManager = new CollisionManager(_player, _enemyManager.Enemies);
+            _collisionManager.AddCollider(_player);
+            _collisionManager.DoorInteracted += OnDoorInteracted;
+
+            SaveManager.Delete();
             _sceneManager = new SceneManager();
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
-
-            _enemyManager = new EnemyManager(_player);
-            _enemyManager.EnemySpawned += OnEnemySpawned;
-            _enemyManager.SpawnEnemy();
 
             _uiManager = new UIManager(_player, _camera);
 
@@ -84,7 +85,7 @@ namespace Imaginophobia {
 
             _lightManager.Update(_camera.GetViewMatrix());
 
-            _audioManager.Update(_player);
+            AudioManager.Instance.Update(_player);
 
             _uiManager.Update();
 
@@ -121,13 +122,19 @@ namespace Imaginophobia {
         }
 
         private void Restart() {
+            SaveManager.Delete();
             _enemyManager.ClearEnemies();
-            _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
+            _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager, false);
         }
 
-        private void OnCallLoadScene(string sceneName) {
-            _enemyManager.ClearEnemies();
-            _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+        private void OnDoorInteracted(string sceneName) {
+            if (_enemyManager.HasActiveScopophobia()) {
+                AudioManager.Instance.PlaySFX(Sound.DoorStuck);
+            }
+            else {
+                _enemyManager.ClearEnemies();
+                _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+            }
         }
 
         private void OnSceneLoaded(Vector2 spawnPosition) {
@@ -137,6 +144,10 @@ namespace Imaginophobia {
         
         private void OnEnemySpawned(ICollisionActor enemy) {
             _collisionManager.AddCollider(enemy, "enemies");
+        }
+
+        private void OnEnemyRemoved(ICollisionActor enemy) {
+            _collisionManager.RemoveCollider(enemy);
         }
 
         private void DebugUpdate() {

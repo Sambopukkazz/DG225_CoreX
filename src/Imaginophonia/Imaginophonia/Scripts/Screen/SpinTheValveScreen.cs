@@ -30,13 +30,16 @@ namespace Imaginophobia {
         private float _angularSpeed;
         private float _progressValue;
         private Player _player;
+        private Trigger _trigger;
 
         public bool MinigameActive;
-        public SpinTheValveScreen(Player player) {
+        public SpinTheValveScreen(Player player, Trigger trigger) {
             _valveTexture = MainGame.Content.Load<Texture2D>("UI/sprite_valve");
             _valveOrigin = new Vector2(_valveTexture.Width / 2f, _valveTexture.Height / 2f);
             MinigameActive = true;
             _player = player;
+            _trigger = trigger;
+            _progressValue = _trigger.Progress;
 
             RandomNeedleSpeed();
             //temp
@@ -77,7 +80,11 @@ namespace Imaginophobia {
                     MinigameActive = false;
                     AudioManager.Instance.PlaySFX(Sound.PipeComplete);
                     _player.ToggleRepair();
-                    this.ScreenManager.CloseScreen();                   
+                    _trigger.Progress = _progressValue;
+                    if (_progressValue >= 200) {
+                        _trigger.Interactable = false;
+                    }
+                    this.ScreenManager.CloseScreen();
                 }
             }
 

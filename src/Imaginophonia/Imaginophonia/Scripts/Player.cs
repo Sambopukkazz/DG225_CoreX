@@ -116,7 +116,6 @@ namespace Imaginophobia {
                 //Transform.Position += new Vector2(Velocity.X * Time.DeltaTime, Velocity.Y * Time.DeltaTime);
 
                 _scotopicLight.Position = Transform.Position;
-                _flashLight.Position = Transform.Position + _flashlightOffset;
 
                 UpdateDebug();
                 
@@ -130,7 +129,7 @@ namespace Imaginophobia {
                 ToggleFlashLight();
             }
 
-            if (_readyToRepair == false) {
+            if (CurrentAction == CharacterAction.Repairing || CurrentAction == CharacterAction.Checking) {
                 if (KeyboardExtended.GetState().IsKeyDown(Keys.A)) {
                     CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
                     _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
@@ -184,6 +183,8 @@ namespace Imaginophobia {
             else {
                 _eyeSightLength = 0;
             }
+
+            _flashLight.Position = Transform.Position + _flashlightOffset;
 
             CheckSanityStage();
         }
@@ -489,10 +490,11 @@ namespace Imaginophobia {
         }
 
         private void DebugTest() {
-            BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
+            //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            //MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Frame {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 450), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Flashlight offset {_flashlightOffset}", new Vector2(150, 650), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"SPFX {_animatedSprite.Effect}", new Vector2(150, 750), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);
 

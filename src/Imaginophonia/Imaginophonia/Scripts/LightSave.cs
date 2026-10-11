@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public enum MentalState {
-        Normal = 75, 
-        Anxious = 50, 
-        Insane = 25
+    public class LightSave {
+        public int Id { get; set; }
+        public bool On { get; set; }
+
     }
 }

@@ -14,40 +14,22 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public class CollisionManager {
         private CollisionWorld2D _collisionWorld;
-        private List<ICollisionActor> _colliders;
+        //private List<ICollisionActor> _colliders;
+        private List<GameObject> _enemies;
         private Player _player;
-        public event Action<string> CallLoadScene;
+        public event Action<string> DoorInteracted;
 
-        public CollisionManager(Player player) {
+        public CollisionManager(Player player, List<GameObject> enemyList) {
             Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
                 IsDynamic = true
             };
-            Layer wallLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-                IsDynamic = false
-            };
-            Layer triggerLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-                IsDynamic = false
-            };
-            Layer enemyLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-                IsDynamic = true
-            };
-            Layer lightLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-                IsDynamic = false
-            };
 
             _collisionWorld = new CollisionWorld2D(defaultLayer);
-            _collisionWorld.AddLayer("walls", wallLayer);
-            _collisionWorld.AddLayer("triggers", triggerLayer);
-            _collisionWorld.AddLayer("enemies", enemyLayer);
-            _collisionWorld.AddLayer("lights", lightLayer);
 
-            _collisionWorld.DisableCollisionBetweenLayers("enemies", "walls");
-            _collisionWorld.DisableCollisionBetweenLayers("lights", "walls");
-            _collisionWorld.EnableCollisionBetweenLayers("enemies", "lights");
-
-            _colliders = new List<ICollisionActor>();
+            //_colliders = new List<ICollisionActor>();
 
             _player = player;
+            _enemies = enemyList;
         }
         public void Update() {
             _collisionWorld.RebuildDynamicLayers();
@@ -75,18 +57,18 @@ namespace Imaginophobia {
                     }
                 }
                 else if(trigger.CompareTag("skillcheck")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair && trigger.Interactable) {
                         //Skill Check
-                        Screen screen = new SpinTheValveScreen(_player);
+                        Screen screen = new SpinTheValveScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
                         _player.ToggleRepair();
                     }
                     
                 }
                 else if (trigger.CompareTag("dots")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair && trigger.Interactable) {
                         //Connect the dot
-                        Screen screen = new ConnectTheDotsScreen(_player);
+                        Screen screen = new ConnectTheDotsScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
                         AudioManager.Instance.PlaySFX(Sound.ElecRepairing);
                         _player.ToggleRepair();
@@ -97,17 +79,12 @@ namespace Imaginophobia {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
                         //Load to next scene
                         //AudioManager.Instance.PlaySFX(Sound.OpenDoor);
-                        if (_colliders.Exists(enemy => enemy.Id == 999)) {
-                            AudioManager.Instance.PlaySFX(Sound.DoorStuck);
+                        //temp
+                        if (UIManager.stage == 7) {
+                            UIManager.stage = 8;
                         }
-                        else {
-                            //temp
-                            if (UIManager.stage == 7) {
-                                UIManager.stage = 8;
-                            }
-                            //tempend
-                            CallLoadScene?.Invoke(trigger.Name);
-                        }
+                        //tempend
+                        DoorInteracted?.Invoke(trigger.Name);
                     }
                 }
 
@@ -123,12 +100,12 @@ namespace Imaginophobia {
                         enemy.SetActive(false);
                         _player.Sanity -= 10;
                         AudioManager.Instance.PlaySFX(Sound.AutoIndicator);
-                        RemoveCollider(collision.Other);
+                        //RemoveCollider(collision.Other);
                     }
                     else if (enemy.Name == "Scopophobia" && enemy.Visible) {
                         _player.Sanity -= 25;
                         enemy.Visible = false;
-                        _colliders.Remove(collision.Other);
+                        //_colliders.Remove(collision.Other);
                     }
                     //else if (enemy.Name == "Scopophobia" && enemy.Visible) {
                     //    _player.Sanity -= 25;
@@ -138,19 +115,29 @@ namespace Imaginophobia {
             }
 
             //Player's eyesight with autophobia
-            for (int i = _colliders.Count - 1; i >= 0; i--) {
-                if (_player.Active) {
-                    if (_colliders[i].GetType().Name == "Autophobia" && _colliders[i].Shape.Intersects(_player.EyeSight)) {
-                        _collisionWorld.Remove(_colliders[i]);
-                        Autophobia enemy = (Autophobia)_colliders[i];
-                        Time.AddTimer(enemy.SetActive, 0.25f);
-                        enemy.AllowMovement = false;
-                        _colliders.RemoveAt(i);
-                        //Trigger Blink
-                        _player.Blink = true;
-                    }
+            if (_player.Active) {
+                foreach (GameObject enemy in _enemies) {
+                    if (enemy is not Autophobia autophobia) continue;
+                    if (!autophobia.AllowMovement) continue;
+                    if (!autophobia.Shape.Intersects(_player.EyeSight)) continue;
+
+                    autophobia.AllowMovement = false;
+                    _collisionWorld.Remove(autophobia); 
+                    Time.AddTimer(autophobia.SetActive, 0.25f);
+                    _player.Blink = true;
                 }
             }
+            //for (int i = _enemies.Count - 1; i >= 0; i--) {
+            //    if (_player.Active) {
+            //        if (_enemies[i].GetType().Name == "Autophobia" && _enemies[i].Shape.Intersects(_player.EyeSight)) {
+            //            Autophobia enemy = (Autophobia)_enemies[i];
+            //            Time.AddTimer(enemy.SetActive, 0.25f);
+            //            enemy.AllowMovement = false;
+            //            //Trigger Blink
+            //            _player.Blink = true;
+            //        }
+            //    }
+            //}
 
             //Player with light
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "lights")) {
@@ -181,20 +168,21 @@ namespace Imaginophobia {
         }
         public void AddCollider(ICollisionActor actor, string layer) {
             _collisionWorld.Insert(actor, layer);
-            _colliders.Add(actor);
+            //_colliders.Add(actor);
         }
 
         public void RemoveCollider(ICollisionActor actor) {
             _collisionWorld.Remove(actor);
-            _colliders.Remove(actor);
+            //_colliders.Remove(actor);
         }
 
         public void ClearColliders() {
-            foreach(var collider in _colliders) {
-                _collisionWorld.Remove(collider);
-            }
-            _colliders.Clear();
+            //foreach(var collider in _colliders) {
+            //    _collisionWorld.Remove(collider);
+            //}
+            //_colliders.Clear();
             
+            ResetLayers();
             //_collisionWorld.RemoveLayer("triggers");
             //_collisionWorld.RemoveLayer("walls");
 
@@ -207,6 +195,29 @@ namespace Imaginophobia {
 
             //_collisionWorld.AddLayer("walls", wallLayer);
             //_collisionWorld.AddLayer("triggers", triggerLayer);
+        }
+
+        private void ResetLayers() {
+            _collisionWorld.RemoveLayer("walls");
+            _collisionWorld.RemoveLayer("triggers");
+            _collisionWorld.RemoveLayer("enemies");
+            _collisionWorld.RemoveLayer("lights");
+
+            _collisionWorld.AddLayer("walls", NewLayer(dynamic: false));
+            _collisionWorld.AddLayer("triggers", NewLayer(dynamic: false));
+            _collisionWorld.AddLayer("enemies", NewLayer(dynamic: true));
+            _collisionWorld.AddLayer("lights", NewLayer(dynamic: false));
+
+            _collisionWorld.DisableCollisionBetweenLayers("enemies", "walls");
+            _collisionWorld.DisableCollisionBetweenLayers("lights", "walls");
+            _collisionWorld.EnableCollisionBetweenLayers("enemies", "lights");
+        }
+
+        private static Layer NewLayer(bool dynamic) {
+            Layer layer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
+                IsDynamic = dynamic
+            };
+            return layer;
         }
     }
 }

@@ -43,9 +43,16 @@ namespace Imaginophobia {
             //MainGame.SpriteBatch.End();
         }
 
-        public void LoadScene(string sceneName, OrthographicCamera camera, CollisionManager collisionManager, LightManager lightManager) {
-            UnloadScene();
+        public void LoadScene(string sceneName, OrthographicCamera camera, CollisionManager collisionManager, LightManager lightManager, bool saveOutgoing = true) {
+            if (_activeScene != null) {
+                if (saveOutgoing) {
+                    SaveManager.SaveScene(_activeScene.Name, _activeScene.Triggers, lightManager.LightAreas);
+                }
+                UnloadScene();
+            }
+
             _activeScene = new SceneBuilder(sceneName, collisionManager, lightManager);
+            SaveManager.ApplyToScene(sceneName, _activeScene.Triggers, lightManager.LightAreas);
             _renderer.LoadTilemap(_activeScene.TileMap);
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
             camera.IsZoomClampedToWorldBounds = true;
