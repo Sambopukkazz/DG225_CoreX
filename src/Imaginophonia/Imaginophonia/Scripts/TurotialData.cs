@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class LightSave {
-        public int Id { get; set; }
-        public bool On { get; set; }
-
+    public class TutorialData {
+        public List<TutorialStep> Steps { get; set; } = new();
     }
 }

@@ -208,6 +208,13 @@
 /processorParam:Version=6.1.1.0
 /build:Character/spitesheet_player.json
 
+#begin Datas/tutorial.json
+/importer:JsonContentImporter
+/processor:JsonContentProcessor
+/processorParam:ContentType=Imaginophobia.TutorialDataReader, Imaginophobia
+/processorParam:Version=6.1.1.0
+/build:Datas/tutorial.json
+
 #begin Font/GenerationFonting_0.png
 /importer:TextureImporter
 /processor:TextureProcessor

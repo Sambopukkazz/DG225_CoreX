@@ -395,7 +395,7 @@
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
-			"pivotY": 1,
+			"pivotY": 0.8,
 			"fieldDefs": [
 				{
 					"identifier": "Intensity",
@@ -1057,15 +1057,15 @@
 						{
 							"__identifier": "SpotLight",
 							"__grid": [6,3],
-							"__pivot": [0.5,1],
+							"__pivot": [0.5,0.8],
 							"__tags": ["light"],
 							"__tile": null,
 							"__smartColor": "#FFF2A5",
-							"iid": "34fcc130-96d0-11f1-b351-29f45823667d",
+							"iid": "0c7ff000-bde0-11f1-acf9-af4d21373d14",
 							"width": 120,
 							"height": 120,
 							"defUid": 16,
-							"px": [780,480],
+							"px": [780,456],
 							"fieldInstances": [
 								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.8, "__tile": null, "defUid": 21, "realEditorValues": [] },
 								{ "__identifier": "ScaleX", "__type": "Float", "__value": 750, "__tile": null, "defUid": 20, "realEditorValues": [] },
@@ -1074,20 +1074,20 @@
 								{ "__identifier": "Color", "__type": "Color", "__value": "#FFF2A5", "__tile": null, "defUid": 24, "realEditorValues": [] }
 							],
 							"__worldX": 780,
-							"__worldY": 480
+							"__worldY": 456
 						},
 						{
 							"__identifier": "SpotLight",
 							"__grid": [10,3],
-							"__pivot": [0.5,1],
+							"__pivot": [0.5,0.8],
 							"__tags": ["light"],
 							"__tile": null,
 							"__smartColor": "#FFF2A5",
-							"iid": "353f2160-96d0-11f1-b351-452ef8615ab5",
+							"iid": "13700f80-bde0-11f1-acf9-19292ee57a71",
 							"width": 120,
 							"height": 120,
 							"defUid": 16,
-							"px": [1260,480],
+							"px": [1260,456],
 							"fieldInstances": [
 								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.8, "__tile": null, "defUid": 21, "realEditorValues": [] },
 								{ "__identifier": "ScaleX", "__type": "Float", "__value": 750, "__tile": null, "defUid": 20, "realEditorValues": [] },
@@ -1096,7 +1096,7 @@
 								{ "__identifier": "Color", "__type": "Color", "__value": "#FFF2A5", "__tile": null, "defUid": 24, "realEditorValues": [] }
 							],
 							"__worldX": 1260,
-							"__worldY": 480
+							"__worldY": 456
 						}
 					]
 				},

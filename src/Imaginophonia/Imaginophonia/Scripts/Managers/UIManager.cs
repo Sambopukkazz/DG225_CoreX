@@ -27,8 +27,8 @@ namespace Imaginophobia {
         private readonly Tweener _tweener;
         private CharacterAction _previousAction;
         private float _blinkSpeed = 0.4f;
+        
         //temp
-        public static float stage;
         List<Keys> pressedKey;
 
         public UIManager(Player player, OrthographicCamera camera) {
@@ -63,12 +63,12 @@ namespace Imaginophobia {
                 }
             }
 
-            if(pressedKey.Contains(Keys.A) && pressedKey.Contains(Keys.D) && pressedKey.Contains(Keys.F) && stage == 0) {
-                stage++;
+            if(pressedKey.Contains(Keys.A) && pressedKey.Contains(Keys.D) && pressedKey.Contains(Keys.F)) {
+                ObjectiveManager.Complete("move");
             }
-            else if (stage == 1 && _player.CurrentAction == CharacterAction.Repairing) {
-                stage++;
-            }
+            //else if (stage == 1 && _player.CurrentAction == CharacterAction.Repairing) {
+            //    stage++;
+            //}
             //end temp
             //if (_player.CurrentAction == CharacterAction.Hiding) {
             //    _vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
@@ -97,35 +97,35 @@ namespace Imaginophobia {
             DebugDraw();
 
             //temp
-            string dialogue = "";
-            if (stage == 0) {
-                dialogue = "Press A/D to walk around. F to open a flashlight";
-            }
-            else if (stage == 1) {
-                dialogue = "Head to the electrical panel to do a task";
-            }
-            else if (stage == 2) {
-                dialogue = "Connect all the dots. \nYou can press A/D to look left and right while you are doing the task, \nand Q to leave the task";
-            }
-            else if (stage == 3) {
-                dialogue = "Spin the valve and stay on the green gauge";
-            }
-            else if (stage == 4) {
-                dialogue = "Connect all the dots";
-            }
-            else if (stage == 5) {
-                dialogue = "Enter the locker to hide";
-            }
-            else if (stage == 6) {
-                dialogue = "";
-            }
-            else if (stage == 7) {
-                dialogue = "Leave the room on the left side to go fix pipe. Look for valve";
-            }
-            else if (stage == 8) {
-                dialogue = "test";
-            }
-            MainGame.SpriteBatch.DrawString(_font, dialogue, new Vector2(700, 100), Color.White);
+            //string dialogue = "";
+            //if (stage == 0) {
+            //    dialogue = "Press A/D to walk around. F to open a flashlight";
+            //}
+            //else if (stage == 1) {
+            //    dialogue = "Head to the electrical panel to do a task";
+            //}
+            //else if (stage == 2) {
+            //    dialogue = "Connect all the dots. \nYou can press A/D to look left and right while you are doing the task, \nand Q to leave the task";
+            //}
+            //else if (stage == 3) {
+            //    dialogue = "Spin the valve and stay on the green gauge. \nYou can press A/D to look left and right while you are doing the task, \nand Q to leave the task";
+            //}
+            //else if (stage == 4) {
+            //    dialogue = "Connect all the dots";
+            //}
+            //else if (stage == 5) {
+            //    dialogue = "Enter the locker to hide";
+            //}
+            //else if (stage == 6) {
+            //    dialogue = "";
+            //}
+            //else if (stage == 7) {
+            //    dialogue = "Leave the room on the left side to go fix pipe. Look for valve";
+            //}
+            //else if (stage == 8) {
+            //    dialogue = "test";
+            //}
+            //MainGame.SpriteBatch.DrawString(_font, dialogue, new Vector2(700, 100), Color.White);
             //endtemp
             //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {_player.Transform.Position} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {_player.Transform.WorldPosition} ", new Vector2(150, 420), Color.White);
@@ -163,6 +163,9 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.FillRectangle(210, 100, 3 * _player.Sanity, 20, colorasd);
             MainGame.SpriteBatch.DrawRectangle(210, 150, 300, 20, Color.White);
             MainGame.SpriteBatch.FillRectangle(210, 150, 3 * _player.Battery, 20, Color.White);
+            if (ObjectiveManager.IsComplete("entered-sewer")) {
+                MainGame.SpriteBatch.DrawString(_font, $"Valves repaired: {ObjectiveManager.RepairedValveCount}/{ObjectiveManager.TargetValves}", new Vector2(100, 200), Color.White);
+            }
 
             MainGame.SpriteBatch.End();
             

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class ObjectiveManager {
+    public class TutorialStep {
+        public string Text { get; set; }
+        public string CompleteOn { get; set; }
     }
 }

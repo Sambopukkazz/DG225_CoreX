@@ -1,14 +1,14 @@
-﻿using MonoGame.Extended;
+﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Collisions;
+using MonoGame.Extended.Content.ContentReaders;
 using Penumbra;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 
 namespace Imaginophobia {
     public class LightArea : ICollisionActor {
@@ -25,6 +25,9 @@ namespace Imaginophobia {
         private float _areaSize = 600; // 5 tiles 120x120 per tile
         private bool _powered = true;
         public bool On => _powered;
+        private bool _scopoAlarm = false;
+        private float _scopoTimer = 0f;
+        public bool ScopoAlarm => _scopoAlarm;
 
         public LightArea(Light light, Vector2 pos, int id, string tag) {
             Light = light;
@@ -42,6 +45,11 @@ namespace Imaginophobia {
         }
 
         public void Update() {
+            if (_scopoAlarm) { 
+                UpdateScopoAlarm(); 
+                return; 
+            }
+
             if (!IsFlickering) {
                 return;
             }
@@ -66,15 +74,52 @@ namespace Imaginophobia {
             }
         }
 
-        public void StartFlicker(float durationSeconds = 1.5f) {
-            if (_powered && IsFlickering == false) {
-                IsFlickering = true;
-                _flickerDurationTimer = durationSeconds;
-                _nextFlickerTimer = 0f;
+        private void UpdateScopoAlarm() {
+            _scopoTimer -= Time.DeltaTime;
+            if (_scopoTimer <= 0f) {                 // done: on, red, permanent
+                _scopoAlarm = false;
+                Light.Color = Color.Red;            // no changing back
+                Light.Intensity = _baseIntensity;
+                Light.Enabled = true;
+                return;
+            }
+            float elapsed = 8 - _scopoTimer;
+            if (elapsed < 6) {
+                _nextFlickerTimer -= Time.DeltaTime;
+                if (_nextFlickerTimer <= 0f) {
+                    Light.Enabled = _rand.NextDouble() > 0.4;               // <- your line 63
+                    _nextFlickerTimer = (float)(_rand.NextDouble() * 0.09 + 0.03);
+                }
+            }
+            else {
+                Light.Enabled = false;               // 2s blackout
             }
         }
 
+        public void StartScopoAlarm() {
+            if (_powered == false) {
+                return;
+            }
+            _scopoAlarm = true;
+            _scopoTimer = 8f;
+            IsFlickering = false;
+            _powered = true;
+            Light.Enabled = true;
+            Light.Intensity = _baseIntensity;
+            _nextFlickerTimer = 0f;
+        }
+
+        public void StartFlicker(float durationSeconds = 1.5f) {
+            if (_scopoAlarm || !_powered || IsFlickering) {
+                return;
+            }
+            IsFlickering = true;
+            _flickerDurationTimer = durationSeconds;
+            _nextFlickerTimer = 0f;
+        }
+
         public void TurnOff() {
+            _scopoAlarm = false;
             IsFlickering = false;
             Light.Intensity = _baseIntensity;
             _powered = false;

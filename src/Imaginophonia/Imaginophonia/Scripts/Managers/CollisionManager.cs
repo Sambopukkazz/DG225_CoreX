@@ -72,6 +72,7 @@ namespace Imaginophobia {
                         MainGame.ScreenManager.ShowScreen(screen);
                         AudioManager.Instance.PlaySFX(Sound.ElecRepairing);
                         _player.ToggleRepair();
+                        ObjectiveManager.Complete("repair");
                     }
                     
                 }
@@ -80,9 +81,7 @@ namespace Imaginophobia {
                         //Load to next scene
                         //AudioManager.Instance.PlaySFX(Sound.OpenDoor);
                         //temp
-                        if (UIManager.stage == 7) {
-                            UIManager.stage = 8;
-                        }
+                        ObjectiveManager.Complete("door");
                         //tempend
                         DoorInteracted?.Invoke(trigger.Name);
                     }

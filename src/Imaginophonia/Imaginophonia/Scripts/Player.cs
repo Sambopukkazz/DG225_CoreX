@@ -378,9 +378,7 @@ namespace Imaginophobia {
             }
             else if (CurrentAction == CharacterAction.Hiding) {
                 //temp
-                if (UIManager.stage == 5) {
-                    UIManager.stage = 7;
-                }
+                ObjectiveManager.Complete("hide");
                 //temopend
                 SetActive(true);
                 AllowMovement = true;

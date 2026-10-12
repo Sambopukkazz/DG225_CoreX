@@ -1,0 +1,14 @@
+{
+  "Steps": [
+    { "Text": "Press A/D to walk around. F to use flashlight", "CompleteOn": "move" },
+    { "Text": "Head to the electrical panel to do a task", "CompleteOn": "repair" },
+    { "Text": "Connect all the dots.\n-A/D to look left and right,\n--Q to leave", "CompleteOn": "dots-done" },
+    { "Text": "Enter the locker to hide", "CompleteOn": "hide" },
+    { "Text": "Leave the room on the left side, look for a valve", "CompleteOn": "door" },
+    { "Text": "Find a valve to repair", "CompleteOn": "valve-open" },
+    { "Text": "Click and spin the valve. Stay on the green gauge! \n-A/D to look left and right, F to use flashlight \n--Q to leave", "CompleteOn": "valve-completed" },
+    { "Text": "Repair all five valves", "CompleteOn": "valves-all" },
+    { "Text": "Head to the ladder in the right electric room and exit.", "CompleteOn": "exit-ladder" },
+    { "Text": "Thank you for playing.", "CompleteOn": "end" }
+  ]
+}

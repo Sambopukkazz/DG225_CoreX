@@ -72,6 +72,17 @@ namespace Imaginophobia {
 
 
                     }
+                    else if (entity.Name == "DoorLight") {
+                        PointLight pointLight = new PointLight();
+                        pointLight.Position = entity.Position;
+                        pointLight.Intensity = entity.Properties.GetFloat("Intensity");
+                        float scale = entity.Properties.GetFloat("Scale");
+                        //float scaleX = entity.Properties.GetFloat("ScaleX");
+                        //float scaleY = entity.Properties.GetFloat("ScaleY");
+                        pointLight.Scale = new Vector2(scale, scale);
+                        pointLight.Color = entity.Properties.GetColor("Color");
+                        lightManager.AddLight(pointLight);
+                    }
                     else if (entity.Name == "SpotLight") {
                         Spotlight spotlight = new Spotlight();
                         spotlight.Rotation = MathHelper.ToRadians(entity.Properties.GetFloat("Rotation"));

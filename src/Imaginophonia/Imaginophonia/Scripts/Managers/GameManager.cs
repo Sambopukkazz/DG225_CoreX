@@ -30,6 +30,7 @@ namespace Imaginophobia {
         private CollisionManager _collisionManager;
         private EnemyManager _enemyManager;
         private UIManager _uiManager;
+        private TutorialManager _tutorialManager;
         private DialogueManager _dialogueManager;
         private CameraShaker _cameraShaker;
         //temp
@@ -55,6 +56,8 @@ namespace Imaginophobia {
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
             _uiManager = new UIManager(_player, _camera);
+
+            _tutorialManager = new TutorialManager();
 
             _dialogueManager = new DialogueManager();
             //temp
@@ -89,6 +92,8 @@ namespace Imaginophobia {
 
             _uiManager.Update();
 
+            _tutorialManager.Update();
+
             _cameraShaker.Update(gameTime);
 
             if (_player.Sanity <= 0) {
@@ -119,15 +124,27 @@ namespace Imaginophobia {
 
             //Draw static object that doesn't move with camera
             _uiManager.Draw();
+            _tutorialManager.Draw();
         }
 
         private void Restart() {
             SaveManager.Delete();
+            ObjectiveManager.ResetValves();
             _enemyManager.ClearEnemies();
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager, false);
         }
 
         private void OnDoorInteracted(string sceneName) {
+            if (sceneName == "end") {
+                if (ObjectiveManager.AllValvesRepaired) {
+                    ObjectiveManager.Complete("exit-ladder");
+                }
+                else {
+                    _tutorialManager.ShowMessage("Still have work to do", 2f);
+                }
+                return;
+            }
+
             if (_enemyManager.HasActiveScopophobia()) {
                 AudioManager.Instance.PlaySFX(Sound.DoorStuck);
             }
@@ -140,13 +157,28 @@ namespace Imaginophobia {
         private void OnSceneLoaded(Vector2 spawnPosition) {
             _player.LoadScenePosition(spawnPosition);
             AudioManager.Instance.PlaySFX(Sound.DoorClose);
+            if (SceneManager.GetActiveScene()?.Name == "tilemap_sewer") {
+                ObjectiveManager.Complete("entered-sewer");
+            } 
         }
         
         private void OnEnemySpawned(ICollisionActor enemy) {
             _collisionManager.AddCollider(enemy, "enemies");
+            if (enemy is Scopophobia) {
+                SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
+                SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
+                _lightManager.ScopoAlarmAll();
+            }
         }
 
         private void OnEnemyRemoved(ICollisionActor enemy) {
+            if (enemy is Scopophobia) {
+                _tutorialManager.ShowMessage("Don't stay in the dark. Go to electric room and repair electric system", 8f);
+            }
+            else if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false) {
+                _tutorialManager.ShowMessage("Try using flashlight to fight them", 4f);
+            }
+
             _collisionManager.RemoveCollider(enemy);
         }
 

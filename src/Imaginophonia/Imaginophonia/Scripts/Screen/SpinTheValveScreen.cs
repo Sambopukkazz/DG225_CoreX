@@ -43,9 +43,7 @@ namespace Imaginophobia {
 
             RandomNeedleSpeed();
             //temp
-            if (UIManager.stage > 2) {
-                UIManager.stage = 3;
-            }
+            ObjectiveManager.Complete("valve-open");
         }
 
         public override void Update(GameTime gameTime) {
@@ -75,7 +73,7 @@ namespace Imaginophobia {
 
                 if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
                     //temp
-                    UIManager.stage = 6;
+                    
                     //endtemp
                     MinigameActive = false;
                     AudioManager.Instance.PlaySFX(Sound.PipeComplete);
@@ -83,6 +81,8 @@ namespace Imaginophobia {
                     _trigger.Progress = _progressValue;
                     if (_progressValue >= 200) {
                         _trigger.Interactable = false;
+                        ObjectiveManager.Complete("valve-completed");
+                        ObjectiveManager.RepairValve(_trigger.Id);
                     }
                     this.ScreenManager.CloseScreen();
                 }

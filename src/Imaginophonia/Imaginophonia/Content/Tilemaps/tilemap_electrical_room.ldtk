@@ -11,7 +11,7 @@
 	"iid": "5a1edbb0-96d0-11f1-93ef-4321a3e5f74f",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 35,
+	"nextUid": 37,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -571,7 +571,7 @@
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
-			"pivotY": 1,
+			"pivotY": 0.8,
 			"fieldDefs": [
 				{
 					"identifier": "Intensity",
@@ -1153,8 +1153,8 @@
 					"entityInstances": [
 						{
 							"__identifier": "SpotLight",
-							"__grid": [155,94],
-							"__pivot": [0.5,1],
+							"__grid": [155,91],
+							"__pivot": [0.5,0.8],
 							"__tags": ["light"],
 							"__tile": null,
 							"__smartColor": "#FFF2A5",
@@ -1162,7 +1162,7 @@
 							"width": 120,
 							"height": 120,
 							"defUid": 22,
-							"px": [778,475],
+							"px": [778,455],
 							"fieldInstances": [
 								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.5, "__tile": null, "defUid": 27, "realEditorValues": [{ "id": "V_Float", "params": [0.5] }] },
 								{ "__identifier": "ScaleX", "__type": "Float", "__value": 750, "__tile": null, "defUid": 28, "realEditorValues": [{ "id": "V_Float", "params": [750] }] },
@@ -1171,12 +1171,12 @@
 								{ "__identifier": "Color", "__type": "Color", "__value": "#FFF2A5", "__tile": null, "defUid": 31, "realEditorValues": [null] }
 							],
 							"__worldX": 778,
-							"__worldY": 475
+							"__worldY": 455
 						},
 						{
 							"__identifier": "SpotLight",
-							"__grid": [251,92],
-							"__pivot": [0.5,1],
+							"__grid": [251,91],
+							"__pivot": [0.5,0.8],
 							"__tags": ["light"],
 							"__tile": null,
 							"__smartColor": "#FFF2A5",
@@ -1184,7 +1184,7 @@
 							"width": 120,
 							"height": 120,
 							"defUid": 22,
-							"px": [1258,465],
+							"px": [1258,455],
 							"fieldInstances": [
 								{ "__identifier": "Intensity", "__type": "Float", "__value": 0.5, "__tile": null, "defUid": 27, "realEditorValues": [{ "id": "V_Float", "params": [0.5] }] },
 								{ "__identifier": "ScaleX", "__type": "Float", "__value": 750, "__tile": null, "defUid": 28, "realEditorValues": [{ "id": "V_Float", "params": [750] }] },
@@ -1193,7 +1193,7 @@
 								{ "__identifier": "Color", "__type": "Color", "__value": "#FFF2A5", "__tile": null, "defUid": 31, "realEditorValues": [] }
 							],
 							"__worldX": 1258,
-							"__worldY": 465
+							"__worldY": 455
 						}
 					]
 				},
@@ -1341,6 +1341,25 @@
 							}] }],
 							"__worldX": 1624,
 							"__worldY": 832
+						},
+						{
+							"__identifier": "LoadNextScene",
+							"__grid": [106,38],
+							"__pivot": [0,0],
+							"__tags": ["door"],
+							"__tile": null,
+							"__smartColor": "#B86F50",
+							"iid": "754a5730-bde0-11f1-8ad4-6b93283076cd",
+							"width": 96,
+							"height": 240,
+							"defUid": 32,
+							"px": [1696,608],
+							"fieldInstances": [{ "__identifier": "Destination", "__type": "String", "__value": "end", "__tile": null, "defUid": 34, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["end"]
+							}] }],
+							"__worldX": 1696,
+							"__worldY": 608
 						}
 					]
 				},

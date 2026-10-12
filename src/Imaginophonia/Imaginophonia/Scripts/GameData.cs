@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class GameSave {
-        public Dictionary<string, SceneSave> Scenes { get; set; } = new();
+    public class GameData {
+        public Dictionary<string, SceneData> Scenes { get; set; } = new();
     }
 }

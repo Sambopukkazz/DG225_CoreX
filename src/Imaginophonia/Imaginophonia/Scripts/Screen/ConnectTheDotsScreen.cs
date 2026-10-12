@@ -49,10 +49,6 @@ namespace Imaginophobia {
             _trigger = trigger;
             MinigameActive = true;
             //temp
-            if (UIManager.stage > 7) {
-                UIManager.stage = 4;
-            }
-            
         }
 
         public override void Update(GameTime gameTime) {
@@ -107,12 +103,14 @@ namespace Imaginophobia {
                 //        UIManager.stage = 6;
                 //    }
                 //}
+
                 _trigger.Progress = _progressValue;
                 
                 
                 //endtemp
                 if (_progressValue >= 200) {
                     _trigger.Interactable = false;
+                    ObjectiveManager.Complete("dots-done");
                     SaveManager.TurnAllLightsOn();
                 }
                 AudioManager.Instance.PlaySFX(Sound.ElecComplete);
@@ -129,47 +127,49 @@ namespace Imaginophobia {
         }
 
         public override void Draw(GameTime gameTime) {
-            MainGame.SpriteBatch.Begin();
-            for (int x = 0; x < _column; x++) {
-                for (int y = 0; y < _row; y++) {
-                    Rectangle gridRect = new Rectangle((int)_gridPos.X + x * _gridSize,(int)_gridPos.Y + y * _gridSize, _gridSize - 1, _gridSize - 1);
-                    MainGame.SpriteBatch.DrawRectangle(gridRect, Color.DarkGray);
-                }
-            }
-
-            foreach (var path in _completedPaths) {
-
-                for (int i = 0; i < path.Points.Count - 1; i++) {
-                    Vector2 start = GetCellCenter(path.Points[i]);
-                    Vector2 end = GetCellCenter(path.Points[i + 1]);
-
-                    DrawLineSegment(start, end, path.Color, thickness: 12);
-                }
-            }
-
-            if (_currentPath != null) {
-                for (int i = 0; i < _currentPath.Points.Count - 1; i++) {
-                    Vector2 start = GetCellCenter(_currentPath.Points[i]);
-                    Vector2 end = GetCellCenter(_currentPath.Points[i + 1]);
-
-                    DrawLineSegment(start, end, _currentPath.Color, thickness: 12);
-                }
-            }
-
-            for (int x = 0; x < _column; x++) {
-                for (int y = 0; y < _row; y++) {
-                    GridCell cell = _cells[x, y];
-                    if (cell.IsEndpoint) {
-                        Vector2 center = GetCellCenter(new Point(x, y));
-                        Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
-                        MainGame.SpriteBatch.DrawCircle(center, 20, 100, cell.Color, 5);
+            if (MinigameActive) {
+                MainGame.SpriteBatch.Begin();
+                for (int x = 0; x < _column; x++) {
+                    for (int y = 0; y < _row; y++) {
+                        Rectangle gridRect = new Rectangle((int)_gridPos.X + x * _gridSize, (int)_gridPos.Y + y * _gridSize, _gridSize - 1, _gridSize - 1);
+                        MainGame.SpriteBatch.DrawRectangle(gridRect, Color.DarkGray);
                     }
                 }
-            }
 
-            MainGame.SpriteBatch.FillRectangle(860, 950, 200, 15, Color.DarkGray);
-            MainGame.SpriteBatch.FillRectangle(860, 950, _progressValue, 15, Color.GreenYellow);
-            MainGame.SpriteBatch.End();
+                foreach (var path in _completedPaths) {
+
+                    for (int i = 0; i < path.Points.Count - 1; i++) {
+                        Vector2 start = GetCellCenter(path.Points[i]);
+                        Vector2 end = GetCellCenter(path.Points[i + 1]);
+
+                        DrawLineSegment(start, end, path.Color, thickness: 12);
+                    }
+                }
+
+                if (_currentPath != null) {
+                    for (int i = 0; i < _currentPath.Points.Count - 1; i++) {
+                        Vector2 start = GetCellCenter(_currentPath.Points[i]);
+                        Vector2 end = GetCellCenter(_currentPath.Points[i + 1]);
+
+                        DrawLineSegment(start, end, _currentPath.Color, thickness: 12);
+                    }
+                }
+
+                for (int x = 0; x < _column; x++) {
+                    for (int y = 0; y < _row; y++) {
+                        GridCell cell = _cells[x, y];
+                        if (cell.IsEndpoint) {
+                            Vector2 center = GetCellCenter(new Point(x, y));
+                            Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
+                            MainGame.SpriteBatch.DrawCircle(center, 20, 100, cell.Color, 5);
+                        }
+                    }
+                }
+
+                MainGame.SpriteBatch.FillRectangle(860, 950, 200, 15, Color.DarkGray);
+                MainGame.SpriteBatch.FillRectangle(860, 950, _progressValue, 15, Color.GreenYellow);
+                MainGame.SpriteBatch.End();
+            }
         }
 
         public void DrawLineSegment(Vector2 point1, Vector2 point2, Color color, int thickness) {
