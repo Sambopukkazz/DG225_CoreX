@@ -59,5 +59,5 @@ gantt
 > เมื่อ Sprint ไหนเริ่มทำงานจริง ให้คัดลอก template `sprint-plan-template.md` (ไฟล์แนบใน LMS) ไปสร้าง `docs/agile/sprint-plan-[NN].md` แล้วดึง Story ของ Sprint นั้นจากตารางด้านบนมาใส่คนรับผิดชอบ แตก Task และปรับ Estimate ให้ละเอียดขึ้น
 
 ## Links
-- [[docs/agile/01-product-backlog|Product Backlog]]
-- [[docs/agile/sprint-plan-01|Sprint 1 Plan]]
+- [Product Backlog](../01-product-backlog.md)
+- [Sprint 1 Plan](../sprint-plans/sprint-plan-01.md)

@@ -1,9 +1,13 @@
 # Product Backlog
 
-**Version:** 1.0 | **Last Updated:** 2026-09-01
+**Version:** 1.1 | **Last Updated:** 2026-10-14
 
 > รวม User Story ทั้งหมดของโปรเจกต์ — ยังไม่ได้แปลว่าต้องทำใน Sprint นี้ทั้งหมด
 > โปรเจกต์นี้แบ่งงานตลอดเทอมเป็น **4 Sprint** (Sprint 1-4) — Sprint ไหนหยิบ Story ไปทำ ให้ใส่เลข Sprint นั้น (1-4) ลงคอลัมน์ `Sprint`
+
+> ⚠️ **สถานะ (status) ให้ดูจาก [`sprint-plans/`](sprint-plans/) เป็นหลัก** — คอลัมน์ `Sprint` ในตารางนี้บอกแค่ว่า story ถูกจัดเข้า sprint ไหน **ไม่ใช่** สถานะความคืบหน้า
+> ตารางนี้เคยขัดกับ [Sprint Backlog](02-sprint-backlog.md) และ [Sprint 1 Plan](sprint-plans/sprint-plan-01.md) เช่น เรื่อง "audio and sound effects" ที่ระบุเป็น `—` ที่นี่ แต่เป็น Sprint 1 ใน sprint backlog และ ✅ Done ใน sprint plan — แก้ให้ตรงกันแล้ว (2026-10-14)
+> ถ้าพบว่าไม่ตรงกันอีก ให้ยึด **sprint plan** เป็นแหล่งความจริง แล้วอัปเดตตารางนี้ตาม
 
 ## Must Have (MVP)
 
@@ -24,9 +28,9 @@
 | 1  | As a player, I want to see my remaining lives, so that I know how close I am to game over                                               | จำนวนชีวิตแสดงบนจอตลอดเวลา ลดลงทันทีที่โดนโจมตี                               | 2             | —     |
 | 2  | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with               | เข้าใกล้สิ่งของแล้วมี highlight ขึ้น เมื่อออกห่างแล้วหายไป                    | 2             | —     |
 | 3  | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.                 | มี ui settings กดเข้าเกมต่างๆ                                                                               | 3             | —     |
-| 4  | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                                            | 2             | —     |
+| 4 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                                            | 2             | 1     |
 | 5  | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | ได้ยินเสียงแทรกซ้ายขวา                                                                                | 3             | 1      |
-| 6  | As a developer,i want the game have skill heal Sanity                                                                                  | สกิลที่เพิ่มค่าสติ                                                                                        | 2             | ---    |
+| 6  | As a developer, I want the game to have a skill that heals Sanity, so that the player can recover from low sanity.                     | สกิลที่เพิ่มค่าสติ                                                                                        | 2             | —     |
 | 7  | As an artist, I want to redesign the mini-game UI                                                                                      | ปรับ UI มินิเกม ให้ดูดีมากขึ้น                                                                    | 3             | 3      |
 | 8  | As a designer, I want to add tutorials for players, so that they understand how to play the game easily.                                | ตอนเข้าด่านจะมี tutorial สอนเล่น + design ui ในหน้า minigame ต่างๆ                         | 2             | 3      |
 | 9  | As a designer, I want to overhaul game's menu, so that it's more clean and understandable to use.                                       | จัดระเบียบปุ่มต่างๆใน menu                                                                             | 3             | 3      |
@@ -51,5 +55,14 @@
 
 ## Links
 
-- [[docs/gdd/00-concept|GDD Concept]]
-- [[docs/agile/02-sprint-backlog|Sprint Backlog]]
+- [GDD Concept](../01_GDD/00-concept.md)
+- [Core Loop](../01_GDD/01-core-loop.md)
+- [Mechanics](../01_GDD/03-mechanics.md)
+- [Sprint Backlog](02-sprint-backlog.md)
+- [Sprint Plans](sprint-plans/) — แหล่งความจริงของสถานะงาน
+- [Kanban](kanban.md)
+- [Report Backlog](05-report-backlog.md)
+
+## หมายเหตุการแก้ไข
+
+- **2026-10-14:** ปรับเรื่องเล่า (user story) ข้อ Should Have #6 ให้มีโครง `so that` ครบถ้วน · แก้คอลัมน์ Sprint ของ Should Have #4 ให้ตรงกับ sprint plan · เพิ่มหมายเหตุเรื่องแหล่งความจริงของสถานะ
