@@ -39,7 +39,9 @@ namespace Imaginophobia {
                 }
                 else if (entity.Class == "door") {
                     string destination = entity.Properties.GetString("Destination");
-                    collisionManager.AddCollider(new Trigger(entity.Id, entity.Position, entity.Size, entity.Class, destination), "triggers");
+                    Trigger trigger = new Trigger(entity.Id, entity.Position, entity.Size, entity.Class, destination);
+                    collisionManager.AddCollider(trigger, "triggers");
+                    Triggers.Add(trigger);
                 }
                 else if (entity.Class == "spawn") {
                     string origin = entity.Properties.GetString("Origin");

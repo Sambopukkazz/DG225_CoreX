@@ -160,7 +160,7 @@ namespace Imaginophobia {
                         GridCell cell = _cells[x, y];
                         if (cell.IsEndpoint) {
                             Vector2 center = GetCellCenter(new Point(x, y));
-                            Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
+                            //Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
                             MainGame.SpriteBatch.DrawCircle(center, 20, 100, cell.Color, 5);
                         }
                     }
