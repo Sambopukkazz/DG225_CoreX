@@ -21,9 +21,10 @@ namespace Imaginophobia {
         // ---- valve progress (the sewer main goal) ----
         public const int TargetValves = 5;
         private static readonly HashSet<int> _repairedValves = new();
-
         public static int RepairedValveCount => _repairedValves.Count;
         public static bool AllValvesRepaired => RepairedValveCount >= TargetValves;
+
+        public static bool IsValveRepaired(int valveId) => _repairedValves.Contains(valveId);
 
         // call on a *successful* valve completion — keyed by trigger id, so no double-count
         public static void RepairValve(int valveId) {

@@ -34,12 +34,14 @@ namespace Imaginophobia {
                 }
                 else if (entity.Class == "dots" || entity.Class == "hideout" || entity.Class == "skillcheck") {
                     Trigger trigger = new Trigger(entity.Id, entity.Position, entity.Size, entity.Class);
+                    BuildHighlightTiles(trigger, entity);
                     collisionManager.AddCollider(trigger, "triggers");
                     Triggers.Add(trigger);
                 }
                 else if (entity.Class == "door") {
                     string destination = entity.Properties.GetString("Destination");
                     Trigger trigger = new Trigger(entity.Id, entity.Position, entity.Size, entity.Class, destination);
+                    BuildHighlightTiles(trigger, entity);
                     collisionManager.AddCollider(trigger, "triggers");
                     Triggers.Add(trigger);
                 }
@@ -98,6 +100,92 @@ namespace Imaginophobia {
                     }
                 }
             }
+        }
+
+        private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
+            TilemapTileLayer layer = FindHighlightLayer(entity.Name);
+
+            if (layer == null) {
+                return;
+            }
+
+            trigger.TileLayer = layer;
+
+            Dictionary<(int, int), TilemapTileEntry> tileIndex = new Dictionary<(int, int), TilemapTileEntry>();
+
+            foreach (TilemapTileEntry tile in layer.GetTiles()) {
+                tileIndex[(tile.X, tile.Y)] = tile;
+            }
+
+            // The collider is smaller than the artwork, so flood fill outwards from a tile inside it
+            Point topLeft = TileMap.WorldToTilePosition(entity.Position);
+            Point bottomRight = TileMap.WorldToTilePosition(entity.Position + entity.Size - new Vector2(1, 1));
+            Rectangle colliderRect = new Rectangle(topLeft.X, topLeft.Y, Math.Max(1, bottomRight.X - topLeft.X + 1), Math.Max(1, bottomRight.Y - topLeft.Y + 1));
+
+            Stack<TilemapTileEntry> pending = new Stack<TilemapTileEntry>();
+            HashSet<(int, int)> visited = new HashSet<(int, int)>();
+
+            foreach (TilemapTileEntry tile in layer.GetTiles()) {
+                if (colliderRect.Contains(tile.X, tile.Y)) {
+                    pending.Push(tile);
+                    break;
+                }
+            }
+
+            while (pending.Count > 0) {
+                TilemapTileEntry current = pending.Pop();
+
+                if (visited.Contains((current.X, current.Y))) {
+                    continue;
+                }
+
+                visited.Add((current.X, current.Y));
+                trigger.Tiles.Add(current);
+
+                if (tileIndex.TryGetValue((current.X + 1, current.Y), out TilemapTileEntry right)) {
+                    pending.Push(right);
+                }
+                if (tileIndex.TryGetValue((current.X - 1, current.Y), out TilemapTileEntry left)) {
+                    pending.Push(left);
+                }
+                if (tileIndex.TryGetValue((current.X, current.Y + 1), out TilemapTileEntry down)) {
+                    pending.Push(down);
+                }
+                if (tileIndex.TryGetValue((current.X, current.Y - 1), out TilemapTileEntry up)) {
+                    pending.Push(up);
+                }
+            }
+        }
+
+        // An object's entity name matches its tile layer name, except the doors
+        private TilemapTileLayer FindHighlightLayer(string entityName) {
+            if (string.IsNullOrEmpty(entityName)) {
+                return null;
+            }
+
+            if (entityName == "LoadNextScene") {
+                return FindTileLayer("Doors");
+            }
+
+            string wanted = entityName.TrimEnd('s', 'S');
+
+            foreach (TilemapLayer layer in TileMap.Layers) {
+                if (layer is TilemapTileLayer tileLayer && string.Equals(tileLayer.Name.TrimEnd('s', 'S'), wanted, StringComparison.OrdinalIgnoreCase)) {
+                    return tileLayer;
+                }
+            }
+
+            return null;
+        }
+
+        private TilemapTileLayer FindTileLayer(string name) {
+            foreach (TilemapLayer layer in TileMap.Layers) {
+                if (layer is TilemapTileLayer tileLayer && string.Equals(tileLayer.Name, name, StringComparison.OrdinalIgnoreCase)) {
+                    return tileLayer;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Imaginophobia {
         private List<GameObject> _enemies;
         private Player _player;
         public event Action<string> DoorInteracted;
+        public Trigger FocusedTrigger { get; private set; }
 
         public CollisionManager(Player player, List<GameObject> enemyList) {
             Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
@@ -41,10 +42,20 @@ namespace Imaginophobia {
 
             //if(_collisionWorld.)
             _player.CanInteract = false;
+            FocusedTrigger = null;
             //Player with Minigame triggers
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
-                if(trigger.CompareTag("hideout")) {
+
+                // Nearest wins, so overlapping triggers don't leave the highlight on the wrong object
+                if (FocusedTrigger == null) {
+                    FocusedTrigger = trigger;
+                }
+                else if ((_player.Transform.Position - trigger.Shape.BoundingBox.Center).LengthSquared() < (_player.Transform.Position - FocusedTrigger.Shape.BoundingBox.Center).LengthSquared()) {
+                    FocusedTrigger = trigger;
+                }
+
+                if (trigger.CompareTag("hideout")) {
                     if (_player.CurrentAction != CharacterAction.Hiding) {
                         _player.CurrentAction = CharacterAction.ReadyToHide;
                     }
