@@ -55,7 +55,7 @@ namespace Imaginophobia {
         public Vector2 CameraTarget;
         public Timer CooldownTimer;
         public bool Blink { get; set; }
-        public event Action StateChanged;
+        public event Action SanityStateChanged;
         public Vector2 PreviousPos { get; set; }
 
 
@@ -71,11 +71,11 @@ namespace Imaginophobia {
 
             _flashLight = new Spotlight() {
                 Color = Color.FromHSV(150f, 0.5f, 0.5f),
-                Scale = new Vector2(1000, 1750),
+                Scale = new Vector2(600, 1250),
                 Intensity = 1,
                 Enabled = false
             };
-            _flashlightOffset = new Vector2(80,-10);
+            _flashlightOffset = new Vector2(85,-12);
 
             LightManager.Penumbra.Lights.Add(_scotopicLight);
             LightManager.Penumbra.Lights.Add(_flashLight);
@@ -157,16 +157,16 @@ namespace Imaginophobia {
             }
 
 
-            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
-                _flashlightOffset.X = -80;
+            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally && _flashLight.Rotation != MathHelper.ToRadians(180)) {
+                _flashlightOffset.X *= -1;
                 _flashLight.Rotation = MathHelper.ToRadians(180);
                 _eyeSight.Start.X = Transform.Position.X - _eyeLevel.X;
                 _eyeSight.Start.Y = Transform.Position.Y + _eyeLevel.Y;
                 _eyeSight.End.X = Transform.Position.X - _eyeLevel.X - _eyeSightLength;
                 _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
             }
-            else if (_animatedSprite.Effect == SpriteEffects.None) {
-                _flashlightOffset.X = 80;
+            else if (_animatedSprite.Effect == SpriteEffects.None && _flashLight.Rotation != 0) {
+                _flashlightOffset.X *= -1;
                 _flashLight.Rotation = 0;
                 _eyeSight.Start = Transform.Position + _eyeLevel;
                 _eyeSight.End.X = Transform.Position.X + _eyeLevel.X + _eyeSightLength;
@@ -177,8 +177,8 @@ namespace Imaginophobia {
                 if (Battery <= 0) {
                     _flashLight.Enabled = false;
                 }
-                Battery -= 2f * Time.DeltaTime;
-                _eyeSightLength = 800;
+                Battery -= 3.5f * Time.DeltaTime;
+                _eyeSightLength = 400;
             }
             else {
                 _eyeSightLength = 0;
@@ -251,7 +251,7 @@ namespace Imaginophobia {
 
         private void SetUpAnimation() {
             //Set up animation
-            Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
+            Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spritesheet_player");
             SpriteSheet spriteSheet = new("player", atlas);
             int walkFrameCount = 9;
             int idleFrameCount = 12;
@@ -337,9 +337,35 @@ namespace Imaginophobia {
                         AudioManager.Instance.PlayStepsSFX(Transform.WorldPosition,10,150);
                         _previousFrame = _animatedSprite.Controller.CurrentFrame;
                         break;
-                }
+                }                
             }
 
+            int offsetX = 0;
+            int offsetY = 0;
+            switch (_animatedSprite.Controller.CurrentFrame) {
+                case 1:
+                    offsetX = 85;
+                    offsetY = -12;
+                    break;
+                case 13:
+                    offsetX = 70;
+                    offsetY = -11;
+                    break;
+                case 15:
+                    offsetX = 72;
+                    offsetY = -10;
+                    break;
+                case 17:
+                    offsetX = 78;
+                    offsetY = -14;
+                    break;
+            }
+            if (offsetX != 0 && _animatedSprite.Effect == SpriteEffects.None) {
+                _flashlightOffset.X = offsetX;
+            }
+            else if (offsetX != 0 && _animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
+                _flashlightOffset.X = -offsetX;
+            }
             //if (!_animatedSprite.Controller.IsAnimating) {
             //    switch (_characterState) {
             //        case CharacterState.Walking:
@@ -432,15 +458,15 @@ namespace Imaginophobia {
         public void CheckSanityStage() {
             if (Sanity <= ((float)SanityState.Anxious) && SanityState == SanityState.Anxious) {
                 SanityState = SanityState.Insane;
-                StateChanged?.Invoke();
+                SanityStateChanged?.Invoke();
             }
             else if (Sanity <= ((float)SanityState.Normal) && SanityState == SanityState.Normal) {
                 SanityState = SanityState.Anxious;
-                StateChanged?.Invoke();
+                SanityStateChanged?.Invoke();
             }
             else if (Sanity > (float)SanityState.Normal && SanityState != SanityState.Normal) {
                 SanityState = SanityState.Normal;
-                StateChanged?.Invoke();
+                SanityStateChanged?.Invoke();
             }
         }
 
@@ -493,7 +519,7 @@ namespace Imaginophobia {
             //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Flashlight offset {_flashlightOffset}", new Vector2(150, 650), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"SPFX {_animatedSprite.Effect}", new Vector2(150, 750), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}, Frmae {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 500), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);
 
             //foreach (Timer timer in Time.Timers) {

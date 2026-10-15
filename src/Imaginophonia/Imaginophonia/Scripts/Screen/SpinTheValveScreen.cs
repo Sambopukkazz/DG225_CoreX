@@ -31,6 +31,7 @@ namespace Imaginophobia {
         private float _progressValue;
         private Player _player;
         private Trigger _trigger;
+        private Random _rand;
 
         public bool MinigameActive;
         public SpinTheValveScreen(Player player, Trigger trigger) {
@@ -40,6 +41,7 @@ namespace Imaginophobia {
             _player = player;
             _trigger = trigger;
             _progressValue = _trigger.Progress;
+            _rand = new Random();
 
             RandomNeedleSpeed();
             //temp
@@ -121,8 +123,17 @@ namespace Imaginophobia {
         }
 
         private void RandomNeedleSpeed() {
-            Random rand = new Random();
-            _needleSpeed = MathHelper.ToRadians(rand.Next(-8, 8));
+            float randomSpeed;
+            do {
+                randomSpeed = _rand.Next(-65, 65);
+            } while (randomSpeed >= -20 && randomSpeed <= 20);
+             
+            _needleSpeed = MathHelper.ToRadians(randomSpeed/10f);
+            //do {
+            //    randomSpeed = _rand.NextSingle(-6.5f, 6.5f);
+            //} while (randomSpeed >= -2f && randomSpeed <= 2f);
+
+            //_needleSpeed = MathHelper.ToRadians(randomSpeed);
 
             Time.AddTimer(RandomNeedleSpeed, 5);
         }

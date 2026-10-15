@@ -21,10 +21,12 @@ namespace Imaginophobia {
         // ---- valve progress (the sewer main goal) ----
         public const int TargetValves = 5;
         private static readonly HashSet<int> _repairedValves = new();
+        private static readonly HashSet<int> _repairedPanels = new();
         public static int RepairedValveCount => _repairedValves.Count;
         public static bool AllValvesRepaired => RepairedValveCount >= TargetValves;
 
         public static bool IsValveRepaired(int valveId) => _repairedValves.Contains(valveId);
+        public static bool IsPanelRepaired(int panelId) => _repairedPanels.Contains(panelId);
 
         // call on a *successful* valve completion — keyed by trigger id, so no double-count
         public static void RepairValve(int valveId) {
@@ -32,7 +34,12 @@ namespace Imaginophobia {
             if (AllValvesRepaired) Complete("valves-all"); // ties the goal into the objective/tutorial system
         }
 
+        public static void RepairPanel(int panelId) {
+            if (!_repairedPanels.Add(panelId)) return;   // same panel twice = no-op
+        }
+
         // run reset (death): the sewer reloads fresh, so the tally must follow
         public static void ResetValves() => _repairedValves.Clear();
+        public static void ResetPanels() => _repairedPanels.Clear();
     }
 }

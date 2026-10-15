@@ -33,7 +33,7 @@ namespace Imaginophobia {
 
         public UIManager(Player player, OrthographicCamera camera) {
             _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            _spacebar = MainGame.Content.Load<Texture2D>("UI/ui_spacebar");
+            _spacebar = MainGame.Content.Load<Texture2D>("UI/sprite_spacebar");
 
             _vignetteOverlay = new VignetteOverlay();
             _blinkOverlay = new VignetteOverlay();
@@ -44,7 +44,7 @@ namespace Imaginophobia {
             _tweener = new Tweener();
 
             _player = player;
-            _player.StateChanged += OnSanityStateChanged;
+            _player.SanityStateChanged += OnSanityStateChanged;
 
             _camera = camera;
 

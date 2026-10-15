@@ -15,7 +15,9 @@ namespace Imaginophobia {
     public class EnemyManager {
         public List<GameObject> Enemies;
         private float SpawnInterval = 5;
-        private int _autophobiaSpawnChance = 30; // 0-100
+        private (int, int, int) _autophobiaAvailableChance = (20, 30, 45); // Normal, Anxious, Insane
+        private int _autophobiaSpawnChance = 20; // 0-100
+        private (int, int, int) _scopophobiaAvailableChance = (5, 12, 17); // Normal, Anxious, Insane
         private int _scopophobiaSpawnChance = 5;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
@@ -24,26 +26,28 @@ namespace Imaginophobia {
         private Random _rand;
         private bool _continueSpawnEnemy;
         private Player _player;
-        Rectangle _worldBound;
+        private Rectangle _worldBound;
 
-        public bool HasActiveScopophobia() => Enemies.Exists(e => e is Scopophobia);
+        public bool HasActiveScopophobia() => Enemies.Exists(enemy => enemy is Scopophobia);
 
         public EnemyManager(Player player) {
             Enemies = new List<GameObject>();
             _player = player;
             _rand = new Random();
 
-            //Load enemies texture
-            _scopophobiaTexture = MainGame.Content.Load<Texture2D>("Phobias/Scopophobia-Entity");
+            _player.SanityStateChanged += OnStageChanged;
 
-            Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
+            //Load enemies texture
+            _scopophobiaTexture = MainGame.Content.Load<Texture2D>("Phobias/sprite_scopophobia");
+
+            Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spritesheet_player");
             _autophobiaSpriteSheet = new("autophobia", atlas);
 
             _autophobiaSpriteSheet.DefineAnimation("walk-forward", builder => {
                 builder.IsLooping(true);
                 for (int i = 1; i <= 9; i++) {
                     if (i == 9) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.13));
+                    else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.12));
                 }
             });
             
@@ -106,37 +110,59 @@ namespace Imaginophobia {
                     spawnLeft = false;
                 }
 
-                GameObject enemy;
-
-                int[] autophobiaNumber = new int[_autophobiaSpawnChance];
-                for (int i = 0; i < autophobiaNumber.Length; i++) {
-                    autophobiaNumber[i] = _rand.Next(0, 101);
-                }
-
-                int[] scopophobiaNumber = new int[_scopophobiaSpawnChance];
-                for (int i = 0; i < scopophobiaNumber.Length; i++) {
-                    scopophobiaNumber[i] = _rand.Next(0, 101);
-                }
-
                 int randomNumber = _rand.Next(0, 101);
-                if (autophobiaNumber.Contains<int>(randomNumber)) {
-                    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                    Enemies.Add(autophobia);
-                    EnemySpawned?.Invoke(autophobia);
+                GameObject enemy = null;
+
+                if (randomNumber < _autophobiaSpawnChance) {
+                    enemy = new Autophobia(pos, _player, _autophobiaSpriteSheet);
                 }
-                else if (scopophobiaNumber.Contains<int>(randomNumber) && Enemies.Exists(enem => enem.GetType().Name == "Scopophobia") == false) {
+                else if (randomNumber < _autophobiaSpawnChance + _scopophobiaSpawnChance && HasActiveScopophobia() == false) {
                     if (spawnLeft) {
                         pos.X -= 1920;
                     }
                     else {
                         pos.X += 1920;
                     }
-                    Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
-                    Enemies.Add(scopophobia);
-                    EnemySpawned?.Invoke(scopophobia);
+
+                    enemy = new Scopophobia(pos, _player, _scopophobiaTexture);
+                }
+
+                if (enemy != null) {
+                    Enemies.Add(enemy);
+                    EnemySpawned?.Invoke(enemy as ICollisionActor);
                 }
 
                 Time.AddTimer(SpawnEnemy, SpawnInterval);
+
+                //int[] autophobiaNumber = new int[_autophobiaSpawnChance];
+                //for (int i = 0; i < autophobiaNumber.Length; i++) {
+                //    autophobiaNumber[i] = _rand.Next(0, 101);
+                //}
+
+                //int[] scopophobiaNumber = new int[_scopophobiaSpawnChance];
+                //for (int i = 0; i < scopophobiaNumber.Length; i++) {
+                //    scopophobiaNumber[i] = _rand.Next(0, 101);
+                //}
+
+
+                //if (autophobiaNumber.Contains<int>(randomNumber)) {
+                //    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
+                //    Enemies.Add(autophobia);
+                //    EnemySpawned?.Invoke(autophobia);
+                //}
+                //else if (scopophobiaNumber.Contains<int>(randomNumber) && HasActiveScopophobia() == false) {
+                //    if (spawnLeft) {
+                //        pos.X -= 1920;
+                //    }
+                //    else {
+                //        pos.X += 1920;
+                //    }
+                //    Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
+                //    Enemies.Add(scopophobia);
+                //    EnemySpawned?.Invoke(scopophobia);
+                //}
+
+
             }
         }
 
@@ -149,6 +175,21 @@ namespace Imaginophobia {
                 enemy.OnDestroyed();
             }
             Enemies.Clear();
+        }
+
+        private void OnStageChanged() {
+            if(_player.SanityState == SanityState.Anxious) {
+                _autophobiaSpawnChance = _autophobiaAvailableChance.Item2;
+                _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item2;
+            }
+            else if (_player.SanityState == SanityState.Insane) {
+                _autophobiaSpawnChance = _autophobiaAvailableChance.Item3;
+                _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item3;
+            }
+            else if (_player.SanityState == SanityState.Normal) {
+                _autophobiaSpawnChance = _autophobiaAvailableChance.Item1;
+                _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item1;
+            }
         }
     }
 }

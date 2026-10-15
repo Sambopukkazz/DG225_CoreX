@@ -13,7 +13,7 @@ namespace Imaginophobia {
     public class Autophobia : GameObject, IAudioApplicable, ICollisionActor {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
-        public float MoveSpeed { get; private set; } = 300f;
+        public float MoveSpeed { get; private set; } = 400f;
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
         public bool AllowMovement { get; set; } = true;

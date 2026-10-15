@@ -1,0 +1,94 @@
+{
+	"textures": [
+		{
+			"filename": "spritesheet_minigame_dot-texture.png",
+			"format": "RGBA8888",
+			"size": {"w":702,"h":840},
+			"frames": {
+				"minigame_dot_grid":{
+					"frame": {"x":1,"y":1,"w":700,"h":700},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_dot_blue":{
+					"frame": {"x":613,"y":703,"w":82,"h":82},
+					"size": {"w":100,"h":100},
+					"offset": {"x":9,"y":9},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_dot_cyan":{
+					"frame": {"x":1,"y":757,"w":82,"h":82},
+					"size": {"w":100,"h":100},
+					"offset": {"x":9,"y":9},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_dot_green":{
+					"frame": {"x":85,"y":757,"w":82,"h":82},
+					"size": {"w":100,"h":100},
+					"offset": {"x":9,"y":9},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_dot_purple":{
+					"frame": {"x":169,"y":757,"w":82,"h":82},
+					"size": {"w":100,"h":100},
+					"offset": {"x":9,"y":9},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_dot_red":{
+					"frame": {"x":253,"y":757,"w":82,"h":82},
+					"size": {"w":100,"h":100},
+					"offset": {"x":9,"y":9},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_dot_yellow":{
+					"frame": {"x":337,"y":757,"w":82,"h":82},
+					"size": {"w":100,"h":100},
+					"offset": {"x":9,"y":9},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_line_blue":{
+					"frame": {"x":1,"y":703,"w":100,"h":52},
+					"size": {"w":100,"h":100},
+					"offset": {"x":0,"y":24},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_line_cyan":{
+					"frame": {"x":103,"y":703,"w":100,"h":52},
+					"size": {"w":100,"h":100},
+					"offset": {"x":0,"y":24},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_line_green":{
+					"frame": {"x":205,"y":703,"w":100,"h":52},
+					"size": {"w":100,"h":100},
+					"offset": {"x":0,"y":24},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_line_purple":{
+					"frame": {"x":307,"y":703,"w":100,"h":52},
+					"size": {"w":100,"h":100},
+					"offset": {"x":0,"y":24},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_line_red":{
+					"frame": {"x":409,"y":703,"w":100,"h":52},
+					"size": {"w":100,"h":100},
+					"offset": {"x":0,"y":24},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_line_yellow":{
+					"frame": {"x":511,"y":703,"w":100,"h":52},
+					"size": {"w":100,"h":100},
+					"offset": {"x":0,"y":24},
+					"pivot": {"x":0.5,"y":0.5}
+				}
+			}
+		}
+	],
+
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"dataformat": "monogame-extended",
+		"version": "1.2",
+		"smartupdate": "$TexturePacker:SmartUpdate:1b1645f6753e1e39e05a8db625a340f8:3687f391c10b2254ec43bd5a7b5a8989:3e4820849444ab771f042a54f1f8d225$"
+	}
+}

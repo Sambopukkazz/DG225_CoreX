@@ -189,7 +189,7 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_step_08.mp3
 
-#begin Character/spitesheet_player-texture.png
+#begin Character/spritesheet_player-texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -200,13 +200,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:Character/spitesheet_player-texture.png
+/build:Character/spritesheet_player-texture.png
 
-#begin Character/spitesheet_player.json
+#begin Character/spritesheet_player.json
 /importer:TexturePackerJsonImporter
 /processor:TexturePackerProcessor
 /processorParam:Version=6.1.1.0
-/build:Character/spitesheet_player.json
+/build:Character/spritesheet_player.json
 
 #begin Datas/tutorial.json
 /importer:JsonContentImporter
@@ -234,7 +234,7 @@
 /processorParam:Version=6.1.1.0
 /build:Font/GenerationFonting.fnt
 
-#begin Phobias/Scopophobia-Entity.png
+#begin Phobias/sprite_scopophobia.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -245,7 +245,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:Phobias/Scopophobia-Entity.png
+/build:Phobias/sprite_scopophobia.png
 
 #begin Shaders/BottomFade.fx
 /importer:EffectImporter
@@ -300,7 +300,7 @@
 /processorParam:Version=6.1.1.0
 /build:Tilemaps/tilemap_sewer.ldtk
 
-#begin UI/Needle.png
+#begin UI/sprite_spacebar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -311,20 +311,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:UI/Needle.png
-
-#begin UI/Radial Circle.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:UI/Radial Circle.png
+/build:UI/sprite_spacebar.png
 
 #begin UI/sprite_valve.png
 /importer:TextureImporter
@@ -339,16 +326,22 @@
 /processorParam:Version=3.8.5.0
 /build:UI/sprite_valve.png
 
-#begin UI/ui_spacebar.png
+#begin UI/spritesheet_minigame_dot-texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
+/processorParam:ColorKeyEnabled=False
 /processorParam:GenerateMipmaps=False
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:UI/ui_spacebar.png
+/build:UI/spritesheet_minigame_dot-texture.png
+
+#begin UI/spritesheet_minigame_dot.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/processorParam:Version=6.1.1.0
+/build:UI/spritesheet_minigame_dot.json
 

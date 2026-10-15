@@ -18,7 +18,7 @@ namespace Imaginophobia {
         private int _maxAttempts = 100;
         private Random _rand = new Random();
         private Action<int, int, Color> _addDot;
-        private Color[] _availableColors = { Color.Red, Color.Blue, Color.Green, Color.Yellow, Color.Purple, Color.Orange };
+        private Color[] _availableColors = { Color.Blue, Color.Cyan, Color.Green, Color.Purple, Color.Red, Color.Yellow };
 
         public DotsGenerator(int row, int column, Action<int, int, Color> addDot) {
             _row = row;

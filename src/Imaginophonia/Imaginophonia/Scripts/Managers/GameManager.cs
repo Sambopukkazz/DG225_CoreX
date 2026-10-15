@@ -33,12 +33,7 @@ namespace Imaginophobia {
         private TutorialManager _tutorialManager;
         private DialogueManager _dialogueManager;
         private CameraShaker _cameraShaker;
-        private TileHighlightRenderer _tileHighlight;
-        private SceneBuilder _highlightScene;
-        private HighlightSettings _valveSettings = new HighlightSettings { ScanSpeed = 0.5f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 4f, OutlineColor = ColorHelper.FromHex("#ffd83f") };
-        private HighlightSettings _lockerSettings = new HighlightSettings { ScanSpeed = 0.25f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 4f, OutlineColor = ColorHelper.FromHex("#ffd83f") };
-        private HighlightSettings _panelSettings = new HighlightSettings { ScanSpeed = 0.15f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 4f, OutlineColor = ColorHelper.FromHex("#ffd83f") };
-        private HighlightSettings _doorSettings = new HighlightSettings { ScanSpeed = 0.4f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 4f, OutlineColor = ColorHelper.FromHex("#ffd83f") };
+        
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
@@ -55,15 +50,9 @@ namespace Imaginophobia {
             _collisionManager.DoorInteracted += OnDoorInteracted;
 
             SaveManager.Delete();
-            _sceneManager = new SceneManager();
+            _sceneManager = new SceneManager(_player);
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
-
-            _tileHighlight = new TileHighlightRenderer();
-            _tileHighlight.ValveGroup.Settings = _valveSettings;
-            _tileHighlight.LockerGroup.Settings = _lockerSettings;
-            _tileHighlight.PanelGroup.Settings = _panelSettings;
-            _tileHighlight.DoorGroup.Settings = _doorSettings;
 
             _uiManager = new UIManager(_player, _camera);
 
@@ -91,13 +80,9 @@ namespace Imaginophobia {
                 _camera.Zoom = MathHelper.Lerp(_camera.Zoom, _player.FocusLevel, 0.1f);
             }
 
-
-            _sceneManager.Update(gameTime);
-
             _collisionManager.Update();
 
-            _tileHighlight.Update();
-            UpdateHighlight();
+            _sceneManager.Update(_collisionManager);
 
             _lightManager.Update(_camera.GetViewMatrix());
 
@@ -110,7 +95,6 @@ namespace Imaginophobia {
             _cameraShaker.Update(gameTime);
 
             if (_player.Sanity <= 0) {
-                _player.Reset();
                 Restart();
             }
 
@@ -120,16 +104,14 @@ namespace Imaginophobia {
         public void Draw(GameTime gameTime) {
             // Build the highlight first, into its own target - binding render targets must not happen
             // inside the lighting capture
-            _tileHighlight.Render(_camera);
+            _sceneManager.Render(_camera);
 
             LightManager.Penumbra.BeginDraw();
 
             MainGame.GraphicsDevice.Clear(Color.White);
 
-            _sceneManager.Draw(_camera);
-
             // Behind the player, so it sits inside the lighting capture
-            _tileHighlight.Draw();
+            _sceneManager.Draw(_camera);
 
             Matrix traformMatrix = _camera.GetViewMatrix();
 
@@ -149,6 +131,7 @@ namespace Imaginophobia {
         }
 
         private void Restart() {
+            _player.Reset();
             SaveManager.Delete();
             ObjectiveManager.ResetValves();
             _enemyManager.ClearEnemies();
@@ -188,6 +171,7 @@ namespace Imaginophobia {
             if (enemy is Scopophobia) {
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
+                ObjectiveManager.ResetPanels();
                 _lightManager.ScopoAlarmAll();
             }
         }
@@ -240,67 +224,6 @@ namespace Imaginophobia {
 
         }
 
-        private void UpdateHighlight() {
-            SceneBuilder scene = SceneManager.GetActiveScene();
-
-            if (scene == null) {
-                return;
-            }
-
-            // The active scene changes on every door transition, so resync the renderer to the new map
-            if (!ReferenceEquals(scene, _highlightScene)) {
-                _highlightScene = scene;
-                _tileHighlight.LoadScene(scene.TileMap);
-            }
-
-            _tileHighlight.Clear();
-
-            foreach (Trigger trigger in scene.Triggers) {
-                if (trigger.CompareTag("skillcheck") && ObjectiveManager.IsValveRepaired(trigger.Id)) {
-                    continue;
-                }
-                if (trigger.CompareTag("dots") && ObjectiveManager.IsComplete("repair")) {
-                    continue;
-                }
-                if (trigger.CompareTag("hideout") && _player.CurrentAction == CharacterAction.Hiding) {
-                    continue;
-                }
-
-                if (trigger.Tiles.Count == 0) {
-                    continue;
-                }
-
-                HighlightGroup group;
-
-                if (trigger.TileLayer.Name == "Valves") {
-                    group = _tileHighlight.ValveGroup;
-                }
-                else if (trigger.TileLayer.Name == "Lockers") {
-                    group = _tileHighlight.LockerGroup;
-                }
-                else if (trigger.TileLayer.Name == "ElectricalPanel") {
-                    group = _tileHighlight.PanelGroup;
-                }
-                else if (trigger.TileLayer.Name == "Doors") {
-                    group = _tileHighlight.DoorGroup;
-                }
-                else {
-                    continue;
-                }
-
-                group.Layer = trigger.TileLayer;
-
-                if (trigger == _collisionManager.FocusedTrigger) {
-                    foreach (TilemapTileEntry tile in trigger.Tiles) {
-                        group.FocusTiles.Add(tile);
-                    }
-                }
-                else {
-                    foreach (TilemapTileEntry tile in trigger.Tiles) {
-                        group.ScanTiles.Add(tile);
-                    }
-                }
-            }
-        }
+        
     }
 }

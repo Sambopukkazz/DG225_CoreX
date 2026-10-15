@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Tilemaps;
 using Penumbra;
 using System;
@@ -72,9 +73,6 @@ namespace Imaginophobia {
                         LightArea lightArea = new LightArea(pointLight, entity.Position, entity.Id, entity.Class);
                         lightManager.AddLight(lightArea);
                         collisionManager.AddCollider(lightArea, "lights");
-
-
-
                     }
                     else if (entity.Name == "DoorLight") {
                         PointLight pointLight = new PointLight();

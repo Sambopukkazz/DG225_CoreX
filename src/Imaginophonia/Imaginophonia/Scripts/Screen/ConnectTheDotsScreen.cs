@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using RenderingLibrary.Math.Geometry;
@@ -22,6 +23,7 @@ namespace Imaginophobia {
         private float _progressValue;
         
         private Vector2 _gridPos;
+        private Vector2 _gridTexturePos;
         private GridCell[,] _cells;
         private List<WirePath> _completedPaths;
         private WirePath _currentPath;
@@ -32,14 +34,25 @@ namespace Imaginophobia {
         private Player _player;
         private Trigger _trigger;
 
+        private Texture2DAtlas _textureAtlas;
+        private Dictionary<Color, string> _nameByColor;
+
         public ConnectTheDotsScreen(Player player, Trigger trigger) {
             _cells = new GridCell[_column, _row];      
             _gridPos = new Vector2((MainGame.GraphicsDevice.Viewport.Width / 2) - (_gridSize * _column / 2), (MainGame.GraphicsDevice.Viewport.Height / 2) - (_gridSize * _row / 2));
+            _gridTexturePos = new Vector2(_gridPos.X - 50, _gridPos.Y - 50);
             _completedPaths = new List<WirePath>();
             _colors = new List<Color>();
-            _progressValue = trigger.Progress;
+            _nameByColor = new Dictionary<Color, string>() {
+                { Color.Blue, "blue" },
+                { Color.Cyan, "cyan" },
+                { Color.Green, "green" },
+                { Color.Purple, "purple" },
+                { Color.Red, "red" },
+                { Color.Yellow, "yellow" }
+            };
 
-
+            _textureAtlas = MainGame.Content.Load<Texture2DAtlas>("UI/spritesheet_minigame_dot");
 
             CreateGrid();
 
@@ -48,7 +61,7 @@ namespace Imaginophobia {
             _player = player;
             _trigger = trigger;
             MinigameActive = true;
-            //temp
+            _progressValue = trigger.Progress;
         }
 
         public override void Update(GameTime gameTime) {
@@ -111,6 +124,7 @@ namespace Imaginophobia {
                 if (_progressValue >= 200) {
                     _trigger.Interactable = false;
                     ObjectiveManager.Complete("dots-done");
+                    ObjectiveManager.RepairPanel(_trigger.Id);
                     SaveManager.TurnAllLightsOn();
                 }
                 AudioManager.Instance.PlaySFX(Sound.ElecComplete);
@@ -128,30 +142,64 @@ namespace Imaginophobia {
 
         public override void Draw(GameTime gameTime) {
             if (MinigameActive) {
-                MainGame.SpriteBatch.Begin();
-                for (int x = 0; x < _column; x++) {
-                    for (int y = 0; y < _row; y++) {
-                        Rectangle gridRect = new Rectangle((int)_gridPos.X + x * _gridSize, (int)_gridPos.Y + y * _gridSize, _gridSize - 1, _gridSize - 1);
-                        MainGame.SpriteBatch.DrawRectangle(gridRect, Color.DarkGray);
-                    }
-                }
+                
+
+                MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+                MainGame.SpriteBatch.Draw(_textureAtlas["minigame_dot_grid"], _gridTexturePos, Color.White);
+
+                //for (int x = 0; x < _column; x++) {
+                //    for (int y = 0; y < _row; y++) {
+                //        Rectangle gridRect = new Rectangle((int)_gridPos.X + x * _gridSize, (int)_gridPos.Y + y * _gridSize, _gridSize - 1, _gridSize - 1);
+                //        MainGame.SpriteBatch.DrawRectangle(gridRect, Color.DarkGray);
+                //    }
+                //}
 
                 foreach (var path in _completedPaths) {
 
                     for (int i = 0; i < path.Points.Count - 1; i++) {
-                        Vector2 start = GetCellCenter(path.Points[i]);
-                        Vector2 end = GetCellCenter(path.Points[i + 1]);
+                        //Vector2 start = GetCellCenter(path.Points[i]);
+                        //Vector2 end = GetCellCenter(path.Points[i + 1]);a
+                        //DrawLineSegment(start, end, path.Color, thickness: 12);
+                        Point dir = path.Points[i + 1] - path.Points[i];
+                        int j = i;
+                        // When go left it still use the start point's top left. Same with go up
+                        if ((dir.X == -1 && dir.Y == 0) || (dir.X == 0 && dir.Y == -1)) {
+                            j++;
+                        }
 
-                        DrawLineSegment(start, end, path.Color, thickness: 12);
+                        Vector2 drawPos = GetCellTopCenter(path.Points[j]);
+                        float rotation = 0;
+                        if ((dir.X == 0 && dir.Y == 1) || (dir.X == 0 && dir.Y == -1)) {
+                            rotation = MathHelper.ToRadians(90);
+                            drawPos.X += _gridSize / 2f;
+                            drawPos.Y += _gridSize / 2f;
+                        }
+
+                        MainGame.SpriteBatch.Draw(_textureAtlas[$"sprite_line_{_nameByColor[path.Color]}"], drawPos, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
                     }
                 }
 
                 if (_currentPath != null) {
                     for (int i = 0; i < _currentPath.Points.Count - 1; i++) {
-                        Vector2 start = GetCellCenter(_currentPath.Points[i]);
-                        Vector2 end = GetCellCenter(_currentPath.Points[i + 1]);
+                        //Vector2 start = GetCellTopLeft(_currentPath.Points[i]);
+                        //Vector2 end = GetCellTopLeft(_currentPath.Points[i + 1]);
+                        //DrawLineSegment(start, end, _currentPath.Color, thickness: 12);
+                        Point dir = _currentPath.Points[i + 1] - _currentPath.Points[i];
+                        int j = i;
+                        // When go left it still use the start point's top left. Same with go up
+                        if ((dir.X == -1 && dir.Y == 0) || (dir.X == 0 && dir.Y == -1)) {
+                            j++; 
+                        }
 
-                        DrawLineSegment(start, end, _currentPath.Color, thickness: 12);
+                        Vector2 drawPos = GetCellTopCenter(_currentPath.Points[j]);
+                        float rotation = 0;
+                        if((dir.X == 0 && dir.Y == 1) || (dir.X == 0 && dir.Y == -1)) {
+                            rotation = MathHelper.ToRadians(90);
+                            drawPos.X += _gridSize / 2f;
+                            drawPos.Y += _gridSize / 2f;
+                        }
+
+                        MainGame.SpriteBatch.Draw(_textureAtlas[$"sprite_line_{_nameByColor[_currentPath.Color]}"], drawPos, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
                     }
                 }
 
@@ -159,9 +207,10 @@ namespace Imaginophobia {
                     for (int y = 0; y < _row; y++) {
                         GridCell cell = _cells[x, y];
                         if (cell.IsEndpoint) {
-                            Vector2 center = GetCellCenter(new Point(x, y));
-                            //Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
-                            MainGame.SpriteBatch.DrawCircle(center, 20, 100, cell.Color, 5);
+                            MainGame.SpriteBatch.Draw(_textureAtlas[$"sprite_dot_{_nameByColor[cell.Color]}"], GetCellTopLeft(cell.Position), Color.White);
+                            //Vector2 center = GetCellCenter(new Point(x, y));
+                            ////Rectangle dotRect = new Rectangle((int)center.X - 20, (int)center.Y - 20, 40, 40);
+                            //MainGame.SpriteBatch.DrawCircle(center, 20, 100, cell.Color, 5);
                         }
                     }
                 }
@@ -241,9 +290,14 @@ namespace Imaginophobia {
             }
         }
 
-        public Vector2 GetCellCenter(Point pos) {
-            Vector2 center = new Vector2(_gridPos.X + pos.X * _gridSize + _gridSize / 2f, _gridPos.Y + pos.Y * _gridSize + _gridSize / 2f);
+        public Vector2 GetCellTopCenter(Point pos) {
+            Vector2 center = new Vector2(_gridPos.X + pos.X * _gridSize + _gridSize / 2f, _gridPos.Y + pos.Y * _gridSize);
             return center;
+        }
+
+        public Vector2 GetCellTopLeft(Point pos) {
+            Vector2 topLeft = new Vector2(_gridPos.X + pos.X * _gridSize, _gridPos.Y + pos.Y * _gridSize);
+            return topLeft;
         }
 
         public void CleanUp() {

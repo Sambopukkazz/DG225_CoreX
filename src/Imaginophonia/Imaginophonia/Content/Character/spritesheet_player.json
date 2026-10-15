@@ -1,7 +1,7 @@
 {
 	"textures": [
 		{
-			"filename": "spitesheet_player-texture.png",
+			"filename": "spritesheet_player-texture.png",
 			"format": "RGBA8888",
 			"size": {"w":960,"h":360},
 			"frames": {
