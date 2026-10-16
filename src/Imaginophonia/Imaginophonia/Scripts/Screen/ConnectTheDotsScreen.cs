@@ -171,8 +171,15 @@ namespace Imaginophobia {
                         float rotation = 0;
                         if ((dir.X == 0 && dir.Y == 1) || (dir.X == 0 && dir.Y == -1)) {
                             rotation = MathHelper.ToRadians(90);
-                            drawPos.X += _gridSize / 2f;
-                            drawPos.Y += _gridSize / 2f;
+                            drawPos.X += (_gridSize / 2f);
+                            drawPos.Y += (_gridSize / 2f);
+                        }
+
+                        if ((dir.X == 0 && dir.Y == -1) || (dir.X == 0 && dir.Y == 1)) {
+                            drawPos.Y -= 15;
+                        }
+                        else if ((dir.X == -1 && dir.Y == 0) || (dir.X == 1 && dir.Y == 0)) {
+                            drawPos.X -= 15;
                         }
 
                         MainGame.SpriteBatch.Draw(_textureAtlas[$"sprite_line_{_nameByColor[path.Color]}"], drawPos, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);
@@ -195,8 +202,15 @@ namespace Imaginophobia {
                         float rotation = 0;
                         if((dir.X == 0 && dir.Y == 1) || (dir.X == 0 && dir.Y == -1)) {
                             rotation = MathHelper.ToRadians(90);
-                            drawPos.X += _gridSize / 2f;
-                            drawPos.Y += _gridSize / 2f;
+                            drawPos.X += (_gridSize / 2f);
+                            drawPos.Y += (_gridSize / 2f);
+                        }
+
+                        if ((dir.X == 0 && dir.Y == -1) || (dir.X == 0 && dir.Y == 1)) {
+                            drawPos.Y -= 15;
+                        }
+                        else if ((dir.X == -1 && dir.Y == 0) || (dir.X == 1 && dir.Y == 0)) {
+                            drawPos.X -= 15;
                         }
 
                         MainGame.SpriteBatch.Draw(_textureAtlas[$"sprite_line_{_nameByColor[_currentPath.Color]}"], drawPos, Color.White, rotation, Vector2.Zero, Vector2.One, SpriteEffects.None, 0);

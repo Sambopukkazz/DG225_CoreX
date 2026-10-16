@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class UIManager {
-        private BitmapFont _font;
         private Texture2D _spacebar;
         private Rectangle _spaceBarBackgroundRect;
         private Player _player;
@@ -27,12 +26,17 @@ namespace Imaginophobia {
         private readonly Tweener _tweener;
         private CharacterAction _previousAction;
         private float _blinkSpeed = 0.4f;
-        
+        private TutorialManager _tutorialManager;
+        private TextManager _textManager;
+        private bool _blackScreen;
+
         //temp
         List<Keys> pressedKey;
 
         public UIManager(Player player, OrthographicCamera camera) {
-            _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            _tutorialManager = new TutorialManager();
+            _textManager = new TextManager();
+
             _spacebar = MainGame.Content.Load<Texture2D>("UI/sprite_spacebar");
 
             _vignetteOverlay = new VignetteOverlay();
@@ -86,6 +90,8 @@ namespace Imaginophobia {
             _tweener.Update(Time.DeltaTime);
 
             DebugUpdate();
+            _textManager.InputTutorial(_tutorialManager.GetText());
+            _textManager.Update();
         }
 
         public void Draw() {
@@ -95,48 +101,16 @@ namespace Imaginophobia {
 
             MainGame.SpriteBatch.Begin();
             DebugDraw();
-
-            //temp
-            //string dialogue = "";
-            //if (stage == 0) {
-            //    dialogue = "Press A/D to walk around. F to open a flashlight";
-            //}
-            //else if (stage == 1) {
-            //    dialogue = "Head to the electrical panel to do a task";
-            //}
-            //else if (stage == 2) {
-            //    dialogue = "Connect all the dots. \nYou can press A/D to look left and right while you are doing the task, \nand Q to leave the task";
-            //}
-            //else if (stage == 3) {
-            //    dialogue = "Spin the valve and stay on the green gauge. \nYou can press A/D to look left and right while you are doing the task, \nand Q to leave the task";
-            //}
-            //else if (stage == 4) {
-            //    dialogue = "Connect all the dots";
-            //}
-            //else if (stage == 5) {
-            //    dialogue = "Enter the locker to hide";
-            //}
-            //else if (stage == 6) {
-            //    dialogue = "";
-            //}
-            //else if (stage == 7) {
-            //    dialogue = "Leave the room on the left side to go fix pipe. Look for valve";
-            //}
-            //else if (stage == 8) {
-            //    dialogue = "test";
-            //}
-            //MainGame.SpriteBatch.DrawString(_font, dialogue, new Vector2(700, 100), Color.White);
-            //endtemp
             //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {_player.Transform.Position} ", new Vector2(150, 400), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"PlayerPos {_player.Transform.WorldPosition} ", new Vector2(150, 420), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {_player.Listener.Position.X}", new Vector2(150, 440), Color.White);
-
+            Color color;
             if (_player.CanInteract && _player.CanRepair) {
                 MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect, ColorHelper.FromHex("#70707041"));
                 //MainGame.SpriteBatch.Draw(_spacebar, _spaceBarPos, null, ColorHelper.FromHex("#70707041"), 0,Vector2.Zero,0.75f,SpriteEffects.None,0);
 
                 if (_player.CooldownTimer != null && (_player.CurrentAction == CharacterAction.ReadyToHide || _player.CurrentAction == CharacterAction.Hiding)) {
-                    Color color;
+                    
                     float timeFactor;
                     if (_player.CooldownTimer.Name == "cooldownTime") {
                         color = ColorHelper.FromHex("#a40e0e64");
@@ -150,21 +124,23 @@ namespace Imaginophobia {
                 }
             }
 
-            Color colorasd = Color.White;
+            color = Color.White;
             if(_player.SanityState == SanityState.Anxious) {
-                colorasd = Color.Yellow;
+                color = Color.Yellow;
             }
             else if (_player.SanityState == SanityState.Insane) {
-                colorasd = Color.Red;
+                color = Color.Red;
             }
-            MainGame.SpriteBatch.DrawString(_font, $"Sanity: ", new Vector2(100, 100), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Battery: ", new Vector2(100, 150), Color.White);
+            
             MainGame.SpriteBatch.DrawRectangle(210, 100, 300, 20, Color.White);
-            MainGame.SpriteBatch.FillRectangle(210, 100, 3 * _player.Sanity, 20, colorasd);
+            MainGame.SpriteBatch.FillRectangle(210, 100, 3 * _player.Sanity, 20, color);
             MainGame.SpriteBatch.DrawRectangle(210, 150, 300, 20, Color.White);
             MainGame.SpriteBatch.FillRectangle(210, 150, 3 * _player.Battery, 20, Color.White);
-            if (ObjectiveManager.IsComplete("entered-sewer")) {
-                MainGame.SpriteBatch.DrawString(_font, $"Valves repaired: {ObjectiveManager.RepairedValveCount}/{ObjectiveManager.TargetValves}", new Vector2(100, 200), Color.White);
+
+            _textManager.Draw();
+
+            if (_blackScreen) {
+                MainGame.SpriteBatch.FillRectangle(0, 0, 1920, 1080, Color.Black);
             }
 
             MainGame.SpriteBatch.End();
@@ -197,24 +173,49 @@ namespace Imaginophobia {
             }
         }
 
+        public void BlackScreen() {
+            _blackScreen = true;
+
+            Action turnOffBlackScreen = () => _blackScreen = false;
+
+            if (MainGame.ScreenManager.ActiveScreen is not SpinTheValveScreen) {
+                Time.AddTimer(turnOffBlackScreen, 1f);
+                return;
+            }
+
+            if (MainGame.ScreenManager.ActiveScreen is SpinTheValveScreen minigame) {
+                minigame.MinigameVisible = false;
+
+                turnOffBlackScreen = () => {
+                    minigame.MinigameVisible = true;
+                    _blackScreen = false;
+                };
+
+                Time.AddTimer(turnOffBlackScreen, 1f);
+            }
+            
+
+            
+        }
+
         private void DebugUpdate() {
             //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-            //    _vignetteOverlay.Scale -= new Vector2(0, 0.01f);
+            //    _blinkOverlay.Scale -= new Vector2(0, 0.01f);
             //}
             //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-            //    _vignetteOverlay.Scale += new Vector2(0, 0.01f);
+            //    _blinkOverlay.Scale += new Vector2(0, 0.01f);
             //}
             //if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-            //    _vignetteOverlay.Scale += new Vector2(0.01f, 0);
+            //    _blinkOverlay.Scale += new Vector2(0.01f, 0);
             //}
             //if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-            //    _vignetteOverlay.Scale -= new Vector2(0.01f, 0);
+            //    _blinkOverlay.Scale -= new Vector2(0.01f, 0);
             //}
             //if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-            //    _vignetteOverlay.Softness += 0.01f;
+            //    _blinkOverlay.Softness += 0.01f;
             //}
             //if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-            //    _vignetteOverlay.Softness -= 0.01f;
+            //    _blinkOverlay.Softness -= 0.01f;
             //}
 
             //if (Keyboard.GetState().IsKeyDown(Keys.I)) {
@@ -254,10 +255,29 @@ namespace Imaginophobia {
 
         }
 
+        public void ShowMessage(string text, float duration = 4f) {
+            _textManager.ShowMessage(text, duration);
+        }
+
         public void BlinkFx() {
+            //Close eye -> scale Y to 0
             _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
-                .Repeat(1)
-                .AutoReverse()
+                .Easing(EasingFunctions.Linear)
+                .OnEnd(_ => {
+                    BlinkOpen();
+                });
+            //_tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
+            //    .Repeat(1)
+            //    .AutoReverse()
+            //    .Easing(EasingFunctions.Linear);
+        }
+        //public void BlinkClose() {
+        //    _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
+        //        .Easing(EasingFunctions.Linear);
+        //}
+
+        public void BlinkOpen() {
+            _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: _blinkSpeed)
                 .Easing(EasingFunctions.Linear);
         }
 
@@ -300,8 +320,8 @@ namespace Imaginophobia {
 
         private void DebugDraw() {
             //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            //MainGame.SpriteBatch.DrawString(_font, $"Scale {_vignetteOverlay.Scale} ", new Vector2(150, 500), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Brightness: {_vignetteOverlay.Softness}", new Vector2(150, 50), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Scale {_blinkOverlay.Scale} ", new Vector2(150, 500), Color.White);
+            //MainGame.SpriteBatch.DrawString(_font, $"Softness: {_blinkOverlay.Softness}", new Vector2(150, 50), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Sharpenss {_vignetteOverlay.Sharpness}", new Vector2(150, 150), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}", new Vector2(150, 200), Color.White);
             //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);

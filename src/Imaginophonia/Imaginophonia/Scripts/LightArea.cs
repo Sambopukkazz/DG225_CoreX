@@ -45,10 +45,10 @@ namespace Imaginophobia {
         }
 
         public void Update() {
-            if (_scopoAlarm) { 
-                UpdateScopoAlarm(); 
-                return; 
-            }
+            //if (_scopoAlarm) { 
+            //    UpdateScopoAlarm(); 
+            //    return; 
+            //}
 
             if (!IsFlickering) {
                 return;
@@ -74,40 +74,45 @@ namespace Imaginophobia {
             }
         }
 
-        private void UpdateScopoAlarm() {
-            _scopoTimer -= Time.DeltaTime;
-            if (_scopoTimer <= 0f) {                 // done: on, red, permanent
-                _scopoAlarm = false;
-                Light.Color = Color.Red;            // no changing back
-                Light.Intensity = _baseIntensity;
-                Light.Enabled = true;
-                return;
-            }
-            float elapsed = 8 - _scopoTimer;
-            if (elapsed < 6) {
-                _nextFlickerTimer -= Time.DeltaTime;
-                if (_nextFlickerTimer <= 0f) {
-                    Light.Enabled = _rand.NextDouble() > 0.4;               // <- your line 63
-                    _nextFlickerTimer = (float)(_rand.NextDouble() * 0.09 + 0.03);
-                }
-            }
-            else {
-                Light.Enabled = false;               // 2s blackout
-            }
+        public void ScopoIncoming() {
+            Light.Color = Color.Red;
+            Light.Intensity = _baseIntensity;
         }
 
-        public void StartScopoAlarm() {
-            if (_powered == false) {
-                return;
-            }
-            _scopoAlarm = true;
-            _scopoTimer = 8f;
-            IsFlickering = false;
-            _powered = true;
-            Light.Enabled = true;
-            Light.Intensity = _baseIntensity;
-            _nextFlickerTimer = 0f;
-        }
+        //private void UpdateScopoAlarm() {
+        //    _scopoTimer -= Time.DeltaTime;
+        //    if (_scopoTimer <= 0f) {                 // done: on, red, permanent
+        //        _scopoAlarm = false;
+        //        Light.Color = Color.Red;            // no changing back
+        //        Light.Intensity = _baseIntensity;
+        //        Light.Enabled = true;
+        //        return;
+        //    }
+        //    float elapsed = 8 - _scopoTimer;
+        //    if (elapsed < 6) {
+        //        _nextFlickerTimer -= Time.DeltaTime;
+        //        if (_nextFlickerTimer <= 0f) {
+        //            Light.Enabled = _rand.NextDouble() > 0.4;               // <- your line 63
+        //            _nextFlickerTimer = (float)(_rand.NextDouble() * 0.09 + 0.03);
+        //        }
+        //    }
+        //    else {
+        //        Light.Enabled = false;               // 2s blackout
+        //    }
+        //}
+
+        //public void StartScopoAlarm() {
+        //    if (_powered == false) {
+        //        return;
+        //    }
+        //    _scopoAlarm = true;
+        //    _scopoTimer = 8f;
+        //    IsFlickering = false;
+        //    _powered = true;
+        //    Light.Enabled = true;
+        //    Light.Intensity = _baseIntensity;
+        //    _nextFlickerTimer = 0f;
+        //}
 
         public void StartFlicker(float durationSeconds = 1.5f) {
             if (_scopoAlarm || !_powered || IsFlickering) {

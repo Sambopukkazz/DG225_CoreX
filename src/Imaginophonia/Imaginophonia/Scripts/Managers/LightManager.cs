@@ -55,7 +55,7 @@ namespace Imaginophobia {
 
         public void ScopoAlarmAll() {
             foreach (LightArea lightArea in LightAreas)
-                lightArea.StartScopoAlarm();
+                lightArea.ScopoIncoming();
         }
     }
 }

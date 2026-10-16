@@ -34,10 +34,12 @@ namespace Imaginophobia {
         private Random _rand;
 
         public bool MinigameActive;
+        public bool MinigameVisible;
         public SpinTheValveScreen(Player player, Trigger trigger) {
             _valveTexture = MainGame.Content.Load<Texture2D>("UI/sprite_valve");
             _valveOrigin = new Vector2(_valveTexture.Width / 2f, _valveTexture.Height / 2f);
             MinigameActive = true;
+            MinigameVisible = true;
             _player = player;
             _trigger = trigger;
             _progressValue = _trigger.Progress;
@@ -54,7 +56,7 @@ namespace Imaginophobia {
 
                 _valveAngle = MathHelper.Lerp(_valveAngle, _targetAngle, _rotationSpeed * Time.DeltaTime);
                 _targetAngle = MathHelper.Lerp(_targetAngle, _valveAngle, _rotationSpeed * 2 * Time.DeltaTime);
-                
+
 
                 _needleAngle += (_needleSpeed / 38f) + (_angularSpeed / 100f);
                 _needleAngle = MathHelper.Clamp(_needleAngle, MathHelper.ToRadians(225), MathHelper.ToRadians(313));
@@ -73,21 +75,23 @@ namespace Imaginophobia {
 
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
 
-                if (_progressValue >= 200 || KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
-                    //temp
-                    
-                    //endtemp
+                if (_progressValue >= 200) {
                     MinigameActive = false;
                     AudioManager.Instance.PlaySFX(Sound.PipeComplete);
                     _player.ToggleRepair();
                     _trigger.Progress = _progressValue;
-                    if (_progressValue >= 200) {
-                        _trigger.Interactable = false;
-                        ObjectiveManager.Complete("valve-completed");
-                        ObjectiveManager.RepairValve(_trigger.Id);
-                    }
+                    _trigger.Interactable = false;
+                    ObjectiveManager.Complete("valve-completed");
+                    ObjectiveManager.RepairValve(_trigger.Id);
                     this.ScreenManager.CloseScreen();
                 }
+            }
+            //(_player.CurrentAction == CharacterAction.Checking || _player.CurrentAction == CharacterAction.Repairing)
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
+                MinigameActive = false;
+                _player.ToggleRepair();
+                _trigger.Progress = _progressValue;
+                this.ScreenManager.CloseScreen();
             }
 
             if (_player.CurrentAction == CharacterAction.Checking) {
@@ -99,7 +103,7 @@ namespace Imaginophobia {
         }
 
         public override void Draw(GameTime gameTime) {
-            if (MinigameActive) {
+            if (MinigameVisible && MinigameActive) {
                 MainGame.SpriteBatch.Begin();
 
                 MainGame.SpriteBatch.DrawArc(_centerOrigin, 300, MathHelper.ToRadians(-135), MathHelper.ToRadians(30), 20, Color.Yellow, 10);

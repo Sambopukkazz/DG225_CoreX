@@ -30,8 +30,6 @@ namespace Imaginophobia {
         private CollisionManager _collisionManager;
         private EnemyManager _enemyManager;
         private UIManager _uiManager;
-        private TutorialManager _tutorialManager;
-        private DialogueManager _dialogueManager;
         private CameraShaker _cameraShaker;
         
 
@@ -56,9 +54,7 @@ namespace Imaginophobia {
 
             _uiManager = new UIManager(_player, _camera);
 
-            _tutorialManager = new TutorialManager();
 
-            _dialogueManager = new DialogueManager();
             //temp
             _cameraShaker = new CameraShaker();
 
@@ -89,8 +85,6 @@ namespace Imaginophobia {
             AudioManager.Instance.Update(_player);
 
             _uiManager.Update();
-
-            _tutorialManager.Update();
 
             _cameraShaker.Update(gameTime);
 
@@ -127,7 +121,6 @@ namespace Imaginophobia {
 
             //Draw static object that doesn't move with camera
             _uiManager.Draw();
-            _tutorialManager.Draw();
         }
 
         private void Restart() {
@@ -144,7 +137,7 @@ namespace Imaginophobia {
                     ObjectiveManager.Complete("exit-ladder");
                 }
                 else {
-                    _tutorialManager.ShowMessage("Still have work to do", 2f);
+                    _uiManager.ShowMessage("Still have work to do", 2f);
                 }
                 return;
             }
@@ -172,16 +165,18 @@ namespace Imaginophobia {
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
                 ObjectiveManager.ResetPanels();
+                _uiManager.BlackScreen();
                 _lightManager.ScopoAlarmAll();
+                //_lightManager.ScopoAlarmAll();
             }
         }
 
         private void OnEnemyRemoved(ICollisionActor enemy) {
             if (enemy is Scopophobia) {
-                _tutorialManager.ShowMessage("Don't stay in the dark. Go to electric room and repair electric system", 8f);
+                _uiManager.ShowMessage("Don't stay in the dark. Go to electric room and repair electric system", 8f);
             }
             else if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false) {
-                _tutorialManager.ShowMessage("Try using flashlight to fight them", 4f);
+                _uiManager.ShowMessage("Try using flashlight to fight them", 4f);
             }
 
             _collisionManager.RemoveCollider(enemy);

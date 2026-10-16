@@ -57,6 +57,8 @@ namespace Imaginophobia {
         public bool Blink { get; set; }
         public event Action SanityStateChanged;
         public Vector2 PreviousPos { get; set; }
+        private float _sewerSanityRedectionSpeed = 0.5f;
+        private (float, float, float) _availableSanityRedectionSpeed = (0.5f, 0.5f, 0.5f); //per second Normal,Anxious,Insane
 
 
         public Player() : base("Player", "Player"){
@@ -86,9 +88,8 @@ namespace Imaginophobia {
             Transform.Scale = Vector2.One * 3f;
 
             //Eyesight
-            _eyeLevel = new Vector2(20,-70);
+            _eyeLevel = new Vector2(20,-85);
             _eyeSight = new LineSegment2D();
-            _eyeSightLength = 100;
 
             _readyToHide = true;
             _readyToRepair = true;
@@ -156,22 +157,33 @@ namespace Imaginophobia {
                 CameraTarget = Transform.Position;
             }
 
-
-            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally && _flashLight.Rotation != MathHelper.ToRadians(180)) {
-                _flashlightOffset.X *= -1;
-                _flashLight.Rotation = MathHelper.ToRadians(180);
+            if (_animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
+                if (_flashLight.Rotation != MathHelper.ToRadians(180)) {
+                    _flashlightOffset.X *= -1;
+                    _flashLight.Rotation = MathHelper.ToRadians(180);
+                }
                 _eyeSight.Start.X = Transform.Position.X - _eyeLevel.X;
                 _eyeSight.Start.Y = Transform.Position.Y + _eyeLevel.Y;
                 _eyeSight.End.X = Transform.Position.X - _eyeLevel.X - _eyeSightLength;
                 _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
+                //_eyeSight.Start = Transform.Position + _flashlightOffset;
+                //_eyeSight.End = Transform.Position + _flashlightOffset;
+                //_eyeSight.End.X -=  _eyeSightLength;
             }
-            else if (_animatedSprite.Effect == SpriteEffects.None && _flashLight.Rotation != 0) {
-                _flashlightOffset.X *= -1;
-                _flashLight.Rotation = 0;
+            else if (_animatedSprite.Effect == SpriteEffects.None) {
+                if (_flashLight.Rotation != 0) {
+                    _flashlightOffset.X *= -1;
+                    _flashLight.Rotation = 0;
+                }
                 _eyeSight.Start = Transform.Position + _eyeLevel;
                 _eyeSight.End.X = Transform.Position.X + _eyeLevel.X + _eyeSightLength;
                 _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
+                //_eyeSight.Start = Transform.Position + _flashlightOffset;
+                //_eyeSight.End = Transform.Position + _flashlightOffset;
+                //_eyeSight.End.X += _eyeSightLength;
             }
+
+            _flashLight.Position = Transform.Position + _flashlightOffset;
 
             if (_flashLight.Enabled) {
                 if (Battery <= 0) {
@@ -184,17 +196,19 @@ namespace Imaginophobia {
                 _eyeSightLength = 0;
             }
 
-            _flashLight.Position = Transform.Position + _flashlightOffset;
+            if (SceneManager.GetActiveScene().Name == Scene.tilemap_sewer.ToString()) {
+                Sanity -= _sewerSanityRedectionSpeed * Time.DeltaTime;
+            }
 
             CheckSanityStage();
         }
 
         public override void Draw() {
-            //BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
-            //MainGame.SpriteBatch.FillRectangle(_origin, _size, Color.Red);
+            BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
+            MainGame.SpriteBatch.FillRectangle(_origin, _size, Color.Red);
             if (Visible) {
                 MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale);
-                //MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
+                MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
                 //MainGame.SpriteBatch.DrawPoint(new Vector2(Listener.Position.X, Listener.Position.Y), Color.Red, 100);
             }
             
@@ -458,14 +472,17 @@ namespace Imaginophobia {
         public void CheckSanityStage() {
             if (Sanity <= ((float)SanityState.Anxious) && SanityState == SanityState.Anxious) {
                 SanityState = SanityState.Insane;
+                _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item3;
                 SanityStateChanged?.Invoke();
             }
             else if (Sanity <= ((float)SanityState.Normal) && SanityState == SanityState.Normal) {
                 SanityState = SanityState.Anxious;
+                _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item2;
                 SanityStateChanged?.Invoke();
             }
             else if (Sanity > (float)SanityState.Normal && SanityState != SanityState.Normal) {
                 SanityState = SanityState.Normal;
+                _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item1;
                 SanityStateChanged?.Invoke();
             }
         }
