@@ -1,4 +1,5 @@
 ﻿using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended;
 using Microsoft.Xna.Framework;
 using RenderingLibrary;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Imaginophobia {
@@ -14,9 +16,12 @@ namespace Imaginophobia {
         private string _tutorialMessage;
         private float _messageTimer;
         private BitmapFont _font;
+        private Timer _timer;
 
         public TextManager() {
             _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+
+            _timer = Time.Timers.Find(timer => timer.Name == "MainTimer");
         }
 
         public void Update() {
@@ -26,18 +31,22 @@ namespace Imaginophobia {
         }
 
         public void Draw() {
+            SpriteBatch spriteBatch = MainGame.SpriteBatch;
+
             if (!string.IsNullOrEmpty(_tutorialMessage)) {
-                MainGame.SpriteBatch.DrawString(_font, _tutorialMessage, new Vector2(700, 100), Color.White);
+                spriteBatch.DrawString(_font, _tutorialMessage, new Vector2(700, 100), Color.White);
             }
             if (!string.IsNullOrEmpty(_message)) {
-                
-                MainGame.SpriteBatch.DrawString(_font, _message, new Vector2(700, 200), Color.Yellow);
+
+                spriteBatch.DrawString(_font, _message, new Vector2(700, 200), Color.Yellow);
             }
-            MainGame.SpriteBatch.DrawString(_font, $"Sanity: ", new Vector2(100, 100), Color.White);
-            MainGame.SpriteBatch.DrawString(_font, $"Battery: ", new Vector2(100, 150), Color.White);
+            spriteBatch.DrawString(_font, $"Sanity: ", new Vector2(100, 100), Color.White);
+            spriteBatch.DrawString(_font, $"Battery: ", new Vector2(100, 150), Color.White);
             if (ObjectiveManager.IsComplete("entered-sewer")) {
-                MainGame.SpriteBatch.DrawString(_font, $"Valves repaired: {ObjectiveManager.RepairedValveCount}/{ObjectiveManager.TargetValves}", new Vector2(100, 200), Color.White);
+                spriteBatch.DrawString(_font, $"Valves repaired: {ObjectiveManager.RepairedValveCount}/{ObjectiveManager.TargetValves}", new Vector2(120, 240), Color.White);
             }
+
+            spriteBatch.DrawString(_font,TimeSpan.FromSeconds(_timer.TimeLeft).ToString(@"mm\:ss"), new Vector2(960-32, 0), Color.White);
         }
 
         public void InputTutorial(string text) {

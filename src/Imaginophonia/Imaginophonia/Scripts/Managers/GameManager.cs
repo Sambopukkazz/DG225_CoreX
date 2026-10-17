@@ -52,8 +52,8 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
+            Time.AddTimer(Restart, 600, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
-
 
             //temp
             _cameraShaker = new CameraShaker();
@@ -106,10 +106,10 @@ namespace Imaginophobia {
 
             // Behind the player, so it sits inside the lighting capture
             _sceneManager.Draw(_camera);
-
             Matrix traformMatrix = _camera.GetViewMatrix();
 
             MainGame.SpriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: traformMatrix);
+            
             _player.Draw();
             _enemyManager.Draw();
             AudioManager.Instance.Draw();
@@ -137,7 +137,7 @@ namespace Imaginophobia {
                     ObjectiveManager.Complete("exit-ladder");
                 }
                 else {
-                    _uiManager.ShowMessage("Still have work to do", 2f);
+                    _uiManager.ShowMessage("I still have work to do.", 2f);
                 }
                 return;
             }
@@ -173,10 +173,10 @@ namespace Imaginophobia {
 
         private void OnEnemyRemoved(ICollisionActor enemy) {
             if (enemy is Scopophobia) {
-                _uiManager.ShowMessage("Don't stay in the dark. Go to electric room and repair electric system", 8f);
+                _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
             }
             else if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false) {
-                _uiManager.ShowMessage("Try using flashlight to fight them", 4f);
+                _uiManager.ShowMessage("Flashlight might be useful.", 4f);
             }
 
             _collisionManager.RemoveCollider(enemy);

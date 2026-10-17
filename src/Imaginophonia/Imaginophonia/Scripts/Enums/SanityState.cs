@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public enum SanityState {
-        Normal = 75, 
-        Anxious = 50, 
-        Insane = 25
+        Normal = 70, 
+        Anxious = 30, 
+        Insane = 0
     }
 }

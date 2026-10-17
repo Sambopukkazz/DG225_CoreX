@@ -15,7 +15,7 @@ namespace Imaginophobia {
     public class EnemyManager {
         public List<GameObject> Enemies;
         private float SpawnInterval = 5;
-        private (int, int, int) _autophobiaAvailableChance = (20, 30, 45); // Normal, Anxious, Insane
+        private (int, int, int) _autophobiaAvailableChance = (20, 35, 55); // Normal, Anxious, Insane
         private int _autophobiaSpawnChance = 20; // 0-100
         private (int, int, int) _scopophobiaAvailableChance = (5, 12, 17); // Normal, Anxious, Insane
         private int _scopophobiaSpawnChance = 5;

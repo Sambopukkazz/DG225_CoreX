@@ -55,10 +55,11 @@ namespace Imaginophobia {
         public Vector2 CameraTarget;
         public Timer CooldownTimer;
         public bool Blink { get; set; }
+        public bool Nyctophobia { get; set; }
         public event Action SanityStateChanged;
         public Vector2 PreviousPos { get; set; }
         private float _sewerSanityRedectionSpeed = 0.5f;
-        private (float, float, float) _availableSanityRedectionSpeed = (0.5f, 0.5f, 0.5f); //per second Normal,Anxious,Insane
+        private (float, float, float) _availableSanityRedectionSpeed = (0.5f, 0.2f, 0f); //per second Normal,Anxious,Insane
 
 
         public Player() : base("Player", "Player"){

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Imaginophobia.Scripts.Enums;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -20,6 +21,7 @@ namespace Imaginophobia {
         private Rectangle _spaceBarBackgroundRect;
         private Player _player;
         private OrthographicCamera _camera;
+        private VignetteOverlay _nyctophobiaOverlay;
         private VignetteOverlay _vignetteOverlay;
         private VignetteOverlay _blinkOverlay;
         private BottomFadeOverlay _rectangleFadeOverlay;
@@ -29,6 +31,8 @@ namespace Imaginophobia {
         private TutorialManager _tutorialManager;
         private TextManager _textManager;
         private bool _blackScreen;
+        private VignettePhase _vignettePhase;
+        private BlinkPhase _blinkPhase;
 
         //temp
         List<Keys> pressedKey;
@@ -41,6 +45,11 @@ namespace Imaginophobia {
 
             _vignetteOverlay = new VignetteOverlay();
             _blinkOverlay = new VignetteOverlay();
+            _nyctophobiaOverlay = new VignetteOverlay() {
+                Scale = new Vector2(0.2f,0.2f),
+                Softness = 0.5f,
+                Color = Color.White,
+            };
             _rectangleFadeOverlay = new BottomFadeOverlay();
 
             _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, (int)(600 * 0.75f), (int)(100 * 0.75f));
@@ -57,9 +66,6 @@ namespace Imaginophobia {
         }
 
         public void Update() {
-            //VignetteOverlay.Scale = new Vector2(VignetteOverlay.Scale.X, MathHelper.Lerp(VignetteOverlay.Scale.Y, 0, 0.01f));
-            ZoomVignette();
-            
             //temp
             foreach (Keys keyPressed in KeyboardExtended.GetState().GetPressedKeys().ToList()) {
                 if (pressedKey.Contains(keyPressed) == false) {
@@ -70,19 +76,30 @@ namespace Imaginophobia {
             if(pressedKey.Contains(Keys.A) && pressedKey.Contains(Keys.D) && pressedKey.Contains(Keys.F)) {
                 ObjectiveManager.Complete("move");
             }
-            //else if (stage == 1 && _player.CurrentAction == CharacterAction.Repairing) {
-            //    stage++;
-            //}
-            //end temp
-            //if (_player.CurrentAction == CharacterAction.Hiding) {
-            //    _vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
-            //    _vignetteOverlay.Scale = new Vector2(0.1f, 0.2f);
-            //    _vignetteOverlay.Softness = 1;
-            //}
+            //endtemp
+
+            ZoomVignette();
 
             if (_player.Blink) {
-                BlinkFx();
+                BlinkClose();
                 _player.Blink = false;
+            }
+
+
+            _nyctophobiaOverlay.Center = _camera.WorldToScreen(_player.Transform.Position); 
+
+            if (_player.Nyctophobia && _vignettePhase != VignettePhase.StartNyctophobia) {
+                NyctoClose();
+                _vignettePhase = VignettePhase.StartNyctophobia;
+            }
+            else if (_player.Nyctophobia == false && _vignettePhase == VignettePhase.StartNyctophobia) {
+                NyctoOpen();
+                _vignettePhase = VignettePhase.StopNyctophobia;
+            }
+
+            if (_nyctophobiaOverlay.Scale == Vector2.Zero) {
+                _nyctophobiaOverlay.Scale = new Vector2(0.9f, 0.5f);
+                _player.Sanity = 0;
             }
 
             _previousAction = _player.CurrentAction;
@@ -97,6 +114,7 @@ namespace Imaginophobia {
         public void Draw() {
             _vignetteOverlay.Render();
             _blinkOverlay.Render();
+            _nyctophobiaOverlay.Render();
             _rectangleFadeOverlay.Render();
 
             MainGame.SpriteBatch.Begin();
@@ -193,15 +211,18 @@ namespace Imaginophobia {
 
                 Time.AddTimer(turnOffBlackScreen, 1f);
             }
-            
-
-            
         }
 
         private void DebugUpdate() {
             //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-            //    _blinkOverlay.Scale -= new Vector2(0, 0.01f);
+                
             //}
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
+                NyctoClose();
+            }
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad8)) {
+                NyctoOpen();
+            }
             //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
             //    _blinkOverlay.Scale += new Vector2(0, 0.01f);
             //}
@@ -254,30 +275,35 @@ namespace Imaginophobia {
             //}
 
         }
+        public void NyctoClose() {
+            //_nyctophobiaOverlay.Center.SetX(_player.Transform.Position.X);
+            //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
+            //    .Easing(EasingFunctions.Linear);
+            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0f, 0f), duration: 10)
+                .Easing(EasingFunctions.Linear);
+        }
+
+        public void NyctoOpen() {
+            //_nyctophobiaOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
+            //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
+            //    .Easing(EasingFunctions.Linear);
+            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
+                .Easing(EasingFunctions.Linear);
+        }
 
         public void ShowMessage(string text, float duration = 4f) {
             _textManager.ShowMessage(text, duration);
         }
 
-        public void BlinkFx() {
+        public void BlinkClose() {
             //Close eye -> scale Y to 0
-            _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
+            _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.332f, 0), duration: 0.15f)
                 .Easing(EasingFunctions.Linear)
-                .OnEnd(_ => {
-                    BlinkOpen();
-                });
-            //_tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
-            //    .Repeat(1)
-            //    .AutoReverse()
-            //    .Easing(EasingFunctions.Linear);
+                .OnEnd(_ => BlinkOpen());
         }
-        //public void BlinkClose() {
-        //    _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(_vignetteOverlay.Scale.X, 0), duration: _blinkSpeed)
-        //        .Easing(EasingFunctions.Linear);
-        //}
 
         public void BlinkOpen() {
-            _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: _blinkSpeed)
+            _tweener.TweenTo(target: _blinkOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 0.2f)
                 .Easing(EasingFunctions.Linear);
         }
 
@@ -286,36 +312,36 @@ namespace Imaginophobia {
                 _vignetteOverlay.CameraZoom = _camera.Zoom;
             }
             if (_player.CurrentAction == CharacterAction.Hiding) {
-                //_vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
                 .Easing(EasingFunctions.Linear);
             }
             if (_previousAction == CharacterAction.ReadyToHide && _player.CurrentAction == CharacterAction.Hiding) {
-                //_vignetteOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
-                //_tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
-                //.Easing(EasingFunctions.Linear);
-                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.4f, 0.1f), duration: 4)
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.375f, 0.175f), duration: 4)
                 .Easing(EasingFunctions.ExponentialOut);
             }
             else if ((_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.Idle) || (_previousAction == CharacterAction.Hiding && _player.CurrentAction == CharacterAction.ReadyToHide)) {
                 //_vignetteOverlay.Center = new Vector2(960, 540);
-                if (_player.SanityState == SanityState.Normal) {
-                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 4)
-                .   Easing(EasingFunctions.ExponentialOut);
-                }
-                else if (_player.SanityState == SanityState.Anxious) {
-                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.55f, 0.4f), duration: 3)
-                .   Easing(EasingFunctions.ExponentialOut);
-                }
-                else if (_player.SanityState == SanityState.Insane) {
-                    _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.35f), duration: 1)
-                .Easing(EasingFunctions.BackOut);
-                }
+                BackToStageScale();
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: new Vector2(960, 540), duration: 3)
                 .Easing(EasingFunctions.Linear);
 
             }
             
+        }
+
+        public void BackToStageScale() {
+            if (_player.SanityState == SanityState.Normal) {
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 4)
+            .Easing(EasingFunctions.ExponentialOut);
+            }
+            else if (_player.SanityState == SanityState.Anxious) {
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.55f, 0.4f), duration: 3)
+            .Easing(EasingFunctions.ExponentialOut);
+            }
+            else if (_player.SanityState == SanityState.Insane) {
+                _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.45f, 0.35f), duration: 1)
+            .Easing(EasingFunctions.BackOut);
+            }
         }
 
         private void DebugDraw() {

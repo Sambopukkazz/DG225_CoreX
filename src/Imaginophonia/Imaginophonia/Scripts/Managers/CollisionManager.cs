@@ -133,7 +133,7 @@ namespace Imaginophobia {
 
                     autophobia.AllowMovement = false;
                     _collisionWorld.Remove(autophobia); 
-                    Time.AddTimer(autophobia.SetActive, 0.25f);
+                    Time.AddTimer(autophobia.SetActive, 0.15f);
                     _player.Blink = true;
                 }
             }
@@ -149,11 +149,12 @@ namespace Imaginophobia {
             //    }
             //}
 
+            _player.Nyctophobia = false;
             //Player with light
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "lights")) {
                 LightArea lightArea = (LightArea)collision.Other;
                 if (lightArea.On == false && lightArea.IsFlickering == false) {
-                    _player.Sanity -= 1 * Time.DeltaTime;
+                    _player.Nyctophobia = true;
                 }
                 //LightArea lightArea = (LightArea)collision.Other;
                 //lightArea.TurnOn();

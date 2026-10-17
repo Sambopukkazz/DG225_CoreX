@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.BitmapFonts;
@@ -8,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
     public class AudioManager : IDisposable {
@@ -67,36 +67,39 @@ namespace Imaginophobia {
             }
             s_instance = this;
 
+            ContentManager content = MainGame.Content;
+
             _activeAudioSources = new List<AudioSource>();
 
             //Load Sound Effect
             NameSFX = new Dictionary<Sound, SoundEffect> {
-                { Sound.DoorClose, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_close") },
-                { Sound.DoorOpen, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_open") },
-                { Sound.DoorStuck, MainGame.Content.Load<SoundEffect>("Audio/sfx_door_stuck") },
-                { Sound.LockerClose, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_close") },
-                { Sound.LockerOpen, MainGame.Content.Load<SoundEffect>("Audio/sfx_locker_open") },
-                { Sound.PipeComplete, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
-                { Sound.PipeFail, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
-                { Sound.PipeRepairing, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
-                { Sound.PipeSuccess, MainGame.Content.Load<SoundEffect>("Audio/sfx_pipe_success") },
-                { Sound.ElecComplete, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_complete") },
-                { Sound.ElecFail, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_failed") },
-                { Sound.ElecRepairing, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
-                { Sound.ElecSuccess, MainGame.Content.Load<SoundEffect>("Audio/sfx_electric_success") },
-                { Sound.ScopoIndicator, MainGame.Content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
-                { Sound.AutoIndicator, MainGame.Content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
+                { Sound.DoorClose, content.Load<SoundEffect>("Audio/sfx_door_close") },
+                { Sound.DoorOpen, content.Load<SoundEffect>("Audio/sfx_door_open") },
+                { Sound.DoorStuck, content.Load<SoundEffect>("Audio/sfx_door_stuck") },
+                { Sound.LockerClose, content.Load<SoundEffect>("Audio/sfx_locker_close") },
+                { Sound.LockerOpen, content.Load<SoundEffect>("Audio/sfx_locker_open") },
+                { Sound.PipeComplete, content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
+                { Sound.PipeFail, content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
+                { Sound.PipeRepairing, content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
+                { Sound.PipeSuccess, content.Load<SoundEffect>("Audio/sfx_pipe_success") },
+                { Sound.ElecComplete, content.Load<SoundEffect>("Audio/sfx_electric_complete") },
+                { Sound.ElecFail, content.Load<SoundEffect>("Audio/sfx_electric_failed") },
+                { Sound.ElecRepairing, content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
+                { Sound.ElecSuccess, content.Load<SoundEffect>("Audio/sfx_electric_success") },
+                { Sound.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
+                { Sound.AutoIndicator, content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
             };
 
             _steps = new SoundEffect[8];
 
             for(int i = 1; i < 9; i++) {
-                _steps[i-1] = MainGame.Content.Load<SoundEffect>($"Audio/sfx_step_0{i}");
+                _steps[i-1] = content.Load<SoundEffect>($"Audio/sfx_step_0{i}");
             }
 
             _amb = new Song[2];
-            _amb[0] = MainGame.Content.Load<Song>($"Audio/amb_electricroom");
-            _amb[1] = MainGame.Content.Load<Song>($"Audio/amb_sewer");
+            _amb[0] = content.Load<Song>($"Audio/amb_electricroom");
+            _amb[1] = content.Load<Song>($"Audio/amb_sewer");
+            AmbVolume = 0.2f;
         }
 
         ~AudioManager() => Dispose(false);
@@ -184,7 +187,6 @@ namespace Imaginophobia {
             else {
                 amb = _amb[0];
             }
-            AmbVolume = 0.2f;
             MediaPlayer.Play(amb);
             MediaPlayer.IsRepeating = true;
         }
