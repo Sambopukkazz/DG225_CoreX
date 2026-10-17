@@ -74,5 +74,5 @@ gantt
 
 ## Links
 
-- [[docs/agile/01-product-backlog|Product Backlog]]
-- [[docs/agile/sprint-plan-01|Sprint 1 Plan]]
+- [Product Backlog](01-product-backlog.md)
+- [Sprint 1 Plan](sprint-plans/sprint-plan-01.md)

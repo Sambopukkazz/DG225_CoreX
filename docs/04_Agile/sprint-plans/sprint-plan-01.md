@@ -1,0 +1,131 @@
+# Sprint [1] Plan
+
+**Sprint Goal:** [เกมเล่นได้ใกล้เคียงหรือมากกว่าเกมใน Jam]
+**ระยะเวลา:** [2026-08-29] — [2026-09-12]
+**Team:**
+เตชินท์ เจริญสิงห์ 682110116
+ธีนันทนัช ปานานนท์ 682110120
+นาถวัฒน์ เต็มเมือง 682110125
+พรภวิษย์ ธนกิจรุ่งโรจน์ 682110132
+
+---
+
+## Sprint Backlog
+
+| # | User Story                                                                                                                              | รับผิดชอบ                   | MoSCoW      | Estimate (SP) | Status         |
+| - | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----------- | ------------- | -------------- |
+| 1 | As a player, I want to be able to move, so that I can explore the map and do objectives.                                                | เตชินท์                       | Must Have   | 1             | ✅ Done        |
+| 2 | As a player, I want to be able to interact with other stuffs, so that I can finish my objectives or hide from monsters.                 | เตชินท์                       | Must Have   | 2             | 🔄 In Progress |
+| 3 | As a player, I want entities to chase me, so that I feel challenged.                                                                    | เตชินท์                       | Must Have   | 2             | 🔲 Todo        |
+| 4 | As a designer, I want fully mapped out levels, so that the players can explores and do objectives                                       | ธีนันทนัช + เตชินท์ | Must Have   | 3             | 🔄 In Progress |
+| 5 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                                         | ธีนันทนัช                   | Must Have   | 6             | 🔲 Todo        |
+| 6 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.                 | พรภวิษย์                     | Should Have | 3             | 🔄 In Progress |
+| 7 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | พรภวิษย์ + เตชินท์   | Should Have | 2             | ✅ Done        |
+| 8 | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | เตชินท์                       | Should Have | 3             | ✅ Done        |
+| 9 | As an artist, I want to redesign the main charecter to make them look more paranoid.                                                    | นาถวัฒน์                     | Must Have   | 5             | 🔄 In Progress |
+
+## Status Legend
+
+- 🔲 Todo
+- 🔄 In Progress
+- ✅ Done
+- ❌ Blocked
+
+---
+
+## Tasks
+
+### Story 1 — [Player controls and acitons]
+
+- [X] [Player Class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [InputManager Class]  [owner:: เตชินท์]  [estimate:: 2hrs]  [status::✅ Done]
+
+### Story 2 — [Collosion + Interactable]
+
+- [X] [Research and choose suitable collision system]  [owner:: เตชินท์]  [estimate:: 6hrs]  [status:: ✅ Done]
+- [X] [Test basic collision]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status:: ✅ Done]
+- [ ] [Flexible collision buildfer for each map/level]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: 🔲 Todo]
+
+### Story 3 — [Enemy behavior]
+
+- [ ] [Enemy base class]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status:: 🔄 In Progress]
+- [ ] [Implement predesign enemy]  [owner:: เตชินท์]  [estimate:: 8hrs]  [status:: 🔄 In Progress]
+
+### Story 4 — [Map creation]
+
+- [X] [Build simple test map]  [owner:: ธีนันทนัช]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Mock map layout]  [owner:: ธีนันทนัช]  [estimate:: 15hrs]  [status:: ✅ Done]
+- [X] [Check map usability and revise it]  [owner:: เตชินท์]  [estimate:: 14hrs]  [status:: ✅ Done]
+
+### Story 5 — [Transform phobias to enemies mechanics]
+
+- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔲 Todo]
+
+### Story 6 — [Menu and settings]
+
+- [ ] [Start Menu]  [owner:: พรภวิษย์]  [estimate:: 18hrs]  [status:: 🔄 In Progress]
+- [ ] [Setting Menu]  [owner:: พรภวิษย์]  [estimate:: 20hrs]  [status:: 🔲 Todo]
+- [ ] [Pause Screen]  [owner:: พรภวิษย์]  [estimate:: 6hrs]  [status:: 🔲 Todo]
+
+### Story 7 — [Sound effect triggers]
+
+- [X] [AudioManager class]  [owner:: เตชินท์]  [estimate:: 7hrs]  [status:: ✅ Done]
+- [ ] [Implement sound effect triggers]  [owner:: เตชินท์]  [estimate:: 15h]  [status:: 🔄 In Progress]
+
+### Story 8 — [Spatial Sound effect]
+
+- [X] [Pan effect]  [owner:: เตชินท์]  [estimate:: 3hrs]  [status::✅ Done]
+- [X] [Doppler effect]  [owner:: เตชินท์]  [estimate:: 7hrs]  [status::✅ Done]
+- [X] [Test and adjust]  [owner:: เตชินท์]  [estimate:: 6hrs]  [status:: ✅ Done]
+
+### Story 9 — [Redesign main character]
+
+- [ ] [Player walk animation]  [owner:: นาถวัฒน์]  [estimate:: 40hrs]  [status::🔄 In Progress]
+- [X] [Player idle animation]  [owner:: นาถวัฒน์]  [estimate:: 20hrs]  [status:: ✅ Done]
+
+---
+
+## Weekly Notes
+
+### [2026-09-20]
+
+ธีนันทนัช
+
+- ใช้ layer ชื่อเหมือนกัน
+- ทำ map demo ให้ลองเดินไปมา ลองปรับค่าต่างๆ ใน ldtk
+- spotlight ตั้ง pivot เป็น bottom center
+- เลือกใช้เป็น 1 ไฟล์ 1 ห้อง
+- ขนาดกำแพงไม่ต้องใหญ่ (16 x 1080 ก็ได้ แต่ต้องตั้ง pivot เป็นซ้ายบน)
+- ดูเรื่อง tileset rules
+- ดูเรื่อง enum
+- เปลี่ยนค่าตัวแปร spotlight (scaleX, scaleY, Intensity, Rotation. Color)
+
+นาถวัฒน์
+
+- redesign background
+- walking, idle animation
+- ทำหน้าปกเกม
+- Redesign ตัวละคร
+
+พรภวิษย์
+
+- ลองใช้ gum
+- ทดลองใส่รูปใน gum
+
+เตชินท์
+
+- merge repo ของเกมกับ gdd เข้าด้วยกัน
+- ทำระบบจัดการ collision
+- สร้าง class scene
+- ทำระบบสร้าง collision และแสงตาม map
+- ทำ skill check minigame
+- ทำ connect the dots minigame
+- ทำระบบจัดการ scene
+
+---
+
+## Links
+
+- [GDD Concept](../../01_GDD/00-concept.md)
+- [Product Backlog](../01-product-backlog.md)
+- [Sprint Backlog](../02-sprint-backlog.md)

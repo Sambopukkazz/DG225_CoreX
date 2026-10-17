@@ -32,5 +32,5 @@
 - **Nice to Have** — ทำถ้ามีเวลาเหลือ
 
 ## Links
-- [[docs/gdd/00-concept|GDD Concept]]
-- [[docs/agile/02-sprint-backlog|Sprint Backlog]]
+- [GDD Concept](../../01_GDD/00-concept.md)
+- [Sprint Backlog](../02-sprint-backlog.md)

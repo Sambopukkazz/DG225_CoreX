@@ -43,6 +43,6 @@
 ---
 
 ## Links
-- [[docs/gdd/00-concept|GDD Concept]]
-- [[docs/agile/01-product-backlog|Product Backlog]]
-- [[docs/agile/02-sprint-backlog|Sprint Backlog]]
+- [GDD Concept](../../01_GDD/00-concept.md)
+- [Product Backlog](../01-product-backlog.md)
+- [Sprint Backlog](../02-sprint-backlog.md)
