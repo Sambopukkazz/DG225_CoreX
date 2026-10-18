@@ -14,21 +14,25 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public class EnemyManager {
         public List<GameObject> Enemies;
-        private float SpawnInterval = 5;
+        private float _spawnInterval = 5;
+        private float _nyctophobiaSpawnInterval = 15;
         private (int, int, int) _autophobiaAvailableChance = (20, 35, 55); // Normal, Anxious, Insane
         private int _autophobiaSpawnChance = 20; // 0-100
         private (int, int, int) _scopophobiaAvailableChance = (5, 12, 17); // Normal, Anxious, Insane
         private int _scopophobiaSpawnChance = 5;
+        private (int, int, int) _nyctophobiaAvailableChance = (5, 12, 17); // Normal, Anxious, Insane
+        private int _nyctophobiaSpawnChance = 5;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
-        public event Action<ICollisionActor> EnemySpawned;
-        public event Action<ICollisionActor> EnemyRemoved;
+        public event Action<GameObject> EnemySpawned;
+        public event Action<GameObject> EnemyRemoved;
         private Random _rand;
         private bool _continueSpawnEnemy;
         private Player _player;
         private Rectangle _worldBound;
 
-        public bool HasActiveScopophobia() => Enemies.Exists(enemy => enemy is Scopophobia);
+        public bool HasActiveScopophobia() => Enemies.Exists(enemy => enemy is Scopophobia scopo && scopo.LightBrokeCount < 12);
+        public bool HasActiveNyctophobia() => Enemies.Exists(enemy => enemy is Nyctophobia);
 
         public EnemyManager(Player player) {
             Enemies = new List<GameObject>();
@@ -60,7 +64,7 @@ namespace Imaginophobia {
         public void Update(Rectangle worldBound) {
             for (int i = Enemies.Count - 1; i >= 0; i--) {
                 if (Enemies[i].Active == false) {
-                    if (Enemies[i] is ICollisionActor actor) EnemyRemoved?.Invoke(actor);
+                    EnemyRemoved?.Invoke(Enemies[i]);
                     Enemies[i].OnDestroyed();
                     Enemies.RemoveAt(i);
                     continue;
@@ -72,7 +76,7 @@ namespace Imaginophobia {
                 if(_continueSpawnEnemy == false) {
                     _continueSpawnEnemy = true;
                     Time.AddTimer(SpawnEnemy, 2f);
-                    
+                    Time.AddTimer(SpawnNyctophobia, 15f);
                 }
             }
             else {
@@ -111,12 +115,14 @@ namespace Imaginophobia {
                 }
 
                 int randomNumber = _rand.Next(0, 101);
-                GameObject enemy = null;
 
-                if (randomNumber < _autophobiaSpawnChance) {
-                    enemy = new Autophobia(pos, _player, _autophobiaSpriteSheet);
+                if (randomNumber < _autophobiaSpawnChance && HasActiveScopophobia() == false) {
+                    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
+                    Enemies.Add(autophobia);
+                    EnemySpawned?.Invoke(autophobia);
                 }
-                else if (randomNumber < _autophobiaSpawnChance + _scopophobiaSpawnChance && HasActiveScopophobia() == false) {
+
+                if (randomNumber < _scopophobiaSpawnChance && HasActiveScopophobia() == false) {
                     if (spawnLeft) {
                         pos.X -= 1920;
                     }
@@ -124,15 +130,17 @@ namespace Imaginophobia {
                         pos.X += 1920;
                     }
 
-                    enemy = new Scopophobia(pos, _player, _scopophobiaTexture);
+                    Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
+                    Enemies.Add(scopophobia);
+                    EnemySpawned?.Invoke(scopophobia);
                 }
 
-                if (enemy != null) {
-                    Enemies.Add(enemy);
-                    EnemySpawned?.Invoke(enemy as ICollisionActor);
-                }
+                //if (enemy != null) {
+                //    Enemies.Add(enemy);
+                //    EnemySpawned?.Invoke(enemy as ICollisionActor);
+                //}
 
-                Time.AddTimer(SpawnEnemy, SpawnInterval);
+                Time.AddTimer(SpawnEnemy, _spawnInterval);
 
                 //int[] autophobiaNumber = new int[_autophobiaSpawnChance];
                 //for (int i = 0; i < autophobiaNumber.Length; i++) {
@@ -166,8 +174,18 @@ namespace Imaginophobia {
             }
         }
 
-        public void SetSpawnRange() {
+        //Different interval
+        public void SpawnNyctophobia() {
+            if (_continueSpawnEnemy) {
+                int randomNumber = _rand.Next(0, 101);
+                if (randomNumber < _nyctophobiaSpawnChance && HasActiveNyctophobia() == false) {
+                    Nyctophobia nyctophobia = new Nyctophobia();
+                    Enemies.Add(nyctophobia);
+                    EnemySpawned?.Invoke(nyctophobia);
+                }
 
+                Time.AddTimer(SpawnNyctophobia, _nyctophobiaSpawnInterval);
+            }
         }
 
         public void ClearEnemies() {
@@ -181,14 +199,17 @@ namespace Imaginophobia {
             if(_player.SanityState == SanityState.Anxious) {
                 _autophobiaSpawnChance = _autophobiaAvailableChance.Item2;
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item2;
+                _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item2;
             }
             else if (_player.SanityState == SanityState.Insane) {
                 _autophobiaSpawnChance = _autophobiaAvailableChance.Item3;
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item3;
+                _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item3;
             }
             else if (_player.SanityState == SanityState.Normal) {
                 _autophobiaSpawnChance = _autophobiaAvailableChance.Item1;
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item1;
+                _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item1;
             }
         }
     }

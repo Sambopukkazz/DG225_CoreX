@@ -205,11 +205,11 @@ namespace Imaginophobia {
         }
 
         public override void Draw() {
-            BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
-            MainGame.SpriteBatch.FillRectangle(_origin, _size, Color.Red);
+            //BoundingBox2D bounds = BoundingBox2D.CreateFromPositionAndSize(Transform.Position, _size);
+            //MainGame.SpriteBatch.FillRectangle(_origin, _size, Color.Red);
             if (Visible) {
                 MainGame.SpriteBatch.Draw(_animatedSprite, Transform.Position, 0, Transform.Scale);
-                MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
+                //MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
                 //MainGame.SpriteBatch.DrawPoint(new Vector2(Listener.Position.X, Listener.Position.Y), Color.Red, 100);
             }
             
@@ -438,6 +438,7 @@ namespace Imaginophobia {
 
         public void SetReadyToHide() {
             _readyToHide = true;
+            Time.RemoveTimer(CooldownTimer);
             CooldownTimer = null;
         }
 
@@ -548,6 +549,11 @@ namespace Imaginophobia {
         public void Reset() {
             Sanity = 100;
             Battery = 100;
+            FocusLevel = 1;
+            SetActive(true);
+            AllowMovement = true;
+            SetReadyToHide();
+            CurrentAction = CharacterAction.Idle;
         }
     }
 }

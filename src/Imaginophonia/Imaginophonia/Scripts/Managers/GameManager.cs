@@ -52,7 +52,7 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
-            Time.AddTimer(Restart, 600, "MainTimer");
+            Time.AddTimer(Restart, 481, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
             //temp
@@ -129,6 +129,7 @@ namespace Imaginophobia {
             ObjectiveManager.ResetValves();
             _enemyManager.ClearEnemies();
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager, false);
+            Time.Timers.Find(timer => timer.Name == "MainTimer").Reset();
         }
 
         private void OnDoorInteracted(string sceneName) {
@@ -159,8 +160,12 @@ namespace Imaginophobia {
             } 
         }
         
-        private void OnEnemySpawned(ICollisionActor enemy) {
-            _collisionManager.AddCollider(enemy, "enemies");
+        private void OnEnemySpawned(GameObject enemy) {
+            if (enemy is Nyctophobia) {
+                _lightManager.NyctoAlarmAll();
+                return;
+            }
+            _collisionManager.AddCollider(enemy as ICollisionActor, "enemies");
             if (enemy is Scopophobia) {
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
@@ -171,7 +176,7 @@ namespace Imaginophobia {
             }
         }
 
-        private void OnEnemyRemoved(ICollisionActor enemy) {
+        private void OnEnemyRemoved(GameObject enemy) {
             if (enemy is Scopophobia) {
                 _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
             }
@@ -179,7 +184,7 @@ namespace Imaginophobia {
                 _uiManager.ShowMessage("Flashlight might be useful.", 4f);
             }
 
-            _collisionManager.RemoveCollider(enemy);
+            _collisionManager.RemoveCollider(enemy as ICollisionActor);
         }
 
         private void DebugUpdate() {

@@ -100,6 +100,24 @@ namespace Imaginophobia {
             }
         }
 
+        //private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
+        //    TilemapTileLayer layer = FindHighlightLayer(entity.Name);
+
+        //    if (layer == null) {
+        //        return;
+        //    }
+
+        //    trigger.TileLayer = layer;
+
+        //    Point topLeft = TileMap.WorldToTilePosition(entity.Position);
+        //    Point bottomRight = TileMap.WorldToTilePosition(entity.Position + entity.Size - new Vector2(1, 1));
+        //    Rectangle colliderRect = new Rectangle(topLeft.X, topLeft.Y, Math.Max(1, bottomRight.X - topLeft.X + 1), Math.Max(1, bottomRight.Y - topLeft.Y + 1));
+
+        //    foreach (TilemapTileEntry tile in layer.GetTilesInRegion(colliderRect)) {
+        //        trigger.Tiles.Add(tile);
+        //    }
+        //}
+
         private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
             TilemapTileLayer layer = FindHighlightLayer(entity.Name);
 

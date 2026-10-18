@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended;
+using MonoGame.Extended.Input;
 using Penumbra;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,9 @@ namespace Imaginophobia {
         }
 
         public void Update(Matrix transformMatrix) {
+            if (KeyboardExtended.GetState().WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.L)) {
+                NyctoAlarmAll();
+            }
             Penumbra.Transform = transformMatrix;
 
             foreach (LightArea lightArea in LightAreas) {
@@ -56,6 +60,16 @@ namespace Imaginophobia {
         public void ScopoAlarmAll() {
             foreach (LightArea lightArea in LightAreas)
                 lightArea.ScopoIncoming();
+        }
+
+        public void NyctoAlarmAll() {
+            foreach (LightArea lightArea in LightAreas)
+                lightArea.StartNyctoAlarm();
+        }
+
+        public void Test() {
+            foreach (LightArea lightArea in LightAreas)
+                lightArea.TurnOn();
         }
     }
 }

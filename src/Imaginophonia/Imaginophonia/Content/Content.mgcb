@@ -14,54 +14,54 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Audio/amb_electricroom.MP3
+#begin Audio/amb_electricroom.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/amb_electricroom.MP3
+/build:Audio/amb_electricroom.mp3
 
-#begin Audio/amb_sewer.MP3
+#begin Audio/amb_sewer.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/amb_sewer.MP3
+/build:Audio/amb_sewer.mp3
 
-#begin Audio/sfx_autophobia_indicator.MP3
+#begin Audio/sfx_autophobia_indicator.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_autophobia_indicator.MP3
+/build:Audio/sfx_autophobia_indicator.mp3
 
-#begin Audio/sfx_door_close.MP3
+#begin Audio/sfx_door_close.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_door_close.MP3
+/build:Audio/sfx_door_close.mp3
 
-#begin Audio/sfx_door_open.MP3
+#begin Audio/sfx_door_open.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_door_open.MP3
+/build:Audio/sfx_door_open.mp3
 
-#begin Audio/sfx_door_stuck.MP3
+#begin Audio/sfx_door_stuck.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_door_stuck.MP3
+/build:Audio/sfx_door_stuck.mp3
 
-#begin Audio/sfx_electric_complete.MP3
+#begin Audio/sfx_electric_complete.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_electric_complete.MP3
+/build:Audio/sfx_electric_complete.mp3
 
 #begin Audio/sfx_electric_failed.mp3
 /importer:Mp3Importer
@@ -70,12 +70,12 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_electric_failed.mp3
 
-#begin Audio/sfx_electric_repairing.MP3
+#begin Audio/sfx_electric_repairing.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_electric_repairing.MP3
+/build:Audio/sfx_electric_repairing.mp3
 
 #begin Audio/sfx_electric_success.mp3
 /importer:Mp3Importer
@@ -84,47 +84,47 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_electric_success.mp3
 
-#begin Audio/sfx_locker_close.MP3
+#begin Audio/sfx_locker_close.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_locker_close.MP3
+/build:Audio/sfx_locker_close.mp3
 
-#begin Audio/sfx_locker_open.MP3
+#begin Audio/sfx_locker_open.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_locker_open.MP3
+/build:Audio/sfx_locker_open.mp3
 
-#begin Audio/sfx_pipe_complete.MP3
+#begin Audio/sfx_pipe_complete.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_pipe_complete.MP3
+/build:Audio/sfx_pipe_complete.mp3
 
-#begin Audio/sfx_pipe_failed.MP3
+#begin Audio/sfx_pipe_failed.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_pipe_failed.MP3
+/build:Audio/sfx_pipe_failed.mp3
 
-#begin Audio/sfx_pipe_repairing.MP3
+#begin Audio/sfx_pipe_repairing.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_pipe_repairing.MP3
+/build:Audio/sfx_pipe_repairing.mp3
 
-#begin Audio/sfx_pipe_success.MP3
+#begin Audio/sfx_pipe_success.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_pipe_success.MP3
+/build:Audio/sfx_pipe_success.mp3
 
 #begin Audio/sfx_scopophobia_indicator.mp3
 /importer:Mp3Importer
@@ -133,12 +133,12 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_scopophobia_indicator.mp3
 
-#begin Audio/sfx_step_01.MP3
+#begin Audio/sfx_step_01.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_step_01.MP3
+/build:Audio/sfx_step_01.mp3
 
 #begin Audio/sfx_step_02.mp3
 /importer:Mp3Importer
@@ -262,6 +262,14 @@
 /processorParam:Defines=
 /processorParam:Version=3.8.5.0
 /build:Shaders/HighlightComposite.fx
+
+#begin Shaders/Saturation.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/processorParam:Version=3.8.5.0
+/build:Shaders/Saturation.fx
 
 #begin Shaders/Silhouette.fx
 /importer:EffectImporter

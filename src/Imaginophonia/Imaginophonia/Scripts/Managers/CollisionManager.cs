@@ -110,6 +110,7 @@ namespace Imaginophobia {
                         enemy.SetActive(false);
                         _player.Sanity -= 10;
                         AudioManager.Instance.PlaySFX(Sound.AutoIndicator);
+                        MainGame.Saturation = 0;
                         //RemoveCollider(collision.Other);
                     }
                     else if (enemy.Name == "Scopophobia" && enemy.Visible) {
@@ -168,8 +169,9 @@ namespace Imaginophobia {
                 if (enemy.Name == "Autophobia") {
                     lightArea.StartFlicker();
                 }
-                else {
+                else if (enemy is Scopophobia scopo && lightArea.On) {
                     lightArea.TurnOff();
+                    scopo.LightBrokeCount++;
                 }
             }
         }

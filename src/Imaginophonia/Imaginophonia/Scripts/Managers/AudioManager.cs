@@ -1,9 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using FlatRedBall.Glue.StateInterpolation;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Content;
+using MonoSound;
+using MonoSound.Default;
+using MonoSound.Filters;
+using MonoSound.Streaming;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,7 +74,12 @@ namespace Imaginophobia {
 
             ContentManager content = MainGame.Content;
 
+            //MonoSoundLibrary.Init(MainGame.Instance);
+
             _activeAudioSources = new List<AudioSource>();
+
+            //StreamPackage stream = StreamLoader.GetStreamedSound("Content/Audio/sfx_door_close.mp3", looping: true);
+            //stream.Play();
 
             //Load Sound Effect
             NameSFX = new Dictionary<Sound, SoundEffect> {
@@ -89,6 +99,12 @@ namespace Imaginophobia {
                 { Sound.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
                 { Sound.AutoIndicator, content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
             };
+
+            
+            //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.LowPass, strength: 1f, frequency: 2000, resonance: 15);
+            ////SoLoudFilterInstance instance = /* SoLoudFilter */MyBQR.CreateInstance();
+            //NameSFX[Sound.LockerClose] = EffectLoader.GetFilteredEffect("Content/Audio/sfx_locker_close.ogg", /* SoLoudFilterInstance */MyBQR);
+            //NameSFX[Sound.LockerOpen] = EffectLoader.GetFilteredEffect("Content/Audio/sfx_locker_open.ogg", /* SoLoudFilterInstance */MyBQR);
 
             _steps = new SoundEffect[8];
 

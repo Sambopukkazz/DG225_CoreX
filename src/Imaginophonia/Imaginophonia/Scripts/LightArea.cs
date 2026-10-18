@@ -3,6 +3,7 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Content.ContentReaders;
+using MonoGame.Extended.Input;
 using Penumbra;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,7 @@ namespace Imaginophobia {
         private float _areaSize = 600; // 5 tiles 120x120 per tile
         private bool _powered = true;
         public bool On => _powered;
-        private bool _scopoAlarm = false;
-        private float _scopoTimer = 0f;
-        public bool ScopoAlarm => _scopoAlarm;
+        private bool _nyctoAlarm = false;
 
         public LightArea(Light light, Vector2 pos, int id, string tag) {
             Light = light;
@@ -45,10 +44,10 @@ namespace Imaginophobia {
         }
 
         public void Update() {
-            //if (_scopoAlarm) { 
-            //    UpdateScopoAlarm(); 
-            //    return; 
-            //}
+            if (_nyctoAlarm) {
+                UpdateNyctoAlarm();
+                return;
+            }
 
             if (!IsFlickering) {
                 return;
@@ -67,7 +66,6 @@ namespace Imaginophobia {
             if (_nextFlickerTimer <= 0) {
                 float randomFactor = (float)(_rand.NextDouble() * 0.9 + 0.1);
                 Light.Intensity = _baseIntensity * randomFactor;
-                //Light.Enabled = _rand.NextDouble() > 0.4;
 
                 float baseInterval = (float)(_rand.NextDouble() * 0.09 + 0.03);
                 _nextFlickerTimer = baseInterval / Math.Max(0.1f, _flickerSpeed);
@@ -79,43 +77,43 @@ namespace Imaginophobia {
             Light.Intensity = _baseIntensity;
         }
 
-        //private void UpdateScopoAlarm() {
-        //    _scopoTimer -= Time.DeltaTime;
-        //    if (_scopoTimer <= 0f) {                 // done: on, red, permanent
-        //        _scopoAlarm = false;
-        //        Light.Color = Color.Red;            // no changing back
-        //        Light.Intensity = _baseIntensity;
-        //        Light.Enabled = true;
-        //        return;
-        //    }
-        //    float elapsed = 8 - _scopoTimer;
-        //    if (elapsed < 6) {
-        //        _nextFlickerTimer -= Time.DeltaTime;
-        //        if (_nextFlickerTimer <= 0f) {
-        //            Light.Enabled = _rand.NextDouble() > 0.4;               // <- your line 63
-        //            _nextFlickerTimer = (float)(_rand.NextDouble() * 0.09 + 0.03);
-        //        }
-        //    }
-        //    else {
-        //        Light.Enabled = false;               // 2s blackout
-        //    }
-        //}
+        private void UpdateNyctoAlarm() {
+            _flickerDurationTimer -= Time.DeltaTime;
+            _nextFlickerTimer -= Time.DeltaTime;
 
-        //public void StartScopoAlarm() {
-        //    if (_powered == false) {
-        //        return;
-        //    }
-        //    _scopoAlarm = true;
-        //    _scopoTimer = 8f;
-        //    IsFlickering = false;
-        //    _powered = true;
-        //    Light.Enabled = true;
-        //    Light.Intensity = _baseIntensity;
-        //    _nextFlickerTimer = 0f;
-        //}
+            if (_flickerDurationTimer <= 0) {
+                IsFlickering = false;
+                Light.Intensity = _baseIntensity;
+                Light.Enabled = false;
+                _powered = false;
+                _nyctoAlarm = false;
+                return;
+            }
+
+            
+            if (_nextFlickerTimer <= 0f) {
+                Light.Enabled = _rand.NextDouble() > 0.4;
+
+                float baseInterval = (float)(_rand.NextDouble() * 0.09 + 0.03);
+                _nextFlickerTimer = baseInterval / Math.Max(0.1f, _flickerSpeed);
+            }
+        }
+
+        public void StartNyctoAlarm() {
+            if (_powered == false) {
+                return;
+            }
+            _nyctoAlarm = true;
+            _flickerDurationTimer = 3f;
+            IsFlickering = true;
+            _powered = true;
+            Light.Enabled = true;
+            Light.Intensity = _baseIntensity;
+            _nextFlickerTimer = 0f;
+        }
 
         public void StartFlicker(float durationSeconds = 1.5f) {
-            if (_scopoAlarm || !_powered || IsFlickering) {
+            if (_nyctoAlarm || !_powered || IsFlickering) {
                 return;
             }
             IsFlickering = true;
@@ -124,10 +122,10 @@ namespace Imaginophobia {
         }
 
         public void TurnOff() {
-            _scopoAlarm = false;
+            _nyctoAlarm = false;
+            _powered = false;
             IsFlickering = false;
             Light.Intensity = _baseIntensity;
-            _powered = false;
             Light.Enabled = false;
         }
 

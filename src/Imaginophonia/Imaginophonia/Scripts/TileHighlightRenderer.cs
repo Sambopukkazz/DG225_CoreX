@@ -52,6 +52,8 @@ namespace Imaginophobia {
             GraphicsDevice device = MainGame.GraphicsDevice;
             SpriteBatch spriteBatch = MainGame.SpriteBatch;
 
+            RenderTargetBinding[] previous = device.GetRenderTargets();
+
             device.SetRenderTarget(_highlightTarget);
             device.Clear(Color.Transparent);
 
@@ -60,7 +62,12 @@ namespace Imaginophobia {
             DrawLayer(device, spriteBatch, camera, PanelGroup);
             DrawLayer(device, spriteBatch, camera, DoorGroup);
 
-            device.SetRenderTarget(null);
+            if (previous.Length > 0) {
+                device.SetRenderTargets(previous);
+            }
+            else {
+                device.SetRenderTarget(null);
+            }
         }
 
         // Puts the highlight on screen. Call this after the scene is drawn - inside the lighting

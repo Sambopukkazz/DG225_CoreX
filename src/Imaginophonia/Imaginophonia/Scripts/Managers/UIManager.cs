@@ -46,9 +46,7 @@ namespace Imaginophobia {
             _vignetteOverlay = new VignetteOverlay();
             _blinkOverlay = new VignetteOverlay();
             _nyctophobiaOverlay = new VignetteOverlay() {
-                Scale = new Vector2(0.2f,0.2f),
-                Softness = 0.5f,
-                Color = Color.White,
+                Softness = 15f,
             };
             _rectangleFadeOverlay = new BottomFadeOverlay();
 
@@ -77,6 +75,13 @@ namespace Imaginophobia {
                 ObjectiveManager.Complete("move");
             }
             //endtemp
+
+            if (MainGame.Saturation < 1) {
+                MainGame.Saturation += 0.3f * Time.DeltaTime; // 3++ second to normal color
+                if (MainGame.Saturation > 1) {
+                    MainGame.Saturation = 1;
+                }
+            }
 
             ZoomVignette();
 
@@ -217,12 +222,12 @@ namespace Imaginophobia {
             //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
                 
             //}
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
-                NyctoClose();
-            }
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad8)) {
-                NyctoOpen();
-            }
+            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
+            //    NyctoClose();
+            //}
+            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad8)) {
+            //    NyctoOpen();
+            //}
             //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
             //    _blinkOverlay.Scale += new Vector2(0, 0.01f);
             //}
@@ -279,7 +284,7 @@ namespace Imaginophobia {
             //_nyctophobiaOverlay.Center.SetX(_player.Transform.Position.X);
             //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
             //    .Easing(EasingFunctions.Linear);
-            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0f, 0f), duration: 10)
+            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0f, 0f), duration: 25)
                 .Easing(EasingFunctions.Linear);
         }
 
@@ -287,7 +292,7 @@ namespace Imaginophobia {
             //_nyctophobiaOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
             //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
             //    .Easing(EasingFunctions.Linear);
-            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 3)
+            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 10)
                 .Easing(EasingFunctions.Linear);
         }
 

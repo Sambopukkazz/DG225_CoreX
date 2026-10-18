@@ -15,6 +15,7 @@ namespace Imaginophobia {
         private AudioSource _audioSource;
         private readonly Vector2 _size;
         private bool _startMovement;
+        public int LightBrokeCount { get; set; }
 
         private Texture2D _texture;
 
