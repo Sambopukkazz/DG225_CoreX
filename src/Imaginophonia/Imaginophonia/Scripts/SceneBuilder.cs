@@ -46,6 +46,13 @@ namespace Imaginophobia {
                     collisionManager.AddCollider(trigger, "triggers");
                     Triggers.Add(trigger);
                 }
+                else if (entity.Class == "report") {
+                    string detail = entity.Properties.GetString("Detail");
+                    Trigger trigger = new Trigger(entity.Id, entity.Position, entity.Size, entity.Class, detail);
+                    BuildHighlightTiles(trigger, entity);
+                    collisionManager.AddCollider(trigger, "triggers");
+                    Triggers.Add(trigger);
+                }
                 else if (entity.Class == "spawn") {
                     string origin = entity.Properties.GetString("Origin");
                     PlayerSpawnPoints.Add(new SpawnPoint(origin,entity.Position));
@@ -100,24 +107,6 @@ namespace Imaginophobia {
             }
         }
 
-        //private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
-        //    TilemapTileLayer layer = FindHighlightLayer(entity.Name);
-
-        //    if (layer == null) {
-        //        return;
-        //    }
-
-        //    trigger.TileLayer = layer;
-
-        //    Point topLeft = TileMap.WorldToTilePosition(entity.Position);
-        //    Point bottomRight = TileMap.WorldToTilePosition(entity.Position + entity.Size - new Vector2(1, 1));
-        //    Rectangle colliderRect = new Rectangle(topLeft.X, topLeft.Y, Math.Max(1, bottomRight.X - topLeft.X + 1), Math.Max(1, bottomRight.Y - topLeft.Y + 1));
-
-        //    foreach (TilemapTileEntry tile in layer.GetTilesInRegion(colliderRect)) {
-        //        trigger.Tiles.Add(tile);
-        //    }
-        //}
-
         private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
             TilemapTileLayer layer = FindHighlightLayer(entity.Name);
 
@@ -127,51 +116,69 @@ namespace Imaginophobia {
 
             trigger.TileLayer = layer;
 
-            Dictionary<(int, int), TilemapTileEntry> tileIndex = new Dictionary<(int, int), TilemapTileEntry>();
-
-            foreach (TilemapTileEntry tile in layer.GetTiles()) {
-                tileIndex[(tile.X, tile.Y)] = tile;
-            }
-
-            // The collider is smaller than the artwork, so flood fill outwards from a tile inside it
             Point topLeft = TileMap.WorldToTilePosition(entity.Position);
             Point bottomRight = TileMap.WorldToTilePosition(entity.Position + entity.Size - new Vector2(1, 1));
             Rectangle colliderRect = new Rectangle(topLeft.X, topLeft.Y, Math.Max(1, bottomRight.X - topLeft.X + 1), Math.Max(1, bottomRight.Y - topLeft.Y + 1));
 
-            Stack<TilemapTileEntry> pending = new Stack<TilemapTileEntry>();
-            HashSet<(int, int)> visited = new HashSet<(int, int)>();
-
-            foreach (TilemapTileEntry tile in layer.GetTiles()) {
-                if (colliderRect.Contains(tile.X, tile.Y)) {
-                    pending.Push(tile);
-                    break;
-                }
-            }
-
-            while (pending.Count > 0) {
-                TilemapTileEntry current = pending.Pop();
-
-                if (visited.Contains((current.X, current.Y))) {
-                    continue;
-                }
-
-                visited.Add((current.X, current.Y));
-                trigger.Tiles.Add(current);
-
-                if (tileIndex.TryGetValue((current.X + 1, current.Y), out TilemapTileEntry right)) {
-                    pending.Push(right);
-                }
-                if (tileIndex.TryGetValue((current.X - 1, current.Y), out TilemapTileEntry left)) {
-                    pending.Push(left);
-                }
-                if (tileIndex.TryGetValue((current.X, current.Y + 1), out TilemapTileEntry down)) {
-                    pending.Push(down);
-                }
-                if (tileIndex.TryGetValue((current.X, current.Y - 1), out TilemapTileEntry up)) {
-                    pending.Push(up);
-                }
+            foreach (TilemapTileEntry tile in layer.GetTilesInRegion(colliderRect)) {
+                trigger.Tiles.Add(tile);
             }
         }
+
+        //private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
+        //    TilemapTileLayer layer = FindHighlightLayer(entity.Name);
+
+        //    if (layer == null) {
+        //        return;
+        //    }
+
+        //    trigger.TileLayer = layer;
+
+        //    Dictionary<(int, int), TilemapTileEntry> tileIndex = new Dictionary<(int, int), TilemapTileEntry>();
+
+        //    foreach (TilemapTileEntry tile in layer.GetTiles()) {
+        //        tileIndex[(tile.X, tile.Y)] = tile;
+        //    }
+
+        //    // The collider is smaller than the artwork, so flood fill outwards from a tile inside it
+        //    Point topLeft = TileMap.WorldToTilePosition(entity.Position);
+        //    Point bottomRight = TileMap.WorldToTilePosition(entity.Position + entity.Size - new Vector2(1, 1));
+        //    Rectangle colliderRect = new Rectangle(topLeft.X, topLeft.Y, Math.Max(1, bottomRight.X - topLeft.X + 1), Math.Max(1, bottomRight.Y - topLeft.Y + 1));
+
+        //    Stack<TilemapTileEntry> pending = new Stack<TilemapTileEntry>();
+        //    HashSet<(int, int)> visited = new HashSet<(int, int)>();
+
+        //    foreach (TilemapTileEntry tile in layer.GetTiles()) {
+        //        if (colliderRect.Contains(tile.X, tile.Y)) {
+        //            pending.Push(tile);
+        //            break;
+        //        }
+        //    }
+
+        //    while (pending.Count > 0) {
+        //        TilemapTileEntry current = pending.Pop();
+
+        //        if (visited.Contains((current.X, current.Y))) {
+        //            continue;
+        //        }
+
+        //        visited.Add((current.X, current.Y));
+        //        trigger.Tiles.Add(current);
+
+        //        if (tileIndex.TryGetValue((current.X + 1, current.Y), out TilemapTileEntry right)) {
+        //            pending.Push(right);
+        //        }
+        //        if (tileIndex.TryGetValue((current.X - 1, current.Y), out TilemapTileEntry left)) {
+        //            pending.Push(left);
+        //        }
+        //        if (tileIndex.TryGetValue((current.X, current.Y + 1), out TilemapTileEntry down)) {
+        //            pending.Push(down);
+        //        }
+        //        if (tileIndex.TryGetValue((current.X, current.Y - 1), out TilemapTileEntry up)) {
+        //            pending.Push(up);
+        //        }
+        //    }
+        //}
 
         // An object's entity name matches its tile layer name, except the doors
         private TilemapTileLayer FindHighlightLayer(string entityName) {

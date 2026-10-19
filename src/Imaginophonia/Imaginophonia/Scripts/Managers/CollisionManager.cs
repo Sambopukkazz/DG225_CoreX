@@ -166,12 +166,13 @@ namespace Imaginophobia {
                 LightArea lightArea = (LightArea)collision.Second;
                 GameObject enemy = (GameObject)collision.First;
 
-                if (enemy.Name == "Autophobia") {
-                    lightArea.StartFlicker();
-                }
-                else if (enemy is Scopophobia scopo && lightArea.On) {
+                if (enemy is Scopophobia scopo && lightArea.ScopoHasPassed == false) {
                     lightArea.TurnOff();
+                    lightArea.ScopoHasPassed = true;
                     scopo.LightBrokeCount++;
+                }
+                else if (enemy.Name == "Autophobia") {
+                    lightArea.StartFlicker();
                 }
             }
         }

@@ -27,6 +27,7 @@ namespace Imaginophobia {
         private bool _powered = true;
         public bool On => _powered;
         private bool _nyctoAlarm = false;
+        public bool ScopoHasPassed { get; set; }
 
         public LightArea(Light light, Vector2 pos, int id, string tag) {
             Light = light;
@@ -105,9 +106,7 @@ namespace Imaginophobia {
             }
             _nyctoAlarm = true;
             _flickerDurationTimer = 3f;
-            IsFlickering = true;
-            _powered = true;
-            Light.Enabled = true;
+            IsFlickering = false;
             Light.Intensity = _baseIntensity;
             _nextFlickerTimer = 0f;
         }

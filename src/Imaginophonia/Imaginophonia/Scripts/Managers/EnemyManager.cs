@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public class EnemyManager {
         public List<GameObject> Enemies;
-        private float _spawnInterval = 5;
+        private float _scopoSpawnInterval = 5;
+        private float _autoSpawnInterval = 5;
         private float _nyctophobiaSpawnInterval = 15;
         private (int, int, int) _autophobiaAvailableChance = (20, 35, 55); // Normal, Anxious, Insane
         private int _autophobiaSpawnChance = 20; // 0-100
@@ -59,6 +60,16 @@ namespace Imaginophobia {
                 builder.IsLooping(false)
                 .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
             });
+
+            Timer scopoAutoTimer = Time.AddTimer(SpawnScopophobia, _scopoSpawnInterval, "ScopoSpawnTimer");
+            scopoAutoTimer.Pause();
+            scopoAutoTimer.Repeat = true;
+            Timer AutoTimer = Time.AddTimer(SpawnAutophobia, _autoSpawnInterval, "AutoSpawnTimer");
+            AutoTimer.Pause();
+            AutoTimer.Repeat = true;
+            Timer nyctoTimer = Time.AddTimer(SpawnNyctophobia, _nyctophobiaSpawnInterval, "NyctoSpawnTimer");
+            nyctoTimer.Pause();
+            nyctoTimer.Repeat = true;
         }
 
         public void Update(Rectangle worldBound) {
@@ -75,12 +86,16 @@ namespace Imaginophobia {
             if (SceneManager.GetActiveScene().Name == "tilemap_sewer") {
                 if(_continueSpawnEnemy == false) {
                     _continueSpawnEnemy = true;
-                    Time.AddTimer(SpawnEnemy, 2f);
-                    Time.AddTimer(SpawnNyctophobia, 15f);
+                    Time.GetTimer("ScopoSpawnTimer").Resume();
+                    Time.GetTimer("AutoSpawnTimer").Resume();
+                    Time.GetTimer("NyctoSpawnTimer").Resume();
                 }
             }
             else {
                 _continueSpawnEnemy = false;
+                Time.GetTimer("ScopoSpawnTimer").Pause();
+                Time.GetTimer("AutoSpawnTimer").Pause();
+                Time.GetTimer("NyctoSpawnTimer").Pause();
             }
 
             if(_worldBound != worldBound) {
@@ -94,97 +109,80 @@ namespace Imaginophobia {
             }
         }
 
-        public void SpawnEnemy() {
-            if (_continueSpawnEnemy) {
-                Vector2 pos;
-                if (_player.CurrentAction == CharacterAction.Hiding) {
-                    pos.Y = _player.PreviousPos.Y;
+        public void SpawnScopophobia() {
+            Vector2 pos;
+            if (_player.CurrentAction == CharacterAction.Hiding) {
+                pos.Y = _player.PreviousPos.Y;
+            }
+            else {
+                pos.Y = _player.Transform.Position.Y;
+            }
+            int posOffset = _rand.Next(100, 500);
+            bool spawnLeft;
+            if (_rand.Next(0, 10) < 5) {
+                pos.X = _worldBound.Left - posOffset;
+                spawnLeft = true;
+            }
+            else {
+                pos.X = _worldBound.Right + posOffset;
+                spawnLeft = false;
+            }
+
+            int randomNumber = _rand.Next(0, 101);
+
+            if (randomNumber < _scopophobiaSpawnChance && HasActiveScopophobia() == false) {
+                if (spawnLeft) {
+                    pos.X -= 1920;
                 }
                 else {
-                    pos.Y = _player.Transform.Position.Y;
-                }
-                int posOffset = _rand.Next(100, 500);
-                bool spawnLeft;
-                if (_rand.Next(0, 10) < 5) {
-                    pos.X = _worldBound.Left - posOffset;
-                    spawnLeft = true;
-                }
-                else {
-                    pos.X = _worldBound.Right + posOffset;
-                    spawnLeft = false;
+                    pos.X += 1920;
                 }
 
-                int randomNumber = _rand.Next(0, 101);
-
-                if (randomNumber < _autophobiaSpawnChance && HasActiveScopophobia() == false) {
+                if (randomNumber < _autophobiaSpawnChance) {
                     Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
                     Enemies.Add(autophobia);
                     EnemySpawned?.Invoke(autophobia);
                 }
 
-                if (randomNumber < _scopophobiaSpawnChance && HasActiveScopophobia() == false) {
-                    if (spawnLeft) {
-                        pos.X -= 1920;
-                    }
-                    else {
-                        pos.X += 1920;
-                    }
+                Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
+                Enemies.Add(scopophobia);
+                EnemySpawned?.Invoke(scopophobia);
+            }
+        }
 
-                    Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
-                    Enemies.Add(scopophobia);
-                    EnemySpawned?.Invoke(scopophobia);
-                }
+        public void SpawnAutophobia() {
+            Vector2 pos;
+            if (_player.CurrentAction == CharacterAction.Hiding) {
+                pos.Y = _player.PreviousPos.Y;
+            }
+            else {
+                pos.Y = _player.Transform.Position.Y;
+            }
+            int posOffset = _rand.Next(100, 500);
 
-                //if (enemy != null) {
-                //    Enemies.Add(enemy);
-                //    EnemySpawned?.Invoke(enemy as ICollisionActor);
-                //}
+            if (_rand.Next(0, 10) < 5) {
+                pos.X = _worldBound.Left - posOffset;
+            }
+            else {
+                pos.X = _worldBound.Right + posOffset;
+            }
 
-                Time.AddTimer(SpawnEnemy, _spawnInterval);
+            int randomNumber = _rand.Next(0, 101);
 
-                //int[] autophobiaNumber = new int[_autophobiaSpawnChance];
-                //for (int i = 0; i < autophobiaNumber.Length; i++) {
-                //    autophobiaNumber[i] = _rand.Next(0, 101);
-                //}
-
-                //int[] scopophobiaNumber = new int[_scopophobiaSpawnChance];
-                //for (int i = 0; i < scopophobiaNumber.Length; i++) {
-                //    scopophobiaNumber[i] = _rand.Next(0, 101);
-                //}
-
-
-                //if (autophobiaNumber.Contains<int>(randomNumber)) {
-                //    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                //    Enemies.Add(autophobia);
-                //    EnemySpawned?.Invoke(autophobia);
-                //}
-                //else if (scopophobiaNumber.Contains<int>(randomNumber) && HasActiveScopophobia() == false) {
-                //    if (spawnLeft) {
-                //        pos.X -= 1920;
-                //    }
-                //    else {
-                //        pos.X += 1920;
-                //    }
-                //    Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
-                //    Enemies.Add(scopophobia);
-                //    EnemySpawned?.Invoke(scopophobia);
-                //}
-
-
+            if (randomNumber < _autophobiaSpawnChance && HasActiveScopophobia() == false) {
+                Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
+                Enemies.Add(autophobia);
+                EnemySpawned?.Invoke(autophobia);
             }
         }
 
         //Different interval
         public void SpawnNyctophobia() {
-            if (_continueSpawnEnemy) {
-                int randomNumber = _rand.Next(0, 101);
-                if (randomNumber < _nyctophobiaSpawnChance && HasActiveNyctophobia() == false) {
-                    Nyctophobia nyctophobia = new Nyctophobia();
-                    Enemies.Add(nyctophobia);
-                    EnemySpawned?.Invoke(nyctophobia);
-                }
-
-                Time.AddTimer(SpawnNyctophobia, _nyctophobiaSpawnInterval);
+            int randomNumber = _rand.Next(0, 101);
+            if (randomNumber < _nyctophobiaSpawnChance && HasActiveNyctophobia() == false) {
+                Nyctophobia nyctophobia = new Nyctophobia();
+                Enemies.Add(nyctophobia);
+                EnemySpawned?.Invoke(nyctophobia);
             }
         }
 

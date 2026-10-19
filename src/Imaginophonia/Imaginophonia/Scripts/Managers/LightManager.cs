@@ -25,9 +25,6 @@ namespace Imaginophobia {
         }
 
         public void Update(Matrix transformMatrix) {
-            if (KeyboardExtended.GetState().WasKeyPressed(Microsoft.Xna.Framework.Input.Keys.L)) {
-                NyctoAlarmAll();
-            }
             Penumbra.Transform = transformMatrix;
 
             foreach (LightArea lightArea in LightAreas) {
@@ -67,9 +64,9 @@ namespace Imaginophobia {
                 lightArea.StartNyctoAlarm();
         }
 
-        public void Test() {
+        public void CleanUpScopo() {
             foreach (LightArea lightArea in LightAreas)
-                lightArea.TurnOn();
+                lightArea.ScopoHasPassed = false;
         }
     }
 }

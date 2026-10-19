@@ -14,7 +14,8 @@ namespace Imaginophobia {
         public HighlightGroup LockerGroup { get; } = new HighlightGroup();
         public HighlightGroup PanelGroup { get; } = new HighlightGroup();
         public HighlightGroup DoorGroup { get; } = new HighlightGroup();
-
+        public HighlightGroup ClipboardGroup { get; } = new HighlightGroup();
+        public HighlightGroup LadderGroup { get; } = new HighlightGroup();
         private Effect _maskShader;
         private Effect _compositeShader;
         private RenderTarget2D _maskTarget;
@@ -40,6 +41,7 @@ namespace Imaginophobia {
             ClearGroup(LockerGroup);
             ClearGroup(PanelGroup);
             ClearGroup(DoorGroup);
+            ClearGroup(ClipboardGroup);
         }
 
         public void Update() {
@@ -61,6 +63,7 @@ namespace Imaginophobia {
             DrawLayer(device, spriteBatch, camera, LockerGroup);
             DrawLayer(device, spriteBatch, camera, PanelGroup);
             DrawLayer(device, spriteBatch, camera, DoorGroup);
+            DrawLayer(device, spriteBatch, camera, ClipboardGroup);
 
             if (previous.Length > 0) {
                 device.SetRenderTargets(previous);

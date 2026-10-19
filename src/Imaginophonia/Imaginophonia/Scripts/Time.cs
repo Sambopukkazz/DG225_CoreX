@@ -21,7 +21,7 @@ namespace Imaginophobia {
 
             foreach (Timer timer in Timers.ToList()) {
                 timer.Update();
-                if(timer.TimeLeft <= 0 || timer.Active == false) {
+                if(timer.Active == false) {
                     Timers.Remove(timer);
                 }
             }
@@ -32,18 +32,14 @@ namespace Imaginophobia {
             Timers.Add(timer);
             return timer;
         }
+
         public static Timer AddTimer(float seconds, string name) {
             Timer timer = new(seconds, name);
             Timers.Add(timer);
             return timer;
         }
-        public static Timer AddTimer(Action method, float seconds) {
-            Timer timer = new(method,seconds);
-            Timers.Add(timer);
-            return timer;
-        }
 
-        public static Timer AddTimer(Action method, float seconds, string name) {
+        public static Timer AddTimer(Action method, float seconds, string name = "") {
             Timer timer = new(method, seconds, name);
             Timers.Add(timer);
             return timer;
@@ -52,6 +48,14 @@ namespace Imaginophobia {
         public static void RemoveTimer(Timer timer) {
             Timers.Remove(timer);
             timer = null;
+        }
+
+        public static bool TimerExist(string timerName) {
+            return Timers.Exists(timer => timer.Name == timerName);
+        }
+
+        public static Timer GetTimer(string timerName) {
+            return Timers.Find(timer => timer.Name == timerName);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Imaginophobia {
         public float TimeLeft { get; private set; }
         private bool _active;
         public bool Active => _active;
+        private bool _paused;
         public bool Repeat { get; set; }
         public event EventHandler OnTimerCompleted;
         private Action _method;
@@ -28,13 +29,6 @@ namespace Imaginophobia {
             _active = true;
         }
 
-        public Timer(Action method,float timeLength) {
-            _method = method;
-            _timeLength = timeLength;
-            TimeLeft = timeLength;
-            _active = true;
-        }
-
         public Timer(Action method, float timeLength, string name) {
             Name = name;
             _method = method;
@@ -44,7 +38,7 @@ namespace Imaginophobia {
         }
 
         public void Update() {
-            if (!_active) return;
+            if (!_active || _paused) return;
             TimeLeft -= Time.DeltaTime;
 
             if (TimeLeft <= 0) {
@@ -75,6 +69,18 @@ namespace Imaginophobia {
 
         public void Reset() {
             TimeLeft = _timeLength;
+        }
+
+        public void Pause() {
+            if (_paused == false) {
+                _paused = true;
+            }
+        }
+
+        public void Resume() {
+            if (_paused == true) {
+                _paused = false;
+            }
         }
     }
 }

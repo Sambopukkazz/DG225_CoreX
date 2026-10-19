@@ -129,7 +129,7 @@ namespace Imaginophobia {
             ObjectiveManager.ResetValves();
             _enemyManager.ClearEnemies();
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager, false);
-            Time.Timers.Find(timer => timer.Name == "MainTimer").Reset();
+            Time.GetTimer("MainTimer").Reset();
         }
 
         private void OnDoorInteracted(string sceneName) {
@@ -162,13 +162,19 @@ namespace Imaginophobia {
         
         private void OnEnemySpawned(GameObject enemy) {
             if (enemy is Nyctophobia) {
+                SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
+                SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
+                ObjectiveManager.ResetPanels();
                 _lightManager.NyctoAlarmAll();
                 return;
             }
+
             _collisionManager.AddCollider(enemy as ICollisionActor, "enemies");
+
             if (enemy is Scopophobia) {
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
+                _lightManager.CleanUpScopo();
                 ObjectiveManager.ResetPanels();
                 _uiManager.BlackScreen();
                 _lightManager.ScopoAlarmAll();

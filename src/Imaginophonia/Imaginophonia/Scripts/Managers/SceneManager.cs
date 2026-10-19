@@ -23,9 +23,10 @@ namespace Imaginophobia {
         private SceneBuilder _highlightScene;
         private Player _player;
         private HighlightSettings _valveSettings = new HighlightSettings { ScanSpeed = 0.5f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#ffd83f") };
-        private HighlightSettings _lockerSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _panelSettings = new HighlightSettings { ScanSpeed = 0.15f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#ffd83f"), ScanWidth = 0.04f };
+        private HighlightSettings _lockerSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _doorSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
+        private HighlightSettings _clipboardSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         //private FadeTransition _fadeTransition;
         public event Action<Vector2> SceneLoaded;
 
@@ -37,6 +38,7 @@ namespace Imaginophobia {
             _tileHighlight.LockerGroup.Settings = _lockerSettings;
             _tileHighlight.PanelGroup.Settings = _panelSettings;
             _tileHighlight.DoorGroup.Settings = _doorSettings;
+            _tileHighlight.ClipboardGroup.Settings = _clipboardSettings;
 
             _player = player;
         }
@@ -110,6 +112,9 @@ namespace Imaginophobia {
                 }
                 else if (trigger.TileLayer.Name == "Doors") {
                     group = _tileHighlight.DoorGroup;
+                }
+                else if (trigger.TileLayer.Name == "Clipboard") {
+                    group = _tileHighlight.ClipboardGroup;
                 }
                 else {
                     continue;
