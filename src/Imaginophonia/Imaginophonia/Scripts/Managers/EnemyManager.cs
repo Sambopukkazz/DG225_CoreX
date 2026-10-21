@@ -14,15 +14,15 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public class EnemyManager {
         public List<GameObject> Enemies;
-        private float _scopoSpawnInterval = 5;
-        private float _autoSpawnInterval = 5;
-        private float _nyctophobiaSpawnInterval = 15;
-        private (int, int, int) _autophobiaAvailableChance = (20, 35, 55); // Normal, Anxious, Insane
+        private float _scopoSpawnInterval = 4.98f;
+        private float _autoSpawnInterval = 4.96f;
+        private float _nyctophobiaSpawnInterval = 30;
+        private (int, int, int) _autophobiaAvailableChance = (20, 45, 60); // Normal, Anxious, Insane
         private int _autophobiaSpawnChance = 20; // 0-100
-        private (int, int, int) _scopophobiaAvailableChance = (5, 12, 17); // Normal, Anxious, Insane
+        private (int, int, int) _scopophobiaAvailableChance = (5, 15, 20); // Normal, Anxious, Insane
         private int _scopophobiaSpawnChance = 5;
-        private (int, int, int) _nyctophobiaAvailableChance = (5, 12, 17); // Normal, Anxious, Insane
-        private int _nyctophobiaSpawnChance = 5;
+        private (int, int, int) _nyctophobiaAvailableChance = (35, 50, 65); // Normal, Anxious, Insane
+        private int _nyctophobiaSpawnChance = 30;
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
         public event Action<GameObject> EnemySpawned;

@@ -42,6 +42,7 @@ namespace Imaginophobia {
             ClearGroup(PanelGroup);
             ClearGroup(DoorGroup);
             ClearGroup(ClipboardGroup);
+            ClearGroup(LadderGroup);
         }
 
         public void Update() {
@@ -64,6 +65,7 @@ namespace Imaginophobia {
             DrawLayer(device, spriteBatch, camera, PanelGroup);
             DrawLayer(device, spriteBatch, camera, DoorGroup);
             DrawLayer(device, spriteBatch, camera, ClipboardGroup);
+            DrawLayer(device, spriteBatch, camera, LadderGroup);
 
             if (previous.Length > 0) {
                 device.SetRenderTargets(previous);

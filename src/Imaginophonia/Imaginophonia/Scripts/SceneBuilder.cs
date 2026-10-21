@@ -108,7 +108,7 @@ namespace Imaginophobia {
         }
 
         private void BuildHighlightTiles(Trigger trigger, TilemapRectangleObject entity) {
-            TilemapTileLayer layer = FindHighlightLayer(entity.Name);
+            TilemapTileLayer layer = FindHighlightLayer(entity);
 
             if (layer == null) {
                 return;
@@ -181,16 +181,20 @@ namespace Imaginophobia {
         //}
 
         // An object's entity name matches its tile layer name, except the doors
-        private TilemapTileLayer FindHighlightLayer(string entityName) {
-            if (string.IsNullOrEmpty(entityName)) {
+        private TilemapTileLayer FindHighlightLayer(TilemapRectangleObject entity) {
+            if (string.IsNullOrEmpty(entity.Name)) {
                 return null;
             }
 
-            if (entityName == "LoadNextScene") {
+            if (entity.Name == "LoadNextScene" && entity.Properties.GetString("Destination") == "end") {
+                return FindTileLayer("Ladder");
+            }
+            else if (entity.Name == "LoadNextScene") {
                 return FindTileLayer("Doors");
             }
+            
 
-            string wanted = entityName.TrimEnd('s', 'S');
+            string wanted = entity.Name.TrimEnd('s', 'S');
 
             foreach (TilemapLayer layer in TileMap.Layers) {
                 if (layer is TilemapTileLayer tileLayer && string.Equals(tileLayer.Name.TrimEnd('s', 'S'), wanted, StringComparison.OrdinalIgnoreCase)) {

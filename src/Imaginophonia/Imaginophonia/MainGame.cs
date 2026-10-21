@@ -89,7 +89,7 @@ namespace Imaginophobia {
             //LightManager.Penumbra.BeginDraw();
 
             //GraphicsDevice.Clear(Color.White);
-            GraphicsDevice.Clear(Color.Black);
+            //GraphicsDevice.Clear(Color.Black);
             //// TODO: Add your drawing code here
             //SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
             ScreenManager.Draw(gameTime);
@@ -128,7 +128,7 @@ namespace Imaginophobia {
         }
 
         protected override void OnExiting(object sender, ExitingEventArgs args) {
-            //MonoSoundLibrary.DeInit();
+            MonoSoundLibrary.DeInit();
             base.OnExiting(sender, args);
         }
     }

@@ -74,42 +74,62 @@ namespace Imaginophobia {
 
             ContentManager content = MainGame.Content;
 
-            //MonoSoundLibrary.Init(MainGame.Instance);
+            MonoSoundLibrary.Init(MainGame.Instance);
 
             _activeAudioSources = new List<AudioSource>();
 
-            //StreamPackage stream = StreamLoader.GetStreamedSound("Content/Audio/sfx_door_close.mp3", looping: true);
-            //stream.Play();
-
             //Load Sound Effect
-            NameSFX = new Dictionary<Sound, SoundEffect> {
-                { Sound.DoorClose, content.Load<SoundEffect>("Audio/sfx_door_close") },
-                { Sound.DoorOpen, content.Load<SoundEffect>("Audio/sfx_door_open") },
-                { Sound.DoorStuck, content.Load<SoundEffect>("Audio/sfx_door_stuck") },
-                { Sound.LockerClose, content.Load<SoundEffect>("Audio/sfx_locker_close") },
-                { Sound.LockerOpen, content.Load<SoundEffect>("Audio/sfx_locker_open") },
-                { Sound.PipeComplete, content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
-                { Sound.PipeFail, content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
-                { Sound.PipeRepairing, content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
-                { Sound.PipeSuccess, content.Load<SoundEffect>("Audio/sfx_pipe_success") },
-                { Sound.ElecComplete, content.Load<SoundEffect>("Audio/sfx_electric_complete") },
-                { Sound.ElecFail, content.Load<SoundEffect>("Audio/sfx_electric_failed") },
-                { Sound.ElecRepairing, content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
-                { Sound.ElecSuccess, content.Load<SoundEffect>("Audio/sfx_electric_success") },
-                { Sound.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
-                { Sound.AutoIndicator, content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
-            };
+            //NameSFX = new Dictionary<Sound, SoundEffect> {
+            //    { Sound.DoorClose, content.Load<SoundEffect>("Audio/sfx_door_close") },
+            //    { Sound.DoorOpen, content.Load<SoundEffect>("Audio/sfx_door_open") },
+            //    { Sound.DoorStuck, content.Load<SoundEffect>("Audio/sfx_door_stuck") },
+            //    { Sound.LockerClose, content.Load<SoundEffect>("Audio/sfx_locker_close") },
+            //    { Sound.LockerOpen, content.Load<SoundEffect>("Audio/sfx_locker_open") },
+            //    { Sound.PipeComplete, content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
+            //    { Sound.PipeFail, content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
+            //    { Sound.PipeRepairing, content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
+            //    { Sound.PipeSuccess, content.Load<SoundEffect>("Audio/sfx_pipe_success") },
+            //    { Sound.ElecComplete, content.Load<SoundEffect>("Audio/sfx_electric_complete") },
+            //    { Sound.ElecFail, content.Load<SoundEffect>("Audio/sfx_electric_failed") },
+            //    { Sound.ElecRepairing, content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
+            //    { Sound.ElecSuccess, content.Load<SoundEffect>("Audio/sfx_electric_success") },
+            //    { Sound.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
+            //    { Sound.AutoIndicator, content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
+            //};
 
-            
-            //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.LowPass, strength: 1f, frequency: 2000, resonance: 15);
-            ////SoLoudFilterInstance instance = /* SoLoudFilter */MyBQR.CreateInstance();
-            //NameSFX[Sound.LockerClose] = EffectLoader.GetFilteredEffect("Content/Audio/sfx_locker_close.ogg", /* SoLoudFilterInstance */MyBQR);
-            //NameSFX[Sound.LockerOpen] = EffectLoader.GetFilteredEffect("Content/Audio/sfx_locker_open.ogg", /* SoLoudFilterInstance */MyBQR);
+            int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.LowPass, strength: 1f, frequency: 2000, resonance: 15);
+            //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.BandPass, strength: 1f, frequency: 2000, resonance: 15);
+            //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.HighPass, strength: 1f, frequency: 2000, resonance: 15);
+
+            //int MyEcho = FilterLoader.RegisterEchoFilter(strength: 1f, delay: 0.3f, decay: 70, bias: 0);
+            //int MyReverb = FilterLoader.RegisterReverbFilter(strength: 1f, feedback: 0.5, dampness: 0.5 ,stereoWidth: 0);
+
+            //Multiple effect
+            //{ Sound.DoorClose, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_door_close.ogg", MyBQR, /*MyEffect2*/, /*MyEffect3*/) }
+
+            NameSFX = new Dictionary<Sound, SoundEffect> {
+                { Sound.DoorClose, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_door_close.ogg", MyBQR) },
+                { Sound.DoorOpen, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_door_open.ogg", MyBQR) },
+                { Sound.DoorStuck, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_door_stuck.ogg", MyBQR) },
+                { Sound.LockerClose, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_locker_close.ogg", MyBQR) },
+                { Sound.LockerOpen, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_locker_open.ogg", MyBQR) },
+                { Sound.PipeComplete, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_pipe_complete.ogg", MyBQR) },
+                { Sound.PipeFail, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_pipe_failed.ogg", MyBQR) },
+                { Sound.PipeRepairing, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_pipe_repairing.ogg", MyBQR) },
+                { Sound.PipeSuccess, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_pipe_success.ogg", MyBQR) },
+                { Sound.ElecComplete, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_electric_complete.ogg", MyBQR) },
+                { Sound.ElecFail, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_electric_failed.ogg", MyBQR) },
+                { Sound.ElecRepairing, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_electric_repairing.ogg",MyBQR) },
+                { Sound.ElecSuccess, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_electric_success.ogg",MyBQR) },
+                { Sound.ScopoIndicator, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_scopophobia_indicator.ogg",MyBQR) },
+                { Sound.AutoIndicator, EffectLoader.GetMultiFilteredEffect("Content/Audio/sfx_autophobia_indicator.ogg",MyBQR) }
+            };
 
             _steps = new SoundEffect[8];
 
             for(int i = 1; i < 9; i++) {
-                _steps[i-1] = content.Load<SoundEffect>($"Audio/sfx_step_0{i}");
+                //_steps[i-1] = content.Load<SoundEffect>($"Audio/sfx_step_0{i}");
+                _steps[i - 1] = EffectLoader.GetMultiFilteredEffect($"Content/Audio/sfx_step_0{i}.xnb", MyBQR);
             }
 
             _amb = new Song[2];

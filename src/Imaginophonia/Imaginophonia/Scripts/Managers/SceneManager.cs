@@ -27,6 +27,7 @@ namespace Imaginophobia {
         private HighlightSettings _lockerSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _doorSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _clipboardSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
+        private HighlightSettings _ladderSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         //private FadeTransition _fadeTransition;
         public event Action<Vector2> SceneLoaded;
 
@@ -39,6 +40,7 @@ namespace Imaginophobia {
             _tileHighlight.PanelGroup.Settings = _panelSettings;
             _tileHighlight.DoorGroup.Settings = _doorSettings;
             _tileHighlight.ClipboardGroup.Settings = _clipboardSettings;
+            _tileHighlight.LadderGroup.Settings = _ladderSettings;
 
             _player = player;
         }
@@ -115,6 +117,9 @@ namespace Imaginophobia {
                 }
                 else if (trigger.TileLayer.Name == "Clipboard") {
                     group = _tileHighlight.ClipboardGroup;
+                }
+                else if (trigger.TileLayer.Name == "Ladder") {
+                    group = _tileHighlight.LadderGroup;
                 }
                 else {
                     continue;
