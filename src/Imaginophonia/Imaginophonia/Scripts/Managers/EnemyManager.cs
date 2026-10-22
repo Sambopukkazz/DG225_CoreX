@@ -12,17 +12,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class EnemyManager {
+    public class EnemyManager : IDisposable {
         public List<GameObject> Enemies;
-        private float _scopoSpawnInterval = 4.98f;
-        private float _autoSpawnInterval = 4.96f;
-        private float _nyctophobiaSpawnInterval = 30;
+        
         private (int, int, int) _autophobiaAvailableChance = (20, 45, 60); // Normal, Anxious, Insane
         private int _autophobiaSpawnChance = 20; // 0-100
+        private float _autoSpawnInterval = 4.96f;
+
         private (int, int, int) _scopophobiaAvailableChance = (5, 15, 20); // Normal, Anxious, Insane
-        private int _scopophobiaSpawnChance = 5;
+        private int _scopophobiaSpawnChance = 5; // 0-100
+        private float _scopoSpawnInterval = 4.98f;
+
         private (int, int, int) _nyctophobiaAvailableChance = (35, 50, 65); // Normal, Anxious, Insane
-        private int _nyctophobiaSpawnChance = 30;
+        private int _nyctophobiaSpawnChance = 30; // 0-100
+        private float _nyctophobiaSpawnInterval = 30;
+
+        private (int, int, int) _entamaphobiaAvailableChance = (35, 50, 65); // Normal, Anxious, Insane
+        private int _entamaphobiaSpawnChance = 30; // 0-100
+        private float _entamaphobiaSpawnInterval = 30;
+        
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
         public event Action<GameObject> EnemySpawned;
@@ -209,6 +217,11 @@ namespace Imaginophobia {
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item1;
                 _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item1;
             }
+        }
+
+        public void Dispose() {
+            _player.SanityStateChanged -= OnStageChanged;
+            ClearEnemies();
         }
     }
 }

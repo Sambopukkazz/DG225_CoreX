@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Imaginophobia.Scripts.Enums;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -22,7 +23,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
-    public class Player : GameObject, IAudioApplicable, ICollisionActor{
+    public class Player : GameObject, IAudioApplicable, ICollisionActor, IDisposable {
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
         private readonly Vector2 _eyeLevel;
@@ -41,6 +42,7 @@ namespace Imaginophobia {
         private int _previousFrame;
         public SanityState SanityState { get; set; }
         public CharacterAction CurrentAction { get; set; }
+        public BlinkPhase BlinkPhase;
         private bool _lockFacingDirection;
         public float Sanity { get; set; } = 100;
         public float Battery { get; set; } = 100;
@@ -359,27 +361,29 @@ namespace Imaginophobia {
             int offsetY = 0;
             switch (_animatedSprite.Controller.CurrentFrame) {
                 case 1:
-                    offsetX = 85;
-                    offsetY = -12;
+                    offsetX = 80;
+                    offsetY = -13;
                     break;
                 case 13:
                     offsetX = 70;
                     offsetY = -11;
                     break;
                 case 15:
-                    offsetX = 72;
-                    offsetY = -10;
+                    offsetX = 75;
+                    offsetY = -13;
                     break;
                 case 17:
                     offsetX = 78;
-                    offsetY = -14;
+                    offsetY = -15;
                     break;
             }
             if (offsetX != 0 && _animatedSprite.Effect == SpriteEffects.None) {
                 _flashlightOffset.X = offsetX;
+                _flashlightOffset.Y = offsetY;
             }
             else if (offsetX != 0 && _animatedSprite.Effect == SpriteEffects.FlipHorizontally) {
                 _flashlightOffset.X = -offsetX;
+                _flashlightOffset.Y = offsetY;
             }
             //if (!_animatedSprite.Controller.IsAnimating) {
             //    switch (_characterState) {
@@ -418,9 +422,7 @@ namespace Imaginophobia {
                 AudioManager.Instance.PlaySFX(Sound.LockerClose);
             }
             else if (CurrentAction == CharacterAction.Hiding) {
-                //temp
                 ObjectiveManager.Complete("hide");
-                //temopend
                 SetActive(true);
                 AllowMovement = true;
                 FocusLevel = 1;
@@ -553,7 +555,14 @@ namespace Imaginophobia {
             SetActive(true);
             AllowMovement = true;
             SetReadyToHide();
+            Visible = true;
+            CooldownTimer = null;
             CurrentAction = CharacterAction.Idle;
+        }
+
+        public void Dispose() {
+            Children.Clear();
+            CooldownTimer = null;
         }
     }
 }

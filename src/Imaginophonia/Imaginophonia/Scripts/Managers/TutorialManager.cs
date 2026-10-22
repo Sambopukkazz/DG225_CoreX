@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class TutorialManager {
+    public class TutorialManager : IDisposable {
         private readonly TutorialData _data;
         private int _index;
 
@@ -33,6 +33,10 @@ namespace Imaginophobia {
         private void Advance() {
             while (_index < _data.Steps.Count && ObjectiveManager.IsComplete(_data.Steps[_index].CompleteOn))
                 _index++;
+        }
+
+        public void Dispose() {
+            ObjectiveManager.Completed -= OnCompleted;
         }
     }
 }

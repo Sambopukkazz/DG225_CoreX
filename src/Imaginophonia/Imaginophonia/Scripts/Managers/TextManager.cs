@@ -19,7 +19,7 @@ namespace Imaginophobia {
         private Timer _timer;
 
         public TextManager() {
-            _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
+            _font = MainGame.Content.Load<BitmapFont>("Fonts/GenerationFonting");
 
             _timer = Time.Timers.Find(timer => timer.Name == "MainTimer");
         }

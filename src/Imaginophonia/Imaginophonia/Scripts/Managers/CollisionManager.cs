@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class CollisionManager {
+    public class CollisionManager : IDisposable {
         private CollisionWorld2D _collisionWorld;
         //private List<ICollisionActor> _colliders;
         private List<GameObject> _enemies;
@@ -157,8 +157,6 @@ namespace Imaginophobia {
                 if (lightArea.On == false && lightArea.IsFlickering == false) {
                     _player.Nyctophobia = true;
                 }
-                //LightArea lightArea = (LightArea)collision.Other;
-                //lightArea.TurnOn();
             }
 
             //Enemy with light
@@ -176,39 +174,22 @@ namespace Imaginophobia {
                 }
             }
         }
+
         public void AddCollider(ICollisionActor actor) {
             //Default Layer
             _collisionWorld.Insert(actor);
         }
+
         public void AddCollider(ICollisionActor actor, string layer) {
             _collisionWorld.Insert(actor, layer);
-            //_colliders.Add(actor);
         }
 
         public void RemoveCollider(ICollisionActor actor) {
             _collisionWorld.Remove(actor);
-            //_colliders.Remove(actor);
         }
 
-        public void ClearColliders() {
-            //foreach(var collider in _colliders) {
-            //    _collisionWorld.Remove(collider);
-            //}
-            //_colliders.Clear();
-            
+        public void ClearColliders() {          
             ResetLayers();
-            //_collisionWorld.RemoveLayer("triggers");
-            //_collisionWorld.RemoveLayer("walls");
-
-            //Layer wallLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-            //    IsDynamic = false
-            //};
-            //Layer triggerLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
-            //    IsDynamic = false
-            //};
-
-            //_collisionWorld.AddLayer("walls", wallLayer);
-            //_collisionWorld.AddLayer("triggers", triggerLayer);
         }
 
         private void ResetLayers() {
@@ -232,6 +213,11 @@ namespace Imaginophobia {
                 IsDynamic = dynamic
             };
             return layer;
+        }
+
+        public void Dispose() {
+            FocusedTrigger = null;
+            ClearColliders();
         }
     }
 }

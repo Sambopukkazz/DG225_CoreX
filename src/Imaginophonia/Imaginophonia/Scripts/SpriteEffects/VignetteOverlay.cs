@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class VignetteOverlay {
+    public class VignetteOverlay : IDisposable {
         private readonly Effect _shader;
         private readonly Texture2D _blankTexture;
         
@@ -49,6 +49,10 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, effect: _shader);
             MainGame.SpriteBatch.Draw(_blankTexture, viewport.Bounds, Color.White);
             MainGame.SpriteBatch.End();
+        }
+
+        public void Dispose() {
+            _blankTexture.Dispose();
         }
     }
 }

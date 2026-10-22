@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     
-    public class BottomFadeOverlay {
+    public class BottomFadeOverlay : IDisposable {
         private readonly Texture2D _blankTexture;
         private readonly Effect _shader;
         private Rectangle _rect;
@@ -28,6 +28,10 @@ namespace Imaginophobia {
             MainGame.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, effect: _shader);
             MainGame.SpriteBatch.Draw(_blankTexture, _rect, Color.Black);
             MainGame.SpriteBatch.End();
+        }
+
+        public void Dispose() {
+            _blankTexture.Dispose();
         }
     }
 }

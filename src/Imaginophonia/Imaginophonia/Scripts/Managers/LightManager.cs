@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class LightManager {
+    public class LightManager : IDisposable {
         public static PenumbraComponent Penumbra { get; private set; }
         private List<Light> _lights;
         public List<LightArea> LightAreas;
@@ -67,6 +67,13 @@ namespace Imaginophobia {
         public void CleanUpScopo() {
             foreach (LightArea lightArea in LightAreas)
                 lightArea.ScopoHasPassed = false;
+        }
+
+        public void Dispose() {
+            ClearLights();
+
+            // Penumbra is static and outlives the session - it also holds the lights Player adds itself
+            Penumbra.Lights.Clear();
         }
     }
 }

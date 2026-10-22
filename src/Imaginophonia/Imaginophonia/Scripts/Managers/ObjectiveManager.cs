@@ -41,5 +41,11 @@ namespace Imaginophobia {
         // run reset (death): the sewer reloads fresh, so the tally must follow
         public static void ResetValves() => _repairedValves.Clear();
         public static void ResetPanels() => _repairedPanels.Clear();
+
+        public static void Reset() {
+            _completed.Clear();
+            ResetValves();
+            ResetPanels();
+        }
     }
 }

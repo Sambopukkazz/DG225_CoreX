@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Gum;
+using Gum.Wireframe;
+using KernSmith.Gum;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,9 +22,11 @@ namespace Imaginophobia {
         public static ScreenManager ScreenManager;
         private RenderTarget2D _frameRT;
         private Effect _grade;
+        private GumService Gum => GumService.Default;
 
         // 0 = grayscale, 1 = normal. Tween this for a sanity / mood effect.
         public static float Saturation { get; set; } = 1f;
+
 
         public MainGame() {
             if (s_instance != null) {
@@ -32,8 +37,8 @@ namespace Imaginophobia {
 
             Graphics = new GraphicsDeviceManager(this);
 
-            Graphics.PreferredBackBufferWidth = 1920;
-            Graphics.PreferredBackBufferHeight = 1080;
+            Graphics.PreferredBackBufferWidth = Layout.ScreenWidth;
+            Graphics.PreferredBackBufferHeight = Layout.ScreenHeight;
             Graphics.IsFullScreen = false;
 
             Graphics.ApplyChanges();
@@ -47,26 +52,23 @@ namespace Imaginophobia {
         }
 
         protected override void Initialize() {
-            // TODO: Add your initialization logic here
             GraphicsDevice = base.GraphicsDevice;
-
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            ScreenManager = new ScreenManager();
-            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
-            //_gameManager = new(viewportAdapter);
-            var screen = new GameplayScreen(viewportAdapter);
-            
 
-            ScreenManager.ShowScreen(screen);
+            Gum.Initialize(this);
+            CustomSetPropertyOnRenderable.InMemoryFontCreator = new KernSmithFontCreator(GraphicsDevice);
+            KernSmithFontCreator.RegisterFont("generationfonting", "Fonts/TrueTypeFont/GenerationFonting.ttf");
+
+            new AudioManager();
+
+            ScreenManager = new ScreenManager();
+            ScreenManager.ShowScreen(new MainMenuScreen());
             ScreenManager.Initialize();
-            //Components.Add(ScreenManager);
-            //Components.Add(LightManager.Penumbra);
 
             base.Initialize();
         }
 
         protected override void LoadContent() {
-            // TODO: use this.Content to load your game content here
             _grade = Content.Load<Effect>("Shaders/Saturation");
             _grade.CurrentTechnique = _grade.Techniques["ApplySaturation"];
         }
@@ -79,6 +81,7 @@ namespace Imaginophobia {
             Time.Update(gameTime);
 
             ScreenManager.Update(gameTime);
+            Gum.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -93,11 +96,18 @@ namespace Imaginophobia {
             //// TODO: Add your drawing code here
             //SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
             ScreenManager.Draw(gameTime);
+            Gum.Draw();
             GraphicsDevice.SetRenderTarget(null);
             DrawGraded();
             //SpriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public static void StartGame() {
+            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
+            GameplayScreen gameplay = new GameplayScreen(viewportAdapter);
+            ScreenManager.ReplaceScreen(gameplay);
         }
 
         private void EnsureFrameTarget() {
@@ -115,7 +125,7 @@ namespace Imaginophobia {
         private void DrawGraded() {
             _grade.Parameters["Saturation"]?.SetValue(Saturation);
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, null, null, _grade);
+            SpriteBatch.Begin(SpriteSortMode.Immediate, Microsoft.Xna.Framework.Graphics.BlendState.Opaque, SamplerState.PointClamp, null, null, _grade);
             SpriteBatch.Draw(_frameRT, GraphicsDevice.Viewport.Bounds, Color.White);
             SpriteBatch.End();
         }

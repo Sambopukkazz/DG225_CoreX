@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class TileHighlightRenderer {
+    public class TileHighlightRenderer : IDisposable {
         public HighlightGroup ValveGroup { get; } = new HighlightGroup();
         public HighlightGroup LockerGroup { get; } = new HighlightGroup();
         public HighlightGroup PanelGroup { get; } = new HighlightGroup();
@@ -52,6 +52,7 @@ namespace Imaginophobia {
 
         // Builds the highlight into its own target. Call this before the scene is drawn
         public void Render(OrthographicCamera camera) {
+            EnsureTargets();
             GraphicsDevice device = MainGame.GraphicsDevice;
             SpriteBatch spriteBatch = MainGame.SpriteBatch;
 
@@ -78,6 +79,9 @@ namespace Imaginophobia {
         // Puts the highlight on screen. Call this after the scene is drawn - inside the lighting
         // capture to sit behind the player, or after it to sit on top
         public void Draw() {
+            if (_highlightTarget == null) {       // <-- this is what the crash line was missing
+                EnsureTargets();
+            }
             SpriteBatch spriteBatch = MainGame.SpriteBatch;
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
@@ -177,6 +181,13 @@ namespace Imaginophobia {
             group.FocusTiles.Clear();
             group.ScanTiles.Clear();
             group.PulseTiles.Clear();
+        }
+
+        public void Dispose() {
+            _maskTarget?.Dispose();
+            _highlightTarget?.Dispose();
+            _maskTarget = null;
+            _highlightTarget = null;
         }
     }
 }

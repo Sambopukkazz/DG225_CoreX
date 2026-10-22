@@ -16,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class UIManager {
+    public class UIManager : IDisposable {
         private Texture2D _spacebar;
         private Rectangle _spaceBarBackgroundRect;
         private Player _player;
@@ -27,12 +27,10 @@ namespace Imaginophobia {
         private BottomFadeOverlay _rectangleFadeOverlay;
         private readonly Tweener _tweener;
         private CharacterAction _previousAction;
-        private float _blinkSpeed = 0.4f;
         private TutorialManager _tutorialManager;
         private TextManager _textManager;
         private bool _blackScreen;
         private VignettePhase _vignettePhase;
-        private BlinkPhase _blinkPhase;
 
         //temp
         List<Keys> pressedKey;
@@ -360,6 +358,15 @@ namespace Imaginophobia {
             //foreach (Timer timer in Time.Timers) {
             //    MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
             //}
+        }
+
+        public void Dispose() {
+            _player.SanityStateChanged -= OnSanityStateChanged;
+            _tutorialManager.Dispose();
+            _vignetteOverlay.Dispose();
+            _blinkOverlay.Dispose();
+            _nyctophobiaOverlay.Dispose();
+            _rectangleFadeOverlay.Dispose();
         }
     }
 }

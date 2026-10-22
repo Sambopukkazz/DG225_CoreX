@@ -123,6 +123,9 @@ namespace Imaginophobia {
                 //endtemp
                 if (_progressValue >= 200) {
                     _trigger.Interactable = false;
+                    if (ObjectiveManager.IsComplete("dots-done")) {
+                        ObjectiveManager.Complete("fixBlackout");
+                    }
                     ObjectiveManager.Complete("dots-done");
                     ObjectiveManager.RepairPanel(_trigger.Id);
                     SaveManager.TurnAllLightsOn();

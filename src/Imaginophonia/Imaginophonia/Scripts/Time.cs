@@ -2,6 +2,7 @@
 using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Imaginophobia {
         public static float TimeDilation { get; set; }
         public static TimeSpan ElapsedTime { get; private set; }
         public static List<Timer> Timers { get; private set; } = new();
+        public static bool SessionActive { get; set; }
 
         public static void Update(GameTime gameTime) {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -56,6 +58,15 @@ namespace Imaginophobia {
 
         public static Timer GetTimer(string timerName) {
             return Timers.Find(timer => timer.Name == timerName);
+        }
+
+        public static void Purge() {
+            if (SessionActive) {
+                Debug.WriteLine("Time.Purge ignored: a session is still running");
+                return;
+            }
+
+            Timers.Clear();
         }
     }
 }

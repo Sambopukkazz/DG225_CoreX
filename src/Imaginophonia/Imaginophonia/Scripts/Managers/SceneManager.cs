@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
-    public class SceneManager {
+    public class SceneManager : IDisposable {
         private static SceneBuilder _activeScene;
         public static SceneBuilder GetActiveScene() => _activeScene;
         private string _lastSceneName;
@@ -176,5 +176,13 @@ namespace Imaginophobia {
             _activeScene?.PlayerSpawnPoints.Clear();
             _activeScene = null;
         }
+
+        public void Dispose() {
+            _renderer.UnloadTilemap();
+            _tileHighlight.Dispose();
+            _highlightScene = null;
+            _activeScene = null;
+        }
+
     }
 }

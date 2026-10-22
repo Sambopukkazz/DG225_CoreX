@@ -21,10 +21,9 @@ using System.Threading.Tasks;
 using static Imaginophobia.SceneManager;
 
 namespace Imaginophobia {
-    public class GameManager {
+    public class GameManager : IDisposable {
         private OrthographicCamera _camera;
         private Player _player;
-        //private AudioManager _audioManager;
         private LightManager _lightManager;
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
@@ -35,7 +34,6 @@ namespace Imaginophobia {
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
-            AudioManager audioManager = new AudioManager();
             _lightManager = new LightManager();
             _player = new Player();
 
@@ -52,7 +50,7 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
-            Time.AddTimer(Restart, 481, "MainTimer");
+            Time.AddTimer(() => MainGame.ScreenManager.ReplaceScreen(new WinScreen()), 481, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
             //temp
@@ -89,7 +87,8 @@ namespace Imaginophobia {
             _cameraShaker.Update(gameTime);
 
             if (_player.Sanity <= 0) {
-                Restart();
+                MainGame.ScreenManager.ReplaceScreen(new DeathScreen());
+                //Restart();
             }
 
             DebugUpdate();
@@ -136,6 +135,7 @@ namespace Imaginophobia {
             if (sceneName == "end") {
                 if (ObjectiveManager.AllValvesRepaired) {
                     ObjectiveManager.Complete("exit-ladder");
+                    MainGame.ScreenManager.ReplaceScreen(new WinScreen());
                 }
                 else {
                     _uiManager.ShowMessage("I still have work to do.", 2f);
@@ -183,10 +183,11 @@ namespace Imaginophobia {
         }
 
         private void OnEnemyRemoved(GameObject enemy) {
-            if (enemy is Scopophobia) {
+            if (enemy is Scopophobia && ObjectiveManager.IsComplete("fixBlackout") == false) {
                 _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
             }
-            else if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false) {
+            else if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false) {
+                ObjectiveManager.Complete("collidedAutophobia");
                 _uiManager.ShowMessage("Flashlight might be useful.", 4f);
             }
 
@@ -197,39 +198,25 @@ namespace Imaginophobia {
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
                 _cameraShaker.Shake(5f, 1f);
             }
-            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.Right)) {
-            //    _camera.Zoom += 0.05f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-            //    VignetteOverlay.Scale += new Vector2(0.01f, 0);
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-            //    VignetteOverlay.Scale -= new Vector2(0.01f, 0);
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-            //    VignetteOverlay.Softness += 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-            //    VignetteOverlay.Softness -= 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad8)) {
-            //    _vignetteOverlay.Sharpness += 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad2)) {
-            //    _vignetteOverlay.Sharpness -= 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-            //    VignetteOverlay.Color = Color.Red;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad0)) {
-            //    VignetteOverlay.Color = Color.Black;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
-            //    _scotopicLight.Enabled = false;
-            //}
-
         }
 
-        
+        public void Dispose() {
+            _enemyManager.EnemySpawned -= OnEnemySpawned;
+            _enemyManager.EnemyRemoved -= OnEnemyRemoved;
+            _collisionManager.DoorInteracted -= OnDoorInteracted;
+            _sceneManager.SceneLoaded -= OnSceneLoaded;
+
+            _uiManager.Dispose();
+            _sceneManager.Dispose();
+            _collisionManager.Dispose();
+            _enemyManager.Dispose();
+            _player.Dispose();
+            _lightManager.Dispose();
+
+            MainGame.Saturation = 1f;
+            ObjectiveManager.Reset();
+            Time.SessionActive = false;
+            Time.Purge();
+        }
     }
 }
