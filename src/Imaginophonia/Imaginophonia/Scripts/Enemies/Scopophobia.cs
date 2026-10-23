@@ -36,7 +36,7 @@ namespace Imaginophobia {
             Transform.Scale = Vector2.One * 4;
             _size = new Vector2(480, 110) * Transform.Scale;
 
-            _audioSource = AudioManager.Instance.Play3DSFX(_origin,Sound.ScopoIndicator, 600, 15000);
+            _audioSource = AudioManager.Instance.Play3DSFX(_origin,SoundEffectName.ScopoIndicator, 600, 15000);
             AddChild(_audioSource);
             UpdateShape();
             

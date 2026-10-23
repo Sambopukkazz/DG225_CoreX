@@ -195,25 +195,28 @@ namespace Imaginophobia {
         }
 
         public void BlackScreen() {
+            AudioManager.Instance.PlaySFX(SoundEffectName.ScreenOff);
             _blackScreen = true;
 
-            Action turnOffBlackScreen = () => _blackScreen = false;
-
-            if (MainGame.ScreenManager.ActiveScreen is not SpinTheValveScreen) {
-                Time.AddTimer(turnOffBlackScreen, 1f);
-                return;
-            }
+            Action turnOffBlackScreen = () => {
+                _blackScreen = false;
+                AudioManager.Instance.PlaySFX(SoundEffectName.ScreenOn);
+            };
 
             if (MainGame.ScreenManager.ActiveScreen is SpinTheValveScreen minigame) {
                 minigame.MinigameVisible = false;
 
                 turnOffBlackScreen = () => {
+                    AudioManager.Instance.PlaySFX(SoundEffectName.ScreenOn);
                     minigame.MinigameVisible = true;
                     _blackScreen = false;
                 };
 
                 Time.AddTimer(turnOffBlackScreen, 1f);
+                return;
             }
+
+            Time.AddTimer(turnOffBlackScreen, 1f);
         }
 
         private void DebugUpdate() {

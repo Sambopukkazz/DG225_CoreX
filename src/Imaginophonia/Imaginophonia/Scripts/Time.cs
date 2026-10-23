@@ -29,12 +29,6 @@ namespace Imaginophobia {
             }
         }
 
-        public static Timer AddTimer(float seconds) {
-            Timer timer = new(seconds);
-            Timers.Add(timer);
-            return timer;
-        }
-
         public static Timer AddTimer(float seconds, string name) {
             Timer timer = new(seconds, name);
             Timers.Add(timer);
@@ -46,10 +40,23 @@ namespace Imaginophobia {
             Timers.Add(timer);
             return timer;
         }
+        public static Timer AddTimer(Action method, int min, int max, string name) {
+            Timer timer = new(method, min, name);
+            timer.Repeat = true;
+            timer.Random = true;
+            timer.MinMax = (min, max);
+            Timers.Add(timer);
+            return timer;
+        }
 
         public static void RemoveTimer(Timer timer) {
             Timers.Remove(timer);
             timer = null;
+        }
+
+        public static void RemoveTimer(string timerName) {
+            Timer timer = Timers.Find(timer => timer.Name == timerName);
+            Timers.Remove(timer);
         }
 
         public static bool TimerExist(string timerName) {

@@ -44,7 +44,7 @@ namespace Imaginophobia {
 
             canvas.AddChild(GumUIHelper.CreateTextButton("< Return to Menu", Layout.BackButtonFontScale, 0, 0, 500, 120, ReturnToMenu));
 
-            _tipsMessage = GumUIHelper.CreateText("", 1.5f, 20, 0, Layout.ScreenWidth, 120);
+            _tipsMessage = GumUIHelper.CreateText("", 1.5f, 20, 0, Layout.ScreenWidth, 120, true, 0);
             _tipsMessage.HorizontalAlignment = HorizontalAlignment.Left;
             _tipsMessage.VerticalAlignment = VerticalAlignment.Center;
             _tipsMessage.XOrigin = HorizontalAlignment.Left;
@@ -55,6 +55,7 @@ namespace Imaginophobia {
 
             RandomizeTip();
             _root.AddToRoot();
+            AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmDeathScreen);
         }
 
         public override void Update(GameTime gameTime) {

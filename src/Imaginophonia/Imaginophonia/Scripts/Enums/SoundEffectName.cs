@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public enum Sound {
+    public enum SoundEffectName {
         DoorClose,
         DoorOpen,
         DoorStuck,
@@ -20,6 +20,17 @@ namespace Imaginophobia {
         ElecRepairing,
         ElecSuccess,
         ScopoIndicator,
-        AutoIndicator
+        PhobiaHit,
+        HeartBeat,
+        Painting,
+        LightBreak,
+        Darkness,
+        ScreenOff,
+        ScreenOn,
+        FlashlightToggle,
+        LightFlickerLong,
+        LightFlickerShort1,
+        LightFlickerShort2,
+        LightFlickerShort3
     }
 }

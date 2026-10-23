@@ -28,12 +28,10 @@ namespace Imaginophobia {
         private HighlightSettings _doorSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _clipboardSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _ladderSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
-        //private FadeTransition _fadeTransition;
         public event Action<Vector2> SceneLoaded;
 
         public SceneManager(Player player) {
             _renderer = new TilemapSpriteBatchRenderer();
-            //_fadeTransition = new FadeTransition(MainGame.GraphicsDevice, Color.Black);
             _tileHighlight = new TileHighlightRenderer();
             _tileHighlight.ValveGroup.Settings = _valveSettings;
             _tileHighlight.LockerGroup.Settings = _lockerSettings;
@@ -155,10 +153,10 @@ namespace Imaginophobia {
             camera.IsZoomClampedToWorldBounds = true;
 
             if (_activeScene.Name == "tilemap_sewer") {
-                AudioManager.Instance.PlayAmbiance("sewer");
+                AudioManager.Instance.PlayBackgroundSound(BackgroundSound.AmbSewer);
             }
             else {
-                AudioManager.Instance.PlayAmbiance("test");
+                AudioManager.Instance.PlayBackgroundSound(BackgroundSound.AmbElectric);
             }
 
             foreach (SpawnPoint spawnPoint in _activeScene.PlayerSpawnPoints) {

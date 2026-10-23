@@ -62,6 +62,7 @@ namespace Imaginophobia {
         public Vector2 PreviousPos { get; set; }
         private float _sewerSanityRedectionSpeed = 0.5f;
         private (float, float, float) _availableSanityRedectionSpeed = (0.5f, 0.2f, 0f); //per second Normal,Anxious,Insane
+        private Random _rand;
 
 
         public Player() : base("Player", "Player"){
@@ -98,6 +99,8 @@ namespace Imaginophobia {
             _readyToRepair = true;
             ReadyToOpenDoor = true;
             AllowMovement = true;
+
+            _rand = new Random();
 
             UpdateShape();
         }
@@ -217,54 +220,6 @@ namespace Imaginophobia {
             
             DebugTest();
         }
-
-        ////private void SetUpAnimation() {
-        ////    //Set up animation
-        ////    Texture2DAtlas atlas = MainGame.Content.Load<Texture2DAtlas>("Character/spitesheet_player");
-        ////    SpriteSheet spriteSheet = new("player", atlas);
-
-
-        ////    spriteSheet.DefineAnimation("walk-forward", builder => {
-        ////        builder.IsLooping(true);
-        ////        for (int i = 1; i < 8; i++) {
-        ////            if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-        ////            else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.3));
-        ////        }
-        ////    });
-
-        ////    spriteSheet.DefineAnimation("sneak-forward", builder => {
-        ////        builder.IsLooping(true);
-        ////        for (int i = 1; i < 8; i++) {
-        ////            if (i == 7) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-        ////            else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
-        ////        }
-        ////    });
-
-        ////    spriteSheet.DefineAnimation("sneak-backward", builder => {
-        ////        builder.IsLooping(true);
-        ////        for (int i = 7; i > 0; i--) {
-        ////            if (i == 1) builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0));
-        ////            else builder.AddFrame($"sprite_walk_0{i}", TimeSpan.FromSeconds(0.5));
-        ////        }
-        ////    });
-
-        ////    spriteSheet.DefineAnimation("idle", builder => {
-        ////        builder.IsLooping(false)
-        ////        .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
-        ////    });
-
-        ////    spriteSheet.DefineAnimation("back", builder => {
-        ////        builder.IsLooping(false)
-        ////        .AddFrame("sprite_back", TimeSpan.FromSeconds(0));
-        ////    });
-
-        ////    spriteSheet.DefineAnimation("check", builder => {
-        ////        builder.IsLooping(false)
-        ////        .AddFrame("sprite_idle", TimeSpan.FromSeconds(0));
-        ////    });
-
-        ////    _animatedSprite = new AnimatedSprite(spriteSheet, "idle");
-        ////}
 
         private void SetUpAnimation() {
             //Set up animation
@@ -419,7 +374,7 @@ namespace Imaginophobia {
                     CooldownTimer.ToggleActive();
                 }
                 CooldownTimer = Time.AddTimer(ToggleHide, 8, "hideTime");
-                AudioManager.Instance.PlaySFX(Sound.LockerClose);
+                AudioManager.Instance.PlaySFX(SoundEffectName.LockerClose);
             }
             else if (CurrentAction == CharacterAction.Hiding) {
                 ObjectiveManager.Complete("hide");
@@ -432,7 +387,7 @@ namespace Imaginophobia {
                     CooldownTimer.ToggleActive();
                 }
                 CooldownTimer = Time.AddTimer(SetReadyToHide, _hideCoolDown, "cooldownTime");
-                AudioManager.Instance.PlaySFX(Sound.LockerOpen);
+                AudioManager.Instance.PlaySFX(SoundEffectName.LockerOpen);
             }
             Visible = Active;
             _scotopicLight.Enabled = Active;
@@ -445,6 +400,7 @@ namespace Imaginophobia {
         }
 
         public void ToggleFlashLight() {
+            AudioManager.Instance.PlaySFX(SoundEffectName.FlashlightToggle);
             if (_flashLight.Enabled) {
                 _flashLight.Enabled = false;
             }
@@ -478,11 +434,27 @@ namespace Imaginophobia {
                 SanityState = SanityState.Insane;
                 _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item3;
                 SanityStateChanged?.Invoke();
+
+                AudioManager.Instance.StopSFX(SoundEffectName.Painting);
+                Time.RemoveTimer("anxietySound");
+
+                AudioManager.Instance.PlaySFX(SoundEffectName.HeartBeat);
+                Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting), 3);
+
+                Action anxietySound = () => {
+                    AudioManager.Instance.PlaySFX(SoundEffectName.HeartBeat);
+                    Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting), 3);
+                };
+
+                Time.AddTimer(anxietySound, 10, 16, "anxietySound");
             }
             else if (Sanity <= ((float)SanityState.Normal) && SanityState == SanityState.Normal) {
                 SanityState = SanityState.Anxious;
                 _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item2;
                 SanityStateChanged?.Invoke();
+
+                AudioManager.Instance.PlaySFX(SoundEffectName.Painting);
+                Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting), 20, 26, "anxietySound");
             }
             else if (Sanity > (float)SanityState.Normal && SanityState != SanityState.Normal) {
                 SanityState = SanityState.Normal;

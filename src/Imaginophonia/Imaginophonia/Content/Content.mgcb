@@ -28,12 +28,33 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/amb_sewer.mp3
 
-#begin Audio/sfx_autophobia_indicator.mp3
+#begin Audio/bgm_death_screen.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/bgm_death_screen.mp3
+
+#begin Audio/bgm_mainmenu_screen.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/bgm_mainmenu_screen.mp3
+
+#begin Audio/bgm_win_screen.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/bgm_win_screen.mp3
+
+#begin Audio/sfx_darkness.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
-/build:Audio/sfx_autophobia_indicator.mp3
+/build:Audio/sfx_darkness.mp3
 
 #begin Audio/sfx_door_close.mp3
 /importer:Mp3Importer
@@ -84,6 +105,55 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_electric_success.mp3
 
+#begin Audio/sfx_flashlight_toggle.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_flashlight_toggle.mp3
+
+#begin Audio/sfx_heartbeat.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_heartbeat.mp3
+
+#begin Audio/sfx_light_break.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_light_break.mp3
+
+#begin Audio/sfx_light_flicker_long.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_light_flicker_long.mp3
+
+#begin Audio/sfx_light_flicker_short_01.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_light_flicker_short_01.mp3
+
+#begin Audio/sfx_light_flicker_short_02.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_light_flicker_short_02.mp3
+
+#begin Audio/sfx_light_flicker_short_03.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_light_flicker_short_03.mp3
+
 #begin Audio/sfx_locker_close.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -97,6 +167,20 @@
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_locker_open.mp3
+
+#begin Audio/sfx_panting.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_panting.mp3
+
+#begin Audio/sfx_phobias_hit.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_phobias_hit.mp3
 
 #begin Audio/sfx_pipe_complete.mp3
 /importer:Mp3Importer
@@ -132,6 +216,20 @@
 /processorParam:Quality=Best
 /processorParam:Version=3.8.5.0
 /build:Audio/sfx_scopophobia_indicator.mp3
+
+#begin Audio/sfx_screen_off.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_screen_off.mp3
+
+#begin Audio/sfx_screen_on.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_screen_on.mp3
 
 #begin Audio/sfx_step_01.mp3
 /importer:Mp3Importer

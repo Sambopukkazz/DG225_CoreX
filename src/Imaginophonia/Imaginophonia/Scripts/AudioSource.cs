@@ -15,13 +15,14 @@ namespace Imaginophobia {
         private AudioEmitter _emitter;
 
         private float _duration;
+        private float _volume;
         private float _innerRadius = 100;
         private float _outerRadius = 200;
         const float SPEED_OF_SOUND = 343.5f;
 
         public bool IsDisposed { get; private set; }
 
-        public AudioSource(Sound name) : base (name.ToString(), "AudioSource") {
+        public AudioSource(SoundEffectName name) : base (name.ToString(), "AudioSource") {
             Transform.Position = Vector2.Zero;
         }
         public AudioSource(Vector2 pos, float innerRadius, float outerRadius) : base("AudioSource", "AudioSource3D") {
@@ -49,14 +50,18 @@ namespace Imaginophobia {
 
         public void PlayLoop(SoundEffect soundEffect, float volume = 1) {
             AudioPlayer = soundEffect.CreateInstance();
+            _volume = volume;
             _duration = (float)soundEffect.Duration.TotalSeconds;
+            AudioPlayer.Volume = volume;
             AudioPlayer.IsLooped = true;
             AudioPlayer.Play();
         }
 
         public void PlayOneShot(SoundEffect soundEffect, float volume = 1) {
             AudioPlayer = soundEffect.CreateInstance();
+            _volume = volume;
             _duration = (float)soundEffect.Duration.TotalSeconds;
+            AudioPlayer.Volume = volume;
             AudioPlayer.Play();
         }
 
@@ -65,7 +70,7 @@ namespace Imaginophobia {
 
             float distance = Vector3.Distance(player.Listener.Position, _emitter.Position);
 
-            float volume = 1f - MathHelper.Clamp((distance - _innerRadius) / (_outerRadius - _innerRadius), 0f, 1f);
+            float volume = _volume - MathHelper.Clamp((distance - _innerRadius) / (_outerRadius - _innerRadius), 0f, _volume);
             AudioPlayer.Volume = volume;
 
             Vector2 directionFromListener = new Vector2(_emitter.Position.X - player.Listener.Position.X, _emitter.Position.Y - player.Listener.Position.Y);

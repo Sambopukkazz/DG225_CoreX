@@ -81,7 +81,7 @@ namespace Imaginophobia {
                         //Connect the dot
                         Screen screen = new ConnectTheDotsScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
-                        AudioManager.Instance.PlaySFX(Sound.ElecRepairing);
+                        AudioManager.Instance.PlaySFX(SoundEffectName.ElecRepairing);
                         _player.ToggleRepair();
                         ObjectiveManager.Complete("repair");
                     }
@@ -89,11 +89,7 @@ namespace Imaginophobia {
                 }
                 else if (trigger.CompareTag("door")) {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
-                        //Load to next scene
-                        //AudioManager.Instance.PlaySFX(Sound.OpenDoor);
-                        //temp
                         ObjectiveManager.Complete("door");
-                        //tempend
                         DoorInteracted?.Invoke(trigger.Name);
                     }
                 }
@@ -108,20 +104,16 @@ namespace Imaginophobia {
                     GameObject enemy = (GameObject)collision.Other;
                     if(enemy.Name == "Autophobia") {
                         enemy.SetActive(false);
-                        _player.Sanity -= 10;
-                        AudioManager.Instance.PlaySFX(Sound.AutoIndicator);
+                        _player.Sanity -= 10;  
                         MainGame.Saturation = 0;
                         //RemoveCollider(collision.Other);
+                        AudioManager.Instance.PlaySFX(SoundEffectName.PhobiaHit);
                     }
                     else if (enemy.Name == "Scopophobia" && enemy.Visible) {
                         _player.Sanity -= 25;
                         enemy.Visible = false;
-                        //_colliders.Remove(collision.Other);
-                    }
-                    //else if (enemy.Name == "Scopophobia" && enemy.Visible) {
-                    //    _player.Sanity -= 25;
-                    //    enemy.Visible = false;
-                    //}                               
+                        AudioManager.Instance.PlaySFX(SoundEffectName.PhobiaHit);
+                    }                       
                 }
             }
 
@@ -138,23 +130,13 @@ namespace Imaginophobia {
                     _player.Blink = true;
                 }
             }
-            //for (int i = _enemies.Count - 1; i >= 0; i--) {
-            //    if (_player.Active) {
-            //        if (_enemies[i].GetType().Name == "Autophobia" && _enemies[i].Shape.Intersects(_player.EyeSight)) {
-            //            Autophobia enemy = (Autophobia)_enemies[i];
-            //            Time.AddTimer(enemy.SetActive, 0.25f);
-            //            enemy.AllowMovement = false;
-            //            //Trigger Blink
-            //            _player.Blink = true;
-            //        }
-            //    }
-            //}
 
             _player.Nyctophobia = false;
             //Player with light
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "lights")) {
                 LightArea lightArea = (LightArea)collision.Other;
                 if (lightArea.On == false && lightArea.IsFlickering == false) {
+                    AudioManager.Instance.PlaySFX(SoundEffectName.Darkness, playAfterLastCompleted: true);
                     _player.Nyctophobia = true;
                 }
             }
@@ -168,6 +150,7 @@ namespace Imaginophobia {
                     lightArea.TurnOff();
                     lightArea.ScopoHasPassed = true;
                     scopo.LightBrokeCount++;
+                    AudioManager.Instance.Play3DSFX(lightArea.Shape.BoundingBox.Center, SoundEffectName.LightBreak, 50, 1800);
                 }
                 else if (enemy.Name == "Autophobia") {
                     lightArea.StartFlicker();

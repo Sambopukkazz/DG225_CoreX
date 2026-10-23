@@ -5,6 +5,7 @@ using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
 using ToolsUtilities;
 
@@ -35,6 +36,9 @@ namespace Imaginophobia {
             canvas.AddChild(GumUIHelper.CreateTextButton("Exit", Layout.MenuFontScale, Layout.MenuButtonX, Layout.MenuExitY, Layout.MenuButtonWidth, Layout.MenuButtonHeight, ExitGame));
 
             _root.AddToRoot();
+
+            AudioManager.Instance.ClearSFXs();
+            AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmMainMenu);
         }
 
         public override void Update(GameTime gameTime) {
@@ -57,7 +61,9 @@ namespace Imaginophobia {
         }
 
         private void StartGame() {
-            MainGame.StartGame();
+            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, MainGame.GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
+            GameplayScreen gameplay = new GameplayScreen(viewportAdapter);
+            ScreenManager.ReplaceScreen(gameplay);
         }
 
         private void OpenSettings() {

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
 using MonoSound;
 using System;
@@ -95,8 +96,10 @@ namespace Imaginophobia {
             //GraphicsDevice.Clear(Color.Black);
             //// TODO: Add your drawing code here
             //SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            
             ScreenManager.Draw(gameTime);
             Gum.Draw();
+
             GraphicsDevice.SetRenderTarget(null);
             DrawGraded();
             //SpriteBatch.End();
@@ -104,11 +107,11 @@ namespace Imaginophobia {
             base.Draw(gameTime);
         }
 
-        public static void StartGame() {
-            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
-            GameplayScreen gameplay = new GameplayScreen(viewportAdapter);
-            ScreenManager.ReplaceScreen(gameplay);
-        }
+        //public static void StartGame() {
+        //    BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
+        //    GameplayScreen gameplay = new GameplayScreen(viewportAdapter);
+        //    ScreenManager.ReplaceScreen(gameplay, new FadeTransition(MainGame.GraphicsDevice, Color.Black, 2f));
+        //}
 
         private void EnsureFrameTarget() {
             Viewport viewport = GraphicsDevice.Viewport;

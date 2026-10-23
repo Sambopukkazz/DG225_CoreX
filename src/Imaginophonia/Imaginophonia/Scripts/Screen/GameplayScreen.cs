@@ -1,11 +1,12 @@
 ﻿using Gum;
 using Gum.Forms.Controls;
-using Gum.Wireframe;
 using Gum.GueDeriving;
+using Gum.Wireframe;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
@@ -80,9 +81,16 @@ namespace Imaginophobia {
 
         public override void UnloadContent() {
             _gameManager.Dispose();
-            base.UnloadContent();
         }
         private void ReturnToMenu() {
+            //FadeTransition fadeTransition = new FadeTransition(MainGame.GraphicsDevice, Color.Black, 1f);
+            //fadeTransition.Completed += (_, _) => {
+            //    MainGame.ScreenManager.ClearScreens();
+            //    MainGame.ScreenManager.ShowScreen(new MainMenuScreen(), fadeTransition);
+            //};
+
+            //MainGame.ScreenManager.CloseScreen(fadeTransition);
+
             MainGame.ScreenManager.ClearScreens();
             MainGame.ScreenManager.ShowScreen(new MainMenuScreen());
         }

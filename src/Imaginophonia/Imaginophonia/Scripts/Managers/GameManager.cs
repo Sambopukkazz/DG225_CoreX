@@ -7,6 +7,7 @@ using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using MonoGame.Extended.Tilemaps;
 using MonoGame.Extended.Tilemaps.Rendering;
 using MonoGame.Extended.Timers;
@@ -85,7 +86,7 @@ namespace Imaginophobia {
             _uiManager.Update();
 
             _cameraShaker.Update(gameTime);
-
+            
             if (_player.Sanity <= 0) {
                 MainGame.ScreenManager.ReplaceScreen(new DeathScreen());
                 //Restart();
@@ -144,9 +145,10 @@ namespace Imaginophobia {
             }
 
             if (_enemyManager.HasActiveScopophobia()) {
-                AudioManager.Instance.PlaySFX(Sound.DoorStuck);
+                AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck);
             }
             else {
+                AudioManager.Instance.ClearSFXs("anxietySound");
                 _enemyManager.ClearEnemies();
                 _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
             }
@@ -154,7 +156,7 @@ namespace Imaginophobia {
 
         private void OnSceneLoaded(Vector2 spawnPosition) {
             _player.LoadScenePosition(spawnPosition);
-            AudioManager.Instance.PlaySFX(Sound.DoorClose);
+            AudioManager.Instance.PlaySFX(SoundEffectName.DoorClose);
             if (SceneManager.GetActiveScene()?.Name == "tilemap_sewer") {
                 ObjectiveManager.Complete("entered-sewer");
             } 
@@ -162,6 +164,7 @@ namespace Imaginophobia {
         
         private void OnEnemySpawned(GameObject enemy) {
             if (enemy is Nyctophobia) {
+                AudioManager.Instance.PlaySFX(SoundEffectName.LightFlickerLong);
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
                 ObjectiveManager.ResetPanels();

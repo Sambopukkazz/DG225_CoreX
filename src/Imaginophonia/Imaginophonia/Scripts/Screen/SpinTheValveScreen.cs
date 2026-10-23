@@ -66,18 +66,18 @@ namespace Imaginophobia {
                 }
                 else if (_needleAngle >= MathHelper.ToRadians(285) && _needleAngle <= MathHelper.ToRadians(313)) {
                     _progressValue -= 35f * Time.DeltaTime;
-                    AudioManager.Instance.PlaySFX(Sound.PipeFail, false, true);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.PipeFail, false, true);
                 }
                 else if (_needleAngle >= MathHelper.ToRadians(225) && _needleAngle <= MathHelper.ToRadians(255)) {
                     _progressValue -= 15f * Time.DeltaTime;
-                    AudioManager.Instance.PlaySFX(Sound.PipeFail, false, true);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.PipeFail, false, true);
                 }
 
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
 
                 if (_progressValue >= 200) {
                     MinigameActive = false;
-                    AudioManager.Instance.PlaySFX(Sound.PipeComplete);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.PipeComplete);
                     _player.ToggleRepair();
                     _trigger.Progress = _progressValue;
                     _trigger.Interactable = false;
@@ -162,7 +162,7 @@ namespace Imaginophobia {
                     _angularSpeed = MathHelper.WrapAngle(_mouseAngle - _lastMouseAngle);
                     _targetAngle += _angularSpeed;
                     _lastMouseAngle = _mouseAngle;
-                    AudioManager.Instance.PlaySFX(Sound.PipeRepairing, false, true);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.PipeRepairing, false, true);
                 }
             }
             else {

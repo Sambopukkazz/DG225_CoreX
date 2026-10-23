@@ -34,7 +34,7 @@ namespace Imaginophobia {
         }
 
         // Text label at a fixed position and size, centered on both axes.
-        public static TextRuntime CreateText(string text, float fontScale, int x, int y, int width, int height) {
+        public static TextRuntime CreateText(string text, float fontScale, int x, int y, int width, int height, bool hasDropShadow = true, int outlineThickness = 1) {
             TextRuntime label = new TextRuntime();
             label.Text = text;
             label.Font = "generationfonting";
@@ -47,8 +47,8 @@ namespace Imaginophobia {
             label.HeightUnits = DimensionUnitType.Absolute;
             label.HorizontalAlignment = HorizontalAlignment.Center;
             label.VerticalAlignment = VerticalAlignment.Center;
-            label.HasDropshadow = true;
-            label.OutlineThickness = 1;
+            label.HasDropshadow = hasDropShadow;
+            label.OutlineThickness = outlineThickness;
             return label;
         }
 

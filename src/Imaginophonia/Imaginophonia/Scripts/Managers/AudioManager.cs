@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Imaginophobia {
     public class AudioManager : IDisposable {
@@ -23,7 +24,7 @@ namespace Imaginophobia {
         private float _previousAmbientVolume;
         private float _previousSoundEffectVolume;
         public bool IsMuted { get; private set; }
-        private bool _debugging = false;
+        private bool _debugging = true;
 
         public float AmbVolume {
             get {
@@ -63,8 +64,9 @@ namespace Imaginophobia {
 
         private SoundEffect[] _steps;
         private int _stepOrder;
-        private Dictionary<Sound, SoundEffect> NameSFX;
-        private Song[] _amb;
+        private Dictionary<SoundEffectName, SoundEffect> SfxByName;
+        private Dictionary<BackgroundSound, Song> BgsByName;
+        private Random _rand;
 
         public AudioManager() {
             if (s_instance != null) {
@@ -78,23 +80,36 @@ namespace Imaginophobia {
 
             _activeAudioSources = new List<AudioSource>();
 
+            _rand = new Random();
+
             //Load Sound Effect
-            NameSFX = new Dictionary<Sound, SoundEffect> {
-                { Sound.DoorClose, content.Load<SoundEffect>("Audio/sfx_door_close") },
-                { Sound.DoorOpen, content.Load<SoundEffect>("Audio/sfx_door_open") },
-                { Sound.DoorStuck, content.Load<SoundEffect>("Audio/sfx_door_stuck") },
-                { Sound.LockerClose, content.Load<SoundEffect>("Audio/sfx_locker_close") },
-                { Sound.LockerOpen, content.Load<SoundEffect>("Audio/sfx_locker_open") },
-                { Sound.PipeComplete, content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
-                { Sound.PipeFail, content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
-                { Sound.PipeRepairing, content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
-                { Sound.PipeSuccess, content.Load<SoundEffect>("Audio/sfx_pipe_success") },
-                { Sound.ElecComplete, content.Load<SoundEffect>("Audio/sfx_electric_complete") },
-                { Sound.ElecFail, content.Load<SoundEffect>("Audio/sfx_electric_failed") },
-                { Sound.ElecRepairing, content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
-                { Sound.ElecSuccess, content.Load<SoundEffect>("Audio/sfx_electric_success") },
-                { Sound.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
-                { Sound.AutoIndicator, content.Load<SoundEffect>("Audio/sfx_autophobia_indicator") }
+            SfxByName = new Dictionary<SoundEffectName, SoundEffect> {
+                { SoundEffectName.DoorClose, content.Load<SoundEffect>("Audio/sfx_door_close") },
+                { SoundEffectName.DoorOpen, content.Load<SoundEffect>("Audio/sfx_door_open") },
+                { SoundEffectName.DoorStuck, content.Load<SoundEffect>("Audio/sfx_door_stuck") },
+                { SoundEffectName.LockerClose, content.Load<SoundEffect>("Audio/sfx_locker_close") },
+                { SoundEffectName.LockerOpen, content.Load<SoundEffect>("Audio/sfx_locker_open") },
+                { SoundEffectName.PipeComplete, content.Load<SoundEffect>("Audio/sfx_pipe_complete") },
+                { SoundEffectName.PipeFail, content.Load<SoundEffect>("Audio/sfx_pipe_failed") },
+                { SoundEffectName.PipeRepairing, content.Load<SoundEffect>("Audio/sfx_pipe_repairing") },
+                { SoundEffectName.PipeSuccess, content.Load<SoundEffect>("Audio/sfx_pipe_success") },
+                { SoundEffectName.ElecComplete, content.Load<SoundEffect>("Audio/sfx_electric_complete") },
+                { SoundEffectName.ElecFail, content.Load<SoundEffect>("Audio/sfx_electric_failed") },
+                { SoundEffectName.ElecRepairing, content.Load<SoundEffect>("Audio/sfx_electric_repairing") },
+                { SoundEffectName.ElecSuccess, content.Load<SoundEffect>("Audio/sfx_electric_success") },
+                { SoundEffectName.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
+                { SoundEffectName.PhobiaHit, content.Load<SoundEffect>("Audio/sfx_phobias_hit") },
+                { SoundEffectName.HeartBeat, content.Load<SoundEffect>("Audio/sfx_heartbeat") },
+                { SoundEffectName.Painting, content.Load<SoundEffect>("Audio/sfx_panting") },
+                { SoundEffectName.LightBreak, content.Load<SoundEffect>("Audio/sfx_light_break") },
+                { SoundEffectName.Darkness, content.Load<SoundEffect>("Audio/sfx_darkness") },
+                { SoundEffectName.ScreenOff, content.Load<SoundEffect>("Audio/sfx_screen_off") },
+                { SoundEffectName.ScreenOn, content.Load<SoundEffect>("Audio/sfx_screen_on") },
+                { SoundEffectName.FlashlightToggle, content.Load<SoundEffect>("Audio/sfx_flashlight_toggle") },
+                { SoundEffectName.LightFlickerLong, content.Load<SoundEffect>("Audio/sfx_light_flicker_long") },
+                { SoundEffectName.LightFlickerShort1, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_01") },
+                { SoundEffectName.LightFlickerShort2, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_02") },
+                { SoundEffectName.LightFlickerShort3, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_03") }
             };
 
             //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.LowPass, strength: 1f, frequency: 2000, resonance: 15);
@@ -132,9 +147,14 @@ namespace Imaginophobia {
                 //_steps[i - 1] = EffectLoader.GetMultiFilteredEffect($"Content/Audio/sfx_step_0{i}.xnb", MyBQR);
             }
 
-            _amb = new Song[2];
-            _amb[0] = content.Load<Song>($"Audio/amb_electricroom");
-            _amb[1] = content.Load<Song>($"Audio/amb_sewer");
+            BgsByName = new Dictionary<BackgroundSound, Song> {
+                { BackgroundSound.AmbElectric, content.Load<Song>("Audio/amb_electricroom") },
+                { BackgroundSound.AmbSewer, content.Load<Song>("Audio/amb_sewer") },
+                { BackgroundSound.BgmMainMenu, content.Load<Song>("Audio/bgm_mainmenu_screen") },
+                { BackgroundSound.BgmDeathScreen, content.Load<Song>("Audio/bgm_death_screen") },
+                { BackgroundSound.BgmWinScreen, content.Load<Song>("Audio/bgm_win_screen") }
+            };
+            
             AmbVolume = 0.2f;
         }
 
@@ -169,7 +189,7 @@ namespace Imaginophobia {
             }
         }
 
-        public void PlaySFX(Sound name, bool repeat = false, bool playAfterLastCompleted = false) {
+        public void PlaySFX(SoundEffectName name, bool repeat = false, bool playAfterLastCompleted = false, float volume = 1) {
             if (playAfterLastCompleted == true && _activeAudioSources.Exists(audio => audio.Name == name.ToString()) == true) {
                 return;
             }
@@ -177,63 +197,92 @@ namespace Imaginophobia {
             AudioSource audioSource = new AudioSource(name);
             _activeAudioSources.Add(audioSource);
 
-            SoundEffect soundEffect = NameSFX[name];
+            SoundEffect soundEffect = SfxByName[name];
             
             if (repeat) {
-                audioSource.PlayLoop(soundEffect);
+                audioSource.PlayLoop(soundEffect, volume);
             }
             else {
-                audioSource.PlayOneShot(soundEffect);
+                audioSource.PlayOneShot(soundEffect, volume);
             }
         }
 
-        public AudioSource Play3DSFX(Vector2 pos, Sound name, float innerRadius = 10, float outerRadius = 80) {
+        public AudioSource Play3DSFX(Vector2 pos, SoundEffectName name, float innerRadius = 10, float outerRadius = 80, float volume = 1) {
             AudioSource audioSource = new(pos, innerRadius, outerRadius);
             _activeAudioSources.Add(audioSource);
 
-            SoundEffect soundEffect = NameSFX[name];
+            SoundEffect soundEffect = SfxByName[name];
 
             if (soundEffect != null) {
-                audioSource.PlayOneShot(soundEffect);
+                audioSource.PlayOneShot(soundEffect, volume);
             }
 
             return audioSource;
         }
 
-        public void PlayStepsSFX(Vector2 pos, float innerRadius  = 10, float outerRadius = 80) {
-            AudioSource instance = new(pos, innerRadius, outerRadius);
-            _activeAudioSources.Add(instance);
+        public void PlayBackgroundSound(BackgroundSound bgsName) {
+            if (MediaPlayer.State == MediaState.Playing) {
+                MediaPlayer.Stop();
+            }
+
+            Song bgs = BgsByName[bgsName];
+            MediaPlayer.Play(bgs);
+            MediaPlayer.IsRepeating = true;
+        }
+
+        public void PlayStepsSFX(Vector2 pos, float innerRadius = 10, float outerRadius = 80) {
+            AudioSource audioSource = new(pos, innerRadius, outerRadius);
+            _activeAudioSources.Add(audioSource);
 
             if (_stepOrder >= _steps.Length) {
                 _stepOrder = 0;
             }
 
-            instance.PlayOneShot(_steps[_stepOrder++]);
+            audioSource.PlayOneShot(_steps[_stepOrder++]);
         }
 
-        public void PlayAmbiance(string ambName) {
-            if (MediaPlayer.State == MediaState.Playing) {
-                MediaPlayer.Stop();
+        public void PlayLightFlickerSFX(Vector2 pos, float innerRadius = 10, float outerRadius = 80) {
+            AudioSource audioSource = new(pos, innerRadius, outerRadius);
+            _activeAudioSources.Add(audioSource);
+            
+            SoundEffect soundEffect = null;
+            switch(_rand.Next(0, 3)) {
+                case 0:
+                    soundEffect = SfxByName[SoundEffectName.LightFlickerShort1];
+                    break;
+                case 1:
+                    soundEffect = SfxByName[SoundEffectName.LightFlickerShort2];
+                    break;
+                case 2:
+                    soundEffect = SfxByName[SoundEffectName.LightFlickerShort3];
+                    break;
             }
 
-            Song amb;
-            if (ambName == "sewer") {
-                amb = _amb[1];
-            }
-            else {
-                amb = _amb[0];
-            }
-            MediaPlayer.Play(amb);
-            MediaPlayer.IsRepeating = true;
+            audioSource.PlayOneShot(soundEffect);
         }
 
-        public void StopSFX(Sound name) {
+        public void StopSFX(SoundEffectName name) {
             if (_activeAudioSources.Exists(audio => audio.Name == name.ToString())) {
                 foreach (var audioSource in _activeAudioSources.Where(audio => audio.Name == name.ToString())) {
                     audioSource.SetActive(false);
                 }
             }
         }
+
+        public void ClearSFXs() {
+            foreach (var audioSource in _activeAudioSources) {
+                audioSource.AudioPlayer.Stop();
+                audioSource.SetActive(false);
+            }
+        }
+
+        //public void ClearSFXs(params string[] soundEffectNames) {
+        //    var test = _activeAudioSources.ExceptBy(soundEffectNames, p => p.Name);
+        //    foreach (AudioSource audioSource in test)  {
+        //        audioSource.AudioPlayer.Stop();
+        //        audioSource.SetActive(false);
+        //    }
+        //}
 
         public void PauseAudio() {
             // Pause any active songs playing.

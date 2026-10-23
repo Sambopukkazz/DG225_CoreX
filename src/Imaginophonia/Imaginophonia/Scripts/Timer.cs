@@ -13,8 +13,11 @@ namespace Imaginophobia {
         public bool Active => _active;
         private bool _paused;
         public bool Repeat { get; set; }
+        public bool Random { get; set; }
+        public (int, int) MinMax { get; set; }
         public event EventHandler OnTimerCompleted;
         private Action _method;
+        private Random _rand;
 
         public Timer(float timeLength) { 
             _timeLength = timeLength;
@@ -27,6 +30,7 @@ namespace Imaginophobia {
             _timeLength = timeLength;
             TimeLeft = timeLength;
             _active = true;
+            _rand = new Random();
         }
 
         public Timer(Action method, float timeLength, string name) {
@@ -35,6 +39,7 @@ namespace Imaginophobia {
             _timeLength = timeLength;
             TimeLeft = timeLength;
             _active = true;
+            _rand = new Random();
         }
 
         public void Update() {
@@ -48,7 +53,10 @@ namespace Imaginophobia {
 
                 OnTimerCompleted?.Invoke(this, EventArgs.Empty);
 
-                if (Repeat) {
+                if (Repeat && Random) {
+                    TimeLeft = _rand.Next(MinMax.Item1,MinMax.Item2);
+                }
+                else if (Repeat) {
                     Reset();
                 }
                 else {
