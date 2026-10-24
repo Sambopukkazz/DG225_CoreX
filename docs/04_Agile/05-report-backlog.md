@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Report Backlog — Hub
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ศูนย์รวมรายงานผลการทดสอบและผลการทดลอง (playtest / QA) ของเกม
 
@@ -20,12 +20,10 @@ date: 2026-10-14
 
 ```
 reports/
-├── qa/       ← รายงานทดสอบระบบ (system test)
-├── polish/   ← รายงาน polish / balance
-└── bugs/     ← รายงานบั๊ก
+└── playtest-YYYY-MM-DD.md   ← รายงาน playtest / user study
 ```
 
-> **TBD:** โฟลเดอร์ `qa/`, `polish/`, `bugs/` ยังว่าง — สร้างเมื่อมีรายงานแรก
+> รายงานทุกประเภท (playtest, system test, balance, บั๊ก) เก็บเป็นไฟล์ `.md` ในโฟลเดอร์นี้โดยตรง — ไม่แยกโฟลเดอร์ย่อย
 
 ## สรุปประเด็นสำคัญจาก Playtest ล่าสุด
 
@@ -45,4 +43,3 @@ reports/
 - Playtest report: [playtest-2026-09-25.md](reports/playtest-2026-09-25.md)
 - Scope & Risks: [Scope & Feature List](../01_GDD/02-scope-features.md)
 - Product Backlog: [Product Backlog](01-product-backlog.md)
-- Kanban: [Kanban](kanban.md)

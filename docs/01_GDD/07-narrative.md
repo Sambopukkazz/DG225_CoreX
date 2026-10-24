@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — Narrative
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ## Story
 
@@ -56,6 +56,7 @@ date: 2026-10-14
 | Autophobia | "You aren't scared of being alone, you are scared of NOT being alone" |
 | Scopophobia | "In this seemingly endless sewer, don't you think there's something looking back at you when you stare into that void?" |
 | Nyctophobia | "The unknown" |
+| Entamaphobia | "People with this phobia often fear not the door itself, but something unknown behind it." — สิ่งที่ไม่รู้ว่าคืออะไร มักเป็นผู้บุกรุกหรือผี |
 
 ## โครงสร้างการเล่าเรื่อง
 

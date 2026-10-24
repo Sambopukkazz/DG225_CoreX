@@ -60,7 +60,6 @@
 - [Mechanics](../01_GDD/03-mechanics.md)
 - [Sprint Backlog](02-sprint-backlog.md)
 - [Sprint Plans](sprint-plans/) — แหล่งความจริงของสถานะงาน
-- [Kanban](kanban.md)
 - [Report Backlog](05-report-backlog.md)
 
 ## หมายเหตุการแก้ไข

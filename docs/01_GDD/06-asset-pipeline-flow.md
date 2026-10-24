@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Asset Pipeline Flow
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ```mermaid
 flowchart TD
@@ -51,13 +51,16 @@ flowchart TD
 
 | โฟลเดอร์ | เก็บอะไร |
 |---|---|
-| `Audio/` | SFX (`sfx_*`) และ ambience (`amb_*`) |
-| `Character/` | Spritesheet + animation json ของตัวละครหลัก (มี `New_version/` และ `Old_version/`) |
-| `Font/` | Bitmap font (`.fnt` + `.png`) |
+| `Audio/` | SFX (`sfx_*`) และ ambience (`amb_*`) — 25 ไฟล์ |
+| `Character/` | Spritesheet + animation json ของตัวละครหลัก (มี `New_version/` และ `Old_version/` ที่ยังไม่ถูกโหลด) |
+| `Datas/` | ข้อมูล JSON (ปัจจุบันมี `tutorial.json`) |
+| `Font/` | Bitmap font (`.fnt` + `.png`) — **เอกพจน์** |
 | `Phobias/` | Entity ของ phobia ต่างๆ |
-| `Shaders/` | `.fx` (Vignette, BottomFade) |
+| `Shaders/` | `.fx` (Vignette, BottomFade, Silhouette, HighlightComposite) |
 | `Tilemaps/` | ไฟล์ `.ldtk` และ `mapassets/` (tileset) |
-| `UI/` | องค์ประกอบ UI (Needle, Radial Circle, spacebar, valve) |
+| `UI/` | องค์ประกอบ UI (spacebar, valve, atlas ของมินิเกม Connect The Dots) |
+
+> ไฟล์ tileset ใน `Tilemaps/mapassets/` **ไม่ต้องลงทะเบียนใน `Content.mgcb`** — `LDtkTilemapImporter` โหลดให้จาก path ที่ระบุในไฟล์ `.ldtk`
 
 ## หมายเหตุ
 

@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Meeting Backlogs — Hub
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ศูนย์รวมบันทึกการประชุมและการติดตามงานรายสัปดาห์ของทีม CoreX
 
@@ -46,4 +46,3 @@ date: 2026-10-14
 - Sprint Backlog: [Sprint Backlog](02-sprint-backlog.md)
 - Retrospectives: [Retrospectives Backlog](04-retrospectives-backlog.md)
 - Reports: [Report Backlog](05-report-backlog.md)
-- Kanban: [Kanban](kanban.md)

@@ -8,7 +8,7 @@ date: 2026-10-14
 
 **Project:** Imaginophobia (ทีม CoreX)
 **Status:** Active · **Current Sprint:** Sprint 4 (2026-10-11 → 2026-11-02)
-**Last Updated:** 2026-10-14 | **Knowledge Hub:** [Project Wiki](./05_Wiki/wiki.md)
+**Last Updated:** 2026-10-24 | **Knowledge Hub:** [Project Wiki](./05_Wiki/wiki.md)
 
 ---
 
@@ -44,12 +44,10 @@ date: 2026-10-14
 | [03-meeting-backlogs.md](./04_Agile/03-meeting-backlogs.md) | Hub บันทึกการประชุม + standups |
 | [04-retrospectives-backlog.md](./04_Agile/04-retrospectives-backlog.md) | Hub ผลการทบทวน |
 | [05-report-backlog.md](./04_Agile/05-report-backlog.md) | Hub รายงานทดสอบ |
-| [kanban.md](./04_Agile/kanban.md) | กระดาน Kanban |
 | [sprint-plans/](./04_Agile/sprint-plans/) | แผนราย Sprint (01–04) |
 | [standups/](./04_Agile/standups/) | บันทึก standup รายสัปดาห์ |
 | [retrospectives/](./04_Agile/retrospectives/) | Retrospective ราย Sprint |
-| [reports/](./04_Agile/reports/) | รายงาน playtest / QA |
-| [user-stories/](./04_Agile/user-stories/) | รายละเอียด User Story รายข้อ |
+| [reports/](./04_Agile/reports/) | รายงาน playtest |
 | [template/](./04_Agile/template/) | แม่แบบเอกสาร |
 
 ## 🗂️ Assets & Resources
@@ -60,7 +58,6 @@ date: 2026-10-14
 | [05_Wiki/wiki.md](./05_Wiki/wiki.md) | Knowledge Hub |
 | [05_Wiki/guidelines/](./05_Wiki/guidelines/) | กฎและกระบวนการของทีม |
 | [05_Wiki/history/](./05_Wiki/history/) | เอกสาร Game Jam (ประวัติ) |
-| [changelog.md](./changelog.md) | บันทึกการแก้ไขเอกสาร |
 
 ---
 

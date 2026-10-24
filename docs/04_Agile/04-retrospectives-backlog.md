@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Retrospectives Backlog — Hub
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ศูนย์รวมผลการทบทวน (retrospective) ท้ายแต่ละ Sprint
 
@@ -33,4 +33,3 @@ date: 2026-10-14
 - Sprint Backlog: [Sprint Backlog](02-sprint-backlog.md)
 - Meeting Backlogs: [Meeting Backlogs](03-meeting-backlogs.md)
 - Reports: [Report Backlog](05-report-backlog.md)
-- Kanban: [Kanban](kanban.md)

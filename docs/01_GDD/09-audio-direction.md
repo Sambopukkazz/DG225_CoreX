@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — Audio Direction
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ## บทบาทของเสียงในเกม
 
@@ -68,6 +68,7 @@ date: 2026-10-14
 - [ ] ตรวจสอบว่าเสียงทุกไฟล์ดังเท่ากันจริง
 - [ ] หาเสียง Jumpscare (อยู่ในแผน Sprint 3)
 - [ ] เพิ่มเสียงสำหรับ phobia ที่ยังไม่มี indicator (Nyctophobia, Claustrophobia)
+- [ ] **Entamaphobia** — เสียงพึมพำ (mumbling) อยู่หน้าประตูตอนมันเกิด · เสียงตอน stage เลื่อนขึ้น · เสียงตอนถูกไฟฉายส่องจน stage ลด · เสียงจอพัลส์ดำ (ดู [Mechanics](03-mechanics.md#entamaphobia--รายละเอียดคอนเซปต์))
 
 ## Related Documents
 
