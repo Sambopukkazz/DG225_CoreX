@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # 🌐 Imaginophobia — Knowledge Wiki
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14 | **Maintained by:** ทีม CoreX
+**Version:** 1.1 | **Last Updated:** 2026-10-24 | **Maintained by:** ทีม CoreX
 
 ---
 
@@ -17,7 +17,6 @@ date: 2026-10-14
 - **[Core Mechanics]**: [03-mechanics.md](../01_GDD/03-mechanics.md)
 - **[System Design]**: [01-system-design.md](../03_Software/01-system-design.md)
 - **[Current Sprint]**: [Sprint Backlog](../04_Agile/02-sprint-backlog.md)
-- **[Kanban]**: [kanban.md](../04_Agile/kanban.md)
 - **[Project Index]**: [index.md](../index.md)
 
 ---
@@ -72,7 +71,7 @@ date: 2026-10-14
 1. ตัดสินใจว่าองค์ความรู้นั้นเป็น **กฎ/กระบวนการ** (→ `guidelines/`) หรือ **บันทึก/งานวิจัย** (→ โฟลเดอร์ใหม่ตามหัวข้อ)
 2. สร้างไฟล์ `.md` ใส่ frontmatter `type`, `version`, `date`
 3. เพิ่มลิงก์ในส่วน Knowledge Base ของไฟล์นี้
-4. อัปเดต [`changelog.md`](../changelog.md)
+4. อัปเดต `**Last Updated:**` ของไฟล์ที่แก้ และของ [Project Index](../index.md)
 
 ---
 

@@ -3,10 +3,9 @@ type: gdd-core-loop
 version: 1.0
 date: 2026-10-14
 ---
-
 # Imaginophobia — Core Loop & Gameplay
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ## Core Loop
 
@@ -63,11 +62,11 @@ flowchart TD
 flowchart TD
     Start([เริ่ม]) --> Fix[ช่องท่อ / ช่องไฟ]
     Fix --> Scopo{เจอ Scopophobia?}
-    Scopo -->|ใช่| ScopoY[หาคู่]
+    Scopo -->|ใช่| ScopoY[ซ่อนตู้]
     Scopo -->|ไม่ใช่| Auto{เจอ Autophobia?}
-    Auto -->|ใช่| AutoY[ส่องไฟฉายใส่ / หาคู่]
+    Auto -->|ใช่| AutoY[ส่องไฟฉายใส่ / ซ่อนตู้]
     Auto -->|ไม่ใช่| Nycto{เจอ Nyctophobia?}
-    Nycto -->|ใช่| NyctoY[กลับไปอยู่ในที่มืดแสงสว่าง]
+    Nycto -->|ใช่| NyctoY[อยู่ในที่มืดไม่มีแสง]
     Nycto -->|ไม่ใช่| AllFixed{ช่องทุกจุดแล้ว?}
     ScopoY --> SanityDrop[Sanity ลด]
     AutoY --> SanityDrop
@@ -85,24 +84,27 @@ flowchart TD
 
 ## Player Actions
 
-| Action | Input | Result | Notes |
-|---|---|---|---|
-| เดิน | Arrow / WASD | ตัวละครเคลื่อนที่ | `CharacterAction.Walking` |
-| ซ่อน | กด Hide (ใกล้ตู้) | เข้าสู่ตู้ซ่อนตัว | `CharacterAction.ReadyToHide` → `Hiding` |
-| ซ่อม | กด Fix / Space | เข้ามินิเกมซ่อม | `CharacterAction.Repairing` |
-| ส่องไฟฉาย | — | ทำให้ Autophobia หายไป / ใช้ในความมืด | `CharacterAction.Checking` |
+| Action                              | Input                        | Result                                                                 | Notes                                          |
+| ----------------------------------- | ---------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------- |
+| เดิน                            | `A` / `D`                | ตัวละครเคลื่อนที่ (`MoveSpeed = 250`)               | `CharacterAction.Walking`                    |
+| ซุ่มเดิน                    | `Left Ctrl` + ทิศทาง | เดินช้าลง (÷ 1.7) และล็อกทิศการหันหน้า   | `CharacterAction.Sneaking`                   |
+| เปิด/ปิดไฟฉาย           | `F`                        | เปิด `Spotlight` (Battery ลด 3.5/วินาที)                 | ใช้ส่อง Autophobia ให้หาย         |
+| โต้ตอบ / ซ่อน / ซ่อม  | `Space`                    | เข้าตู้ซ่อน · เริ่มมินิเกม · ใช้ประตู | `ReadyToHide` → `Hiding` · `Repairing` |
+| มองซ้าย-ขวาขณะซ่อม | `A` / `D`                | เลื่อนกล้อง 400px                                           | `CharacterAction.Checking`                   |
+| ออกจากมินิเกม          | `Q`                        | ปิดหน้าจอมินิเกม (progress ถูกบันทึกไว้)   | ใช้กับ Spin The Valve / Connect The Dots |
 
-> **TBD:** ตารางปุ่มจริง (key binding) ยังไม่ยืนยัน — `InputManager` เป็นที่เดียวที่ผูกปุ่มทั้งหมด ให้ตรวจสอบจากโค้ดก่อนแก้ตารางนี้
+> **TBD:** ปุ่มทั้งหมดยังไม่ถูกรวมไว้ที่ `InputManager` — มีแค่ `A` / `D` ที่อยู่ที่นั่น ส่วนที่เหลืออ่านตรงใน `Player.cs`, `CollisionManager.cs` และหน้าจอมินิเกม ควรย้ายมารวมกันก่อนแก้ตารางนี้ให้เป็นทางการ
 
 ## Win / Lose Conditions
 
-- **ชนะเมื่อ:** ซ่อมท่อ/ช่องไฟครบทุกจุดตามที่กำหนด แล้วหลบหนีออกไปได้สำเร็จ (`หลบหนีได้สำเร็จ`)
+- **ชนะเมื่อ:** ซ่อมวาล์วครบ 5 จุดตามที่กำหนด แล้วออกจากประตูทางออก (`Destination == "end"`) สำเร็จ
 - **แพ้เมื่อ:**
-  - ถูก Autophobia / Scopophobia จับได้
-  - ค่า Sanity ลดถึง 0 (`MentalState` มี 3 ระดับ: Normal 75 / Anxious 50 / Insane 25)
-  - Nyctophobia — อยู่ในความมืดนานเกินไปหรือหมดเวลา แล้วถูกความมืดกลืนกิน
+  - ถูก Autophobia จับได้ (Sanity −10) หรือถูก Scopophobia พุ่งชน (Sanity −25)
+  - ค่า Sanity ลดถึง 0 (`SanityState` มี 3 ระดับ: Normal 70 / Anxious 30 / Insane 0)
+  - Nyctophobia — อยู่ในความมืดที่ไฟดับนานเกินไป จน vignette ปิดสนิท (`Sanity = 0`)
+  - หมดเวลา 10 นาที (`MainTimer = 600s`)
 
-> **TBD:** ค่า threshold ของ Sanity ที่ทำให้แพ้ และอัตราการลด Sanity ต่อวินาที ต้องยืนยันจากโค้ด/การทดสอบ — ดู [Data Schema](../03_Software/03-data-schema.md)
+> **TBD:** อัตราการลด Sanity ต่อวินาทีและค่า threshold ถูกยืนยันจากโค้ดแล้ว (ดู [Data Schema](../03_Software/03-data-schema.md#6-ค่าปรับแต่งเกม-tuning-values)) แต่ยังไม่ผ่านการทดสอบบาลานซ์
 
 ## Related Documents
 

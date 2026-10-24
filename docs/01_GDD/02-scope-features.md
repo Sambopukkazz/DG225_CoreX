@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — Scope & Feature List
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ## Unique Selling Point (USP)
 
@@ -36,6 +36,7 @@ date: 2026-10-14
 | 16 | บันทึก progress ของ task (ออกกลางคันกลับมาไม่เริ่มใหม่) | Should | **เพิ่มจากผล Playtest** |
 | 17 | Redesign monster + jumpscare | Should | **เพิ่มจากผล Playtest** |
 | 18 | บทพูดของตัวละครเบื้องต้น | Could | Sprint 3 (draft) |
+| 19 | Entamaphobia (Fear of Doors) — ศัตรูใหม่: แอบมองใต้ช่องประตู + ส่องไฟฉาย | Should | **ข้อเสนอใหม่หลัง Playtest** — ยังไม่มีคลาส/asset (ดู [Mechanics](03-mechanics.md#entamaphobia--รายละเอียดคอนเซปต์)) |
 
 ## Out of Scope — สิ่งที่ "จะไม่ทำ"
 

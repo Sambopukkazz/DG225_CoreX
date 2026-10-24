@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Guidelines — Index
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 > **กฎสำคัญ:** อ่าน guideline ที่เกี่ยวข้องในโฟลเดอร์นี้ **ก่อน** เริ่มงานพัฒนา/ทดสอบทุกครั้ง
 
@@ -25,7 +25,7 @@ date: 2026-10-14
 |---|---|
 | **Coding Convention** | ยังไม่มีข้อตกลงเรื่อง naming/style ของ C# — ทีมควรตกลงก่อนโค้ดบานปลาย |
 | **Testing Guideline** | ยังไม่มีกระบวนการทดสอบก่อน merge |
-| **Documentation Guideline** | กำหนดว่าเอกสารไหนต้องอัปเดตเมื่อโค้ดเปลี่ยน (frontmatter, version, changelog) |
+| **Documentation Guideline** | กำหนดว่าเอกสารไหนต้องอัปเดตเมื่อโค้ดเปลี่ยน (frontmatter, version, `Last Updated` ใน [Project Index](../../index.md)) |
 | **Definition of Done** | ระบุชัดว่า "เสร็จ" หมายถึงอะไร (โค้ดผ่าน, ทดสอบแล้ว, เอกสารอัปเดต) |
 | **Playtest Guideline** | ขั้นตอนจัด user study ให้ทำซ้ำได้ (ดูแม่แบบจาก [playtest 25/09](../../04_Agile/reports/playtest-2026-09-25.md)) |
 

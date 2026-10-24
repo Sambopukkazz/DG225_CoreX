@@ -7,7 +7,7 @@ team: CoreX
 
 # Imaginophobia — Game Concept & Architecture
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14 | **Owner:** เตชินท์ เจริญสิงห์ (682110116)
+**Version:** 1.1 | **Last Updated:** 2026-10-24 | **Owner:** เตชินท์ เจริญสิงห์ (682110116)
 
 ## 1. Introduction
 
@@ -99,35 +99,43 @@ Imaginophobia คือเกมแนว 2D pixel-art survival horror ผู้
 
 | Subsystem | Class | หน้าที่ |
 |---|---|---|
-| Game loop / orchestration | `MainGame`, `GameManager` | `Initialize` → `LoadContent` → `Update` → `Draw`; ถือ manager ทั้งหมดและคุม state ของเกม |
-| Scene | `SceneManager`, `SceneBuilder`, `Enums/Scene` | โหลด `.ldtk` สร้าง collider + แสงตาม tilemap; สลับฉาก (`tilemap_electrical_room`, `tilemap_electrical_room_2`, `tilemap_sewer`) |
-| Collision | `CollisionManager`, `ICollisionActor`, `Wall`, `Trigger`, `Collectible`, `LightArea` | จัดการ collider แบบมี layer; ตรวจการชนระหว่างผู้เล่น/ศัตรู/วัตถุ |
+| Game loop / orchestration | `MainGame`, `GameplayScreen`, `GameManager` | `MainGame` ถือ `ScreenManager` ของ MonoGame.Extended และแสดง `GameplayScreen` ซึ่งห่อ `GameManager` · `GameManager` ถือ manager ย่อยและคุม state ของเกม |
+| Scene | `SceneManager`, `SceneBuilder`, `Enums/Scene` | โหลด `.ldtk` สร้าง collider + แสง + highlight tile ตาม tilemap; สลับฉาก (`tilemap_electrical_room`, `tilemap_electrical_room_2`, `tilemap_sewer`) |
+| Collision | `CollisionManager`, `ICollisionActor`, `Wall`, `Trigger`, `Collectible`, `LightArea` | จัดการ collider แบบมี layer (`walls` / `triggers` / `enemies` / `lights`); ตรวจการชนและจัดการ interaction |
 | Lighting | `LightManager`, `LightArea`, `SpriteEffects/VignetteOverlay`, `BottomFadeOverlay` | แสง 2D (Penumbra) และเอฟเฟกต์การถูกความมืดกลืนกิน |
-| Audio | `AudioManager`, `AudioSource`, `IAudioApplicable`, `Enums/Sound` | SFX, ambience, และ spatial (3D) audio ตามระยะห่างจากผู้เล่น |
-| Input | `InputManager` (static) | รวมการอ่านคีย์บอร์ดไว้ที่เดียว |
-| Enemies | `EnemyManager`, `Autophobia`, `Scopophobia` | สุ่ม spawn และอัปเดตพฤติกรรมของ phobia |
-| Objectives | `ObjectiveManager`, `SpawnPoint` | ติดตามภารกิจที่ต้องซ่อมให้ครบ |
-| Minigames | `Screen/SkillCheckScreen`, `ConnectTheDotsScreen`, `SpinTheValveScreen`, `GameplayScreen`, `DotsGenerator`, `GeneratedDotsMap`, `GridCell`, `WirePath` | มินิเกมทั้งสามแบบ |
-| UI | `UIManager` | HUD (Objective / Sanity / Battery) และเมนู |
-| Dialogue | `DialogueManager` | ข้อความในเกม |
-| Player | `Player`, `CharacterAction`, `Enums/MentalState` | การเดิน, การซ่อน, สถานะทางจิต (Normal 75 / Anxious 50 / Insane 25) |
+| Audio | `AudioManager` (singleton), `AudioSource`, `IAudioApplicable`, `Enums/Sound` | SFX, ambience, และ spatial (3D) audio ตามระยะห่างจากผู้เล่น |
+| Input | `InputManager` (static) | รวมการอ่านคีย์บอร์ดไว้ที่เดียว (ปัจจุบันแค่ `A` / `D`) |
+| Enemies | `EnemyManager`, `Autophobia`, `Scopophobia` | สุ่ม spawn และอัปเดตพฤติกรรมของ phobia (Entamaphobia อยู่ในแผน — ยังไม่มีคลาส) |
+| Objectives | `ObjectiveManager` (static), `SpawnPoint` | ติดตาม objective แบบ id และความคืบหน้าของวาล์ว/แผงไฟ |
+| Minigames | `Screen/SpinTheValveScreen`, `ConnectTheDotsScreen`, `GameplayScreen`, `DotsGenerator`, `GeneratedDotsMap`, `GridCell`, `WirePath` | มินิเกมที่ใช้จริง 2 แบบ (`SkillCheckScreen` เป็น dead code) |
+| UI | `UIManager` | HUD (แถบ Sanity / Battery / ตัวนับวาล์ว / ตัวจับเวลา) และ vignette 3 ตัว |
+| Text / Tutorial | `TextManager`, `TutorialManager`, `TutorialStep`, `TutorialDataReader` | ข้อความในเกม และ tutorial ที่ไล่ตาม objective ที่สำเร็จ |
+| Highlight | `TileHighlightRenderer`, `HighlightGroup`, `HighlightSettings` | ไฮไลต์วัตถุที่โต้ตอบได้ (วาล์ว / ตู้ / แผงไฟ / ประตู) ด้วย shader |
+| Save | `SaveManager` (static), `GameData`, `SceneData`, `TriggerData`, `LightData` | บันทึกความคืบหน้าของ trigger และสถานะไฟต่อฉากลง JSON |
+| Player | `Player`, `CharacterAction`, `Enums/SanityState` | การเดิน, การซ่อน, สถานะทางจิต (Normal 70 / Anxious 30 / Insane 0) |
 | Support | `Time`, `Timer`, `CameraShaker`, `GameObject` | ตัวจับเวลา, การสั่นกล้อง, base class |
 
 ```mermaid
 flowchart TD
-    MainGame --> GameManager
+    MainGame --> ScreenManager
+    ScreenManager --> GameplayScreen
+    GameplayScreen --> GameManager
     GameManager --> SceneManager
     GameManager --> CollisionManager
     GameManager --> LightManager
-    GameManager --> AudioManager
     GameManager --> EnemyManager
     GameManager --> UIManager
-    GameManager --> ObjectiveManager
+    GameManager --> Player
+    GameManager --> CameraShaker
     SceneManager --> SceneBuilder
+    SceneManager --> TileHighlightRenderer
     SceneBuilder --> CollisionManager
     SceneBuilder --> LightManager
     EnemyManager --> Autophobia
     EnemyManager --> Scopophobia
+    UIManager --> TextManager
+    UIManager --> TutorialManager
+    TutorialManager --> ObjectiveManager
     Autophobia -.IAudioApplicable.-> AudioManager
     Scopophobia -.IAudioApplicable.-> AudioManager
     Player -.ICollisionActor.-> CollisionManager

@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — GDD Index
 
-**Version:** 1.0 | **Last Updated:** 2026-10-14
+**Version:** 1.1 | **Last Updated:** 2026-10-24
 
 ## 📖 เอกสารในโฟลเดอร์นี้
 
@@ -30,7 +30,7 @@ date: 2026-10-14
 | หมวด | เอกสาร |
 |---|---|
 | Software Design | [System Design](../03_Software/01-system-design.md) · [Class Diagram](../03_Software/02-class-diagram.md) · [Data Schema](../03_Software/03-data-schema.md) |
-| Agile | [Product Backlog](../04_Agile/01-product-backlog.md) · [Sprint Backlog](../04_Agile/02-sprint-backlog.md) · [Kanban](../04_Agile/kanban.md) |
+| Agile | [Product Backlog](../04_Agile/01-product-backlog.md) · [Sprint Backlog](../04_Agile/02-sprint-backlog.md) · [Sprint Plans](../04_Agile/sprint-plans/) |
 | Wiki | [Knowledge Hub](../05_Wiki/wiki.md) |
 | ภาพรวมโปรเจกต์ | [Project Index](../index.md) |
 
@@ -63,13 +63,28 @@ date: 2026-10-14
 
 ## 🧭 Scene Object Naming Convention (LDtk)
 
-| Prefix | ประเภท | ตัวอย่าง |
-|---|---|---|
-| `pipe_` | จุดซ่อมท่อ | `pipe_01` |
-| `elec_` | จุดซ่อมไฟ | `elec_01` |
-| `door_` | ประตู | `door_lobby` |
-| `locker_` | ตู้ซ่อนตัว | `locker_01` |
-| `spawn_` | จุดเกิดผู้เล่น | `spawn_start` |
-| `light_` | แหล่งแสง | `light_bulb_01` |
+การตั้งชื่อ entity ใน LDtk ถูกใช้เป็น **สัญญาณให้โค้ด** โดยตรง — `SceneBuilder` อ่านค่า 2 อย่าง:
 
-> **TBD:** ตารางนี้เป็นข้อเสนอ ยังไม่ได้ยืนยันกับการตั้งชื่อจริงในไฟล์ `.ldtk` — ต้องตรวจสอบและแก้ให้ตรง
+- **tag ตัวแรกของ entity** (`__tags[0]`) → `entity.Class` ใช้ตัดสินว่าจะสร้างอะไร
+- **ชื่อ entity** (`__identifier`) → `entity.Name` ใช้แยกย่อย (เช่น ชนิดของแสง)
+
+| tag | กลายเป็น | ชื่อ entity ที่ใช้อยู่ |
+|---|---|---|
+| `wall` | `Wall` | `InvisWall` |
+| `skillcheck` | `Trigger` (มินิเกมวาล์ว) | `Valve` |
+| `dots` | `Trigger` (มินิเกมเชื่อมจุด) | `ElectricalPanel` |
+| `hideout` | `Trigger` (ตู้ซ่อนตัว) | `Locker` |
+| `door` | `Trigger` + ชื่อ = property `Destination` | `LoadNextScene` |
+| `spawn` | `SpawnPoint` + ชื่อ = property `Origin` | `PlayerSpawnPoint` (ห้องไฟฟ้า) · `SpawnPoint` (โถงอุโมง) |
+| `light` | `PointLight` / `SpotLight` (+ `LightArea` ถ้าเป็น `PointLight`) | `PointLight` · `DoorLight` · `SpotLight` |
+
+**Layer ที่ต้องมี**
+
+| Layer | ชนิด | ใช้ทำอะไร |
+|---|---|---|
+| `Collision` | Entities | สร้าง collider / trigger / spawn point |
+| `Lighting` | Entities | สร้างแสง |
+| `Valves` · `Lockers` · `ElectricalPanel` · `Doors` | Tiles | tile ที่ใช้ทำ highlight (ชื่อ layer ต้องตรงกับชื่อ entity โดยตัด `s` ตัวท้ายออก — ยกเว้น `LoadNextScene` ที่ใช้ layer `Doors`) |
+
+> **TBD:** ชื่อ entity บางตัวยังไม่ consistent — `PlayerSpawnPoint` กับ `SpawnPoint` ทำหน้าที่เดียวกัน และ `InvisWall` เป็นชื่อที่บอกว่า "มองไม่เห็น" ไม่ได้บอกว่าเป็นกำแพงชน ควรตกลงชื่อใหม่ทั้งชุด
+> รายละเอียด entity / property / จำนวนจริงในแต่ละฉาก: [Data Schema](../03_Software/03-data-schema.md#2-ข้อมูลระดับ-level-data)
