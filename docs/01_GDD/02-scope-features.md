@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — Scope & Feature List
 
-**Version:** 1.1 | **Last Updated:** 2026-10-24
+**Version:** 1.2 | **Last Updated:** 2026-10-25
 
 ## Unique Selling Point (USP)
 
@@ -27,16 +27,17 @@ date: 2026-10-14
 | 7 | มินิเกม Spin The Valve | Should | Sprint 2 (ปรับจาก Skill Check) |
 | 8 | ศัตรู: Autophobia, Scopophobia | Must | Sprint 2 |
 | 9 | การซ่อน (Hide / Claustrophobia timing) | Must | Sprint 2–3 |
-| 10 | ค่า Sanity + Battery และผลต่อเกม | Must | Sprint 3 — **ยังไม่ส่งผลต่อ gameplay จริง (ดู Risks)** |
+| 10 | ค่า Sanity + Battery และผลต่อเกม | Must | Sprint 3 — **ส่งผลต่อ gameplay แล้วบางส่วน**: ระดับสติเปลี่ยน vignette + เสียง (heartbeat/panting) · ชน Autophobia ทำให้ทั้งจอสีซีด · Nyctophobia ทำให้สติหมด → จอตาย · ยังขาด visual indicator ตัวเลขบน HUD |
 | 11 | แสง + shader เอฟเฟกต์กระพริบตา / ถูกความมืดกลืน | Must | Sprint 3 |
-| 12 | UI: เมนู, Settings, HUD | Should | Sprint 2–3 |
-| 13 | ระบบข้อความในเกม (Dialogue) | Should | Sprint 3 |
-| 14 | ระบบ Save game | Should | Sprint 3 (draft) |
-| 15 | Tutorial / Guide ก่อนเริ่มมินิเกม | Should | **เพิ่มจากผล Playtest** |
-| 16 | บันทึก progress ของ task (ออกกลางคันกลับมาไม่เริ่มใหม่) | Should | **เพิ่มจากผล Playtest** |
-| 17 | Redesign monster + jumpscare | Should | **เพิ่มจากผล Playtest** |
+| 12 | UI: เมนู, Settings, HUD | Should | **เสร็จแล้ว** — `MainMenuScreen` / `SettingsScreen` / `CreditsScreen` (Gum) + pause overlay + สไลเดอร์ volume |
+| 13 | ระบบข้อความในเกม (Dialogue) | Should | Sprint 3 — `TextManager` + `Datas/tutorial.json` (10 ขั้น) |
+| 14 | ระบบ Save game | Should | Sprint 3 (draft) — บันทึก progress ของ trigger + สถานะไฟต่อฉาก (ไม่บันทึกตำแหน่ง/สติ/แบต) |
+| 15 | Tutorial / Guide ก่อนเริ่มมินิเกม | Should | **เพิ่มจากผล Playtest** — ทำแล้ว (tutorial 10 ขั้นตาม objective) |
+| 16 | บันทึก progress ของ task (ออกกลางคันกลับมาไม่เริ่มใหม่) | Should | **เพิ่มจากผล Playtest** — ทำแล้ว (`SaveManager`) |
+| 17 | Redesign monster + jumpscare | Should | **เพิ่มจากผล Playtest** — ยังไม่มี jumpscare ในโค้ด |
 | 18 | บทพูดของตัวละครเบื้องต้น | Could | Sprint 3 (draft) |
-| 19 | Entamaphobia (Fear of Doors) — ศัตรูใหม่: แอบมองใต้ช่องประตู + ส่องไฟฉาย | Should | **ข้อเสนอใหม่หลัง Playtest** — ยังไม่มีคลาส/asset (ดู [Mechanics](03-mechanics.md#entamaphobia--รายละเอียดคอนเซปต์)) |
+| 19 | Entamaphobia (Fear of Doors) — ศัตรูใหม่: แอบมองใต้ช่องประตู + ส่องไฟฉาย | Should | **ข้อเสนอใหม่หลัง Playtest** — มีคลาส stub (`Enemies/Entamaphobia.cs`) + ปุ่ม `E` แอบมองประตูผูกแล้ว แต่ยังไม่ spawn และยังไม่มี asset/mechanic (ดู [Mechanics](03-mechanics.md#entamaphobia--รายละเอียดคอนเซปต์)) |
+| 20 | จอจบเกม (Death / Win) + ทางกลับเมนู | Should | **ทำแล้ว** — `DeathScreen` (มี tip สุ่ม 9 ข้อความ) และ `WinScreen` |
 
 ## Out of Scope — สิ่งที่ "จะไม่ทำ"
 
@@ -55,7 +56,7 @@ date: 2026-10-14
 |---|---|---|
 | Monster ยังไม่น่ากลัวพอ (ผู้ทดสอบให้ 2.5/5) | เกมไม่น่ากลัว = เสียจุดขายหลัก | Redesign monster, เพิ่ม jumpscare, เพิ่มจำนวน/ความหลากหลายของมอน |
 | เกมพึ่งเสียงมากเกินไป (คนไม่ใส่หูฟังเล่นไม่ได้) | ผู้เล่นกลุ่มใหญ่รับรู้ monster ไม่ได้ | เพิ่ม Visual Indicator ตอน monster เกิด |
-| ค่า Sanity ไม่ส่งผลต่อ gameplay | ระบบที่ลงทุนไปกลายเป็นแค่ตัวเลข | ทำให้ Sanity ส่งผลจริง (ภาพบิดเบี้ยว/เอฟเฟกต์) ไม่ใช่แค่แสดงตัวเลข |
+| ค่า Sanity ไม่ส่งผลต่อ gameplay | ระบบที่ลงทุนไปกลายเป็นแค่ตัวเลข | ทำให้ Sanity ส่งผลจริง (ภาพบิดเบี้ยว/เอฟเฟกต์) ไม่ใช่แค่แสดงตัวเลข — **คืบหน้าแล้ว:** vignette + สีจอ + เสียงเปลี่ยนตามระดับสติ และสติหมด = จอตาย |
 | Minigame ยากเกินไป (ผู้ทดสอบให้ 4/5) | ผู้เล่นใหม่ค้าง ไม่ไปต่อ | ทำง่ายขึ้น + มี guide วิธีเล่น + บันทึก progress |
 | Objective ไม่ชัดเจน | ผู้เล่นหลง ไม่รู้ต้องทำอะไรต่อ | เพิ่ม hint / marker ระหว่างเล่น + ป้ายประกาศ |
 | ประตู/ทางเดินกลืนกับพื้นหลัง | ผู้เล่นหาประตูไม่เจอ | ปรับสี/contrast + ทำ asset ประตูให้ต่างจาก locker |

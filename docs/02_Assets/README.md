@@ -17,7 +17,7 @@
 
 1. โหลด asset ที่ต้องการลงใน `_candidates/<ประเภท>/`
 2. **บันทึกที่มา + license ลงใน [Asset List](../01_GDD/05-asset-list.md) ทันที** — ห้ามปล่อยว่าง
-3. คัดเลือกตัวที่ใช้ แล้วตั้งชื่อตาม [Naming Convention](../01_GDD/README.md#asset-naming-convention)
+3. คัดเลือกตัวที่ใช้ แล้วตั้งชื่อตาม [Naming Convention](../01_GDD/README.md#-naming-convention)
 4. ย้ายไฟล์ที่เลือกไปที่ `src/Imaginophonia/Imaginophonia/Content/<ประเภท>/`
 5. ลงทะเบียนใน `Content/Content.mgcb`
 

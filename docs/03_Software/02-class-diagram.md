@@ -1,16 +1,16 @@
 ---
 type: software-class-diagram
-version: 2.0
-date: 2026-10-24
+version: 3.0
+date: 2026-10-25
 ---
 
 # Imaginophobia — Class Diagram
 
-**Version:** 2.0 | **Last Updated:** 2026-10-24
+**Version:** 3.0 | **Last Updated:** 2026-10-25
 
-> สร้างจากโค้ดจริงใน `src/Imaginophonia/Imaginophonia/`
+> สร้างจากโค้ดจริงใน `src/Imaginophonia/Imaginophonia/` (ณ commit `cf024ef`, 2026-10-24)
 > ไฟล์นี้เดิมอยู่ใน `docs/01_GDD/04-class-diagram.md` — ย้ายมาไว้ในหมวด Software Design เพราะเป็นงานออกแบบซอฟต์แวร์
-> `ICollisionActor` และ `Screen` มาจากไลบรารี MonoGame.Extended ไม่ได้ประกาศในโปรเจกต์
+> `ICollisionActor`, `Screen`, `Tilemap*` มาจากไลบรารี (MonoGame.Extended) — ไม่ได้ประกาศในโปรเจกต์ ส่วน `ISpatialSoundApplicable` ประกาศในโปรเจกต์เองที่ `Scripts/ISpatialSoundApplicable.cs`
 
 ## Core Hierarchy
 
@@ -37,11 +37,16 @@ classDiagram
         +CollisionShape2D Shape
         +LineSegment2D EyeSight
         +AudioListener Listener
+        +Spotlight FlashLight
         +float MoveSpeed = 250
         +float Sanity = 100
         +float Battery = 100
         +SanityState SanityState
         +CharacterAction CurrentAction
+        +BlinkPhase BlinkPhase
+        +float FocusLevel
+        +Vector2 CameraTarget
+        +Vector2 PreviousPos
         +bool CanInteract
         +bool CanRepair
         +bool Blink
@@ -50,15 +55,20 @@ classDiagram
         +event SanityStateChanged
         +Update()
         +Draw()
+        +CollideWithWallMove(Vector2)
         +ToggleHide()
+        +SetReadyToHide()
         +ToggleRepair()
+        +TogglePeek()
         +ToggleFlashLight()
         +CheckSanityStage()
+        +LoadScenePosition(Vector2)
         +Reset()
     }
 
     class AudioSource {
         +SoundEffectInstance AudioPlayer
+        +bool IsDisposed
         +UpdateSpatialAudio(Player)
         +PlayLoop(SoundEffect, float)
         +PlayOneShot(SoundEffect, float)
@@ -66,6 +76,7 @@ classDiagram
 
     class Autophobia {
         +float MoveSpeed = 400
+        +int Id = 666
         +bool AllowMovement
         +Update()
         +Draw()
@@ -73,12 +84,23 @@ classDiagram
 
     class Scopophobia {
         +float MoveSpeed = 2600
+        +int Id = 555
+        +int LightBrokeCount
         +Update()
         +Draw()
         +OnDestroyed()
     }
 
-    class IAudioApplicable {
+    class Nyctophobia {
+        <<marker>>
+    }
+
+    class Entamaphobia {
+        <<stub>>
+        +Update()
+    }
+
+    class ISpatialSoundApplicable {
         <<interface>>
         +float MoveSpeed
         +Vector2 Velocity
@@ -94,27 +116,43 @@ classDiagram
     GameObject <|-- AudioSource
     GameObject <|-- Autophobia
     GameObject <|-- Scopophobia
-    Player ..|> IAudioApplicable
+    GameObject <|-- Nyctophobia
+    GameObject <|-- Entamaphobia
+    Player ..|> ISpatialSoundApplicable
     Player ..|> ICollisionActor
+    Player ..|> IDisposable
     AudioSource ..|> IDisposable
-    Autophobia ..|> IAudioApplicable
+    Autophobia ..|> ISpatialSoundApplicable
     Autophobia ..|> ICollisionActor
-    Scopophobia ..|> IAudioApplicable
+    Scopophobia ..|> ISpatialSoundApplicable
     Scopophobia ..|> ICollisionActor
+    Scopophobia --> AudioSource : Play3DSFX (child)
 ```
+
+> `Nyctophobia` เป็น **marker class เปล่า ๆ** — ใช้ให้ `EnemyManager.HasActiveNyctophobia()` ตรวจได้ว่า "ความมืดกำลังเล่นงานอยู่" พฤติกรรมจริงอยู่ใน `LightArea.StartNyctoAlarm()` + `UIManager`
+> `Entamaphobia` มี `Update` ครึ่ง ๆ กลาง ๆ (`_stage`, `_value`, `_nextStageValue`, `_speed`) และยังไม่ถูก spawn จาก timer ไหน
 
 ## Managers
 
 ```mermaid
 classDiagram
+    class MainGame {
+        +MainGame Instance$
+        +ScreenManager ScreenManager$
+        +float Saturation$
+        +Initialize()
+        +Update(GameTime)
+        +Draw(GameTime)
+        -DrawGraded()
+    }
     class GameManager {
         +Update(GameTime)
         +Draw(GameTime)
         -Restart()
         -OnDoorInteracted(string)
         -OnSceneLoaded(Vector2)
-        -OnEnemySpawned(ICollisionActor)
-        -OnEnemyRemoved(ICollisionActor)
+        -OnEnemySpawned(GameObject)
+        -OnEnemyRemoved(GameObject)
     }
     class SceneManager {
         +GetActiveScene() SceneBuilder$
@@ -147,27 +185,36 @@ classDiagram
         +AddLight(LightArea)
         +ClearLights()
         +ScopoAlarmAll()
+        +NyctoAlarmAll()
+        +CleanUpScopo()
     }
     class AudioManager {
         +AudioManager Instance$
-        +float AmbVolume
+        +float BgsVolume
         +float SoundEffectVolume
         +bool IsMuted
         +Update(Player)
-        +PlaySFX(Sound, bool, bool)
-        +Play3DSFX(Vector2, Sound, float, float) AudioSource
+        +PlaySFX(SoundEffectName, bool, bool, float)
+        +Play3DSFX(Vector2, SoundEffectName, float, float, float) AudioSource
         +PlayStepsSFX(Vector2, float, float)
-        +PlayAmbiance(string)
-        +StopSFX(Sound)
+        +PlayLightFlickerSFX(Vector2, float, float)
+        +PlayBackgroundSound(BackgroundSound)
+        +StopSFX(SoundEffectName)
+        +ClearSFXs()
         +ToggleMute()
     }
     class EnemyManager {
         +List~GameObject~ Enemies
         +Update(Rectangle)
         +Draw()
-        +SpawnEnemy()
+        +SpawnScopophobia()
+        +SpawnAutophobia()
+        +SpawnNyctophobia()
+        +SpawnEntamaphobia()
         +ClearEnemies()
         +HasActiveScopophobia() bool
+        +HasActiveNyctophobia() bool
+        +HasActiveEntamaphobia() bool
         +event EnemySpawned
         +event EnemyRemoved
     }
@@ -180,6 +227,8 @@ classDiagram
         +NyctoOpen()
         +BlinkClose()
         +BlinkOpen()
+        +ZoomVignette()
+        +BackToStageScale()
     }
     class TextManager {
         +Update()
@@ -189,6 +238,7 @@ classDiagram
     }
     class TutorialManager {
         +GetText() string
+        +OnCompleted(string)
     }
     class ObjectiveManager {
         <<static>>
@@ -197,11 +247,14 @@ classDiagram
         +int RepairedValveCount$
         +Complete(string)$
         +IsComplete(string) bool$
+        +IsValveRepaired(int) bool$
+        +IsPanelRepaired(int) bool$
         +RepairValve(int)$
         +RepairPanel(int)$
         +ResetValves()$
         +ResetPanels()$
-        +event Completed$
+        +Reset()$
+        +event Completed
     }
     class SaveManager {
         <<static>>
@@ -221,10 +274,29 @@ classDiagram
         +HighlightGroup LockerGroup
         +HighlightGroup PanelGroup
         +HighlightGroup DoorGroup
+        +HighlightGroup ClipboardGroup
+        +HighlightGroup LadderGroup
         +LoadScene(Tilemap)
+        +Clear()
         +Update()
         +Render(OrthographicCamera)
         +Draw()
+    }
+    class GumUIHelper {
+        <<static>>
+        +CreateTitle(string)$
+        +CreateText(...)$
+        +CreateTextButton(...)$
+        +CreatePauseButton(Action)$
+        +CreateSlider(int, int)$
+        +CreateValueLabel(int, int, float)$
+        +CreateDimPanel()$
+        +AddSettingsPanel(ContainerRuntime)$
+    }
+    class Layout {
+        <<static>>
+        +int ScreenWidth = 1920$
+        +int ScreenHeight = 1080$
     }
 
     GameManager --> SceneManager
@@ -233,12 +305,16 @@ classDiagram
     GameManager --> EnemyManager
     GameManager --> UIManager
     GameManager --> Player
+    MainGame --> AudioManager
+    MainGame --> GameManager
     SceneManager --> SceneBuilder
     SceneManager --> TileHighlightRenderer
     SceneBuilder --> CollisionManager
     SceneBuilder --> LightManager
     EnemyManager --> Autophobia
     EnemyManager --> Scopophobia
+    EnemyManager --> Nyctophobia
+    EnemyManager --> Entamaphobia
     AudioManager --> AudioSource
     UIManager --> TextManager
     UIManager --> TutorialManager
@@ -247,18 +323,44 @@ classDiagram
     SaveManager --> LightArea
 ```
 
-## Screens (Minigames)
+> `AudioManager` เป็น singleton ที่ถูกสร้างใน **`MainGame.Initialize()`** (ตัวแปร local ไม่ได้เก็บเป็น field) — ไม่ได้สร้างใน `GameManager` อีกแล้ว
+> `GameManager` ยังมี `Restart()` แต่ **ไม่มีที่เรียกใช้** (เหลือแค่บรรทัดที่คอมเมนต์ไว้ใน `Update`) — เส้นทางตายคือ `ScreenManager.ReplaceScreen(new DeathScreen())`
+
+## Screens
 
 ```mermaid
 classDiagram
     class Screen {
         <<MonoGame.Extended.Screens>>
-        +Update(GameTime)
-        +Draw(GameTime)
-    }
-    class GameplayScreen {
         +bool UpdateWhenInactive
         +bool DrawWhenInactive
+        +Update(GameTime)
+        +Draw(GameTime)
+        +OnActivated()
+        +OnDeactivated()
+        +Dispose()
+    }
+    class MainMenuScreen {
+        +StartGame()
+        +OpenSettings()
+        +OpenCredits()
+        +ExitGame()
+    }
+    class SettingsScreen
+    class CreditsScreen
+    class DeathScreen {
+        +RandomizeTip()
+        +ReturnToMenu()
+    }
+    class WinScreen
+    class GameplayScreen {
+        +bool UpdateWhenInactive = true
+        +bool DrawWhenInactive = true
+        +TogglePause()
+        +ReturnToMenu()
+    }
+    class DoorPeekingScreen {
+        <<draft>>
     }
     class SpinTheValveScreen {
         +bool MinigameActive
@@ -273,13 +375,31 @@ classDiagram
         +GetCellTopCenter(Point) Vector2
     }
     class SkillCheckScreen {
-        +bool SkillCheckIsActive
+        <<dead code>>
+    }
+    class PauseScreen {
+        <<dead code>>
     }
 
+    Screen <|-- MainMenuScreen
+    Screen <|-- SettingsScreen
+    Screen <|-- CreditsScreen
+    Screen <|-- DeathScreen
+    Screen <|-- WinScreen
     Screen <|-- GameplayScreen
+    Screen <|-- DoorPeekingScreen
     Screen <|-- SpinTheValveScreen
     Screen <|-- ConnectTheDotsScreen
     Screen <|-- SkillCheckScreen
+    Screen <|-- PauseScreen
+
+    GameplayScreen --> GameManager
+    MainMenuScreen ..> GameplayScreen
+    MainMenuScreen ..> SettingsScreen
+    MainMenuScreen ..> CreditsScreen
+    DeathScreen ..> MainMenuScreen
+    WinScreen ..> MainMenuScreen
+    GameplayScreen ..> MainMenuScreen
 
     class DotsGenerator {
         +PlotMap()
@@ -308,7 +428,8 @@ classDiagram
     ConnectTheDotsScreen --> WirePath
 ```
 
-> `SkillCheckScreen` ไม่มีที่ไหนเรียกใช้แล้ว — เก็บไว้เป็น reference เท่านั้น
+> `SkillCheckScreen` และ `PauseScreen` อยู่ในโฟลเดอร์ `Scraped/` — ไม่มีที่ไหนเรียกใช้แล้ว (ถูกแทนที่ด้วย `SpinTheValveScreen` และ pause overlay ใน `GameplayScreen`)
+> ทุกหน้าจอ UI สร้างด้วย **Gum** (`Panel` → `Dock(Dock.Fill)` → `AddToRoot()`) และประกอบคอนโทรลผ่าน `GumUIHelper` โดยวางตำแหน่งด้วยค่าคงที่ใน `Layout`
 
 ## Colliders, Highlight & Support
 
@@ -337,8 +458,10 @@ classDiagram
         +Light Light
         +bool On
         +bool IsFlickering
+        +bool ScopoHasPassed
         +Update()
         +StartFlicker(float)
+        +StartNyctoAlarm()
         +TurnOff()
         +TurnOn()
         +ScopoIncoming()
@@ -372,18 +495,29 @@ classDiagram
         <<static>>
         +float DeltaTime$
         +TimeSpan ElapsedTime$
+        +float TimeScale$
+        +float TimeDilation$
         +List~Timer~ Timers$
         +Update(GameTime)$
-        +AddTimer(float) Timer$
+        +AddTimer(float, string) Timer$
         +AddTimer(Action, float, string) Timer$
+        +AddTimer(Action, int, int, string) Timer$
+        +GetTimer(string) Timer$
+        +TimerExist(string) bool$
         +RemoveTimer(Timer)$
+        +RemoveTimer(string)$
+        +Purge()$
     }
     class Timer {
         +string Name
         +float TimeLeft
         +bool Active
         +bool Repeat
+        +bool Random
+        +(int,int) MinMax
         +Update()
+        +Pause()
+        +Resume()
         +ToggleActive()
         +Reset()
         +event OnTimerCompleted
@@ -456,24 +590,26 @@ classDiagram
     TutorialManager --> TutorialData
 ```
 
+> `SaveManager.SaveScene` ข้าม trigger ที่ `Tag == "door"` (ประตูไม่ถูกบันทึกสถานะ) และจัดเก็บเป็น JSON ที่ `%APPDATA%\Imaginophobia\save.json`
+
 ## Enums
 
 ```mermaid
 classDiagram
     class SanityState {
         <<enumeration>>
-        Normal = 70
-        Anxious = 30
+        Normal = 85
+        Anxious = 40
         Insane = 0
     }
     class CharacterAction {
         <<enumeration>>
         Repairing
         Checking
+        Peeking
         ReadyToHide
         Hiding
         Walking
-        Sneaking
         Idle
     }
     class Scene {
@@ -482,7 +618,7 @@ classDiagram
         tilemap_electrical_room_2
         tilemap_sewer
     }
-    class Sound {
+    class SoundEffectName {
         <<enumeration>>
         DoorClose
         DoorOpen
@@ -498,7 +634,34 @@ classDiagram
         ElecRepairing
         ElecSuccess
         ScopoIndicator
-        AutoIndicator
+        PhobiaHit
+        HeartBeat
+        Painting
+        LightBreak
+        Darkness
+        ScreenOff
+        ScreenOn
+        FlashlightToggle
+        LightFlickerLong
+        LightFlickerShort1
+        LightFlickerShort2
+        LightFlickerShort3
+    }
+    class BackgroundSound {
+        <<enumeration>>
+        AmbElectric
+        AmbSewer
+        BgmMainMenu
+        BgmDeathScreen
+        BgmWinScreen
+    }
+    class GameState {
+        <<enumeration>>
+        Menu
+        Gameplay
+        Lose
+        Win
+        Pause
     }
     class BlinkPhase {
         <<enumeration>>
@@ -516,12 +679,13 @@ classDiagram
 
 ## หมายเหตุ
 
-- `Screen` มาจากไลบรารี **MonoGame.Extended.Screens** · `ICollisionActor` มาจาก **MonoGame.Extended.Collisions** · `Light` / `PointLight` / `Spotlight` / `PenumbraComponent` มาจาก **Penumbra**
-- `SanityState`, `Scene`, `Sound`, `BlinkPhase`, `VignettePhase` อยู่ใน `Scripts/Enums/` แต่ `CharacterAction` อยู่ที่ `Scripts/CharacterAction.cs` โดยตรง
-- `BlinkPhase` ประกาศใน namespace `Imaginophobia.Scripts.Enums` — ต่างจาก enum ตัวอื่นที่อยู่ใน `Imaginophobia`
-- `Nyctophobia`, `Claustrophobia` และ `Entamaphobia` **ยังไม่มีคลาส** — Nyctophobia/Claustrophobia ทำงานผ่าน `LightArea` + `Player` + `UIManager` ส่วน Entamaphobia ยังเป็นข้อเสนอ (ดู [Mechanics](../01_GDD/03-mechanics.md#entamaphobia--รายละเอียดคอนเซปต์))
-- `ObjectiveManager`, `SaveManager`, `InputManager`, `Time` เป็น static class ทั้งหมด — ไม่มี instance และไม่ถูก inject
-- `AudioManager` เป็น singleton ที่สร้างใน constructor ของ `GameManager` (ตัวแปร local ไม่ได้เก็บเป็น field)
+- `Screen` มาจากไลบรารี **MonoGame.Extended.Screens** · `ICollisionActor` มาจาก **MonoGame.Extended.Collisions** · `Light` / `PointLight` / `Spotlight` / `PenumbraComponent` มาจาก **Penumbra** · `Keyframe`/`SpriteSheet` ของ animation มาจาก **MonoGame.Extended.Graphics**
+- คลาสที่ประกาศในโปรเจกต์ทั้งหมด: `GameObject`, `Player`, `AudioSource`, `Autophobia`, `Scopophobia`, `Nyctophobia`, `Entamaphobia`, `ISpatialSoundApplicable`, manager ทั้งหมด, `Screen` ทุกตัวในรายการ, `Trigger`/`Wall`/`Collectible`/`LightArea`, `HighlightGroup`/`HighlightSettings`, `Time`/`Timer`/`CameraShaker`/`Layout`/`GumUIHelper`, `SpawnPoint`, `VignetteOverlay`/`BottomFadeOverlay`, `DotsGenerator`/`GeneratedDotsMap`/`GridCell`/`WirePath`, data class ทั้งหมดใน `Scripts/Datas/`
+- enum `SanityState`, `Scene`, `SoundEffectName`, `BackgroundSound`, `GameState`, `VignettePhase` อยู่ใน `Scripts/Enums/` · `CharacterAction` อยู่ที่ `Scripts/CharacterAction.cs` โดยตรง · `BlinkPhase` ประกาศใน namespace `Imaginophobia.Scripts.Enums` — ต่างจาก enum ตัวอื่นที่อยู่ใน `Imaginophobia`
+- `GameState` (Menu / Gameplay / Lose / Win / Pause) **ยังไม่มีที่ใช้** — สถานะเกมตอนนี้สื่อผ่าน "หน้าจอที่ active" ของ `ScreenManager` แทน
+- `SoundEffectName` มี 26 ค่า แต่ยังมี 2 ค่าที่ "โหลดไว้แต่ไม่เคยเล่น": `DoorOpen` และ `PipeSuccess` (นับจากการเรียก `PlaySFX` ในโค้ด) — `Painting` ผูกกับไฟล์ `sfx_panting.mp3` (ชื่อ enum ไม่ตรงกับไฟล์ ซึ่งชื่อไฟล์ก็พิมพ์ผิดอยู่แล้ว)
+- `ObjectiveManager`, `SaveManager`, `InputManager`, `Time`, `Layout`, `GumUIHelper` เป็น static class ทั้งหมด — ไม่มี instance และไม่ถูก inject
+- `Nyctophobia` / `Entamaphobia` ยังไม่มี asset และยังไม่ถูกผูกเข้า spawn timer (ดู [System Design § 14](01-system-design.md#14-known-issues--technical-debt))
 
 ## Related Documents
 

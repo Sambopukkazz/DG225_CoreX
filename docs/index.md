@@ -8,7 +8,7 @@ date: 2026-10-14
 
 **Project:** Imaginophobia (ทีม CoreX)
 **Status:** Active · **Current Sprint:** Sprint 4 (2026-10-11 → 2026-11-02)
-**Last Updated:** 2026-10-24 | **Knowledge Hub:** [Project Wiki](./05_Wiki/wiki.md)
+**Last Updated:** 2026-10-25 | **Knowledge Hub:** [Project Wiki](./05_Wiki/wiki.md)
 
 ---
 

@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — Audio Direction
 
-**Version:** 1.1 | **Last Updated:** 2026-10-24
+**Version:** 1.2 | **Last Updated:** 2026-10-25
 
 ## บทบาทของเสียงในเกม
 
@@ -28,7 +28,7 @@ date: 2026-10-14
 
 เกมใช้ระบบ 3D/spatial audio — เสียง phobia จะดังขึ้นเมื่อมันเข้าใกล้ และแยกซ้าย-ขวาได้ ทำให้ผู้เล่นใช้หูระบุตำแหน่งได้
 
-โค้ดที่เกี่ยวข้อง: `AudioManager.Play3DSFX(Vector2 pos, Sound name, float innerRadius = 10, float outerRadius = 80)`, `AudioSource.UpdateSpatialAudio(Player player)`
+โค้ดที่เกี่ยวข้อง: `AudioManager.Play3DSFX(Vector2 pos, SoundEffectName name, float innerRadius = 10, float outerRadius = 80, float volume = 1)`, `AudioSource.UpdateSpatialAudio(Player player)`
 
 ## ขั้นตอนการหาและตัดเสียง
 
@@ -41,26 +41,40 @@ date: 2026-10-14
 
 ## รายการเสียงปัจจุบัน
 
+ไฟล์ทั้งหมดใน `Content/Audio/` เป็นนามสกุล `.mp3` และลงทะเบียนใน `Content.mgcb` ครบ 39 ไฟล์ (ดูตารางเต็มใน [Asset List](05-asset-list.md#audio--sfx))
+
 | หมวด | ไฟล์ | จำนวน |
 |---|---|---|
 | Ambience | `amb_sewer.mp3`, `amb_electricroom.mp3` | 2 |
+| Music (BGM) | `bgm_mainmenu_screen.mp3`, `bgm_death_screen.mp3`, `bgm_win_screen.mp3` | 3 |
 | Pipe repair | `sfx_pipe_repairing/success/failed/complete.mp3` | 4 |
 | Electric repair | `sfx_electric_repairing/success/failed/complete.mp3` | 4 |
 | Door | `sfx_door_open/close/stuck.mp3` | 3 |
 | Locker | `sfx_locker_open/close.mp3` | 2 |
-| Phobia indicator | `sfx_scopophobia_indicator.mp3`, `sfx_autophobia_indicator.mp3` | 2 |
+| Phobia feedback | `sfx_scopophobia_indicator.mp3`, `sfx_phobias_hit.mp3` | 2 |
+| Sanity | `sfx_heartbeat.mp3`, `sfx_panting.mp3` | 2 |
+| Light / darkness | `sfx_light_break.mp3`, `sfx_darkness.mp3`, `sfx_light_flicker_long.mp3`, `sfx_light_flicker_short_01..03.mp3` | 6 |
+| Screen (blackout) | `sfx_screen_off.mp3`, `sfx_screen_on.mp3` | 2 |
+| Flashlight | `sfx_flashlight_toggle.mp3` | 1 |
 | Footsteps | `sfx_step_01..08.mp3` | 8 |
-| **รวม** | | **25** |
+| **รวม** | | **39** |
+
+> ⚠️ `sfx_autophobia_indicator.mp3` (ที่เอกสารและค่า enum `AutoIndicator` เคยอ้าง) **ไม่มีใน source แล้ว**
 
 รายการเต็มพร้อมที่มา: [Asset List](05-asset-list.md#audio--sfx)
 
 ## Music (BGM)
 
-| Asset | แหล่งที่มา | สถานะ |
+| Asset | เล่นเมื่อ | สถานะ |
 |---|---|---|
-| `dark frequency` | https://freetouse.com/music/aylex/dark-frequency | 🔲 ระบุไว้ในเอกสารแล้ว แต่ **ยังไม่มีไฟล์ใน `Content/Audio/`** |
+| `bgm_mainmenu_screen.mp3` | เมนูหลัก | ✅ ใช้งาน (`BackgroundSound.BgmMainMenu`) |
+| `bgm_death_screen.mp3` | จอตาย | ✅ ใช้งาน (`BackgroundSound.BgmDeathScreen`) |
+| `bgm_win_screen.mp3` | จอชนะ | 🔲 ผูกใน enum/dictionary แล้ว แต่ยังไม่มีหน้าจอไหนเรียก |
+| `dark frequency` (freetouse.com) | — | ❌ เอกสารเดิมอ้างไว้ แต่ไม่พบไฟล์นี้ใน `Content/Audio/` |
 
-> **TBD:** ยังไม่ได้ตัดสินใจว่าเกมจะมี BGM กี่แทร็ก และจะเล่นตอนไหน (เมนู / ระหว่างเล่น / ช่วงหนี)
+> ระดับเสียง default ของ BGM/ambience = `AudioManager.BgsVolume` (0.2) และปรับได้จากสไลเดอร์ "Ambience Volume" ใน Settings / pause overlay
+
+> **TBD:** ยังไม่ได้ตัดสินใจว่าเกมจะมีเพลงระหว่างเล่น (in-game) ไหม — ปัจจุบันระหว่างเล่นมีแค่ ambience
 
 ## งานที่ต้องทำ (จากผล Playtest)
 

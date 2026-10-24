@@ -16,7 +16,7 @@ date: 2026-10-14
 |---|---|---|---|
 | Workflow & Branching | การแยก branch, commit convention, merge conflict | [Game Jam Workflow Rules](../history/03-workflow-rules.md) | ✅ มีแล้ว |
 | Role & File Ownership | ใครรับผิดชอบไฟล์/module ไหน | [Roles](../history/02-roles.md) | ✅ มีแล้ว |
-| Asset Naming | การตั้งชื่อไฟล์ asset | [GDD README](../../01_GDD/README.md#asset-naming-convention) | ✅ มีแล้ว |
+| Asset Naming | การตั้งชื่อไฟล์ asset | [GDD README](../../01_GDD/README.md#-naming-convention) | ✅ มีแล้ว |
 | Asset Pipeline | ขั้นตอนนำ asset เข้าโปรเจกต์ | [Asset Pipeline Flow](../../01_GDD/06-asset-pipeline-flow.md) | ✅ มีแล้ว |
 
 ## Guideline ที่ยังขาด (ข้อเสนอ)

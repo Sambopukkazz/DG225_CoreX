@@ -6,7 +6,7 @@ date: 2026-10-14
 
 # Imaginophobia — GDD Index
 
-**Version:** 1.1 | **Last Updated:** 2026-10-24
+**Version:** 1.2 | **Last Updated:** 2026-10-25
 
 ## 📖 เอกสารในโฟลเดอร์นี้
 
@@ -75,6 +75,7 @@ date: 2026-10-14
 | `dots` | `Trigger` (มินิเกมเชื่อมจุด) | `ElectricalPanel` |
 | `hideout` | `Trigger` (ตู้ซ่อนตัว) | `Locker` |
 | `door` | `Trigger` + ชื่อ = property `Destination` | `LoadNextScene` |
+| `report` | `Trigger` + ชื่อ = property `Detail` | `Clipboard` |
 | `spawn` | `SpawnPoint` + ชื่อ = property `Origin` | `PlayerSpawnPoint` (ห้องไฟฟ้า) · `SpawnPoint` (โถงอุโมง) |
 | `light` | `PointLight` / `SpotLight` (+ `LightArea` ถ้าเป็น `PointLight`) | `PointLight` · `DoorLight` · `SpotLight` |
 
@@ -84,7 +85,7 @@ date: 2026-10-14
 |---|---|---|
 | `Collision` | Entities | สร้าง collider / trigger / spawn point |
 | `Lighting` | Entities | สร้างแสง |
-| `Valves` · `Lockers` · `ElectricalPanel` · `Doors` | Tiles | tile ที่ใช้ทำ highlight (ชื่อ layer ต้องตรงกับชื่อ entity โดยตัด `s` ตัวท้ายออก — ยกเว้น `LoadNextScene` ที่ใช้ layer `Doors`) |
+| `Valves` · `Lockers` · `ElectricalPanel` · `Doors` · `Clipboard` · `Ladder` | Tiles | tile ที่ใช้ทำ highlight (ชื่อ layer ต้องตรงกับชื่อ entity โดยตัด `s` ตัวท้ายออก — ยกเว้น `LoadNextScene` ที่ใช้ layer `Doors` และถ้า `Destination == "end"` ใช้ layer `Ladder`) |
 
 > **TBD:** ชื่อ entity บางตัวยังไม่ consistent — `PlayerSpawnPoint` กับ `SpawnPoint` ทำหน้าที่เดียวกัน และ `InvisWall` เป็นชื่อที่บอกว่า "มองไม่เห็น" ไม่ได้บอกว่าเป็นกำแพงชน ควรตกลงชื่อใหม่ทั้งชุด
 > รายละเอียด entity / property / จำนวนจริงในแต่ละฉาก: [Data Schema](../03_Software/03-data-schema.md#2-ข้อมูลระดับ-level-data)

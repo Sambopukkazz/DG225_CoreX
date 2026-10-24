@@ -69,7 +69,10 @@ Sanity    : 100
 Battery   : 100
 ```
 
-**หน้าจอที่ต้องมี** — Main menu · Settings (Ambience Volume, SFX Volume) · Credits · Gameplay · Minigame screens (Skill Check, Connect The Dots, Spin The Valve)
+**หน้าจอที่ต้องมี** — Main menu · Settings (Ambience Volume, SFX Volume) · Credits · Gameplay · Death · Win · Minigame screens (Connect The Dots, Spin The Valve, Door Peeking)
+
+> ✅ **สถานะในโค้ด (2026-10-25):** หน้าจอทั้งหมดข้างบนมีแล้ว (สร้างด้วย Gum) — รายการปุ่มจริงบนเมนูคือ `Shift 1` (เริ่มเกม) · `Index` (ยังปิดใช้งาน) · `Settings` · `Credits` · `Exit` และมี pause overlay (เปิดด้วย `ESC`/ปุ่มมุมขวาบน) ระหว่างเล่น
+> ⚠️ จอชนะยังมีบรรทัดเวลาเป็น placeholder (`"Time left: lorem ipsum"`) และจอแอบมองประตูยังเป็นสี่เหลี่ยมสีเขียว ต้องทำอาร์ตจริง
 
 ## ข้อควรปรับปรุงด้านภาพ (จากผล Playtest)
 
