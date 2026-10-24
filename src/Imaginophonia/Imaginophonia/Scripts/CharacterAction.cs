@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 namespace Imaginophobia {
     public enum CharacterAction {
         Repairing, 
-        Checking, 
+        Checking,
+        Peeking,
         ReadyToHide, 
         Hiding, 
         Walking, 
-        Sneaking, 
+        //Sneaking, 
         Idle
     }
 }

@@ -6,7 +6,7 @@ using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 
 namespace Imaginophobia {
-    public class Scopophobia : GameObject, IAudioApplicable, ICollisionActor{
+    public class Scopophobia : GameObject, ISpatialSoundApplicable, ICollisionActor{
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float MoveSpeed { get; private set; } = 2600f;

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
-    public class Autophobia : GameObject, IAudioApplicable, ICollisionActor {
+    public class Autophobia : GameObject, ISpatialSoundApplicable, ICollisionActor {
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         public float MoveSpeed { get; private set; } = 400f;

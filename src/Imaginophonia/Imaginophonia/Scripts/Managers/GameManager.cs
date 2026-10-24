@@ -148,7 +148,7 @@ namespace Imaginophobia {
                 AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck);
             }
             else {
-                AudioManager.Instance.ClearSFXs("anxietySound");
+                AudioManager.Instance.ClearSFXs();
                 _enemyManager.ClearEnemies();
                 _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
             }
@@ -164,7 +164,7 @@ namespace Imaginophobia {
         
         private void OnEnemySpawned(GameObject enemy) {
             if (enemy is Nyctophobia) {
-                AudioManager.Instance.PlaySFX(SoundEffectName.LightFlickerLong);
+                AudioManager.Instance.PlaySFX(SoundEffectName.LightFlickerLong, volume:0.02f);
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
                 ObjectiveManager.ResetPanels();

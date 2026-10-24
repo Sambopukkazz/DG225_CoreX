@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
-    public class Player : GameObject, IAudioApplicable, ICollisionActor, IDisposable {
+    public class Player : GameObject, ISpatialSoundApplicable, ICollisionActor, IDisposable {
         public int Id { get; }
         public CollisionShape2D Shape { get; private set; }
         private readonly Vector2 _eyeLevel;
@@ -35,6 +35,7 @@ namespace Imaginophobia {
         public AudioListener Listener { get; private set; }
         private PointLight _scotopicLight;
         private Spotlight _flashLight;
+        public Spotlight FlashLight => _flashLight;
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         private Vector2 _flashlightOffset;
@@ -46,7 +47,7 @@ namespace Imaginophobia {
         private bool _lockFacingDirection;
         public float Sanity { get; set; } = 100;
         public float Battery { get; set; } = 100;
-        public bool AllowMovement { get; set; }
+        private bool _allowMovement { get; set; }
         private bool _readyToHide;
         private float _hideCoolDown = 3f;
         public bool ReadyToOpenDoor { get; set; }
@@ -98,7 +99,7 @@ namespace Imaginophobia {
             _readyToHide = true;
             _readyToRepair = true;
             ReadyToOpenDoor = true;
-            AllowMovement = true;
+            _allowMovement = true;
 
             _rand = new Random();
 
@@ -106,7 +107,7 @@ namespace Imaginophobia {
         }
 
         public override void Update() {
-            if (AllowMovement) {
+            if (_allowMovement) {
                 Direction = InputManager.Direction;
                 Velocity = MoveSpeed * InputManager.Direction;
                 _lockFacingDirection = false;
@@ -114,7 +115,7 @@ namespace Imaginophobia {
                 if (KeyboardExtended.GetState().IsKeyDown(Keys.LeftControl)) {
                     Velocity /= 1.7f;
                     _lockFacingDirection = true;
-                    CurrentAction = CharacterAction.Sneaking;
+                    //CurrentAction = CharacterAction.Sneaking;
                 }
                 
 
@@ -132,7 +133,7 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && _animatedSprite.CurrentAnimation != "back" && CurrentAction != CharacterAction.Hiding) {
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && CurrentAction != CharacterAction.Repairing && CurrentAction != CharacterAction.Hiding) {
                 ToggleFlashLight();
             }
 
@@ -277,15 +278,16 @@ namespace Imaginophobia {
         private void Animate() {
             if (InputManager.Direction.X < 0 && !_lockFacingDirection) {
                 _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
-                CurrentAction = CharacterAction.Walking;
+                //CurrentAction = CharacterAction.Walking;
             }
             else if (InputManager.Direction.X > 0 && !_lockFacingDirection) {
                 _animatedSprite.Effect = SpriteEffects.None;
-                CurrentAction = CharacterAction.Walking;
+                //CurrentAction = CharacterAction.Walking;
             }
 
             if (!_lockFacingDirection && InputManager.Direction != Vector2.Zero && _animatedSprite.CurrentAnimation != "walk-forward") {
                 _animatedSprite.SetAnimation("walk-forward");
+                CurrentAction = CharacterAction.Walking;
             }
             else if (_lockFacingDirection && InputManager.Direction != Vector2.Zero) {
                 if(_animatedSprite.CurrentAnimation != "sneak-backward" && ((_animatedSprite.Effect == SpriteEffects.None && InputManager.Direction.X < 0) || (_animatedSprite.Effect == SpriteEffects.FlipHorizontally && InputManager.Direction.X > 0))) {
@@ -294,7 +296,8 @@ namespace Imaginophobia {
                 else if (_animatedSprite.CurrentAnimation != "sneak-forward" && ((_animatedSprite.Effect == SpriteEffects.None && InputManager.Direction.X > 0) || (_animatedSprite.Effect == SpriteEffects.FlipHorizontally && InputManager.Direction.X < 0))) {
                     _animatedSprite.SetAnimation("sneak-forward");
                 }
-                
+                CurrentAction = CharacterAction.Walking;
+
             }
             else if (InputManager.Direction == Vector2.Zero && _animatedSprite.CurrentAnimation != "idle") {
                 _animatedSprite.SetAnimation("idle");
@@ -366,20 +369,20 @@ namespace Imaginophobia {
         public void ToggleHide() {
             if (Visible && _readyToHide) {
                 SetActive(false);
-                AllowMovement = false;
+                _allowMovement = false;
                 _readyToHide = false;
                 FocusLevel = 1.25f;
                 CurrentAction = CharacterAction.Hiding;
                 if(CooldownTimer != null) {
                     CooldownTimer.ToggleActive();
                 }
-                CooldownTimer = Time.AddTimer(ToggleHide, 8, "hideTime");
+                CooldownTimer = Time.AddTimer(ToggleHide, 10, "hideTime");
                 AudioManager.Instance.PlaySFX(SoundEffectName.LockerClose);
             }
             else if (CurrentAction == CharacterAction.Hiding) {
                 ObjectiveManager.Complete("hide");
                 SetActive(true);
-                AllowMovement = true;
+                _allowMovement = true;
                 FocusLevel = 1;
                 CurrentAction = CharacterAction.Idle;
                 Transform.Position = PreviousPos;
@@ -411,7 +414,7 @@ namespace Imaginophobia {
 
         public void ToggleRepair() {
             if (_readyToRepair) {
-                AllowMovement = false;
+                _allowMovement = false;
                 _readyToRepair = false;
                 _animatedSprite.SetAnimation("back");
                 CurrentAction = CharacterAction.Repairing;
@@ -420,8 +423,26 @@ namespace Imaginophobia {
                 FocusLevel = 1.25f;
             }
             else if (!_readyToRepair) {
-                AllowMovement = true;
+                _allowMovement = true;
                 _readyToRepair = true;
+                _animatedSprite.SetAnimation("idle");
+                CurrentAction = CharacterAction.Idle;
+                CanInteract = true;
+                FocusLevel = 1;
+            }
+        }
+
+        public void TogglePeek() {
+            if (CurrentAction != CharacterAction.Peeking) {
+                _allowMovement = false;
+                _animatedSprite.SetAnimation("idle");
+                CurrentAction = CharacterAction.Peeking;
+                _flashLight.Enabled = false;
+                CanInteract = false;
+                FocusLevel = 1.75f;
+            }
+            else if (CurrentAction == CharacterAction.Peeking) {
+                _allowMovement = true;
                 _animatedSprite.SetAnimation("idle");
                 CurrentAction = CharacterAction.Idle;
                 CanInteract = true;
@@ -439,11 +460,11 @@ namespace Imaginophobia {
                 Time.RemoveTimer("anxietySound");
 
                 AudioManager.Instance.PlaySFX(SoundEffectName.HeartBeat);
-                Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting), 3);
+                Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting, volume: 0.065f), 3);
 
                 Action anxietySound = () => {
                     AudioManager.Instance.PlaySFX(SoundEffectName.HeartBeat);
-                    Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting), 3);
+                    Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting, volume: 0.065f), 3);
                 };
 
                 Time.AddTimer(anxietySound, 10, 16, "anxietySound");
@@ -453,8 +474,8 @@ namespace Imaginophobia {
                 _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item2;
                 SanityStateChanged?.Invoke();
 
-                AudioManager.Instance.PlaySFX(SoundEffectName.Painting);
-                Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting), 20, 26, "anxietySound");
+                AudioManager.Instance.PlaySFX(SoundEffectName.Painting, volume: 0.025f);
+                Time.AddTimer(() => AudioManager.Instance.PlaySFX(SoundEffectName.Painting, volume: 0.025f), 20, 26, "anxietySound");
             }
             else if (Sanity > (float)SanityState.Normal && SanityState != SanityState.Normal) {
                 SanityState = SanityState.Normal;
@@ -525,7 +546,7 @@ namespace Imaginophobia {
             Battery = 100;
             FocusLevel = 1;
             SetActive(true);
-            AllowMovement = true;
+            _allowMovement = true;
             SetReadyToHide();
             Visible = true;
             CooldownTimer = null;

@@ -66,7 +66,7 @@ namespace Imaginophobia {
         }
 
         public void UpdateSpatialAudio(Player player) {
-            IAudioApplicable emitter = (IAudioApplicable)Parent;
+            ISpatialSoundApplicable emitter = (ISpatialSoundApplicable)Parent;
 
             float distance = Vector3.Distance(player.Listener.Position, _emitter.Position);
 

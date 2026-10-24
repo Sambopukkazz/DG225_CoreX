@@ -15,7 +15,7 @@ namespace Imaginophobia {
         private int _maxDots = 5;
         private int _minPathLength = 6;
         private int _minDistance = 4;
-        private int _maxAttempts = 100;
+        private int _maxAttempts = 500;
         private Random _rand = new Random();
         private Action<int, int, Color> _addDot;
         private Color[] _availableColors = { Color.Blue, Color.Cyan, Color.Green, Color.Purple, Color.Red, Color.Yellow };

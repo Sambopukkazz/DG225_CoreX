@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Imaginophobia {
-    public interface IAudioApplicable {
+    public interface ISpatialSoundApplicable {
         public float MoveSpeed { get; }
         public Vector2 Velocity { get; }
         public Vector2 Direction { get; }

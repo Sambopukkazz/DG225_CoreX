@@ -239,10 +239,10 @@ namespace Imaginophobia {
             parent.AddChild(CreateDimPanel());
             parent.AddChild(CreateTitle("Settings"));
 
-            Slider ambienceSlider = CreateSlider(Layout.SliderX, Layout.AmbienceRowY);
-            parent.AddChild(ambienceSlider);
-            Label ambienceValue = CreateValueLabel(Layout.SliderValueX, Layout.AmbienceRowY);
-            parent.AddChild(ambienceValue);
+            Slider backgroundSoundSlider = CreateSlider(Layout.SliderX, Layout.AmbienceRowY);
+            parent.AddChild(backgroundSoundSlider);
+            Label backgroundSoundValue = CreateValueLabel(Layout.SliderValueX, Layout.AmbienceRowY);
+            parent.AddChild(backgroundSoundValue);
             TextRuntime ambienceLabel = CreateText("Ambience Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.AmbienceLabelY, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
             ambienceLabel.VerticalAlignment = VerticalAlignment.Top;
             parent.AddChild(ambienceLabel);
@@ -255,11 +255,11 @@ namespace Imaginophobia {
             sfxLabel.VerticalAlignment = VerticalAlignment.Top;
             parent.AddChild(sfxLabel);
 
-            ambienceSlider.Value = AudioManager.Instance.AmbVolume * 100f;
-            ambienceValue.Text = ambienceSlider.Value.ToString("N0");
-            ambienceSlider.ValueChanged += (_, _) => {
-                AudioManager.Instance.AmbVolume = (float)(ambienceSlider.Value / 100f);
-                ambienceValue.Text = ambienceSlider.Value.ToString("N0");
+            backgroundSoundSlider.Value = AudioManager.Instance.BgsVolume * 100f;
+            backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString("N0");
+            backgroundSoundSlider.ValueChanged += (_, _) => {
+                AudioManager.Instance.BgsVolume = (float)(backgroundSoundSlider.Value / 100f);
+                backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString("N0");
             };
 
             sfxSlider.Value = AudioManager.Instance.SoundEffectVolume * 100f;

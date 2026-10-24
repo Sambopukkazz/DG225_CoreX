@@ -101,7 +101,6 @@ namespace Imaginophobia {
         }
 
         public void StartNyctoAlarm() {
-            AudioManager.Instance.PlaySFX(SoundEffectName.LightFlickerLong);
             if (_powered == false) {
                 return;
             }
@@ -116,7 +115,7 @@ namespace Imaginophobia {
             if (_nyctoAlarm || !_powered || IsFlickering) {
                 return;
             }
-            AudioManager.Instance.PlayLightFlickerSFX(Shape.BoundingBox.Center, 50, 600);
+            AudioManager.Instance.PlayLightFlickerSFX(Shape.BoundingBox.Center, 50, 1800);
             //AudioManager.Instance.Play3DSFX(Shape.BoundingBox.Center,SoundEffectName.ScreenOn,50, 500);
             IsFlickering = true;
             _flickerDurationTimer = durationSeconds;

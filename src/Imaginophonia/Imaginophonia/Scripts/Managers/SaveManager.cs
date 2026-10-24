@@ -4,6 +4,7 @@ using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 public static class SaveManager {
@@ -29,7 +30,7 @@ public static class SaveManager {
     // --- called when LEAVING a scene, before it unloads ---
     public static void SaveScene(string sceneName, List<Trigger> triggers, List<LightArea> lightAreas) {
         var scene = new SceneData();
-        foreach (Trigger trigger in triggers) {
+        foreach (Trigger trigger in triggers.Where(trig => trig.Tag != "door")) {
             scene.Triggers.Add(new TriggerData { Id = trigger.Id, Progress = trigger.Progress, Interactable = trigger.Interactable });
         }
 

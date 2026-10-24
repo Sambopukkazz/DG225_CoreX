@@ -88,9 +88,14 @@ namespace Imaginophobia {
                     
                 }
                 else if (trigger.CompareTag("door")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
                         ObjectiveManager.Complete("door");
                         DoorInteracted?.Invoke(trigger.Name);
+                    }
+                    else if (KeyboardExtended.GetState().WasKeyPressed(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer") {
+                        _player.TogglePeek();
+                        Screen screen = new DoorPeekingScreen(_player, trigger);
+                        Time.AddTimer(() => MainGame.ScreenManager.ShowScreen(screen), 1f);
                     }
                 }
 
@@ -150,7 +155,7 @@ namespace Imaginophobia {
                     lightArea.TurnOff();
                     lightArea.ScopoHasPassed = true;
                     scopo.LightBrokeCount++;
-                    AudioManager.Instance.Play3DSFX(lightArea.Shape.BoundingBox.Center, SoundEffectName.LightBreak, 50, 1800);
+                    AudioManager.Instance.Play3DSFX(lightArea.Shape.BoundingBox.Center, SoundEffectName.LightBreak, 50, 1800, 0.4f);
                 }
                 else if (enemy.Name == "Autophobia") {
                     lightArea.StartFlicker();

@@ -26,7 +26,7 @@ namespace Imaginophobia {
         public bool IsMuted { get; private set; }
         private bool _debugging = true;
 
-        public float AmbVolume {
+        public float BgsVolume {
             get {
                 if (IsMuted) {
                     return 0.0f;
@@ -155,7 +155,7 @@ namespace Imaginophobia {
                 { BackgroundSound.BgmWinScreen, content.Load<Song>("Audio/bgm_win_screen") }
             };
             
-            AmbVolume = 0.2f;
+            BgsVolume = 0.2f;
         }
 
         ~AudioManager() => Dispose(false);
@@ -258,7 +258,7 @@ namespace Imaginophobia {
                     break;
             }
 
-            audioSource.PlayOneShot(soundEffect);
+            audioSource.PlayOneShot(soundEffect, 0.15f);
         }
 
         public void StopSFX(SoundEffectName name) {

@@ -139,7 +139,7 @@ namespace Imaginophobia {
                     }
                     else {
                         color = ColorHelper.FromHex("#0e61a464");
-                        timeFactor = 56.25f;
+                        timeFactor = 45;
                     }
                     MainGame.SpriteBatch.FillRectangle(960 - 225, 540 + 400, _player.CooldownTimer.TimeLeft * timeFactor, 75, color);
                 }
@@ -286,7 +286,7 @@ namespace Imaginophobia {
             //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
             //    .Easing(EasingFunctions.Linear);
             _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0f, 0f), duration: 25)
-                .Easing(EasingFunctions.Linear);
+                .Easing(EasingFunctions.ExponentialOut);
         }
 
         public void NyctoOpen() {
@@ -294,7 +294,7 @@ namespace Imaginophobia {
             //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
             //    .Easing(EasingFunctions.Linear);
             _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 10)
-                .Easing(EasingFunctions.Linear);
+                .Easing(EasingFunctions.SineOut);
         }
 
         public void ShowMessage(string text, float duration = 4f) {
@@ -317,10 +317,12 @@ namespace Imaginophobia {
             if (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking) {
                 _vignetteOverlay.CameraZoom = _camera.Zoom;
             }
+
             if (_player.CurrentAction == CharacterAction.Hiding) {
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
                 .Easing(EasingFunctions.Linear);
             }
+
             if (_previousAction == CharacterAction.ReadyToHide && _player.CurrentAction == CharacterAction.Hiding) {
                 _tweener.TweenTo(target: _vignetteOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.375f, 0.175f), duration: 4)
                 .Easing(EasingFunctions.ExponentialOut);
