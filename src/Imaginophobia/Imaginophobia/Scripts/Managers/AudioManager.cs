@@ -24,7 +24,7 @@ namespace Imaginophobia {
         private float _previousAmbientVolume;
         private float _previousSoundEffectVolume;
         public bool IsMuted { get; private set; }
-        private bool _debugging = true;
+        private bool _debugging = false;
 
         public float BgsVolume {
             get {

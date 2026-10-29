@@ -70,8 +70,8 @@ namespace Imaginophobia {
 
             float distance = Vector3.Distance(player.Listener.Position, _emitter.Position);
 
-            float volume = _volume - MathHelper.Clamp((distance - _innerRadius) / (_outerRadius - _innerRadius), 0f, _volume);
-            AudioPlayer.Volume = volume;
+            float volume = 1f - MathHelper.Clamp((distance - _innerRadius) / (_outerRadius - _innerRadius), 0f, 1f);
+            AudioPlayer.Volume = _volume * volume;
 
             Vector2 directionFromListener = new Vector2(_emitter.Position.X - player.Listener.Position.X, _emitter.Position.Y - player.Listener.Position.Y);
             

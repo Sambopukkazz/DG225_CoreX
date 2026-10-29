@@ -8,7 +8,7 @@
         "name": "C#: Imaginophonia Debug",
         "type": "dotnet",
         "request": "launch",
-        "projectPath": "${workspaceFolder}/Imaginophonia.csproj"
+        "projectPath": "${workspaceFolder}/Imaginophobia.csproj"
       }
     ],
   }

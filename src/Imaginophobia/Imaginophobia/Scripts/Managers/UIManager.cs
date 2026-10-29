@@ -1,4 +1,4 @@
-﻿using Imaginophobia.Scripts.Enums;
+﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
