@@ -13,6 +13,9 @@ namespace Imaginophobia {
         public static PenumbraComponent Penumbra { get; private set; }
         private List<Light> _lights;
         public List<LightArea> LightAreas;
+
+        public bool AllLightsAreOff() => LightAreas.All(light => light.On == false);
+
         public LightManager() {
             if(Penumbra == null) {
                 Penumbra = new PenumbraComponent(MainGame.Instance);

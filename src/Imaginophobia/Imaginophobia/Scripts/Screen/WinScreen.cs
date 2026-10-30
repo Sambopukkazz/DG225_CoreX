@@ -7,12 +7,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
 using RenderingLibrary.Graphics;
+using System;
 
 namespace Imaginophobia {
     public class WinScreen : Screen {
         private Panel _root;
 
-        public WinScreen() {
+        public WinScreen(float timeLeft) {
             _root = new Panel();
             _root.Dock(Dock.Fill);
 
@@ -22,12 +23,12 @@ namespace Imaginophobia {
             _root.AddChild(canvas);
 
             SpriteRuntime background = new SpriteRuntime();
-            background.SourceFileName = "UI/win_screen.png";
+            background.SourceFileName = "UI/background_win.png";
             canvas.AddChild(background);
 
             canvas.AddChild(GumUIHelper.CreateText("You survived.", Layout.TitleFontScale, 600, 220, 720, 120));
-
-            TextRuntime time = GumUIHelper.CreateText("Time left: lorem ipsum", 2, 960, 480, 600, 120);
+            string message = TimeSpan.FromSeconds(timeLeft).ToString(@"mm\:ss");
+            TextRuntime time = GumUIHelper.CreateText($"Time left: {message}", 2, 960, 480, 600, 120);
             time.XOrigin = HorizontalAlignment.Center;
             time.YOrigin = VerticalAlignment.Center;
             canvas.AddChild(time);

@@ -21,7 +21,7 @@ namespace Imaginophobia {
             _root.AddChild(canvas);
 
             SpriteRuntime background = new SpriteRuntime();
-            background.SourceFileName = "UI/Imaginophobia_bg_placerholder.png";
+            background.SourceFileName = "UI/background_main.png";
             canvas.AddChild(background);
 
             GumUIHelper.AddSettingsPanel(canvas);

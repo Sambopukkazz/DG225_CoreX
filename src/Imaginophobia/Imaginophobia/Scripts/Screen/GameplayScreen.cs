@@ -18,23 +18,16 @@ namespace Imaginophobia {
     public class GameplayScreen : Screen {
         private GameManager _gameManager;
         private Panel _root;
-        private ContainerRuntime _pauseMenu;
+        private ContainerRuntime _pauseMenu;     
 
-        public GameplayScreen(BoxingViewportAdapter viewportAdapter) {
+        public override void Initialize() {
+            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, MainGame.GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
             _gameManager = new(viewportAdapter);
+
             UpdateWhenInactive = true;
             DrawWhenInactive = true;
-
             _root = new Panel();
             _root.Dock(Dock.Fill);
-
-            //RectangleRuntime background = new RectangleRuntime();
-            //background.IsFilled = true;
-            //background.FillColor = Color.Green;
-            //background.StrokeAlpha = 0;
-            //background.Width = Layout.ScreenWidth;
-            //background.Height = Layout.ScreenHeight;
-            //_root.AddChild(background);
 
             _pauseMenu = new ContainerRuntime();
             _pauseMenu.Width = Layout.ScreenWidth;
@@ -42,6 +35,7 @@ namespace Imaginophobia {
             _pauseMenu.Visible = false;
             _root.AddChild(_pauseMenu);
 
+            AudioManager.Instance.UnmuteAudio();
             GumUIHelper.AddSettingsPanel(_pauseMenu);
             _pauseMenu.AddChild(GumUIHelper.CreateTextButton("Return to Menu", Layout.MenuFontScale, Layout.ActionButtonX, Layout.ActionButtonY, Layout.ActionButtonWidth, Layout.ActionButtonHeight, ReturnToMenu));
 
@@ -83,16 +77,10 @@ namespace Imaginophobia {
             _gameManager.Dispose();
         }
         private void ReturnToMenu() {
-            //FadeTransition fadeTransition = new FadeTransition(MainGame.GraphicsDevice, Color.Black, 1f);
-            //fadeTransition.Completed += (_, _) => {
-            //    MainGame.ScreenManager.ClearScreens();
-            //    MainGame.ScreenManager.ShowScreen(new MainMenuScreen(), fadeTransition);
-            //};
-
-            //MainGame.ScreenManager.CloseScreen(fadeTransition);
-
-            MainGame.ScreenManager.ClearScreens();
-            MainGame.ScreenManager.ShowScreen(new MainMenuScreen());
+            if (MainGame.GameState == GameState.Gameplay) {
+                MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 2, 2);
+                MainGame.GameState = GameState.Menu;
+            }
         }
     }
 }

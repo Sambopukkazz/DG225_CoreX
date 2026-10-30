@@ -51,10 +51,10 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
-            Time.AddTimer(() => MainGame.ScreenManager.ReplaceScreen(new WinScreen()), 481, "MainTimer");
+            Time.AddTimer(() => MainGame.ScreenManager.ReplaceScreen(new DeathScreen()), 481, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
-            //temp
+            //temp-
             _cameraShaker = new CameraShaker();
 
         }
@@ -88,8 +88,9 @@ namespace Imaginophobia {
             _cameraShaker.Update(gameTime);
             
             if (_player.Sanity <= 0) {
-                MainGame.ScreenManager.ReplaceScreen(new DeathScreen());
-                //Restart();
+                //MainGame.ScreenManager.ClearScreens(1);
+                //MainGame.ScreenManager.ShowScreen
+                MainGame.GameState = GameState.Lose;
             }
 
             DebugUpdate();
@@ -136,7 +137,11 @@ namespace Imaginophobia {
             if (sceneName == "end") {
                 if (ObjectiveManager.AllValvesRepaired) {
                     ObjectiveManager.Complete("exit-ladder");
-                    MainGame.ScreenManager.ReplaceScreen(new WinScreen());
+                    SaveManager.Delete();
+                    ObjectiveManager.ResetValves();
+                    _enemyManager.ClearEnemies();
+                    AudioManager.Instance.ClearSFXs();
+                    MainGame.ScreenManager.ReplaceScreen(new WinScreen(Time.GetTimer("MainTimer").TimeLeft));
                 }
                 else {
                     _uiManager.ShowMessage("I still have work to do.", 2f);
@@ -164,11 +169,18 @@ namespace Imaginophobia {
         
         private void OnEnemySpawned(GameObject enemy) {
             if (enemy is Nyctophobia) {
-                AudioManager.Instance.PlaySFX(SoundEffectName.LightFlickerLong, volume:0.02f);
+                if (_lightManager.AllLightsAreOff() == false) {
+                    AudioManager.Instance.PlaySFX(SoundEffectName.LightFlickerLong, volume: 0.2f);
+                }
                 SaveManager.ResetScene(Scene.tilemap_electrical_room.ToString());
                 SaveManager.ResetScene(Scene.tilemap_electrical_room_2.ToString());
                 ObjectiveManager.ResetPanels();
                 _lightManager.NyctoAlarmAll();
+                return;
+            }
+            else if (enemy is Entamaphobia entamaphobia && SceneManager.GetActiveScene().Name != "tilemap_sewer") {
+                Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
+                entamaphobia.Door = door;
                 return;
             }
 
@@ -216,9 +228,8 @@ namespace Imaginophobia {
             _player.Dispose();
             _lightManager.Dispose();
 
-            MainGame.Saturation = 1f;
+            MainGame.ScreenManager.Saturation = 1f;
             ObjectiveManager.Reset();
-            Time.SessionActive = false;
             Time.Purge();
         }
     }

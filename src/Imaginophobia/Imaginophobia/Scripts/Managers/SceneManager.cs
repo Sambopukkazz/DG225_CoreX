@@ -88,7 +88,7 @@ namespace Imaginophobia {
                 if (trigger.CompareTag("dots") && ObjectiveManager.IsPanelRepaired(trigger.Id)) {
                     continue;
                 }
-                if ((trigger.CompareTag("skillcheck") || trigger.CompareTag("dots")) && _player.CurrentAction == CharacterAction.Repairing) {
+                if ((trigger.CompareTag("skillcheck") || trigger.CompareTag("dots")) && _player.CurrentAction == CharacterAction.Interacting) {
                     continue;
                 }
                 if (trigger.CompareTag("hideout") && _player.CurrentAction == CharacterAction.Hiding) {

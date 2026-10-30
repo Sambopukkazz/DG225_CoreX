@@ -332,14 +332,6 @@
 /processorParam:Version=6.1.1.0
 /build:Fonts/GenerationFonting.fnt
 
-#begin Fonts/TrueTypeFont/GenerationFonting.ttf
-/importer:FontImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/processorParam:Version=3.8.5.0
-/build:Fonts/TrueTypeFont/GenerationFonting.ttf;Fonts/TrueTypeFont/GenerationFonting
-
 #begin Phobias/sprite_scopophobia.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -414,7 +406,7 @@
 /processorParam:Version=6.1.1.0
 /build:Tilemaps/tilemap_sewer.ldtk
 
-#begin UI/death_screen.png
+#begin UI/background_death.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -425,9 +417,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:UI/death_screen.png
+/build:UI/background_death.png
 
-#begin UI/Imaginophobia_bg_placerholder.png
+#begin UI/background_main.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -438,9 +430,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:UI/Imaginophobia_bg_placerholder.png
+/build:UI/background_main.png
 
-#begin UI/pause_button.png
+#begin UI/background_win.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -451,7 +443,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
-/build:UI/pause_button.png
+/build:UI/background_win.png
 
 #begin UI/slider_placeholder.png
 /importer:TextureImporter
@@ -478,6 +470,19 @@
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
 /build:UI/slider_thumbinstance_placeholder.png
+
+#begin UI/sprite_button_pause.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:UI/sprite_button_pause.png
 
 #begin UI/sprite_spacebar.png
 /importer:TextureImporter
@@ -523,17 +528,4 @@
 /processor:TexturePackerProcessor
 /processorParam:Version=6.1.1.0
 /build:UI/spritesheet_minigame_dot.json
-
-#begin UI/win_screen.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:UI/win_screen.png
 

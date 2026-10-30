@@ -11,6 +11,7 @@ using MonoGame.Extended.ECS;
 using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Particles;
+using MonoGame.Extended.Tweening;
 using Penumbra;
 using RenderingLibrary;
 using System;
@@ -43,27 +44,23 @@ namespace Imaginophobia {
         private int _previousFrame;
         public SanityState SanityState { get; set; }
         public CharacterAction CurrentAction { get; set; }
-        public BlinkPhase BlinkPhase;
         private bool _lockFacingDirection;
         public float Sanity { get; set; } = 100;
         public float Battery { get; set; } = 100;
         private bool _allowMovement { get; set; }
-        private bool _readyToHide;
-        private float _hideCoolDown = 3f;
-        public bool ReadyToOpenDoor { get; set; }
-        private bool _readyToRepair;
-        public bool CanRepair => _readyToRepair;
-        public bool CanInteract { get; set; }
+        //private bool _readyToHide;
+        public readonly float HideTime = 10f;
+        public readonly float HideCooldown = 3f;
         public float FocusLevel { get; private set; }
         public Vector2 CameraTarget;
-        public Timer CooldownTimer;
         public bool Blink { get; set; }
         public bool Nyctophobia { get; set; }
         public event Action SanityStateChanged;
         public Vector2 PreviousPos { get; set; }
         private float _sewerSanityRedectionSpeed = 0.5f;
         private (float, float, float) _availableSanityRedectionSpeed = (0.5f, 0.2f, 0f); //per second Normal,Anxious,Insane
-        private Random _rand;
+        public Trigger CollidingTrigger { get; set; }
+        private Tweener _tweener;
 
 
         public Player() : base("Player", "Player"){
@@ -96,12 +93,9 @@ namespace Imaginophobia {
             _eyeLevel = new Vector2(20,-85);
             _eyeSight = new LineSegment2D();
 
-            _readyToHide = true;
-            _readyToRepair = true;
-            ReadyToOpenDoor = true;
-            _allowMovement = true;
+            _tweener = new Tweener();
 
-            _rand = new Random();
+            _allowMovement = true;
 
             UpdateShape();
         }
@@ -115,17 +109,13 @@ namespace Imaginophobia {
                 if (KeyboardExtended.GetState().IsKeyDown(Keys.LeftControl)) {
                     Velocity /= 1.7f;
                     _lockFacingDirection = true;
-                    //CurrentAction = CharacterAction.Sneaking;
                 }
                 
 
                 Transform.Position = Transform.Position.Translate(Velocity.X * Time.DeltaTime, 0);
                 Listener.Position = new Vector3(Transform.Position, 0);
-                //Transform.Position += new Vector2(Velocity.X * Time.DeltaTime, Velocity.Y * Time.DeltaTime);
 
                 _scotopicLight.Position = Transform.Position;
-
-                UpdateDebug();
                 
                 Animate();
                 _animatedSprite.Update(Time.ElapsedTime);
@@ -133,32 +123,65 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && CurrentAction != CharacterAction.Repairing && CurrentAction != CharacterAction.Hiding) {
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Hiding) {
                 ToggleFlashLight();
             }
 
-            if (CurrentAction == CharacterAction.Repairing || CurrentAction == CharacterAction.Checking) {
-                if (KeyboardExtended.GetState().IsKeyDown(Keys.A)) {
-                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
+            if (CurrentAction == CharacterAction.Interacting || CurrentAction == CharacterAction.Checking) {
+                //if (KeyboardExtended.GetState().IsKeyDown(Keys.A)) {
+                //    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
+                //    _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
+                //    _animatedSprite.SetAnimation("check");
+                //    CurrentAction = CharacterAction.Checking;
+                //}
+                //else if (KeyboardExtended.GetState().IsKeyDown(Keys.D)) {
+                //    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X + 400, 0.1f);
+                //    _animatedSprite.Effect = SpriteEffects.None;
+                //    _animatedSprite.SetAnimation("check");
+                //    CurrentAction = CharacterAction.Checking;
+                //}
+                //else {
+                //    _animatedSprite.SetAnimation("back");
+                //    CurrentAction = CharacterAction.Interacting;
+                //    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X, 0.01f);
+                //    if (_flashLight.Enabled) {
+                //        ToggleFlashLight();
+                //    }
+                //    _eyeSightLength = 0;
+                //}
+
+                Vector2 pos = Transform.Position;
+                if (KeyboardExtended.GetState().WasKeyPressed(Keys.A)) {
+                    pos.X -= 400;
+                    _tweener.TweenTo(target: this, expression: player => player.CameraTarget, toValue: pos, duration: 0.5f)
+                            .Easing(EasingFunctions.QuadraticOut);
                     _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
                     _animatedSprite.SetAnimation("check");
                     CurrentAction = CharacterAction.Checking;
                 }
-                else if (KeyboardExtended.GetState().IsKeyDown(Keys.D)) {
-                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X + 400, 0.1f);
+                else if (KeyboardExtended.GetState().WasKeyPressed(Keys.D)) {
+                    pos.X += 400;
+                    _tweener.TweenTo(target: this, expression: player => player.CameraTarget, toValue: pos, duration: 0.5f)
+                            .Easing(EasingFunctions.QuadraticOut);
                     _animatedSprite.Effect = SpriteEffects.None;
                     _animatedSprite.SetAnimation("check");
                     CurrentAction = CharacterAction.Checking;
                 }
-                else {
+                else if (KeyboardExtended.GetState().IsKeyUp(Keys.A) && KeyboardExtended.GetState().IsKeyUp(Keys.D)) {
+                    if (KeyboardExtended.GetState().WasKeyReleased(Keys.A) || KeyboardExtended.GetState().WasKeyReleased(Keys.D)) {
+                        _tweener.TweenTo(target: this, expression: player => player.CameraTarget, toValue: Transform.Position, duration: 2.5f)
+                            .Easing(EasingFunctions.QuadraticOut);
+                    }
+                    
                     _animatedSprite.SetAnimation("back");
                     if (_flashLight.Enabled) {
-                        _flashLight.Enabled = false;
+                        ToggleFlashLight();
                     }
-                    CurrentAction = CharacterAction.Repairing;
-                    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X, 0.01f);
+                    CurrentAction = CharacterAction.Interacting;
                     _eyeSightLength = 0;
                 }
+
+                _tweener.Update(Time.DeltaTime);
             }
             else {
                 CameraTarget = Transform.Position;
@@ -173,9 +196,6 @@ namespace Imaginophobia {
                 _eyeSight.Start.Y = Transform.Position.Y + _eyeLevel.Y;
                 _eyeSight.End.X = Transform.Position.X - _eyeLevel.X - _eyeSightLength;
                 _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
-                //_eyeSight.Start = Transform.Position + _flashlightOffset;
-                //_eyeSight.End = Transform.Position + _flashlightOffset;
-                //_eyeSight.End.X -=  _eyeSightLength;
             }
             else if (_animatedSprite.Effect == SpriteEffects.None) {
                 if (_flashLight.Rotation != 0) {
@@ -185,9 +205,6 @@ namespace Imaginophobia {
                 _eyeSight.Start = Transform.Position + _eyeLevel;
                 _eyeSight.End.X = Transform.Position.X + _eyeLevel.X + _eyeSightLength;
                 _eyeSight.End.Y = Transform.Position.Y + _eyeLevel.Y;
-                //_eyeSight.Start = Transform.Position + _flashlightOffset;
-                //_eyeSight.End = Transform.Position + _flashlightOffset;
-                //_eyeSight.End.X += _eyeSightLength;
             }
 
             _flashLight.Position = Transform.Position + _flashlightOffset;
@@ -218,8 +235,6 @@ namespace Imaginophobia {
                 //MainGame.SpriteBatch.DrawLine(_eyeSight.Start, _eyeSight.End,Color.Yellow,10);
                 //MainGame.SpriteBatch.DrawPoint(new Vector2(Listener.Position.X, Listener.Position.Y), Color.Red, 100);
             }
-            
-            DebugTest();
         }
 
         private void SetUpAnimation() {
@@ -367,39 +382,27 @@ namespace Imaginophobia {
         }
 
         public void ToggleHide() {
-            if (Visible && _readyToHide) {
+            if (Visible && CurrentAction != CharacterAction.Hiding && Time.TimerExist("hideCooldown") == false) {
                 SetActive(false);
                 _allowMovement = false;
-                _readyToHide = false;
                 FocusLevel = 1.25f;
                 CurrentAction = CharacterAction.Hiding;
-                if(CooldownTimer != null) {
-                    CooldownTimer.ToggleActive();
-                }
-                CooldownTimer = Time.AddTimer(ToggleHide, 10, "hideTime");
+                Time.AddTimer(ToggleHide, HideTime, "hideTime");
                 AudioManager.Instance.PlaySFX(SoundEffectName.LockerClose);
             }
-            else if (CurrentAction == CharacterAction.Hiding) {
+            else if (!Visible && CurrentAction == CharacterAction.Hiding) {
                 ObjectiveManager.Complete("hide");
                 SetActive(true);
                 _allowMovement = true;
                 FocusLevel = 1;
                 CurrentAction = CharacterAction.Idle;
                 Transform.Position = PreviousPos;
-                if (CooldownTimer != null) {
-                    CooldownTimer.ToggleActive();
-                }
-                CooldownTimer = Time.AddTimer(SetReadyToHide, _hideCoolDown, "cooldownTime");
+                Time.RemoveTimer("hideTime");
+                Time.AddTimer(HideCooldown, "hideCooldown");
                 AudioManager.Instance.PlaySFX(SoundEffectName.LockerOpen);
             }
             Visible = Active;
             _scotopicLight.Enabled = Active;
-        }
-
-        public void SetReadyToHide() {
-            _readyToHide = true;
-            Time.RemoveTimer(CooldownTimer);
-            CooldownTimer = null;
         }
 
         public void ToggleFlashLight() {
@@ -413,21 +416,17 @@ namespace Imaginophobia {
         }
 
         public void ToggleRepair() {
-            if (_readyToRepair) {
+            if (CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Checking) {
                 _allowMovement = false;
-                _readyToRepair = false;
                 _animatedSprite.SetAnimation("back");
-                CurrentAction = CharacterAction.Repairing;
+                CurrentAction = CharacterAction.Interacting;
                 _flashLight.Enabled = false;
-                CanInteract = false;
                 FocusLevel = 1.25f;
             }
-            else if (!_readyToRepair) {
+            else if (CurrentAction == CharacterAction.Interacting || CurrentAction == CharacterAction.Checking) {
                 _allowMovement = true;
-                _readyToRepair = true;
                 _animatedSprite.SetAnimation("idle");
                 CurrentAction = CharacterAction.Idle;
-                CanInteract = true;
                 FocusLevel = 1;
             }
         }
@@ -438,14 +437,12 @@ namespace Imaginophobia {
                 _animatedSprite.SetAnimation("idle");
                 CurrentAction = CharacterAction.Peeking;
                 _flashLight.Enabled = false;
-                CanInteract = false;
                 FocusLevel = 1.75f;
             }
             else if (CurrentAction == CharacterAction.Peeking) {
                 _allowMovement = true;
                 _animatedSprite.SetAnimation("idle");
                 CurrentAction = CharacterAction.Idle;
-                CanInteract = true;
                 FocusLevel = 1;
             }
         }
@@ -488,74 +485,18 @@ namespace Imaginophobia {
             Transform.Position = pos;
         }
 
-        private void UpdateDebug() {
-            //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-            //    _flashLight.Scale += new Vector2(0, 10);
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-            //    _flashLight.Scale -= new Vector2(0, 10);
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Right)) {
-            //    _flashLight.Scale += new Vector2(10, 0);
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Left)) {
-            //    _flashLight.Scale -= new Vector2(10, 0);
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad6)) {
-            //    _scotopicLight.Intensity += 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad4)) {
-            //    _scotopicLight.Intensity -= 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad1)) {
-            //    _scotopicLight.Enabled = true;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad3)) {
-            //    _scotopicLight.Enabled = false;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Up)) {
-            //    _light.Intensity += 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.Down)) {
-            //    _light.Intensity -= 0.01f;
-            //}
-            //if (Keyboard.GetState().IsKeyDown(Keys.NumPad5)) {
-            //    Visible = true;
-            //}
-            //if (KeyboardExtended.GetState().WasKeyPressed(Keys.NumPad7)) {
-            //    Time.AddTimer(5);
-            //}
-        }
-
-        private void DebugTest() {
-            //BitmapFont _font = MainGame.Content.Load<BitmapFont>("Font/GenerationFonting");
-            //MainGame.SpriteBatch.DrawString(_font, $"PlayerState {CurrentAction} ", new Vector2(150, 400), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Light scale: {_scotopicLight.Scale.X}.{_scotopicLight.Scale.Y}\nLight intensity: {_scotopicLight.Intensity}", new Vector2(150, 50), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Flashlight offset {_flashlightOffset}", new Vector2(150, 650), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"SPFX {_animatedSprite.Effect}", new Vector2(150, 750), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Animation {_animatedSprite.CurrentAnimation}, Frmae {_animatedSprite.Controller.CurrentFrame}", new Vector2(150, 500), Color.White);
-            //MainGame.SpriteBatch.DrawString(_font, $"Listener {Listener.Position.X}", new Vector2(150, 520), Color.White);
-
-            //foreach (Timer timer in Time.Timers) {
-            //    MainGame.SpriteBatch.DrawString(_font, $"\nTimer:{timer.TimeLeft}", new Vector2(100, 500 + (40 * Time.Timers.IndexOf(timer))), Color.White);
-            //}
-        }
-
         public void Reset() {
             Sanity = 100;
             Battery = 100;
             FocusLevel = 1;
             SetActive(true);
             _allowMovement = true;
-            SetReadyToHide();
             Visible = true;
-            CooldownTimer = null;
             CurrentAction = CharacterAction.Idle;
         }
 
         public void Dispose() {
             Children.Clear();
-            CooldownTimer = null;
         }
     }
 }

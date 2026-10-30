@@ -109,7 +109,7 @@ namespace Imaginophobia {
 
             visual.Background.Parent = null;
             SpriteRuntime image = new SpriteRuntime();
-            image.SourceFileName = "UI/pause_button.png";
+            image.SourceFileName = "UI/sprite_button_pause.png";
             visual.Children.Insert(0, image);
 
             label.Text = "Settings";
@@ -256,14 +256,14 @@ namespace Imaginophobia {
             parent.AddChild(sfxLabel);
 
             backgroundSoundSlider.Value = AudioManager.Instance.BgsVolume * 100f;
-            backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString("N0");
+            backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString();
             backgroundSoundSlider.ValueChanged += (_, _) => {
                 AudioManager.Instance.BgsVolume = (float)(backgroundSoundSlider.Value / 100f);
                 backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString("N0");
             };
 
             sfxSlider.Value = AudioManager.Instance.SoundEffectVolume * 100f;
-            sfxValue.Text = sfxSlider.Value.ToString("N0");
+            sfxValue.Text = sfxSlider.Value.ToString();
             sfxSlider.ValueChanged += (_, _) => {
                 AudioManager.Instance.SoundEffectVolume = (float)(sfxSlider.Value / 100f);
                 sfxValue.Text = sfxSlider.Value.ToString("N0");

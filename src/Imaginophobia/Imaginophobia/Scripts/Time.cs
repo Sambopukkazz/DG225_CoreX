@@ -15,7 +15,6 @@ namespace Imaginophobia {
         public static float TimeDilation { get; set; }
         public static TimeSpan ElapsedTime { get; private set; }
         public static List<Timer> Timers { get; private set; } = new();
-        public static bool SessionActive { get; set; }
 
         public static void Update(GameTime gameTime) {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -68,11 +67,6 @@ namespace Imaginophobia {
         }
 
         public static void Purge() {
-            if (SessionActive) {
-                Debug.WriteLine("Time.Purge ignored: a session is still running");
-                return;
-            }
-
             Timers.Clear();
         }
     }

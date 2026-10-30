@@ -15,15 +15,17 @@ namespace Imaginophobia {
 
         public MainMenuScreen() {
             _root = new Panel();
-            _root.Dock(Dock.Fill);
+        }
 
+        public override void Initialize() {
+            _root.Dock(Dock.Fill);
             ContainerRuntime canvas = new ContainerRuntime();
             canvas.Width = Layout.ScreenWidth;
             canvas.Height = Layout.ScreenHeight;
             _root.AddChild(canvas);
 
             SpriteRuntime background = new SpriteRuntime();
-            background.SourceFileName = "UI/Imaginophobia_bg_placerholder.png";
+            background.SourceFileName = "UI/background_main.png";
             canvas.AddChild(background);
 
             canvas.AddChild(GumUIHelper.CreateTitle("Imaginophobia"));
@@ -52,7 +54,7 @@ namespace Imaginophobia {
         }
 
         public override void OnDeactivated() {
-            _root.IsVisible = DrawWhenInactive;
+            _root.IsVisible = false;
         }
 
         public override void Dispose() {
@@ -61,9 +63,8 @@ namespace Imaginophobia {
         }
 
         private void StartGame() {
-            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, MainGame.GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
-            GameplayScreen gameplay = new GameplayScreen(viewportAdapter);
-            ScreenManager.ReplaceScreen(gameplay);
+            MainGame.GameState = GameState.Gameplay;
+            MainGame.ScreenManager.ReplaceScreen(new GameplayScreen(), 2, 2, 1);
         }
 
         private void OpenSettings() {

@@ -156,6 +156,9 @@ namespace Imaginophobia {
             };
             
             BgsVolume = 0.2f;
+
+            _previousAmbientVolume = MediaPlayer.Volume;
+            _previousSoundEffectVolume = SoundEffect.MasterVolume;
         }
 
         ~AudioManager() => Dispose(false);
@@ -189,9 +192,13 @@ namespace Imaginophobia {
             }
         }
 
-        public void PlaySFX(SoundEffectName name, bool repeat = false, bool playAfterLastCompleted = false, float volume = 1) {
-            if (playAfterLastCompleted == true && _activeAudioSources.Exists(audio => audio.Name == name.ToString()) == true) {
+        public void PlaySFX(SoundEffectName name, bool repeat = false, bool waitExist = false, bool interrupt = false, float volume = 1) {
+            if (waitExist == true && _activeAudioSources.Exists(audio => audio.Name == name.ToString()) == true) {
                 return;
+            }
+
+            if (interrupt == true) {
+                StopSFX(name);
             }
 
             AudioSource audioSource = new AudioSource(name);

@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class EnemyManager : IDisposable {
-        public List<GameObject> Enemies;
+        private List<GameObject> _enemies;
+        public IReadOnlyList<GameObject> Enemies => _enemies;
         
         private (int, int, int) _autophobiaAvailableChance = (20, 40, 55); // Normal, Anxious, Insane
         private int _autophobiaSpawnChance = 20; // 0-100
@@ -40,12 +41,12 @@ namespace Imaginophobia {
         private Player _player;
         private Rectangle _worldBound;
 
-        public bool HasActiveScopophobia() => Enemies.Exists(enemy => enemy is Scopophobia scopo && scopo.LightBrokeCount < 12);
-        public bool HasActiveNyctophobia() => Enemies.Exists(enemy => enemy is Nyctophobia);
-        public bool HasActiveEntamaphobia() => Enemies.Exists(enemy => enemy is Entamaphobia);
+        public bool HasActiveScopophobia() => _enemies.Exists(enemy => enemy is Scopophobia scopo && scopo.LightPassedCount < 12);
+        public bool HasActiveNyctophobia() => _enemies.Exists(enemy => enemy is Nyctophobia);
+        public bool HasActiveEntamaphobia() => _enemies.Exists(enemy => enemy is Entamaphobia);
 
         public EnemyManager(Player player) {
-            Enemies = new List<GameObject>();
+            _enemies = new List<GameObject>();
             _player = player;
             _rand = new Random();
 
@@ -82,14 +83,14 @@ namespace Imaginophobia {
         }
 
         public void Update(Rectangle worldBound) {
-            for (int i = Enemies.Count - 1; i >= 0; i--) {
-                if (Enemies[i].Active == false) {
-                    EnemyRemoved?.Invoke(Enemies[i]);
-                    Enemies[i].OnDestroyed();
-                    Enemies.RemoveAt(i);
+            for (int i = _enemies.Count - 1; i >= 0; i--) {
+                if (_enemies[i].Active == false) {
+                    EnemyRemoved?.Invoke(_enemies[i]);
+                    _enemies[i].OnDestroyed();
+                    _enemies.RemoveAt(i);
                     continue;
                 }
-                Enemies[i].Update();
+                _enemies[i].Update();
             }
 
             if (SceneManager.GetActiveScene().Name == "tilemap_sewer") {
@@ -113,8 +114,8 @@ namespace Imaginophobia {
         }
 
         public void Draw() {
-            for (int i = Enemies.Count - 1; i >= 0; i--) {
-                Enemies[i].Draw();
+            for (int i = _enemies.Count - 1; i >= 0; i--) {
+                _enemies[i].Draw();
             }
         }
 
@@ -149,12 +150,12 @@ namespace Imaginophobia {
 
                 if (randomNumber < _autophobiaSpawnChance) {
                     Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                    Enemies.Add(autophobia);
+                    _enemies.Add(autophobia);
                     EnemySpawned?.Invoke(autophobia);
                 }
 
                 Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
-                Enemies.Add(scopophobia);
+                _enemies.Add(scopophobia);
                 EnemySpawned?.Invoke(scopophobia);
             }
         }
@@ -180,7 +181,7 @@ namespace Imaginophobia {
 
             if (randomNumber < _autophobiaSpawnChance && HasActiveScopophobia() == false) {
                 Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                Enemies.Add(autophobia);
+                _enemies.Add(autophobia);
                 EnemySpawned?.Invoke(autophobia);
             }
         }
@@ -189,7 +190,7 @@ namespace Imaginophobia {
             int randomNumber = _rand.Next(0, 101);
             if (randomNumber < _nyctophobiaSpawnChance && HasActiveNyctophobia() == false) {
                 Nyctophobia nyctophobia = new Nyctophobia();
-                Enemies.Add(nyctophobia);
+                _enemies.Add(nyctophobia);
                 EnemySpawned?.Invoke(nyctophobia);
             }
         }
@@ -199,16 +200,16 @@ namespace Imaginophobia {
 
             if (randomNumber < _entamaphobiaSpawnChance && HasActiveEntamaphobia() == false) {
                 Entamaphobia entamaphobia = new Entamaphobia(_player);
-                Enemies.Add(entamaphobia);
+                _enemies.Add(entamaphobia);
                 //EnemySpawned?.Invoke(entamaphobia);
             }
         }
 
         public void ClearEnemies() {
-            foreach (GameObject enemy in Enemies) {
+            foreach (GameObject enemy in _enemies) {
                 enemy.OnDestroyed();
             }
-            Enemies.Clear();
+            _enemies.Clear();
         }
 
         private void OnStageChanged() {

@@ -39,7 +39,7 @@ namespace Imaginophobia {
             _root.AddChild(canvas);
 
             SpriteRuntime background = new SpriteRuntime();
-            background.SourceFileName = "UI/death_screen.png";
+            background.SourceFileName = "UI/background_death.png";
             canvas.AddChild(background);
 
             canvas.AddChild(GumUIHelper.CreateTextButton("< Return to Menu", Layout.BackButtonFontScale, 0, 0, 500, 120, ReturnToMenu));

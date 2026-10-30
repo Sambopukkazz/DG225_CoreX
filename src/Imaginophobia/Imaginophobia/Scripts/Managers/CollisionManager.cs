@@ -15,12 +15,12 @@ namespace Imaginophobia {
     public class CollisionManager : IDisposable {
         private CollisionWorld2D _collisionWorld;
         //private List<ICollisionActor> _colliders;
-        private List<GameObject> _enemies;
+        private IReadOnlyList<GameObject> _enemies;
         private Player _player;
         public event Action<string> DoorInteracted;
         public Trigger FocusedTrigger { get; private set; }
 
-        public CollisionManager(Player player, List<GameObject> enemyList) {
+        public CollisionManager(Player player, IReadOnlyList<GameObject> enemyList) {
             Layer defaultLayer = new Layer(new SpatialHash(new SizeF(64f, 64f))) {
                 IsDynamic = true
             };
@@ -41,8 +41,8 @@ namespace Imaginophobia {
             }
 
             //if(_collisionWorld.)
-            _player.CanInteract = false;
             FocusedTrigger = null;
+            _player.CollidingTrigger = null;
             //Player with Minigame triggers
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
@@ -55,12 +55,15 @@ namespace Imaginophobia {
                     FocusedTrigger = trigger;
                 }
 
+                _player.CollidingTrigger = FocusedTrigger;
+
+                if (trigger != FocusedTrigger) {
+                    return;
+                }
+
                 if (trigger.CompareTag("hideout")) {
-                    if (_player.CurrentAction != CharacterAction.Hiding) {
-                        _player.CurrentAction = CharacterAction.ReadyToHide;
-                    }
                     if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
-                        if (_player.CurrentAction != CharacterAction.Hiding && _player.CooldownTimer == null) {
+                        if (_player.CurrentAction != CharacterAction.Hiding && Time.TimerExist("hideCooldown") == false) {
                             _player.PreviousPos = _player.Transform.Position;
                             _player.Transform.Position = trigger.Shape.BoundingBox.Center;
                         }
@@ -68,7 +71,7 @@ namespace Imaginophobia {
                     }
                 }
                 else if(trigger.CompareTag("skillcheck")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair && trigger.Interactable) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) && trigger.Interactable) {
                         //Skill Check
                         Screen screen = new SpinTheValveScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
@@ -77,7 +80,7 @@ namespace Imaginophobia {
                     
                 }
                 else if (trigger.CompareTag("dots")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CanRepair && trigger.Interactable) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) && trigger.Interactable) {
                         //Connect the dot
                         Screen screen = new ConnectTheDotsScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
@@ -92,7 +95,7 @@ namespace Imaginophobia {
                         ObjectiveManager.Complete("door");
                         DoorInteracted?.Invoke(trigger.Name);
                     }
-                    else if (KeyboardExtended.GetState().WasKeyPressed(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer") {
+                    else if (KeyboardExtended.GetState().WasKeyPressed(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
                         _player.TogglePeek();
                         Screen screen = new DoorPeekingScreen(_player, trigger);
                         Time.AddTimer(() => MainGame.ScreenManager.ShowScreen(screen), 1f);
@@ -100,7 +103,7 @@ namespace Imaginophobia {
                 }
 
                 //Make player acknowledge that they can interact
-                if(trigger.Interactable)_player.CanInteract = true;
+                //if(trigger.Interactable)_player.CanInteract = true;
             }
 
             //Player with enemies
@@ -109,8 +112,8 @@ namespace Imaginophobia {
                     GameObject enemy = (GameObject)collision.Other;
                     if(enemy.Name == "Autophobia") {
                         enemy.SetActive(false);
-                        _player.Sanity -= 10;  
-                        MainGame.Saturation = 0;
+                        _player.Sanity -= 10;
+                        MainGame.ScreenManager.Saturation = 0;
                         //RemoveCollider(collision.Other);
                         AudioManager.Instance.PlaySFX(SoundEffectName.PhobiaHit);
                     }
@@ -141,7 +144,7 @@ namespace Imaginophobia {
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "lights")) {
                 LightArea lightArea = (LightArea)collision.Other;
                 if (lightArea.On == false && lightArea.IsFlickering == false) {
-                    AudioManager.Instance.PlaySFX(SoundEffectName.Darkness, playAfterLastCompleted: true);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.Darkness, waitExist: true);
                     _player.Nyctophobia = true;
                 }
             }
@@ -152,10 +155,13 @@ namespace Imaginophobia {
                 GameObject enemy = (GameObject)collision.First;
 
                 if (enemy is Scopophobia scopo && lightArea.ScopoHasPassed == false) {
-                    lightArea.TurnOff();
                     lightArea.ScopoHasPassed = true;
-                    scopo.LightBrokeCount++;
-                    AudioManager.Instance.Play3DSFX(lightArea.Shape.BoundingBox.Center, SoundEffectName.LightBreak, 50, 1800, 0.4f);
+                    scopo.LightPassedCount++;
+                    if (lightArea.On) {
+                        AudioManager.Instance.Play3DSFX(lightArea.Shape.BoundingBox.Center, SoundEffectName.LightBreak, 50, 1800, 0.4f);
+                        lightArea.TurnOff();
+                    }
+                    
                 }
                 else if (enemy.Name == "Autophobia") {
                     lightArea.StartFlicker();
