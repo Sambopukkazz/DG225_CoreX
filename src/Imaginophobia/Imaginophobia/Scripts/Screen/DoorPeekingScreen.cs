@@ -102,6 +102,9 @@ namespace Imaginophobia {
             if (_light.Enabled == false) {
                 spriteBatch.FillRectangle(260, 90, 1400, 900, Color.Black * 0.7f);
             }
+            else if (_light.Enabled == true) {
+                spriteBatch.FillRectangle(260, 90, 1400, 900, color);
+            }
 
             spriteBatch.Draw(_doorForegound, Vector2.Zero, Color.White);
             spriteBatch.End();

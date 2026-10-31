@@ -78,6 +78,10 @@ namespace Imaginophobia {
             }
         }
 
+        public void SetInActive() {
+            _active = false;
+        }
+
         public void Reset() {
             TimeLeft = _timeLength;
         }

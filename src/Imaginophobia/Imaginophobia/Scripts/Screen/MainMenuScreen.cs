@@ -55,6 +55,7 @@ namespace Imaginophobia {
             spriteBatch.Begin();
             spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
             spriteBatch.End();
+
             _eyes.Draw();
         }
 
@@ -68,7 +69,6 @@ namespace Imaginophobia {
 
         public override void Dispose() {
             _root.RemoveFromRoot();
-            base.Dispose();
         }
 
         private void StartGame() {

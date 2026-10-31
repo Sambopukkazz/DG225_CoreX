@@ -60,8 +60,8 @@ namespace Imaginophobia {
             new AudioManager();
 
             ScreenManager = new ModifiedScreenManager();
-            ScreenManager.ShowScreen(new MainMenuScreen(), 1);
             ScreenManager.Initialize();
+            ScreenManager.ShowScreen(new MainMenuScreen(), 1);
 
             GameState = GameState.Menu;
 

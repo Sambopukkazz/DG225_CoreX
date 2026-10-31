@@ -25,7 +25,7 @@ namespace Imaginophobia {
 
             foreach (Timer timer in Timers.ToList()) {
                 timer.Update(DeltaTime);
-                if(timer.Active == false) {
+                if (timer.Active == false) {
                     Timers.Remove(timer);
                 }
             }
@@ -63,8 +63,7 @@ namespace Imaginophobia {
         }
 
         public static void RemoveTimer(string timerName) {
-            Timer timer = Timers.Find(timer => timer.Name == timerName);
-            Timers.Remove(timer);
+            Timers.RemoveAll(timer => timer.Name == timerName);
         }
 
         public static bool TimerExist(string timerName) {
@@ -76,12 +75,9 @@ namespace Imaginophobia {
         }
 
         public static void Purge() {
-            foreach (Timer timer in Timers) {
-
-            }
             for (int i = Timers.Count - 1; i >= 0; i--) {
                 if (Timers[i].Name != "ScreenTimer") {
-                    Timers.RemoveAt(i);
+                    Timers[i].SetInActive();
                 }
             }
         }
