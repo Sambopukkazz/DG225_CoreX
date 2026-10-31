@@ -91,50 +91,55 @@ namespace Imaginophobia {
             _fadeCurrentTime = 0;
         }
 
+        public void PulseFade(float fadeOutSeconds, float fadeInSeconds) {
+            FadeOut(fadeOutSeconds);
+            Time.AddTimer(() => FadeIn(fadeInSeconds), fadeOutSeconds, "ScreenTimer");
+        }
+
         public void ShowScreen(Screen screen, float fadeInSeconds) {
+            AudioManager.Instance.UnmuteAudio();
             ShowScreen(screen);
             FadeIn(fadeInSeconds);
-            AudioManager.Instance.UnmuteAudio();
+        }
+
+        public void ShowScreen(Screen screen, float fadeOutSeconds, float fadeInSeconds, float waitSeconds = 0) {
+            FadeOut(fadeOutSeconds);
+
+            if (waitSeconds > 0) {
+                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds, "ScreenTimer");
+            }
+            else {
+                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds, "ScreenTimer");
+            }
         }
 
         public void CloseScreen(float fadeOutSeconds) {
             FadeOut(fadeOutSeconds);
-            Time.AddTimer(CloseScreen, fadeOutSeconds);
-            Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds);
+            Time.AddTimer(CloseScreen, fadeOutSeconds, "ScreenTimer");
+            Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds, "ScreenTimer");
         }
 
         public void ClearScreens(Screen screen, float fadeOutSeconds, float fadeInSeconds, float waitSeconds = 0) {
             FadeOut(fadeOutSeconds);
-            Time.AddTimer(ClearScreens, fadeOutSeconds);
-            Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds);
+            Time.AddTimer(ClearScreens, fadeOutSeconds, "ScreenTimer");
+            Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds, "ScreenTimer");
 
             if (waitSeconds > 0) {
-                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds);
+                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds, "ScreenTimer");
             }
             else {
-                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds);
+                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds, "ScreenTimer");
             }
         }
 
         public void ReplaceScreen(Screen screen, float fadeOutSeconds, float fadeInSeconds, float waitSeconds = 0) {
             CloseScreen(fadeOutSeconds);
             if (waitSeconds > 0) {
-                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds);
+                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds, "ScreenTimer");
             }
             else {
-                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds);
+                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds, "ScreenTimer");
             }
         }
-
-        //public void ReplaceScreen(float fadeOutSeconds, float fadeInSeconds, float waitSeconds = 0) {
-            
-        //    CloseScreen(fadeOutSeconds);
-        //    if (waitSeconds > 0) {
-        //        Time.AddTimer(() => ShowScreen(new GameplayScreen(viewportAdapter), fadeInSeconds), waitSeconds + fadeOutSeconds);
-        //    }
-        //    else {
-        //        Time.AddTimer(() => ShowScreen(new GameplayScreen(viewportAdapter), fadeInSeconds), fadeOutSeconds);
-        //    }
-        //}
     }
 }

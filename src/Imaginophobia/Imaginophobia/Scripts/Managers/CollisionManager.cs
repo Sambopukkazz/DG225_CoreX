@@ -75,7 +75,7 @@ namespace Imaginophobia {
                         //Skill Check
                         Screen screen = new SpinTheValveScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
-                        _player.ToggleRepair();
+                        _player.ToggleInteracting();
                     }
                     
                 }
@@ -85,10 +85,20 @@ namespace Imaginophobia {
                         Screen screen = new ConnectTheDotsScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
                         AudioManager.Instance.PlaySFX(SoundEffectName.ElecRepairing);
-                        _player.ToggleRepair();
+                        _player.ToggleInteracting();
                         ObjectiveManager.Complete("repair");
                     }
                     
+                }
+                else if (trigger.CompareTag("report")) {
+                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CurrentAction != CharacterAction.Reading && trigger.Interactable) {
+                        //Connect the dot
+                        Screen screen = new ClipboardScreen(_player);
+                        MainGame.ScreenManager.ShowScreen(screen);
+                        //AudioManager.Instance.PlaySFX(SoundEffectName.Paper);
+                        _player.ToggleReading();
+                    }
+
                 }
                 else if (trigger.CompareTag("door")) {
                     if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
@@ -98,7 +108,7 @@ namespace Imaginophobia {
                     else if (KeyboardExtended.GetState().WasKeyPressed(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
                         _player.TogglePeek();
                         Screen screen = new DoorPeekingScreen(_player, trigger);
-                        Time.AddTimer(() => MainGame.ScreenManager.ShowScreen(screen), 1f);
+                        MainGame.ScreenManager.ShowScreen(screen, 0.5f, 0.5f);
                     }
                 }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
@@ -11,21 +12,29 @@ using System.Xml.Linq;
 namespace Imaginophobia {
     public static class Time {
         public static float DeltaTime { get; private set; }
-        public static float TimeScale { get; set; }
+        public static float UnscaledDeltaTime { get; private set; }
+        public static float TimeScale { get; set; } = 1;
         public static float TimeDilation { get; set; }
         public static TimeSpan ElapsedTime { get; private set; }
         public static List<Timer> Timers { get; private set; } = new();
 
         public static void Update(GameTime gameTime) {
             DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            UnscaledDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             ElapsedTime = gameTime.ElapsedGameTime;
 
             foreach (Timer timer in Timers.ToList()) {
-                timer.Update();
+                timer.Update(DeltaTime);
                 if(timer.Active == false) {
                     Timers.Remove(timer);
                 }
             }
+            //for (int i = Timers.Count - 1; i >= 0; i--) {
+            //    Timers[i].Update(DeltaTime);
+            //    if (Timers[i].Active == false) {
+            //        Timers.RemoveAt(i);
+            //    }
+            //}
         }
 
         public static Timer AddTimer(float seconds, string name) {
@@ -67,7 +76,14 @@ namespace Imaginophobia {
         }
 
         public static void Purge() {
-            Timers.Clear();
+            foreach (Timer timer in Timers) {
+
+            }
+            for (int i = Timers.Count - 1; i >= 0; i--) {
+                if (Timers[i].Name != "ScreenTimer") {
+                    Timers.RemoveAt(i);
+                }
+            }
         }
     }
 }

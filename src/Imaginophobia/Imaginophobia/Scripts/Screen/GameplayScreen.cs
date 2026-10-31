@@ -35,13 +35,15 @@ namespace Imaginophobia {
             _pauseMenu.Visible = false;
             _root.AddChild(_pauseMenu);
 
-            AudioManager.Instance.UnmuteAudio();
-            GumUIHelper.AddSettingsPanel(_pauseMenu);
+            //AudioManager.Instance.UnmuteAudio();
+            GumUIHelper.AddSettingsPanel(_pauseMenu, true);
             _pauseMenu.AddChild(GumUIHelper.CreateTextButton("Return to Menu", Layout.MenuFontScale, Layout.ActionButtonX, Layout.ActionButtonY, Layout.ActionButtonWidth, Layout.ActionButtonHeight, ReturnToMenu));
 
             _root.AddChild(GumUIHelper.CreatePauseButton(TogglePause));
 
             _root.AddToRoot();
+
+            MainGame.GameState = GameState.Gameplay;
         }
 
         public override void Update(GameTime gameTime) {
@@ -70,15 +72,27 @@ namespace Imaginophobia {
         }
 
         private void TogglePause() {
-            _pauseMenu.Visible = !_pauseMenu.Visible;
+            if (_pauseMenu.Visible == true) {
+                _pauseMenu.Visible = false;
+                MainGame.GameState = GameState.Gameplay;
+                //AudioManager.Instance.ResumeAudio();
+                //Time.TimeScale = 1;
+            }
+            else if (_pauseMenu.Visible == false) {
+                _pauseMenu.Visible = true;
+                MainGame.GameState = GameState.Pause;
+                //AudioManager.Instance.PauseAudio();
+                //Time.TimeScale = 0;
+            }
         }
 
         public override void UnloadContent() {
             _gameManager.Dispose();
         }
+
         private void ReturnToMenu() {
-            if (MainGame.GameState == GameState.Gameplay) {
-                MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 2, 2);
+            if (MainGame.GameState == GameState.Pause) {
+                MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 1, 1);
                 MainGame.GameState = GameState.Menu;
             }
         }

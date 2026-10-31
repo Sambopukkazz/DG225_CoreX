@@ -29,9 +29,7 @@ namespace Imaginophobia {
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
         private EnemyManager _enemyManager;
-        private UIManager _uiManager;
-        private CameraShaker _cameraShaker;
-        
+        private UIManager _uiManager;      
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
@@ -51,11 +49,12 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
-            Time.AddTimer(() => MainGame.ScreenManager.ReplaceScreen(new DeathScreen()), 481, "MainTimer");
+            Time.AddTimer(_player.Dead, 481, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
+            //Time.TimeScale = 1;
             //temp-
-            _cameraShaker = new CameraShaker();
+            //_cameraShaker = new CameraShaker();
 
         }
 
@@ -66,7 +65,9 @@ namespace Imaginophobia {
 
             _enemyManager.Update(_camera.WorldBounds);
 
-            _camera.LookAt(_player.CameraTarget + _cameraShaker.ShakeOffset);
+            _camera.LookAt(_player.CameraTarget);
+
+            //_camera.LookAt(_player.CameraTarget + _cameraShaker.ShakeOffset);
 
             if (_camera.Zoom != _player.FocusLevel && _player.FocusLevel > _camera.Zoom) {
                 _camera.Zoom = MathHelper.Lerp(_camera.Zoom, _player.FocusLevel, 0.05f);
@@ -85,11 +86,10 @@ namespace Imaginophobia {
 
             _uiManager.Update();
 
-            _cameraShaker.Update(gameTime);
-            
-            if (_player.Sanity <= 0) {
-                //MainGame.ScreenManager.ClearScreens(1);
-                //MainGame.ScreenManager.ShowScreen
+            //_cameraShaker.Update(gameTime);
+
+            if (_player.Sanity <= 0 && MainGame.GameState == GameState.Gameplay) {
+                MainGame.ScreenManager.ClearScreens(new DeathScreen(), 0, 2, 1);
                 MainGame.GameState = GameState.Lose;
             }
 
@@ -135,27 +135,35 @@ namespace Imaginophobia {
 
         private void OnDoorInteracted(string sceneName) {
             if (sceneName == "end") {
-                if (ObjectiveManager.AllValvesRepaired) {
+                if (ObjectiveManager.AllValvesRepaired || KeyboardExtended.GetState().IsKeyDown(Keys.Up)) {
                     ObjectiveManager.Complete("exit-ladder");
                     SaveManager.Delete();
                     ObjectiveManager.ResetValves();
                     _enemyManager.ClearEnemies();
                     AudioManager.Instance.ClearSFXs();
-                    MainGame.ScreenManager.ReplaceScreen(new WinScreen(Time.GetTimer("MainTimer").TimeLeft));
+                    MainGame.ScreenManager.ClearScreens(new WinScreen(Time.GetTimer("MainTimer").TimeLeft), 0.5f, 0.5f, 1f);
                 }
                 else {
                     _uiManager.ShowMessage("I still have work to do.", 2f);
                 }
+
                 return;
             }
 
             if (_enemyManager.HasActiveScopophobia()) {
-                AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck);
+                AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck, interrupt: true);
             }
             else {
-                AudioManager.Instance.ClearSFXs();
-                _enemyManager.ClearEnemies();
-                _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+                MainGame.ScreenManager.FadeOut(0.25f);
+
+                Action action = () => {
+                    AudioManager.Instance.ClearSFXs();
+                    _enemyManager.ClearEnemies();
+                    _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+                    MainGame.ScreenManager.FadeIn(0.25f);
+                };
+
+                Time.AddTimer(action, 0.25f, "ScreenTimer");
             }
         }
 
@@ -211,7 +219,10 @@ namespace Imaginophobia {
 
         private void DebugUpdate() {
             if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
-                _cameraShaker.Shake(5f, 1f);
+                //_cameraShaker.Shake(5f, 1f);
+            }
+            if (KeyboardExtended.GetState().WasKeyPressed(Keys.L)) {
+                _player.Sanity -= 50;
             }
         }
 

@@ -99,6 +99,10 @@ namespace Imaginophobia {
                 { SoundEffectName.ElecSuccess, content.Load<SoundEffect>("Audio/sfx_electric_success") },
                 { SoundEffectName.ScopoIndicator, content.Load<SoundEffect>("Audio/sfx_scopophobia_indicator") },
                 { SoundEffectName.PhobiaHit, content.Load<SoundEffect>("Audio/sfx_phobias_hit") },
+                { SoundEffectName.EntamaAdvance, content.Load<SoundEffect>("Audio/sfx_entama_advance") },
+                { SoundEffectName.EntamaDecrease, content.Load<SoundEffect>("Audio/sfx_entama_decrease") },
+                { SoundEffectName.EntamaPresence, content.Load<SoundEffect>("Audio/sfx_entama_presence") },
+                { SoundEffectName.EntamaJumpscare, content.Load<SoundEffect>("Audio/sfx_entama_jumpscare") },
                 { SoundEffectName.HeartBeat, content.Load<SoundEffect>("Audio/sfx_heartbeat") },
                 { SoundEffectName.Painting, content.Load<SoundEffect>("Audio/sfx_panting") },
                 { SoundEffectName.LightBreak, content.Load<SoundEffect>("Audio/sfx_light_break") },
@@ -109,7 +113,9 @@ namespace Imaginophobia {
                 { SoundEffectName.LightFlickerLong, content.Load<SoundEffect>("Audio/sfx_light_flicker_long") },
                 { SoundEffectName.LightFlickerShort1, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_01") },
                 { SoundEffectName.LightFlickerShort2, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_02") },
-                { SoundEffectName.LightFlickerShort3, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_03") }
+                { SoundEffectName.LightFlickerShort3, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_03") },
+                { SoundEffectName.PageAdvance, content.Load<SoundEffect>("Audio/sfx_clipboard_pageturn") },
+                { SoundEffectName.PageReverse, content.Load<SoundEffect>("Audio/sfx_clipboard_pageturnback") }
             };
 
             //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.LowPass, strength: 1f, frequency: 2000, resonance: 15);

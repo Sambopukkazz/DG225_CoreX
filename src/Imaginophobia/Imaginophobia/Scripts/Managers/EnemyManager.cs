@@ -80,6 +80,9 @@ namespace Imaginophobia {
             Timer nyctoTimer = Time.AddTimer(SpawnNyctophobia, _nyctophobiaSpawnInterval, "NyctoSpawnTimer");
             nyctoTimer.Pause();
             nyctoTimer.Repeat = true;
+            Timer entamaTimer = Time.AddTimer(SpawnEntamaphobia, _entamaphobiaSpawnInterval, "EntamaSpawnTimer");
+            entamaTimer.Pause();
+            entamaTimer.Repeat = true;
         }
 
         public void Update(Rectangle worldBound) {
@@ -120,6 +123,10 @@ namespace Imaginophobia {
         }
 
         public void SpawnScopophobia() {
+            if (HasActiveScopophobia()) {
+                return;
+            }
+
             Vector2 pos;
             if (_player.CurrentAction == CharacterAction.Hiding) {
                 pos.Y = _player.PreviousPos.Y;
@@ -140,7 +147,7 @@ namespace Imaginophobia {
 
             int randomNumber = _rand.Next(0, 101);
 
-            if (randomNumber < _scopophobiaSpawnChance && HasActiveScopophobia() == false) {
+            if (randomNumber < _scopophobiaSpawnChance) {
                 if (spawnLeft) {
                     pos.X -= 1920;
                 }
@@ -156,11 +163,16 @@ namespace Imaginophobia {
 
                 Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
                 _enemies.Add(scopophobia);
+                Time.GetTimer("ScopoSpawnTimer").Pause();
                 EnemySpawned?.Invoke(scopophobia);
             }
         }
 
         public void SpawnAutophobia() {
+            if (HasActiveScopophobia()) {
+                return;
+            }
+
             Vector2 pos;
             if (_player.CurrentAction == CharacterAction.Hiding) {
                 pos.Y = _player.PreviousPos.Y;
@@ -179,7 +191,7 @@ namespace Imaginophobia {
 
             int randomNumber = _rand.Next(0, 101);
 
-            if (randomNumber < _autophobiaSpawnChance && HasActiveScopophobia() == false) {
+            if (randomNumber < _autophobiaSpawnChance) {
                 Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
                 _enemies.Add(autophobia);
                 EnemySpawned?.Invoke(autophobia);
@@ -187,8 +199,13 @@ namespace Imaginophobia {
         }
 
         public void SpawnNyctophobia() {
+            if (HasActiveNyctophobia()) {
+                return;
+            }
+
             int randomNumber = _rand.Next(0, 101);
-            if (randomNumber < _nyctophobiaSpawnChance && HasActiveNyctophobia() == false) {
+
+            if (randomNumber < _nyctophobiaSpawnChance) {
                 Nyctophobia nyctophobia = new Nyctophobia();
                 _enemies.Add(nyctophobia);
                 EnemySpawned?.Invoke(nyctophobia);
@@ -196,9 +213,13 @@ namespace Imaginophobia {
         }
 
         public void SpawnEntamaphobia() {
+            if (Time.TimerExist("EntamaCooldown") || HasActiveEntamaphobia()) {
+                return;
+            }
+
             int randomNumber = _rand.Next(0, 101);
 
-            if (randomNumber < _entamaphobiaSpawnChance && HasActiveEntamaphobia() == false) {
+            if (randomNumber < _entamaphobiaSpawnChance) {
                 Entamaphobia entamaphobia = new Entamaphobia(_player);
                 _enemies.Add(entamaphobia);
                 //EnemySpawned?.Invoke(entamaphobia);

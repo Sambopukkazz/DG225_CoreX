@@ -35,6 +35,7 @@ namespace Imaginophobia {
         private AnimatedSprite _animatedSprite;
         public AudioListener Listener { get; private set; }
         private PointLight _scotopicLight;
+        public PointLight ScotopicLight => _scotopicLight;
         private Spotlight _flashLight;
         public Spotlight FlashLight => _flashLight;
         public Vector2 Direction { get; private set; }
@@ -401,12 +402,13 @@ namespace Imaginophobia {
                 Time.AddTimer(HideCooldown, "hideCooldown");
                 AudioManager.Instance.PlaySFX(SoundEffectName.LockerOpen);
             }
+
             Visible = Active;
             _scotopicLight.Enabled = Active;
         }
 
         public void ToggleFlashLight() {
-            AudioManager.Instance.PlaySFX(SoundEffectName.FlashlightToggle);
+            AudioManager.Instance.PlaySFX(SoundEffectName.FlashlightToggle, interrupt:true);
             if (_flashLight.Enabled) {
                 _flashLight.Enabled = false;
             }
@@ -415,7 +417,7 @@ namespace Imaginophobia {
             }
         }
 
-        public void ToggleRepair() {
+        public void ToggleInteracting() {
             if (CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Checking) {
                 _allowMovement = false;
                 _animatedSprite.SetAnimation("back");
@@ -440,6 +442,22 @@ namespace Imaginophobia {
                 FocusLevel = 1.75f;
             }
             else if (CurrentAction == CharacterAction.Peeking) {
+                _allowMovement = true;
+                _animatedSprite.SetAnimation("idle");
+                CurrentAction = CharacterAction.Idle;
+                FocusLevel = 1;
+            }
+        }
+
+        public void ToggleReading() {
+            if (CurrentAction != CharacterAction.Reading) {
+                _allowMovement = false;
+                _animatedSprite.SetAnimation("back");
+                CurrentAction = CharacterAction.Reading;
+                _flashLight.Enabled = false;
+                FocusLevel = 1.25f;
+            }
+            else if (CurrentAction == CharacterAction.Reading) {
                 _allowMovement = true;
                 _animatedSprite.SetAnimation("idle");
                 CurrentAction = CharacterAction.Idle;
@@ -479,6 +497,10 @@ namespace Imaginophobia {
                 _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item1;
                 SanityStateChanged?.Invoke();
             }
+        }
+
+        public void Dead() {
+            Sanity = 0;
         }
 
         public void LoadScenePosition(Vector2 pos) {

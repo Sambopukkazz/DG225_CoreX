@@ -12,13 +12,16 @@ using RenderingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gum.GueDeriving;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class UIManager : IDisposable {
         private Texture2D _spacebar;
+        private Texture2D _peekButton;
         private RectangleF _spaceBarBackgroundRect;
+        private RectangleF _spaceBarBackgroundMiddleRect;
         private Player _player;
         private OrthographicCamera _camera;
         private VignetteOverlay _nyctophobiaOverlay;
@@ -31,7 +34,6 @@ namespace Imaginophobia {
         private TextManager _textManager;
         private bool _blackScreen;
         private VignettePhase _vignettePhase;
-        private SizeF _size;
 
         //temp
         List<Keys> pressedKey;
@@ -41,6 +43,7 @@ namespace Imaginophobia {
             _textManager = new TextManager();
 
             _spacebar = MainGame.Content.Load<Texture2D>("UI/sprite_spacebar");
+            _peekButton = MainGame.Content.Load<Texture2D>("UI/sprite_peek_button");
 
             _vignetteOverlay = new VignetteOverlay();
             _blinkOverlay = new VignetteOverlay();
@@ -49,8 +52,8 @@ namespace Imaginophobia {
             };
             _rectangleFadeOverlay = new BottomFadeOverlay();
 
-            _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, (int)(600 * 0.5f), (int)(100 * 0.5f));
-            _size = _spaceBarBackgroundRect.Size;
+            _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 300, 50);
+            _spaceBarBackgroundMiddleRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 450, 75);
 
             _tweener = new Tweener();
 
@@ -58,7 +61,7 @@ namespace Imaginophobia {
             _player.SanityStateChanged += OnSanityStateChanged;
 
             _camera = camera;
-
+            
             //temp
             pressedKey = new List<Keys>();
         }
@@ -125,23 +128,34 @@ namespace Imaginophobia {
             Color color;
             if (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) {
                 if (_player.CollidingTrigger != null) {
-                    if (_player.CollidingTrigger.Tag == "door" && SceneManager.GetActiveScene().Name != "tilemap_sewer") {
-                        if (_player.CollidingTrigger.Name == "end") {
-                            _spaceBarBackgroundRect.X = _player.CollidingTrigger.Shape.BoundingBox.Center.X - (_spaceBarBackgroundRect.Width / 2f);
-                            _spaceBarBackgroundRect.Y = _player.CollidingTrigger.Shape.BoundingBox.Max.Y - (_spaceBarBackgroundRect.Height * 2);
+                    if (_player.CollidingTrigger.Tag == "door") {
+                        if (_player.CollidingTrigger.Name == Scene.tilemap_sewer.ToString()) {
+                            //_spaceBarBackgroundRect.X = _player.CollidingTrigger.Shape.BoundingBox.Center.X - (_spaceBarBackgroundRect.Width / 2f);
+                            //_spaceBarBackgroundRect.Y = _player.CollidingTrigger.Shape.BoundingBox.Max.Y - (_spaceBarBackgroundRect.Height * 2);
+                            _spaceBarBackgroundMiddleRect.X = 600;
+                            _spaceBarBackgroundMiddleRect.Y = 540 + 400;
+
+                            Vector2 buttonPos = _spaceBarBackgroundMiddleRect.Position;
+                            buttonPos.X += 500;
+                            MainGame.SpriteBatch.Draw(_peekButton, buttonPos, Color.White);
                         }
                         else {
-                            _spaceBarBackgroundRect.X = _player.CollidingTrigger.Shape.BoundingBox.Max.X;
-                            _spaceBarBackgroundRect.Y = _player.CollidingTrigger.Shape.BoundingBox.Min.Y - _spaceBarBackgroundRect.Height;
+                            //_spaceBarBackgroundRect.X = _player.CollidingTrigger.Shape.BoundingBox.Max.X;
+                            //_spaceBarBackgroundRect.Y = _player.CollidingTrigger.Shape.BoundingBox.Min.Y - _spaceBarBackgroundRect.Height;
+                            _spaceBarBackgroundMiddleRect.X = 960 - (_spaceBarBackgroundRect.Width / 2f);
+                            _spaceBarBackgroundMiddleRect.Y = 540 + 400 ;
                         }
+
+                        MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundMiddleRect.ToRectangle(), Color.White);
                     }
                     else {
                         _spaceBarBackgroundRect.X = _camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Center).X - (_spaceBarBackgroundRect.Width / 2f);
                         _spaceBarBackgroundRect.Y = (_camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Min).Y - _spaceBarBackgroundRect.Height);
+                        //MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect.ToRectangle(), ColorHelper.FromHex("#70707041"));
+                        MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect.ToRectangle(), Color.White);
                     }
                     //_spaceBarBackgroundRect.Position = _camera.WorldToScreen(_spaceBarBackgroundRect.Position);
                     //_spaceBarBackgroundRect.Size = _size * _camera.Zoom;
-                    MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect.ToRectangle(), ColorHelper.FromHex("#70707041"));
                 }              
 
                 if ((_player.CollidingTrigger?.Tag == "hideout" || _player.CurrentAction == CharacterAction.Hiding)) {
@@ -173,10 +187,12 @@ namespace Imaginophobia {
                 color = Color.Red;
             }
             
-            MainGame.SpriteBatch.DrawRectangle(210, 100, 300, 20, Color.White);
-            MainGame.SpriteBatch.FillRectangle(210, 100, 3 * _player.Sanity, 20, color);
-            MainGame.SpriteBatch.DrawRectangle(210, 150, 300, 20, Color.White);
-            MainGame.SpriteBatch.FillRectangle(210, 150, 3 * _player.Battery, 20, Color.White);
+            //Sanity Bar
+            MainGame.SpriteBatch.DrawRectangle(210, 90, 400, 40, Color.White);
+            MainGame.SpriteBatch.FillRectangle(210, 90, 4 * _player.Sanity, 40, color);
+            //Battery Bar
+            MainGame.SpriteBatch.DrawRectangle(210, 150, 250, 20, Color.White);
+            MainGame.SpriteBatch.FillRectangle(210, 150, 2.5f * _player.Battery, 20, Color.White);
 
             _textManager.Draw();
 
@@ -309,6 +325,7 @@ namespace Imaginophobia {
             _blinkOverlay.Dispose();
             _nyctophobiaOverlay.Dispose();
             _rectangleFadeOverlay.Dispose();
+            _tweener.Dispose();
         }
     }
 }

@@ -15,11 +15,19 @@ namespace Imaginophobia {
     // value labels and the dim backdrop panel - so they all share one styling (the
     // generationfonting font, dropshadow + outline text, transparent button background).
     public static class GumUIHelper {
-        public static TextRuntime CreateTitle(string text) {
+        public static TextRuntime CreateTitle(string text, bool gameplay = false) {
             TextRuntime title = new TextRuntime();
             title.Text = text;
-            title.Width = Layout.TitleWidth;
-            title.Height = Layout.TitleHeight;
+
+            if (gameplay == false) {
+                title.Width = Layout.TitleWidth;
+                title.Height = Layout.TitleHeight;
+            }
+            else {
+                title.Width = Layout.TitleWidth;
+                title.Height = Layout.TitleHeight + 450;
+            }
+            
             title.X = Layout.TitleX;
             title.Y = Layout.TitleY;
             title.Font = "generationfonting";
@@ -224,6 +232,7 @@ namespace Imaginophobia {
             panel.Y = Layout.PanelY;
             panel.Width = Layout.PanelWidth;
             panel.Height = Layout.PanelHeight;
+
             panel.CornerRadius = Layout.PanelCornerRadius;
             panel.HasDropshadow = true;
             panel.DropshadowOffsetX = 0;
@@ -235,35 +244,63 @@ namespace Imaginophobia {
 
         // Dim panel + "Settings" title + two labelled sliders, built once and reused by
         // SettingsScreen and the pause overlay. No action button - callers add their own.
-        public static void AddSettingsPanel(ContainerRuntime parent) {
+        public static void AddSettingsPanel(ContainerRuntime parent, bool gameplay = false) {
             parent.AddChild(CreateDimPanel());
-            parent.AddChild(CreateTitle("Settings"));
+            parent.AddChild(CreateTitle("Settings", gameplay));
 
-            Slider backgroundSoundSlider = CreateSlider(Layout.SliderX, Layout.AmbienceRowY);
-            parent.AddChild(backgroundSoundSlider);
-            Label backgroundSoundValue = CreateValueLabel(Layout.SliderValueX, Layout.AmbienceRowY);
-            parent.AddChild(backgroundSoundValue);
-            TextRuntime ambienceLabel = CreateText("Ambience Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.AmbienceLabelY, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
-            ambienceLabel.VerticalAlignment = VerticalAlignment.Top;
-            parent.AddChild(ambienceLabel);
+            Slider backgroundSoundSlider;
+            Label backgroundSoundValue;
+            TextRuntime ambienceLabel;
+            Slider sfxSlider;
+            Label sfxValue;
+            TextRuntime sfxLabel;
 
-            Slider sfxSlider = CreateSlider(Layout.SliderX, Layout.SfxRowY);
-            parent.AddChild(sfxSlider);
-            Label sfxValue = CreateValueLabel(Layout.SliderValueX, Layout.SfxRowY);
-            parent.AddChild(sfxValue);
-            TextRuntime sfxLabel = CreateText("SFX Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.SfxLabelY, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
-            sfxLabel.VerticalAlignment = VerticalAlignment.Top;
-            parent.AddChild(sfxLabel);
+
+            if (gameplay == false) {
+                backgroundSoundSlider = CreateSlider(Layout.SliderX, Layout.AmbienceRowY);
+                parent.AddChild(backgroundSoundSlider);
+                backgroundSoundValue = CreateValueLabel(Layout.SliderValueX, Layout.AmbienceRowY);
+                parent.AddChild(backgroundSoundValue);
+                ambienceLabel = CreateText("Ambience Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.AmbienceLabelY, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
+                ambienceLabel.VerticalAlignment = VerticalAlignment.Top;
+                parent.AddChild(ambienceLabel);
+
+                sfxSlider = CreateSlider(Layout.SliderX, Layout.SfxRowY);
+                parent.AddChild(sfxSlider);
+                sfxValue = CreateValueLabel(Layout.SliderValueX, Layout.SfxRowY);
+                parent.AddChild(sfxValue);
+                sfxLabel = CreateText("SFX Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.SfxLabelY, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
+                sfxLabel.VerticalAlignment = VerticalAlignment.Top;
+                parent.AddChild(sfxLabel);
+            }
+            else {
+                backgroundSoundSlider = CreateSlider(Layout.SliderX, Layout.AmbienceRowY + 200);
+                parent.AddChild(backgroundSoundSlider);
+                backgroundSoundValue = CreateValueLabel(Layout.SliderValueX, Layout.AmbienceRowY + 200);
+                parent.AddChild(backgroundSoundValue);
+                ambienceLabel = CreateText("Ambience Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.AmbienceLabelY + 200, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
+                ambienceLabel.VerticalAlignment = VerticalAlignment.Top;
+                parent.AddChild(ambienceLabel);
+
+                sfxSlider = CreateSlider(Layout.SliderX, Layout.SfxRowY + 200);
+                parent.AddChild(sfxSlider);
+                sfxValue = CreateValueLabel(Layout.SliderValueX, Layout.SfxRowY + 200);
+                parent.AddChild(sfxValue);
+                sfxLabel = CreateText("SFX Volume", Layout.MenuFontScale, Layout.SliderLabelX, Layout.SfxLabelY + 200, Layout.SliderLabelWidth, Layout.SliderLabelHeight);
+                sfxLabel.VerticalAlignment = VerticalAlignment.Top;
+                parent.AddChild(sfxLabel);
+            }
+            
 
             backgroundSoundSlider.Value = AudioManager.Instance.BgsVolume * 100f;
-            backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString();
+            backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString("N0");
             backgroundSoundSlider.ValueChanged += (_, _) => {
                 AudioManager.Instance.BgsVolume = (float)(backgroundSoundSlider.Value / 100f);
                 backgroundSoundValue.Text = backgroundSoundSlider.Value.ToString("N0");
             };
 
             sfxSlider.Value = AudioManager.Instance.SoundEffectVolume * 100f;
-            sfxValue.Text = sfxSlider.Value.ToString();
+            sfxValue.Text = sfxSlider.Value.ToString("N0");
             sfxSlider.ValueChanged += (_, _) => {
                 AudioManager.Instance.SoundEffectVolume = (float)(sfxSlider.Value / 100f);
                 sfxValue.Text = sfxSlider.Value.ToString("N0");

@@ -6,15 +6,21 @@ using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.ViewportAdapters;
 using RenderingLibrary.Graphics;
 using System;
 
 namespace Imaginophobia {
     public class WinScreen : Screen {
         private Panel _root;
+        private float _timeLeft;
 
         public WinScreen(float timeLeft) {
             _root = new Panel();
+            _timeLeft = timeLeft;
+        }
+
+        public override void Initialize() {
             _root.Dock(Dock.Fill);
 
             ContainerRuntime canvas = new ContainerRuntime();
@@ -27,7 +33,7 @@ namespace Imaginophobia {
             canvas.AddChild(background);
 
             canvas.AddChild(GumUIHelper.CreateText("You survived.", Layout.TitleFontScale, 600, 220, 720, 120));
-            string message = TimeSpan.FromSeconds(timeLeft).ToString(@"mm\:ss");
+            string message = TimeSpan.FromSeconds(_timeLeft).ToString(@"mm\:ss");
             TextRuntime time = GumUIHelper.CreateText($"Time left: {message}", 2, 960, 480, 600, 120);
             time.XOrigin = HorizontalAlignment.Center;
             time.YOrigin = VerticalAlignment.Center;
@@ -41,6 +47,10 @@ namespace Imaginophobia {
             canvas.AddChild(GumUIHelper.CreateTextButton("Return to Menu", Layout.MenuFontScale, 760, 880, 400, 80, ReturnToMenu));
 
             _root.AddToRoot();
+
+            AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmWinScreen);
+
+            MainGame.GameState = GameState.Win;
         }
 
         public override void Update(GameTime gameTime) {
@@ -66,7 +76,10 @@ namespace Imaginophobia {
         }
 
         private void ReturnToMenu() {
-            MainGame.ScreenManager.ReplaceScreen(new MainMenuScreen());
+            if (MainGame.GameState == GameState.Win) {
+                MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 1, 1, 1);
+                MainGame.GameState = GameState.Menu;
+            }
         }
     }
 }

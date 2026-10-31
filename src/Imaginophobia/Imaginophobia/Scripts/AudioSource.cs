@@ -74,7 +74,7 @@ namespace Imaginophobia {
             AudioPlayer.Volume = _volume * volume;
 
             Vector2 directionFromListener = new Vector2(_emitter.Position.X - player.Listener.Position.X, _emitter.Position.Y - player.Listener.Position.Y);
-            
+
             //CircleF.Contains(new CircleF(Transform.Position, _innerRadius), new Vector2(Player.Listener.Position.X, Player.Listener.Position.Y)
             if (directionFromListener == Vector2.Zero || ((player.Listener.Position.X >= (_emitter.Position.X - _innerRadius)) && (player.Listener.Position.X <= (_emitter.Position.X + _innerRadius)))) {
                 AudioPlayer.Pan = 0;
@@ -91,6 +91,20 @@ namespace Imaginophobia {
             float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
             float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
             AudioPlayer.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
+
+            //Vector3 toEmitter = _emitter.Position - player.Listener.Position;
+            //float distance = toEmitter.Length();
+            //Vector2 u = (distance > 0.0001f) ? Vector2.Normalize(new Vector2(toEmitter.X, toEmitter.Y)) : Vector2.Zero;
+
+            //float volume = 1f - MathHelper.Clamp((distance - _innerRadius) / (_outerRadius - _innerRadius), 0f, 1f);
+            //AudioPlayer.Volume = _volume * volume;
+
+            //AudioPlayer.Pan = MathHelper.Clamp(u.X, -1f, 1f);   // (keep your inner-radius deadzone if you want it)
+
+            //float vL = Vector2.Dot(player.Velocity, u) * DopplerUnitsPerPixel;
+            //float vS = Vector2.Dot(_emitter.Velocity, u) * DopplerUnitsPerPixel; // same scale on both, not /10
+            //float pitchFactor = (SPEED_OF_SOUND + vL) / (SPEED_OF_SOUND + vS); // clamp denominator if you keep c
+            //AudioPlayer.Pitch = MathHelper.Clamp((float)Math.Log(pitchFactor, 2), -1f, 1f); // octaves
         }
 
         ~AudioSource() => Dispose(false);

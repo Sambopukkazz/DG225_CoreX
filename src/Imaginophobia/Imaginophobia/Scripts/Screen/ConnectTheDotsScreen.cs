@@ -69,7 +69,7 @@ namespace Imaginophobia {
             //    //_dotsGenerator.Update();
             //}
 
-            if (MinigameActive) {
+            if (MinigameActive && MainGame.GameState != GameState.Pause) {
                 MouseStateExtended mouseStateExtended = MouseExtended.GetState();
                 Point? hoveredPoint = ScreenToGrid(new Vector2(mouseStateExtended.X, mouseStateExtended.Y));
 
@@ -132,7 +132,7 @@ namespace Imaginophobia {
                 }
                 AudioManager.Instance.PlaySFX(SoundEffectName.ElecComplete);
                 this.ScreenManager.CloseScreen();
-                _player.ToggleRepair();
+                _player.ToggleInteracting();
             }
 
             if (_player.CurrentAction == CharacterAction.Checking) {

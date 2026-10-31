@@ -8,6 +8,7 @@ namespace Imaginophobia {
     public enum CharacterAction {
         Interacting, 
         Checking,
+        Reading,
         Peeking,
         Hiding, 
         Walking, 

@@ -8,6 +8,7 @@ using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.ViewportAdapters;
 using RenderingLibrary.Graphics;
 using System;
 
@@ -31,6 +32,9 @@ namespace Imaginophobia {
 
         public DeathScreen() {
             _root = new Panel();
+        }
+
+        public override void Initialize() {
             _root.Dock(Dock.Fill);
 
             ContainerRuntime canvas = new ContainerRuntime();
@@ -54,8 +58,12 @@ namespace Imaginophobia {
             canvas.AddChild(_tipsMessage);
 
             RandomizeTip();
+
             _root.AddToRoot();
+
             AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmDeathScreen);
+
+            MainGame.GameState = GameState.Lose;
         }
 
         public override void Update(GameTime gameTime) {
@@ -86,7 +94,10 @@ namespace Imaginophobia {
         }
 
         private void ReturnToMenu() {
-            MainGame.ScreenManager.ReplaceScreen(new MainMenuScreen());
+            if (MainGame.GameState == GameState.Lose) {
+                MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 1, 1, 1);
+                MainGame.GameState = GameState.Menu;
+            }
         }
     }
 }

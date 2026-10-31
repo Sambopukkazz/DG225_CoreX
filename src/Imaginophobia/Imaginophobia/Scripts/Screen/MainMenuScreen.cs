@@ -12,6 +12,8 @@ using ToolsUtilities;
 namespace Imaginophobia {
     public class MainMenuScreen : Screen {
         private Panel _root;
+        private EyeField _eyes;
+        private Texture2D _backgroundTexture;
 
         public MainMenuScreen() {
             _root = new Panel();
@@ -24,9 +26,8 @@ namespace Imaginophobia {
             canvas.Height = Layout.ScreenHeight;
             _root.AddChild(canvas);
 
-            SpriteRuntime background = new SpriteRuntime();
-            background.SourceFileName = "UI/background_main.png";
-            canvas.AddChild(background);
+            _backgroundTexture = MainGame.Content.Load<Texture2D>("UI/background_main");
+            _eyes = new EyeField(_backgroundTexture);
 
             canvas.AddChild(GumUIHelper.CreateTitle("Imaginophobia"));
             canvas.AddChild(GumUIHelper.CreateTextButton("<", Layout.ArrowFontScale, Layout.LeftArrowX, Layout.ArrowY, Layout.ArrowSize, Layout.ArrowSize, null, false));
@@ -41,12 +42,20 @@ namespace Imaginophobia {
 
             AudioManager.Instance.ClearSFXs();
             AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmMainMenu);
+            MainGame.GameState = GameState.Menu;
         }
 
         public override void Update(GameTime gameTime) {
+            _eyes.Update();
         }
 
         public override void Draw(GameTime gameTime) {
+            SpriteBatch spriteBatch = MainGame.SpriteBatch;
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
+            spriteBatch.End();
+            _eyes.Draw();
         }
 
         public override void OnActivated() {
@@ -63,8 +72,10 @@ namespace Imaginophobia {
         }
 
         private void StartGame() {
-            MainGame.GameState = GameState.Gameplay;
-            MainGame.ScreenManager.ReplaceScreen(new GameplayScreen(), 2, 2, 1);
+            if (MainGame.GameState == GameState.Menu) {
+                MainGame.GameState = GameState.Gameplay;
+                MainGame.ScreenManager.ReplaceScreen(new GameplayScreen(), 0.5f, 0.5f, 1);
+            }
         }
 
         private void OpenSettings() {

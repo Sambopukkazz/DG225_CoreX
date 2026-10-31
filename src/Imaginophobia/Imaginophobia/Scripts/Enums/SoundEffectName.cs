@@ -20,6 +20,10 @@ namespace Imaginophobia {
         ElecRepairing,
         ElecSuccess,
         ScopoIndicator,
+        EntamaAdvance,
+        EntamaDecrease,
+        EntamaPresence,
+        EntamaJumpscare,
         PhobiaHit,
         HeartBeat,
         Painting,
@@ -31,6 +35,8 @@ namespace Imaginophobia {
         LightFlickerLong,
         LightFlickerShort1,
         LightFlickerShort2,
-        LightFlickerShort3
+        LightFlickerShort3,
+        PageAdvance,
+        PageReverse
     }
 }

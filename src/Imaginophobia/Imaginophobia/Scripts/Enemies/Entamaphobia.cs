@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class Entamaphobia : GameObject {
-        private int _stage;
+        private int _stage = 1;
         private float _value;
         private float _nextStageValue;
         private float _speed = 1;
@@ -20,14 +20,39 @@ namespace Imaginophobia {
         }
 
         public override void Update() {
-            if (_value == 0) {
-                _nextStageValue = _rand.Next(1,10);
+            if (_player.CurrentAction != CharacterAction.Peeking) {
+                _value += _speed * Time.DeltaTime;
+
+                if (_value >= _nextStageValue) {
+                    _stage++;
+                    _value = 0;
+                    switch (_stage) {
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                    }
+                    _nextStageValue = _rand.Next(1, 10);
+                }
             }
+            else if (_player.CurrentAction == CharacterAction.Peeking) {
+                if (_player.FlashLight.Enabled) {
+                    _value -= 1 * Time.DeltaTime;
+                }
 
-            _value += _speed * Time.DeltaTime;
-
-            if (_player.FlashLight.Enabled) {
-                _value -= 1 * Time.DeltaTime;
+                if (_value <= 0) {
+                    _stage--;
+                    _value = 0;
+                    switch (_stage) {
+                        case 0:
+                            break;
+                    }
+                    _nextStageValue = _rand.Next(1, 10);
+                }
             }
 
             Door.Progress = _stage * 50;

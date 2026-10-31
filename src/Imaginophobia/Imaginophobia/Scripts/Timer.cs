@@ -42,9 +42,12 @@ namespace Imaginophobia {
             _rand = new Random();
         }
 
-        public void Update() {
-            if (!_active || _paused) return;
-            TimeLeft -= Time.DeltaTime;
+        public void Update(float deltaTime) {
+            if (!_active || _paused) {
+                return;
+            }
+
+            TimeLeft -= deltaTime;
 
             if (TimeLeft <= 0) {
                 if(_method != null) {
