@@ -11,8 +11,6 @@ date: 2026-10-14
 
 เป็นสัญญาณหลักที่บอกให้ผู้เล่นรู้ว่าphobiaกำลังมา
 
-> ⚠️ **ข้อควรระวัง:** ผล Playtest พบว่าเกมพึ่งเสียงมากเกินไป จน **ผู้เล่นที่ไม่ได้ใส่หูฟังไม่สามารถรับรู้การเคลื่อนไหวของ monster ได้เลย** และไม่สามารถคาดเดาได้ → ต้องเพิ่ม Visual Indicator ควบคู่กับเสียง
-
 ## แนวทางเสียง
 
 | ประเภท           | แนวทาง                                                                                                                                                         |
@@ -58,8 +56,6 @@ date: 2026-10-14
 | Footsteps         | `sfx_step_01..08.mp3`                                                                                               | 8            |
 | **รวม**  |                                                                                                                       | **39** |
 
-> ⚠️ `sfx_autophobia_indicator.mp3` (ที่เอกสารและค่า enum `AutoIndicator` เคยอ้าง) **ไม่มีใน source แล้ว**
-
 รายการเต็มพร้อมที่มา: [Asset List](05-asset-list.md#audio--sfx)
 
 ## Music (BGM)
@@ -72,8 +68,6 @@ date: 2026-10-14
 | `dark frequency` (freetouse.com) | —                 | ❌ เอกสารเดิมอ้างไว้ แต่ไม่พบไฟล์นี้ใน `Content/Audio/` |
 
 > ระดับเสียง default ของ BGM/ambience = `AudioManager.BgsVolume` (0.2) และปรับได้จากสไลเดอร์ "Ambience Volume" ใน Settings / pause overlay
-
-> **TBD:** ยังไม่ได้ตัดสินใจว่าเกมจะมีเพลงระหว่างเล่น (in-game) ไหม — ปัจจุบันระหว่างเล่นมีแค่ ambience
 
 ## งานที่ต้องทำ (จากผล Playtest)
 

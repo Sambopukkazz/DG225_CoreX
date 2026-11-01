@@ -28,17 +28,11 @@ date: 2026-10-14
 | Week 12        | [standup-week-12.md](standups/standup-week-12.md) | —           |
 | Week 13        | [standup-week-13.md](standups/standup-week-13.md) | —           |
 
-> **TBD:** เติมคอลัมน์วันที่จากหัวไฟล์แต่ละฉบับ
-
-## Retrospectives
-
 ดู [Retrospectives Backlog](04-retrospectives-backlog.md)
 
 ## Saturday Discord Meeting
 
 ทีมมีการประชุมผ่าน Discord ทุกคืนวันเสาร์ — บันทึกการประชุมควรถูกเก็บไว้ในโฟลเดอร์นี้
-
-> **TBD:** ยังไม่มีบันทึกการประชุม Discord ในโฟลเดอร์นี้ — ต้องเริ่มเก็บ
 
 ## Related Documents
 

@@ -6,12 +6,12 @@
 
 ## โครงสร้าง
 
-| โฟลเดอร์ | เก็บอะไร | ผู้รับผิดชอบ |
-|---|---|---|
-| [`_candidates/sprites/`](_candidates/sprites/) | Sprite / Texture / Spritesheet | คนที่ 1 |
-| [`_candidates/sfx/`](_candidates/sfx/) | Sound Effects | คนที่ 2 |
-| [`_candidates/music/`](_candidates/music/) | Music / BGM | คนที่ 3 |
-| [`_candidates/fonts/`](_candidates/fonts/) | Fonts + Data | คนที่ 4 |
+| โฟลเดอร์                              | เก็บอะไร               | ผู้รับผิดชอบ |
+| --------------------------------------------- | ------------------------------ | ------------------------ |
+| [`_candidates/sprites/`](_candidates/sprites/) | Sprite / Texture / Spritesheet | คนที่ 1             |
+| [`_candidates/sfx/`](_candidates/sfx/)         | Sound Effects                  | คนที่ 2             |
+| [`_candidates/music/`](_candidates/music/)     | Music / BGM                    | คนที่ 3             |
+| [`_candidates/fonts/`](_candidates/fonts/)     | Fonts + Data                   | คนที่ 4             |
 
 ## ขั้นตอน
 
@@ -22,5 +22,3 @@
 5. ลงทะเบียนใน `Content/Content.mgcb`
 
 รายละเอียดเต็ม: [Asset Pipeline Flow](../01_GDD/06-asset-pipeline-flow.md)
-
-> ⚠️ ห้ามวาง asset ที่มีลิขสิทธิ์ไม่ชัดเจนไว้ในโฟลเดอร์นี้ — repo เป็น public

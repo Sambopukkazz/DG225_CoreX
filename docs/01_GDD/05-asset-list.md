@@ -7,10 +7,6 @@ date: 2026-10-25
 
 **Version:** 3.0 | **Last Updated:** 2026-10-25
 
-> ตารางนี้อิงจากไฟล์จริงใน `src/Imaginophonia/Imaginophonia/Content/` (ไม่นับ `bin/` และ `obj/` ที่เป็น build artifact) และจาก `Content/Content.mgcb` (commit `cf024ef`, 2026-10-24)
-> Asset ที่ยังไม่มีให้ใส่ใน `docs/02_Assets/_candidates/` ก่อน แล้วค่อยย้ายเข้า `Content/` ตาม [Asset Pipeline Flow](06-asset-pipeline-flow.md)
-> คอลัมน์ **mgcb** = ลงทะเบียนใน `Content.mgcb` แล้วหรือยัง (ถ้าไม่ลงทะเบียน เกมจะโหลดไม่ได้)
-
 ## Sprites / Textures
 
 | Asset Name                                                | คำอธิบาย                                                                  | mgcb                                                     | โหลดโดย                                                           | รับผิดชอบ |
@@ -41,8 +37,6 @@ date: 2026-10-25
 | `Tilemaps/mapassets/sewer_indicator_red.png`            | ป้ายชี้ทางสีแดง (480×360)                                         | — (ผ่าน `.ldtk`)                                  | `SceneBuilder`                                                         | นาถวัฒน์   |
 | `Tilemaps/mapassets/sewer_indicator.png`                | ป้ายชี้ทาง (ไม่ได้ถูกอ้างใน `.ldtk` แล้ว)          | ❌ (ไม่มีฉากไหนอ้าง)                      | —                                                                       | นาถวัฒน์   |
 | `Tilemaps/mapassets/Exit_sign.png`                      | ป้ายทางออก (360×120) ใช้ในโถงอุโมง                        | — (ผ่าน `.ldtk`)                                  | `SceneBuilder`                                                         | นาถวัฒน์   |
-
-> ไฟล์ tileset ทั้งหมดถูกอ้างจาก `.ldtk` โดยตรง (`defs.tilesets[].relPath`) — ชื่อ identifier ใน `.ldtk` ของแต่ละไฟล์ไม่เหมือนกัน (`Spritesheet_er_floor` / `Er_floor`) แต่ชี้ไปไฟล์ภาพเดียวกัน ถ้าเปลี่ยนชื่อไฟล์ภาพต้องแก้ใน `.ldtk` ทุกไฟล์ที่อ้าง
 
 ## Audio — SFX
 
@@ -126,23 +120,6 @@ date: 2026-10-25
 | `Tilemaps/tilemap_sewer.ldtk`             | ฉากโถงอุโมง —**6960×1080** (3 walls · **5 valves** · 4 lockers · 2 doors [ห้องไฟฟ้า 1/2] · 2 spawns · 12 PointLight · 2 DoorLight) | ✅   |
 
 รายละเอียด entity / property / tile layer / tileset / destination / origin: [Data Schema § Level Data](../03_Software/03-data-schema.md#2-ข้อมูลระดับ-level-data)
-
-## ⚠️ ปัญหาการตั้งชื่อที่ต้องแก้
-
-ตาม [Asset Naming Convention](README.md#-naming-convention) ใน README ของ GDD:
-
-| ปัญหา                                             | ตัวอย่าง                                                                                   | ที่ถูกต้อง                                                                  |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| สะกดผิด                                         | `spitesheet_player`                                                                              | `spritesheet_player` (ขาด `r`)                                                 |
-| สะกดผิด (ชื่อโฟลเดอร์)              | `Datas/`                                                                                         | `Data/`                                                                             |
-| สะกดผิด (ชื่อคลาส/ไฟล์)             | `TurotialData.cs`, `TurorialDataReader.cs`                                                     | `TutorialData.cs`, `TutorialDataReader.cs`                                        |
-| ชื่อ enum ไม่ตรงกับไฟล์               | `SoundEffectName.Painting` → `sfx_panting.mp3`                                                | ให้ตรงกัน (`Painting` หรือแก้ไฟล์เป็น `sfx_painting.mp3`) |
-| ชื่อไฟล์สะกดผิด                         | `Imaginophobia_bg_placerholder.png`                                                              | `placeholder`                                                                       |
-| ชื่อโฟลเดอร์ vs ชื่อ project           | โฟลเดอร์`Imaginophonia` แต่ project `Imaginophobia`                                 | ตกลงให้ตรงกัน                                                            |
-| ชื่อ identifier ใน `.ldtk` ไม่ตรงกัน  | `Spritesheet_er_floor` vs `Er_floor` ชี้ไฟล์เดียวกัน                            | ตั้งชื่อ identifier ให้ตรงกันทุกไฟล์                          |
-| ชื่อ entity ทำหน้าที่เดียวกัน     | `PlayerSpawnPoint` vs `SpawnPoint` (ต่างกันแค่ tag `spawn` / property `Origin`)  | ตกลงชื่อเดียว                                                            |
-| นามสกุลไฟล์ไม่ consistent                | `bin/` มี `.ogg`/`.xnb` ค้างจากชุดเก่า ขณะที่ source เป็น `.mp3` | ลบ artifact และใช้`.mp3` อย่างเดียว                               |
-| ชื่อไฟล์เสียงมีช่องว่างเกิน | `sfx_light_flickering_short_01 .ogg` (พบเฉพาะใน `Content/bin/`)                       | ลบ artifact                                                                         |
 
 ## Related Documents
 

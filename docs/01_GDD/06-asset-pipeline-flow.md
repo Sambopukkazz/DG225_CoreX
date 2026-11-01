@@ -58,10 +58,3 @@ flowchart TD
 | `Shaders/`     | `.fx` (Vignette, BottomFade, Silhouette, HighlightComposite, Saturation)                                                                                       |
 | `Tilemaps/`    | ไฟล์`.ldtk` และ `mapassets/` (tileset)                                                                                                                |
 | `UI/`          | องค์ประกอบ UI (spacebar, valve, ปุ่ม pause, สไลเดอร์, พื้นหลัง/จอตาย/จอชนะ, atlas ของมินิเกม Connect The Dots) |
-
-> ไฟล์ tileset ใน `Tilemaps/mapassets/` **ไม่ต้องลงทะเบียนใน `Content.mgcb`** — `LDtkTilemapImporter` โหลดให้จาก path ที่ระบุในไฟล์ `.ldtk`
-
-## หมายเหตุ
-
-- โฟลเดอร์ `Content/bin/` เป็นผลลัพธ์จากการ build (`.xnb`, `.ogg`) — **ไม่ควรแก้ด้วยมือ** และควรอยู่ใน `.gitignore`
-- ถ้าเพิ่ม asset ใหม่แล้วเกมยังไม่เห็นไฟล์ ให้ตรวจสอบว่าลงทะเบียนใน `Content.mgcb` แล้วหรือยัง (สาเหตุที่พบบ่อยที่สุด)

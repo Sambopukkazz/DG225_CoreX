@@ -9,8 +9,6 @@ warning: เอกสารประวัติศาสตร์ — Game Jam 
 
 เอกสารชุดนี้ใช้เป็นศูนย์กลางติดตามงานตลอด 48 ชั่วโมงของ Game Jam (กรกฎาคม 2026) เดิมวางไว้ที่ `docs/03_GameJam/` — ปัจจุบันย้ายมาเก็บเป็นประวัติไว้ที่ `docs/05_Wiki/history/` เนื่องจากเป็นเอกสารชุดเหตุการณ์ที่จบแล้ว ไม่ใช่เอกสารที่ยังใช้งานต่อ
 
-> **หมายเหตุ:** ลิงก์ไปยัง template ต้นทาง (Lab Discussion) ถูกลบออกแล้ว เนื่องจากไฟล์นั้นไม่มีอยู่ใน repo นี้
-
 ## 👥 ข้อมูลทีม
 
 | หัวข้อ                                             | รายละเอียด                                                                    |
@@ -18,13 +16,9 @@ warning: เอกสารประวัติศาสตร์ — Game Jam 
 | ชื่อทีม / โปรเจกต์                        | CoreX / Imaginophobia                                                                   |
 | สมาชิก (ชื่อ–รหัส, 4 คน)                | เตชินท์ 116, ธีนันทนัช 120, นาถวัฒน์ 125, พรภวิษย์ 132 |
 | ผู้ดูแล timeline (Time Keeper)                    | พรภวิษย์ 132                                                                    |
-| Repo หลัก                                            | https://github.com/Sambopukkazz/DG225_CoreX                                       |
+| Repo หลัก                                            | https://github.com/Sambopukkazz/DG225_CoreX                                             |
 | เวลาที่ Jam เริ่มจริง (วันศุกร์) | 24/7/26, 17.00                                                                          |
 | เวลาที่ Jam ต้องส่งงาน (Hour 48)        | [วัน-เวลา]                                                                       |
-
-> ⚠️ **TBD:** เวลาส่งงาน (Hour 48) ยังไม่ได้กรอก และคอลัมน์ "เวลาจริง" ใน [00-timeline.md](00-timeline.md) ยังว่างทั้งหมด — Jam จบไปแล้ว ถ้าต้องการเก็บเป็นประวัติให้ครบ ต้องย้อนไปเติม
-
-> Time Keeper และเวลาเริ่ม/จบ ต้องตรงกับที่กรอกใน [00-timeline.md](00-timeline.md) — แก้ที่นี่แล้วอย่าลืมแก้ที่นั่นด้วย
 
 ## 📖 เอกสารในโปรเจกต์นี้
 
@@ -34,7 +28,7 @@ warning: เอกสารประวัติศาสตร์ — Game Jam 
 | [01-pipeline-checklist.md](01-pipeline-checklist.md) | Must-have / nice-to-have / cut-list ของ pipeline function          | 🔲         |
 | [02-roles.md](02-roles.md)                           | แบ่งความรับผิดชอบตาม module + file ownership rule | 🔲         |
 | [03-workflow-rules.md](03-workflow-rules.md)         | Branching, commit convention, merge conflict rule                     | 🔲         |
-| [04-feedback.md](04-feedback.md)                     | Feedback ที่ได้รับระหว่าง/หลัง Jam                                | 🔲         |
+| [04-feedback.md](04-feedback.md)                     | Feedback ที่ได้รับระหว่าง/หลัง Jam                | 🔲         |
 
 ## ⚡ Quick Reference (เปิดดูตอนตัดสินใจด่วน)
 

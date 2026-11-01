@@ -28,7 +28,7 @@
 | 1  | As a player, I want to see my remaining lives, so that I know how close I am to game over                                               | จำนวนชีวิตแสดงบนจอตลอดเวลา ลดลงทันทีที่โดนโจมตี                               | 2             | —     |
 | 2  | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with               | เข้าใกล้สิ่งของแล้วมี highlight ขึ้น เมื่อออกห่างแล้วหายไป                    | 2             | —     |
 | 3  | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking.                 | มี ui settings กดเข้าเกมต่างๆ                                                                               | 3             | —     |
-| 4 | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                                            | 2             | 1     |
+| 4  | As a designer, I want the game to have audio and sound effects, so that the game becomes more immersive.                                | ใส่เสียงเดิน เสียงซ่อมเสียง phobia etc                                                            | 2             | 1      |
 | 5  | As a designer, I want to make audio becomes stereo, so that the game gets even more immersive, and can also be a nice gameplay mechanic | ได้ยินเสียงแทรกซ้ายขวา                                                                                | 3             | 1      |
 | 6  | As a developer, I want the game to have a skill that heals Sanity, so that the player can recover from low sanity.                     | สกิลที่เพิ่มค่าสติ                                                                                        | 2             | —     |
 | 7  | As an artist, I want to redesign the mini-game UI                                                                                      | ปรับ UI มินิเกม ให้ดูดีมากขึ้น                                                                    | 3             | 3      |
@@ -61,7 +61,3 @@
 - [Sprint Backlog](02-sprint-backlog.md)
 - [Sprint Plans](sprint-plans/) — แหล่งความจริงของสถานะงาน
 - [Report Backlog](05-report-backlog.md)
-
-## หมายเหตุการแก้ไข
-
-- **2026-10-14:** ปรับเรื่องเล่า (user story) ข้อ Should Have #6 ให้มีโครง `so that` ครบถ้วน · แก้คอลัมน์ Sprint ของ Should Have #4 ให้ตรงกับ sprint plan · เพิ่มหมายเหตุเรื่องแหล่งความจริงของสถานะ

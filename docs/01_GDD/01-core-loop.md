@@ -105,10 +105,6 @@ flowchart TD
   - ค่า Sanity ลดถึง 0 (`SanityState` มี 3 ระดับ: Normal 85 / Anxious 40 / Insane 0) → เปิด `DeathScreen`
   - Nyctophobia — อยู่ในความมืดที่ไฟดับนานเกินไป จน vignette ปิดสนิท (`Sanity = 0`)
 
-> ⚠️ **ค่าที่ต้องตัดสินใจ:** ตัวจับเวลาหลักในโค้ดตั้งไว้ **481 วินาที** และเมื่อหมดเวลาจะเปิด `WinScreen` (ไม่ใช่จอตาย) — ดูเหมือนค่าทดสอบที่ค้างอยู่ ยังไม่มีเอกสารยืนยันว่าดีไซน์ต้องการให้หมดเวลา = ชนะ หรือ = จบรอบแบบแพ้ (ดู [Mechanics](03-mechanics.md#objectives))
-> ⚠️ การตายยังไม่มีปุ่มเริ่มรอบใหม่ในจอตาย — ต้องกลับเมนูหลักแล้วกด Start (ปุ่ม Shift 1) อีกครั้ง
-> **TBD:** อัตราการลด Sanity ต่อวินาทีและค่า threshold ถูกยืนยันจากโค้ดแล้ว (ดู [Data Schema](../03_Software/03-data-schema.md#6-ค่าปรับแต่งเกม-tuning-values)) แต่ยังไม่ผ่านการทดสอบบาลานซ์
-
 ## Related Documents
 
 - Mechanics: [Mechanics](03-mechanics.md)
