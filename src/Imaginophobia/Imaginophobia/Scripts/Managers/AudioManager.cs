@@ -291,13 +291,13 @@ namespace Imaginophobia {
             }
         }
 
-        //public void ClearSFXs(params string[] soundEffectNames) {
-        //    var test = _activeAudioSources.ExceptBy(soundEffectNames, p => p.Name);
-        //    foreach (AudioSource audioSource in test)  {
-        //        audioSource.AudioPlayer.Stop();
-        //        audioSource.SetActive(false);
-        //    }
-        //}
+        public void ClearSFXs(params string[] soundEffectNames) {
+            var audioSourceList = _activeAudioSources.Where(source => soundEffectNames.Contains(source.Name) == false);
+            foreach (AudioSource audioSource in audioSourceList) {
+                audioSource.AudioPlayer.Stop();
+                audioSource.SetActive(false);
+            }
+        }
 
         public void ChangeSFXVolume(SoundEffectName name, float volume) {
             if (_activeAudioSources.Exists(audio => audio.Name == name.ToString())) {
@@ -319,7 +319,9 @@ namespace Imaginophobia {
 
         public void FadeSFXVolumeOut(SoundEffectName name, float time) {
             AudioSource audioSource = _activeAudioSources.Find(audio => audio.Name == name.ToString());
-            audioSource.FadeVolumnOut(time);
+            if (audioSource != null) {
+                audioSource.FadeVolumnOut(time);
+            }
         }
 
         public void PauseAudio() {

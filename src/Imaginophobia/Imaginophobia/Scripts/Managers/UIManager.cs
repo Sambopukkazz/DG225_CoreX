@@ -15,11 +15,11 @@ using System.Linq;
 using Gum.GueDeriving;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Extended.Graphics;
 
 namespace Imaginophobia {
     public class UIManager : IDisposable {
-        private Texture2D _spacebar;
-        private Texture2D _peekButton;
+        private Texture2DAtlas _buttonAtlas;
         private RectangleF _spaceBarBackgroundRect;
         private RectangleF _spaceBarBackgroundMiddleRect;
         private Player _player;
@@ -42,8 +42,7 @@ namespace Imaginophobia {
             _tutorialManager = new TutorialManager();
             _textManager = new TextManager();
 
-            _spacebar = MainGame.Content.Load<Texture2D>("UI/sprite_spacebar");
-            _peekButton = MainGame.Content.Load<Texture2D>("UI/sprite_peek_button");
+            _buttonAtlas = MainGame.Content.Load<Texture2DAtlas>("UI/spritesheet_buttons");
 
             _vignetteOverlay = new VignetteOverlay();
             _blinkOverlay = new VignetteOverlay();
@@ -124,9 +123,11 @@ namespace Imaginophobia {
             _nyctophobiaOverlay.Render();
             _rectangleFadeOverlay.Render();
 
-            MainGame.SpriteBatch.Begin();
+            SpriteBatch spriteBatch = MainGame.SpriteBatch;
+
+            spriteBatch.Begin();
             Color color;
-            if (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking) {
+            if (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking && _player.CurrentAction != CharacterAction.Reading) {
                 if (_player.CollidingTrigger != null && _player.CollidingTrigger.Interactable) {
                     if (_player.CollidingTrigger.Tag == "door") {
                         if (_player.CollidingTrigger.Name == Scene.tilemap_sewer.ToString()) {
@@ -137,7 +138,7 @@ namespace Imaginophobia {
 
                             Vector2 buttonPos = _spaceBarBackgroundMiddleRect.Position;
                             buttonPos.X += 500;
-                            MainGame.SpriteBatch.Draw(_peekButton, buttonPos, Color.White);
+                            spriteBatch.Draw(_buttonAtlas["sprite_button_peek"], buttonPos, Color.White);
                         }
                         else {
                             //_spaceBarBackgroundRect.X = _player.CollidingTrigger.Shape.BoundingBox.Max.X;
@@ -146,13 +147,13 @@ namespace Imaginophobia {
                             _spaceBarBackgroundMiddleRect.Y = 540 + 400 ;
                         }
 
-                        MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundMiddleRect.ToRectangle(), Color.White);
+                        spriteBatch.Draw(_buttonAtlas["sprite_spacebar"], _spaceBarBackgroundMiddleRect.ToRectangle(), Color.White);
                     }
                     else {
                         _spaceBarBackgroundRect.X = _camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Center).X - (_spaceBarBackgroundRect.Width / 2f);
                         _spaceBarBackgroundRect.Y = (_camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Min).Y - _spaceBarBackgroundRect.Height);
                         //MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect.ToRectangle(), ColorHelper.FromHex("#70707041"));
-                        MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect.ToRectangle(), Color.White);
+                        spriteBatch.Draw(_buttonAtlas["sprite_spacebar"], _spaceBarBackgroundRect.ToRectangle(), Color.White);
                     }
                     //_spaceBarBackgroundRect.Position = _camera.WorldToScreen(_spaceBarBackgroundRect.Position);
                     //_spaceBarBackgroundRect.Size = _size * _camera.Zoom;
@@ -163,20 +164,32 @@ namespace Imaginophobia {
                     Timer timer = Time.GetTimer("hideCooldown");
                     float timeFactor;
                     if (timer != null) {
-                        color = ColorHelper.FromHex("#a40e0e64");
+                        color = ColorHelper.FromHex("#61070786");
                         timeFactor = _spaceBarBackgroundRect.Width /  _player.HideCooldown;
                     }
                     else {
                         timer = Time.GetTimer("hideTime");
-                        color = ColorHelper.FromHex("#0e61a464");
+                        color = ColorHelper.FromHex("#cccccc64");
                         timeFactor = _spaceBarBackgroundRect.Width / _player.HideTime;
                     }
 
                     if(timer != null) {
-                        MainGame.SpriteBatch.FillRectangle(_spaceBarBackgroundRect.X, _spaceBarBackgroundRect.Y, timer.TimeLeft * timeFactor, _spaceBarBackgroundRect.Height, color);
+                        spriteBatch.FillRectangle(_spaceBarBackgroundRect.X, _spaceBarBackgroundRect.Y, timer.TimeLeft * timeFactor, _spaceBarBackgroundRect.Height, color);
                     }
                     
                 }
+            }
+
+            if (MainGame.ScreenManager.ActiveScreen is SpinTheValveScreen) {
+                spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(865,905), Color.White * 0.4f);
+            }
+            else if (MainGame.ScreenManager.ActiveScreen is ConnectTheDotsScreen) {
+                spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(1344, 560), Color.White * 0.4f);
+            }
+            else if (MainGame.ScreenManager.ActiveScreen is ClipboardScreen && _player.CurrentAction == CharacterAction.Reading) {
+                spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(1312, 605), Color.White * 0.4f);
+                spriteBatch.Draw(_buttonAtlas["sprite_button_left"], new Vector2(385, 506), Color.White * 0.4f);
+                spriteBatch.Draw(_buttonAtlas["sprite_button_right"], new Vector2(1312, 506), Color.White * 0.4f);
             }
 
             color = Color.White;
@@ -186,21 +199,21 @@ namespace Imaginophobia {
             else if (_player.SanityState == SanityState.Insane) {
                 color = Color.Red;
             }
-            
+
             //Sanity Bar
-            MainGame.SpriteBatch.DrawRectangle(210, 90, 400, 40, Color.White);
-            MainGame.SpriteBatch.FillRectangle(210, 90, 4 * _player.Sanity, 40, color);
+            spriteBatch.DrawRectangle(210, 90, 400, 40, Color.White);
+            spriteBatch.FillRectangle(210, 90, 4 * _player.Sanity, 40, color);
             //Battery Bar
-            MainGame.SpriteBatch.DrawRectangle(210, 150, 250, 20, Color.White);
-            MainGame.SpriteBatch.FillRectangle(210, 150, 2.5f * _player.Battery, 20, Color.White);
+            spriteBatch.DrawRectangle(210, 150, 250, 20, Color.White);
+            spriteBatch.FillRectangle(210, 150, 2.5f * _player.Battery, 20, Color.White);
 
             _textManager.Draw();
 
             if (_blackScreen) {
-                MainGame.SpriteBatch.FillRectangle(0, 0, 1920, 1080, Color.Black);
+                spriteBatch.FillRectangle(0, 0, 1920, 1080, Color.Black);
             }
 
-            MainGame.SpriteBatch.End();
+            spriteBatch.End();
         }
 
         private void OnSanityStateChanged() {

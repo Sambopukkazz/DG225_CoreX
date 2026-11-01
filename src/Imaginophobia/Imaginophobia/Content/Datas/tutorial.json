@@ -7,7 +7,7 @@
     { "Text": "You can peek under the door to check the outside", "CompleteOn": "peek" },
     { "Text": "Leave the room on the left side, look for a valve", "CompleteOn": "door-open" },
     { "Text": "Find a valve to repair", "CompleteOn": "valve-start" },
-    { "Text": "Click and spin the valve. Stay on the green gauge! \nPress A/D to look left and right, F to use flashlight, Q to leave", "CompleteOn": "valve-done" },
+    { "Text": "Click and spin the valve. Stay on the green gauge. \nPress A/D to look left and right, F to use flashlight, Q to leave", "CompleteOn": "valve-done" },
     { "Text": "Repair all five valves", "CompleteOn": "valves-all" },
     { "Text": "Head to the ladder in the right electric room and exit.", "CompleteOn": "exit-ladder" }
   ]

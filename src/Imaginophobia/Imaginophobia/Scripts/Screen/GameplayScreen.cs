@@ -18,6 +18,7 @@ namespace Imaginophobia {
     public class GameplayScreen : Screen {
         private GameManager _gameManager;
         private Panel _root;
+        private Button _pauseButton;
         private ContainerRuntime _pauseMenu;     
 
         public override void Initialize() {
@@ -39,7 +40,8 @@ namespace Imaginophobia {
             GumUIHelper.AddSettingsPanel(_pauseMenu, true);
             _pauseMenu.AddChild(GumUIHelper.CreateTextButton("Return to Menu", Layout.MenuFontScale, Layout.ActionButtonX, Layout.ActionButtonY, Layout.ActionButtonWidth, Layout.ActionButtonHeight, ReturnToMenu));
 
-            _root.AddChild(GumUIHelper.CreatePauseButton(TogglePause));
+            _pauseButton = GumUIHelper.CreatePauseButton(TogglePause);
+            _root.AddChild(_pauseButton);
 
             _root.AddToRoot();
 
@@ -52,9 +54,11 @@ namespace Imaginophobia {
         public override void Update(GameTime gameTime) {
             _gameManager.Update(gameTime);
 
-            if (GumService.Default.Keyboard.KeyPushed(Keys.Escape)) {
+            if (GumService.Default.Keyboard.KeyPushed(Keys.Escape) && _pauseButton.IsVisible) {
                 TogglePause();
             }
+
+            _pauseButton.IsVisible = IsActive;
         }
 
         public override void Draw(GameTime gameTime) {

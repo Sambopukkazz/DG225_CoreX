@@ -13,7 +13,7 @@ namespace Imaginophobia {
         private int _index;
 
         public TutorialManager() {
-            _data = MainGame.Content.Load<TutorialData>("Datas/tutorial");
+            _data = TutorialData.Load();
 
             ObjectiveManager.Completed += OnCompleted;
             Advance();

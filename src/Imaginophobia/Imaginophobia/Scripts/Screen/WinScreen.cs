@@ -32,19 +32,19 @@ namespace Imaginophobia {
             background.SourceFileName = "UI/background_win.png";
             canvas.AddChild(background);
 
-            canvas.AddChild(GumUIHelper.CreateText("You survived.", Layout.TitleFontScale, 600, 220, 720, 120));
+            canvas.AddChild(GumUIHelper.CreateText("You survived.", 4, 1180, 50, 720, 120, outlineThickness: 0));
             string message = TimeSpan.FromSeconds(_timeLeft).ToString(@"mm\:ss");
-            TextRuntime time = GumUIHelper.CreateText($"Time left: {message}", 2, 960, 480, 600, 120);
+            TextRuntime time = GumUIHelper.CreateText($"Time left: {message}", 2, 1650, 220, 600, 120, outlineThickness: 0);
             time.XOrigin = HorizontalAlignment.Center;
             time.YOrigin = VerticalAlignment.Center;
             canvas.AddChild(time);
 
-            TextRuntime thanks = GumUIHelper.CreateText("Thanks for playing.", 1.75f, 960, 680, 600, 120);
+            TextRuntime thanks = GumUIHelper.CreateText("Thanks for playing.", 2f, 1655, 1035, 600, 120, outlineThickness: 0);
             thanks.XOrigin = HorizontalAlignment.Center;
             thanks.YOrigin = VerticalAlignment.Center;
             canvas.AddChild(thanks);
 
-            canvas.AddChild(GumUIHelper.CreateTextButton("Return to Menu", Layout.MenuFontScale, 760, 880, 400, 80, ReturnToMenu));
+            canvas.AddChild(GumUIHelper.CreateTextButton("< Return to Menu", Layout.MenuFontScale, 20, 1000, 440, 80, ReturnToMenu));
 
             _root.AddToRoot();
 

@@ -61,7 +61,7 @@ namespace Imaginophobia {
 
                 _player.CollidingTrigger = FocusedTrigger;
 
-                if (trigger != FocusedTrigger) {
+                if (trigger != FocusedTrigger || MainGame.GameState == GameState.Jumpscare) {
                     return;
                 }
 

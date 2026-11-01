@@ -20,6 +20,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using static Imaginophobia.SceneManager;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Imaginophobia {
     public class GameManager : IDisposable {
@@ -49,13 +50,10 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
-            Time.AddTimer(_player.Dead, 481, "MainTimer");
+            Time.AddTimer(_player.Dead, 721, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
             Time.TimeScale = 1;
-            //temp-
-            //_cameraShaker = new CameraShaker();
-
         }
 
         public void Update(GameTime gameTime) {
@@ -96,8 +94,6 @@ namespace Imaginophobia {
                 MainGame.ScreenManager.ClearScreens(new DeathScreen(), 0, 2, 1);
                 MainGame.GameState = GameState.Lose;
             }
-
-            DebugUpdate();
         }
 
         public void Draw(GameTime gameTime) {
@@ -139,7 +135,7 @@ namespace Imaginophobia {
 
         private void OnDoorInteracted(string sceneName) {
             if (sceneName == "end") {
-                if (ObjectiveManager.AllValvesRepaired || InputManager.HoldKey(Keys.Up)) {
+                if (ObjectiveManager.AllValvesRepaired && SaveManager.AllSewerLightsAreOn()) {
                     ObjectiveManager.Complete("exit-ladder");
                     SaveManager.Delete();
                     ObjectiveManager.ResetValves();
@@ -158,16 +154,26 @@ namespace Imaginophobia {
                 AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck, interrupt: true);
             }
             else {
+                if (_enemyManager.HasActiveEntamaphobia()) {
+                    _enemyManager.ClearEnemies();
+                    _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+                    MainGame.ScreenManager.ShowScreen(new JumpScareScreen());
+                    return;
+                }
+
                 MainGame.ScreenManager.FadeOut(0.25f);
 
                 Action action = () => {
-                    AudioManager.Instance.ClearSFXs();
+                    AudioManager.Instance.ClearSFXs("anxietySound", "Darkness");
+                    AudioManager.Instance.FadeSFXVolumeOut(SoundEffectName.Darkness, 1.5f);
                     _enemyManager.ClearEnemies();
                     _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
                     MainGame.ScreenManager.FadeIn(0.25f);
                 };
 
                 Time.AddTimer(action, 0.25f, "ScreenTimer");
+
+                
             }
         }
 
@@ -219,15 +225,6 @@ namespace Imaginophobia {
             }
 
             _collisionManager.RemoveCollider(enemy as ICollisionActor);
-        }
-
-        private void DebugUpdate() {
-            if (InputManager.PressedKey(Keys.K)) {
-                //_cameraShaker.Shake(5f, 1f);
-            }
-            if (InputManager.PressedKey(Keys.L)) {
-                _player.Sanity -= 50;
-            }
         }
 
         public void Dispose() {

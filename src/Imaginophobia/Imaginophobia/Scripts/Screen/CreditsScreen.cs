@@ -57,10 +57,6 @@ namespace Imaginophobia {
             canvas.Height = Layout.ScreenHeight;
             _root.AddChild(canvas);
 
-            SpriteRuntime background = new SpriteRuntime();
-            background.SourceFileName = "UI/background_main.png";
-            canvas.AddChild(background);
-
             canvas.AddChild(GumUIHelper.CreateTitle("Credits"));
             canvas.AddChild(GumUIHelper.CreateTextButton("Back", Layout.BackButtonFontScale, Layout.BackButtonX, Layout.BackButtonY, Layout.BackButtonSize, Layout.BackButtonSize, Back));
             canvas.AddChild(GumUIHelper.CreateDimPanel());

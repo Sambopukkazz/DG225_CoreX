@@ -36,6 +36,9 @@ namespace Imaginophobia {
 
             AudioManager.Instance.PlaySFX(SoundEffectName.ClipboardCheck);
 
+            Time.GetTimer("MainTimer").Pause();
+            Time.GetTimer("EntamaSpawnTimer").Pause();
+
             _tweener = new Tweener();
             _tweener.TweenTo(target: this, expression: screen => screen.ClipboardPos, toValue: new Vector2(645, 120), duration: 0.75f)
                 .Easing(EasingFunctions.ExponentialOut);
@@ -45,7 +48,7 @@ namespace Imaginophobia {
             if (InputManager.PressedKey(Keys.A) && _player.CurrentAction == CharacterAction.Reading) {
                 if (_page > 1) {
                     _page--;
-                    AudioManager.Instance.PlaySFX(SoundEffectName.ClipboardPageReverse, interrupt: true);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.ClipboardPageReverse);
                 }
             }
             else if (InputManager.PressedKey(Keys.D) && _player.CurrentAction == CharacterAction.Reading) {
@@ -64,6 +67,8 @@ namespace Imaginophobia {
                     .Easing(EasingFunctions.ExponentialOut);
 
                 Time.AddTimer(this.ScreenManager.CloseScreen, 0.75f);
+                Time.GetTimer("MainTimer").Resume();
+                Time.GetTimer("EntamaSpawnTimer").Resume();
             }
 
             _tweener.Update(Time.DeltaTime);

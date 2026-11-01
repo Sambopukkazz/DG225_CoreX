@@ -1,0 +1,42 @@
+{
+	"textures": [
+		{
+			"filename": "spritesheet_buttons-texture.png",
+			"format": "RGBA8888",
+			"size": {"w":450,"h":460},
+			"frames": {
+				"sprite_button_light":{
+					"frame": {"x":0,"y":0,"w":350,"h":75},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_button_exit":{
+					"frame": {"x":0,"y":77,"w":225,"h":75},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_button_left":{
+					"frame": {"x":0,"y":154,"w":225,"h":75},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_button_peek":{
+					"frame": {"x":0,"y":231,"w":225,"h":75},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_button_right":{
+					"frame": {"x":0,"y":308,"w":225,"h":75},
+					"pivot": {"x":0.5,"y":0.5}
+				},
+				"sprite_spacebar":{
+					"frame": {"x":0,"y":385,"w":450,"h":75},
+					"pivot": {"x":0.5,"y":0.5}
+				}	
+			}
+		}
+	],
+
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"dataformat": "monogame-extended",
+		"version": "1.2",
+		"smartupdate": "$TexturePacker:SmartUpdate:e38465188082a2a5f2ec19dbb0dd0cc3:acfe84f33d76c8354ece09c041b79f9a:3e4820849444ab771f042a54f1f8d225$"
+	}
+}

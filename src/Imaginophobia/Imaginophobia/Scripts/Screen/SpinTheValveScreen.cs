@@ -83,6 +83,7 @@ namespace Imaginophobia {
                     _trigger.Interactable = false;
                     ObjectiveManager.Complete("valve-done");
                     ObjectiveManager.RepairValve(_trigger.Id);
+
                     this.ScreenManager.CloseScreen();
                 }
             }

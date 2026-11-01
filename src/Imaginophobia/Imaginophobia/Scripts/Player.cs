@@ -103,6 +103,10 @@ namespace Imaginophobia {
         }
 
         public override void Update() {
+            if (MainGame.GameState == GameState.Jumpscare) {
+                return;
+            }
+
             if (_allowMovement) {
                 Direction = InputManager.Direction;
                 Velocity = MoveSpeed * InputManager.Direction;

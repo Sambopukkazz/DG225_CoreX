@@ -19,7 +19,8 @@ namespace Imaginophobia {
         private PointLight _light;
         private Texture2D _sewerBackground;
         private Texture2D _doorForegound;
-        private Texture2DAtlas _textureAtlas;
+        private Texture2DAtlas _buttonAtlas;
+        private Texture2DAtlas _entamaAtlas;
 
         public DoorPeekingScreen(Player player, Trigger trigger) {
             _door = trigger;
@@ -34,7 +35,8 @@ namespace Imaginophobia {
             
             _doorForegound = MainGame.Content.Load<Texture2D>("UI/foreground_peek_door");
 
-            _textureAtlas = MainGame.Content.Load<Texture2DAtlas>("Phobias/spritesheet_entamaphobia");
+            _buttonAtlas = MainGame.Content.Load<Texture2DAtlas>("UI/spritesheet_buttons");
+            _entamaAtlas = MainGame.Content.Load<Texture2DAtlas>("Phobias/spritesheet_entamaphobia");
 
             _light = new PointLight() {
                 Position = new Vector2(540, 810),
@@ -97,14 +99,24 @@ namespace Imaginophobia {
             spriteBatch.Draw(_sewerBackground, Vector2.Zero, Color.White);
 
             if (_door.Progress != 0) {
-                spriteBatch.Draw(_textureAtlas[$"entama_stage_{_door.Progress}"], Vector2.Zero, Color.White);
+                spriteBatch.Draw(_entamaAtlas[$"entama_stage_{_door.Progress}"], Vector2.Zero, Color.White);
+            }
+
+            if (_light.Enabled == false) {
+                spriteBatch.FillRectangle(260, 90, 1400, 900, Color.Black);
             }
 
             spriteBatch.Draw(_doorForegound, Vector2.Zero, Color.White);
 
             if (_door.Progress > 2) {
-                spriteBatch.Draw(_textureAtlas[$"entama_hand"], Vector2.Zero, Color.White);
+                spriteBatch.Draw(_entamaAtlas[$"entama_hand"], Vector2.Zero, Color.White);
             }
+
+            spriteBatch.DrawRectangle(108, 111, 330, 40, Color.White * 0.4f);
+            spriteBatch.FillRectangle(108, 111, _player.Battery * 3.3f, 40, Color.White * 0.4f);
+
+            spriteBatch.Draw(_buttonAtlas["sprite_button_light"], new Vector2(108, 165), Color.White * 0.4f);
+            spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(108,260), Color.White * 0.4f);
 
             spriteBatch.End();
 

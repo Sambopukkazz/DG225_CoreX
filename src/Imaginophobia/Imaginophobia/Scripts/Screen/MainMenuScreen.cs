@@ -17,6 +17,9 @@ namespace Imaginophobia {
 
         public MainMenuScreen() {
             _root = new Panel();
+
+            UpdateWhenInactive = true;
+            DrawWhenInactive = true;
         }
 
         public override void Initialize() {

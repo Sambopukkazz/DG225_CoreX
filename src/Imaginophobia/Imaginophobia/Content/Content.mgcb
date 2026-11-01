@@ -355,13 +355,6 @@
 /processorParam:Version=6.1.1.0
 /build:Character/spritesheet_player.json
 
-#begin Datas/tutorial.json
-/importer:JsonContentImporter
-/processor:JsonContentProcessor
-/processorParam:ContentType=Imaginophobia.TutorialDataReader, Imaginophobia
-/processorParam:Version=6.1.1.0
-/build:Datas/tutorial.json
-
 #begin Fonts/GenerationFonting_0.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -708,32 +701,6 @@
 /processorParam:Version=3.8.5.0
 /build:UI/sprite_button_pause.png
 
-#begin UI/sprite_peek_button.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:UI/sprite_peek_button.png
-
-#begin UI/sprite_spacebar.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:UI/sprite_spacebar.png
-
 #begin UI/sprite_valve.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -746,6 +713,25 @@
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
 /build:UI/sprite_valve.png
+
+#begin UI/spritesheet_buttons-texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:UI/spritesheet_buttons-texture.png
+
+#begin UI/spritesheet_buttons.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/processorParam:Version=6.1.1.0
+/build:UI/spritesheet_buttons.json
 
 #begin UI/spritesheet_clipboard-texture.png
 /importer:TextureImporter

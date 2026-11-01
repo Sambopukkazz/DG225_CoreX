@@ -38,6 +38,7 @@ namespace Imaginophobia {
         public event Action<GameObject> EnemyRemoved;
         private Random _rand;
         private bool _continueSpawnEnemy;
+        private bool _hasEverSpawnScopophobia;
         private Player _player;
         private Rectangle _worldBound;
 
@@ -106,15 +107,21 @@ namespace Imaginophobia {
                 }
             }
             else {
-                _continueSpawnEnemy = false;
-                Time.GetTimer("ScopoSpawnTimer").Pause();
-                Time.GetTimer("AutoSpawnTimer").Pause();
-                Time.GetTimer("NyctoSpawnTimer").Pause();
-                Time.GetTimer("EntamaSpawnTimer").Resume();
+                if (_continueSpawnEnemy == true) {
+                    _continueSpawnEnemy = false;
+                    Time.GetTimer("ScopoSpawnTimer").Pause();
+                    Time.GetTimer("AutoSpawnTimer").Pause();
+                    Time.GetTimer("NyctoSpawnTimer").Pause();
+                    Time.GetTimer("EntamaSpawnTimer").Resume();
+                }
             }
 
             if(_worldBound != worldBound) {
                 _worldBound = worldBound;
+            }
+
+            if (_hasEverSpawnScopophobia == false && ObjectiveManager.AllValvesRepaired) {
+                ForceSpawnScopophobia();
             }
         }
 
@@ -122,6 +129,43 @@ namespace Imaginophobia {
             for (int i = _enemies.Count - 1; i >= 0; i--) {
                 _enemies[i].Draw();
             }
+        }
+
+        public void ForceSpawnScopophobia() {
+            if (HasActiveScopophobia()) {
+                return;
+            }
+
+            Vector2 pos;
+            if (_player.CurrentAction == CharacterAction.Hiding) {
+                pos.Y = _player.PreviousPos.Y;
+            }
+            else {
+                pos.Y = _player.Transform.Position.Y;
+            }
+            int posOffset = _rand.Next(100, 500);
+            bool spawnLeft;
+            if (_rand.Next(0, 10) < 5) {
+                pos.X = _worldBound.Left - posOffset;
+                spawnLeft = true;
+            }
+            else {
+                pos.X = _worldBound.Right + posOffset;
+                spawnLeft = false;
+            }
+
+            if (spawnLeft) {
+                pos.X -= 1920;
+            }
+            else {
+                pos.X += 1920;
+            }
+
+            Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
+            _enemies.Add(scopophobia);
+            Time.GetTimer("ScopoSpawnTimer").Pause();
+            EnemySpawned?.Invoke(scopophobia);
+            _hasEverSpawnScopophobia = true;
         }
 
         public void SpawnScopophobia() {
@@ -167,6 +211,7 @@ namespace Imaginophobia {
                 _enemies.Add(scopophobia);
                 Time.GetTimer("ScopoSpawnTimer").Pause();
                 EnemySpawned?.Invoke(scopophobia);
+                _hasEverSpawnScopophobia = true;
             }
         }
 
