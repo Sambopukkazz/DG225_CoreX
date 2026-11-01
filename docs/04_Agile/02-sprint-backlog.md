@@ -60,17 +60,23 @@ gantt
 
 ## Sprint 3 (Draft)
 
-| # | User Story                                                                        | MoSCoW      | Estimate (SP) |
-| - | --------------------------------------------------------------------------------- | ----------- | ------------- |
-| 1 | [User Story ที่วางแผนไว้ล่วงหน้าจาก 01-product-backlog.md] | Should Have | [SP]          |
-| 3 | As an artist, I want draw the assets and phobias that have been added.           | Must Have   | 5             |
-| 4 | As an artist, I want redesign the mini-game UI to make it look better.           | Should Have | 3             |
+| # | User Story                                                                                                              | MoSCoW      | Estimate (SP) |
+| - | ----------------------------------------------------------------------------------------------------------------------- | ----------- | ------------- |
+| 1 | As a player, I want to see my remaining lives                                                                           | Should Have | 2             |
+| 2 | As a Artist, I want to redesign some of the assets to make them clearer and batter guide the player.                    | Should Have | 3             |
+| 3 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                         | Must Have   | 6             |
+| 4 | As a developer, I want to have a menu and settings, so that the players can customize their experience to their liking. | Should Have | 3             |
+| 5 | As a player, I want entities to chase me, so that I feel challenged.                                                    | Must Have   | 2             |
 
 ## Sprint 4 (Draft)
 
-| # | User Story | MoSCoW | Estimate (SP) |
-| - | ---------- | ------ | ------------- |
-| 1 |            |        |               |
+| # | User Story                                                                                                                 | MoSCoW       | Estimate (SP) |
+| - | -------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------- |
+| 1 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                            | Must Have    | 6             |
+| 2 | As an artist, I want redesign the mini-game UI to make it look better.                                                    | Should Have  | 3             |
+| 3 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with. | Should Have  | 2             |
+| 4 | As a designer, I want to make a balance sheet of entities, so that I can understand the balancing.                         | Nice to Have | 1             |
+| 5 | As a designer, I want to add sounds to the game to make the game more interesting.                                         | Should Have  | 2             |
 
 ## Links
 

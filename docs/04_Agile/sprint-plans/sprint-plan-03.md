@@ -62,8 +62,8 @@
 
 ### Story 6 — [Highlights shader]
 
-- [ ] [Follow tutorials]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status:: 🔲 Todo]
-- [ ] [Implement highlights shader]  [owner:: เตชินท์]  [estimate:: 9h]  [status:: 🔲 Todo]
+- [ ] [Follow tutorials]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status:: 🔄 In Progress]
+- [ ] [Implement highlights shader]  [owner:: เตชินท์]  [estimate:: 9h]  [status:: 🔄 In Progress]
 
 ### Story 7 — [Tutorial]
 
