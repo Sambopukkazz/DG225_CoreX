@@ -13,18 +13,18 @@
 |                                                   | จัดการเอกสารใน repo                                | ตรวจสอบเสียงทั้งหมด                          |                                                |
 |                                                   |                                                                  | ตรวจสอบบัค                                            |                                                |
 |                                                   |                                                                  | ปรับโครงสร้าง code                                 |                                                |
-| นาถวัฒน์ (Artist)                         | Redesign asset                                                   | Main menu screen                                                |                                                |
-|                                                   | Dead screen                                                      | Jumpscare scene                                                 |                                                |
-|                                                   | Pause Button UI                                                 |                                                                 |                                                |
-|                                                   | Extra Decoration asset                                           |                                                                 |                                                |
+| นาถวัฒน์ (Artist)                         | Main menu screen                                                 |                                                                 |                                                |
+|                                                   | Jumpscare scene                                                 |                                                                 |                                                |
+|                                                   | วาดรูปลูกตา                                           |                                                                 |                                                |
+|                                                   | win scene                                                       |                                                                 |                                                |
 | ธีนันทนัช (Designer)                    | วาด asset connect the dot                                     | ตรวจ Sound ที่พรภวิษย์หา                       | -                                              |
 |                                                   | ทำ UI เกมเสร็จ เหลือใส่รูปเล็กน้อย | Playtest/Balancing                                              |                                                |
 |                                                   | Playtest/Balancing                                               | Mix sound เพิ่มเล็กน้อย                            |                                                |
 |                                                   | Rrework เสียง scopophobia                                   | ลองฟังเสียงจริงในเกม                        |                                                |
 |                                                   |                                                                  | Design concept entamaphobia                                     |                                                |
-| พรภวิษย์ (UI Designer and Sound engineer) | หา Sound ที่ธีนันทนัชลิสต์                    | ตรวจสอบความถูกต้องของข้อมูลใน GDD  | -                                              |
+| พรภวิษย์ (UI Designer and Sound engineer) | หา Sound ที่ธีนันทนัชลิสต์                    |                                                                 | -                                              |
 |                                                   | แก้เสียงวาล์ว                                       |                                                                 | -                                              |
-|                                                   | หาเสียงที่ยังขาด                                 |                                                                 |                                                |
+|                                                   | ตรวจสอบความถูกต้องของข้อมูลใน GDD   |                                                                 |                                                |
 
 ---
 
