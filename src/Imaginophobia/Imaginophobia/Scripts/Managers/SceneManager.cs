@@ -88,7 +88,7 @@ namespace Imaginophobia {
                 if (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn()) {
                     continue;
                 }
-                if ((trigger.CompareTag("skillcheck") || trigger.CompareTag("dots")) && _player.CurrentAction == CharacterAction.Interacting) {
+                if ((trigger.CompareTag("skillcheck") || trigger.CompareTag("dots")) && _player.CurrentAction == CharacterAction.Repairing) {
                     continue;
                 }
                 if (trigger.CompareTag("hideout") && _player.CurrentAction == CharacterAction.Hiding) {
@@ -147,6 +147,7 @@ namespace Imaginophobia {
 
             _activeScene = new SceneBuilder(sceneName, collisionManager, lightManager);
             SaveManager.ApplyToScene(sceneName, _activeScene.Triggers, lightManager.LightAreas);
+
             _renderer.LoadTilemap(_activeScene.TileMap);
             camera.EnableWorldBounds(_activeScene.TileMap.WorldBounds);
             camera.IsZoomClampedToWorldBounds = true;

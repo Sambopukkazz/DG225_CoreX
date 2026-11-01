@@ -78,7 +78,7 @@ namespace Imaginophobia {
                 if (_progressValue >= 200) {
                     MinigameActive = false;
                     AudioManager.Instance.PlaySFX(SoundEffectName.PipeComplete);
-                    _player.ToggleInteracting();
+                    _player.ToggleRepairing();
                     _trigger.Progress = _progressValue;
                     _trigger.Interactable = false;
                     ObjectiveManager.Complete("valve-done");
@@ -89,7 +89,7 @@ namespace Imaginophobia {
             //(_player.CurrentAction == CharacterAction.Checking || _player.CurrentAction == CharacterAction.Repairing)
             if (InputManager.PressedKey(Keys.Q)) {
                 MinigameActive = false;
-                _player.ToggleInteracting();
+                _player.ToggleRepairing();
                 _trigger.Progress = _progressValue;
                 this.ScreenManager.CloseScreen();
             }

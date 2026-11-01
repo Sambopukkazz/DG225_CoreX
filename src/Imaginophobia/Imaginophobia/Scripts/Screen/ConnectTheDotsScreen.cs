@@ -80,7 +80,7 @@ namespace Imaginophobia {
                         if (_currentPath == null) {
                             GridCell cell = _cells[pos.X, pos.Y];
                             if (cell.IsEndpoint && cell.Color != Color.White) {
-                                AudioManager.Instance.PlaySFX(SoundEffectName.ElecFail);
+                                AudioManager.Instance.PlaySFX(SoundEffectName.ElecFail, volume: 0.4f);
                                 _completedPaths.RemoveAll(path => path.Color == cell.Color);
 
                                 _currentPath = new WirePath { Color = cell.Color };
@@ -97,7 +97,7 @@ namespace Imaginophobia {
                 }
                 else if (mouseStateExtended.WasButtonPressed(MouseButton.Right)) {
                     _completedPaths.Clear();
-                    AudioManager.Instance.PlaySFX(SoundEffectName.ElecFail);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.ElecFail, volume: 0.4f);
                 }
             }
             if (_completedPaths.Count == _colors.Count) {
@@ -123,16 +123,16 @@ namespace Imaginophobia {
                 //endtemp
                 if (_progressValue >= 200) {
                     _trigger.Interactable = false;
-                    if (ObjectiveManager.IsComplete("dots-done")) {
-                        ObjectiveManager.Complete("fixBlackout");
-                    }
+                    //if (ObjectiveManager.IsComplete("dots-done")) {
+                    //    ObjectiveManager.Complete("fixBlackout");
+                    //}
                     ObjectiveManager.Complete("dots-done");
                     ObjectiveManager.RepairPanel(_trigger.Id);
                     SaveManager.TurnAllLightsOn();
                 }
-                AudioManager.Instance.PlaySFX(SoundEffectName.ElecComplete);
+                AudioManager.Instance.PlaySFX(SoundEffectName.ElecComplete, volume: 0.6f);
                 this.ScreenManager.CloseScreen();
-                _player.ToggleInteracting();
+                _player.ToggleRepairing();
             }
 
             if (_player.CurrentAction == CharacterAction.Checking) {
@@ -302,7 +302,7 @@ namespace Imaginophobia {
                 if (targetCell.IsEndpoint && targetCell.Color == path.Color && path.Points.Count > 1) {
                     path.IsComplete = true;
                     _completedPaths.Add(path);
-                    AudioManager.Instance.PlaySFX(SoundEffectName.ElecSuccess);
+                    AudioManager.Instance.PlaySFX(SoundEffectName.ElecSuccess, volume: 0.75f);
                 }
             }
         }

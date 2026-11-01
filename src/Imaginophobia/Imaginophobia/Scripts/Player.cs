@@ -125,11 +125,14 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (InputManager.PressedKey(Keys.F) && CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Hiding) {
+            if (InputManager.PressedKey(Keys.F) && CurrentAction != CharacterAction.Repairing && CurrentAction != CharacterAction.Hiding) {
+                ToggleFlashLight();
+            }
+            else if (InputManager.ReleasedKey(Keys.F) && CurrentAction == CharacterAction.Peeking) {
                 ToggleFlashLight();
             }
 
-            if (CurrentAction == CharacterAction.Interacting || CurrentAction == CharacterAction.Checking) {
+            if (CurrentAction == CharacterAction.Repairing || CurrentAction == CharacterAction.Checking) {
                 //if (KeyboardExtended.GetState().IsKeyDown(Keys.A)) {
                 //    CameraTarget.X = MathHelper.Lerp(CameraTarget.X, Transform.Position.X - 400, 0.1f);
                 //    _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
@@ -179,7 +182,7 @@ namespace Imaginophobia {
                     if (_flashLight.Enabled) {
                         ToggleFlashLight();
                     }
-                    CurrentAction = CharacterAction.Interacting;
+                    CurrentAction = CharacterAction.Repairing;
                 }
 
                 _tweener.Update(Time.DeltaTime);
@@ -215,7 +218,7 @@ namespace Imaginophobia {
                 if (Battery <= 0) {
                     _flashLight.Enabled = false;
                 }
-                Battery -= 3.5f * Time.DeltaTime;
+                Battery -= 1f * Time.DeltaTime;
                 _eyeSightLength = 400;
             }
             else {
@@ -385,6 +388,10 @@ namespace Imaginophobia {
 
         public void ToggleHide() {
             if (Visible && CurrentAction != CharacterAction.Hiding && Time.TimerExist("hideCooldown") == false) {
+                if (_flashLight.Enabled) {
+                    ToggleFlashLight();
+                }
+
                 SetActive(false);
                 _allowMovement = false;
                 FocusLevel = 1.25f;
@@ -418,15 +425,18 @@ namespace Imaginophobia {
             }
         }
 
-        public void ToggleInteracting() {
-            if (CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Checking) {
+        public void ToggleRepairing() {
+            if (CurrentAction != CharacterAction.Repairing && CurrentAction != CharacterAction.Checking) {
+                if (_flashLight.Enabled) {
+                    ToggleFlashLight();
+                }
+
                 _allowMovement = false;
                 _animatedSprite.SetAnimation("back");
-                CurrentAction = CharacterAction.Interacting;
-                _flashLight.Enabled = false;
+                CurrentAction = CharacterAction.Repairing;
                 FocusLevel = 1.25f;
             }
-            else if (CurrentAction == CharacterAction.Interacting || CurrentAction == CharacterAction.Checking) {
+            else if (CurrentAction == CharacterAction.Repairing || CurrentAction == CharacterAction.Checking) {
                 _allowMovement = true;
                 _animatedSprite.SetAnimation("idle");
                 CurrentAction = CharacterAction.Idle;
@@ -436,11 +446,14 @@ namespace Imaginophobia {
 
         public void TogglePeek() {
             if (CurrentAction != CharacterAction.Peeking) {
+                if (_flashLight.Enabled) {
+                    ToggleFlashLight();
+                }
+
                 _allowMovement = false;
                 _animatedSprite.SetAnimation("idle");
                 _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
                 CurrentAction = CharacterAction.Peeking;
-                _flashLight.Enabled = false;
                 FocusLevel = 1.75f;
             }
             else if (CurrentAction == CharacterAction.Peeking) {
@@ -453,10 +466,13 @@ namespace Imaginophobia {
 
         public void ToggleReading() {
             if (CurrentAction != CharacterAction.Reading) {
+                if (_flashLight.Enabled) {
+                    ToggleFlashLight();
+                }
+
                 _allowMovement = false;
                 _animatedSprite.SetAnimation("back");
                 CurrentAction = CharacterAction.Reading;
-                _flashLight.Enabled = false;
                 FocusLevel = 1.25f;
             }
             else if (CurrentAction == CharacterAction.Reading) {

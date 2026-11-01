@@ -46,6 +46,7 @@ namespace Imaginophobia {
             AudioManager.Instance.PlayBackgroundSound(BackgroundSound.AmbElectric);
 
             MainGame.GameState = GameState.Gameplay;
+            MainGame.Loading = false;
         }
 
         public override void Update(GameTime gameTime) {
@@ -74,17 +75,17 @@ namespace Imaginophobia {
         }
 
         private void TogglePause() {
-            if (_pauseMenu.Visible == true && MainGame.GameState == GameState.Pause) {
+            if (_pauseMenu.Visible == true && MainGame.GameState == GameState.Pause && MainGame.Loading == false) {
                 _pauseMenu.Visible = false;
                 MainGame.GameState = GameState.Gameplay;
-                //AudioManager.Instance.ResumeAudio();
-                //Time.TimeScale = 1;
+                AudioManager.Instance.ResumeAudio();
+                Time.TimeScale = 1;
             }
-            else if (_pauseMenu.Visible == false && MainGame.GameState == GameState.Gameplay) {
+            else if (_pauseMenu.Visible == false && MainGame.GameState == GameState.Gameplay && MainGame.Loading == false) {
                 _pauseMenu.Visible = true;
                 MainGame.GameState = GameState.Pause;
-                //AudioManager.Instance.PauseAudio();
-                //Time.TimeScale = 0;
+                AudioManager.Instance.PauseAudio();
+                Time.TimeScale = 0;
             }
         }
 
@@ -93,9 +94,9 @@ namespace Imaginophobia {
         }
 
         private void ReturnToMenu() {
-            if (MainGame.GameState == GameState.Pause) {
+            if (MainGame.Loading == false) {
+                MainGame.Loading = true;
                 MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 1, 1);
-                MainGame.GameState = GameState.Menu;
             }
         }
     }

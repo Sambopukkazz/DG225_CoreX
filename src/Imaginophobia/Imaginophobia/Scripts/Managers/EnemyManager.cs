@@ -28,9 +28,9 @@ namespace Imaginophobia {
         private int _nyctophobiaSpawnChance = 30; // 0-100
         private float _nyctophobiaSpawnInterval = 30;
 
-        private (int, int, int) _entamaphobiaAvailableChance = (10, 50, 65); // Normal, Anxious, Insane
-        private int _entamaphobiaSpawnChance = 10; // 0-100
-        private float _entamaphobiaSpawnInterval = 5;
+        private (int, int, int) _entamaphobiaAvailableChance = (15, 20, 25); // Normal, Anxious, Insane
+        private int _entamaphobiaSpawnChance = 15; // 0-100
+        private float _entamaphobiaSpawnInterval = 3;
         
         private Texture2D _scopophobiaTexture;
         private SpriteSheet _autophobiaSpriteSheet;
@@ -80,10 +80,9 @@ namespace Imaginophobia {
             Timer nyctoTimer = Time.AddTimer(SpawnNyctophobia, _nyctophobiaSpawnInterval, "NyctoSpawnTimer");
             nyctoTimer.Pause();
             nyctoTimer.Repeat = true;
-            //Timer entamaTimer = Time.AddTimer(SpawnEntamaphobia, _entamaphobiaSpawnInterval, "EntamaSpawnTimer");
-            //entamaTimer.Pause();
-            //entamaTimer.Repeat = true;
-            //Time.AddTimer(60,"EntamaCooldown");
+            Timer entamaTimer = Time.AddTimer(SpawnEntamaphobia, _entamaphobiaSpawnInterval, "EntamaSpawnTimer");
+            entamaTimer.Repeat = true;
+            Time.AddTimer(60, "EntamaCooldown");
         }
 
         public void Update(Rectangle worldBound) {
@@ -103,6 +102,7 @@ namespace Imaginophobia {
                     Time.GetTimer("ScopoSpawnTimer").Resume();
                     Time.GetTimer("AutoSpawnTimer").Resume();
                     Time.GetTimer("NyctoSpawnTimer").Resume();
+                    Time.GetTimer("EntamaSpawnTimer").Pause();
                 }
             }
             else {
@@ -110,14 +110,11 @@ namespace Imaginophobia {
                 Time.GetTimer("ScopoSpawnTimer").Pause();
                 Time.GetTimer("AutoSpawnTimer").Pause();
                 Time.GetTimer("NyctoSpawnTimer").Pause();
+                Time.GetTimer("EntamaSpawnTimer").Resume();
             }
 
             if(_worldBound != worldBound) {
                 _worldBound = worldBound;
-            }
-
-            if (InputManager.PressedKey(Keys.G)) {
-                SpawnEntamaphobia();
             }
         }
 
@@ -222,19 +219,14 @@ namespace Imaginophobia {
                 return;
             }
 
-            //int randomNumber = _rand.Next(0, 101);
+            int randomNumber = _rand.Next(0, 101);
 
-            //if (randomNumber < _entamaphobiaSpawnChance) {
-            //    Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
+            if (randomNumber < _entamaphobiaSpawnChance) {
+                Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
 
-            //    Entamaphobia entamaphobia = new Entamaphobia(_player, door);
-            //    _enemies.Add(entamaphobia);
-            //}
-
-            Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
-
-            Entamaphobia entamaphobia = new Entamaphobia(_player, door);
-            _enemies.Add(entamaphobia);
+                Entamaphobia entamaphobia = new Entamaphobia(_player, door);
+                _enemies.Add(entamaphobia);
+            }
         }
 
         public void ClearEnemies() {
@@ -249,16 +241,19 @@ namespace Imaginophobia {
                 _autophobiaSpawnChance = _autophobiaAvailableChance.Item2;
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item2;
                 _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item2;
+                _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item2;
             }
             else if (_player.SanityState == SanityState.Insane) {
                 _autophobiaSpawnChance = _autophobiaAvailableChance.Item3;
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item3;
                 _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item3;
+                _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item3;
             }
             else if (_player.SanityState == SanityState.Normal) {
                 _autophobiaSpawnChance = _autophobiaAvailableChance.Item1;
                 _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item1;
                 _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item1;
+                _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item1;
             }
         }
 

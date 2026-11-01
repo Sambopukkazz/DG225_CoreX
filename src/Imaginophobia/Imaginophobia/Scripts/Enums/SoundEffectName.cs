@@ -36,7 +36,8 @@ namespace Imaginophobia {
         LightFlickerShort1,
         LightFlickerShort2,
         LightFlickerShort3,
-        PageAdvance,
-        PageReverse
+        ClipboardPageAdvance,
+        ClipboardPageReverse,
+        ClipboardCheck
     }
 }

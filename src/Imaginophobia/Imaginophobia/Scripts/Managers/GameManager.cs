@@ -52,13 +52,17 @@ namespace Imaginophobia {
             Time.AddTimer(_player.Dead, 481, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
-            //Time.TimeScale = 1;
+            Time.TimeScale = 1;
             //temp-
             //_cameraShaker = new CameraShaker();
 
         }
 
         public void Update(GameTime gameTime) {
+            if (MainGame.GameState == GameState.Pause) {
+                return;
+            }
+
             InputManager.Update();
 
             _player.Update();
@@ -174,7 +178,7 @@ namespace Imaginophobia {
                 ObjectiveManager.Complete("entered-sewer");
             }
 
-            MainGame.GameState = GameState.Gameplay;
+            MainGame.Loading = false;
         }
         
         private void OnEnemySpawned(GameObject enemy) {

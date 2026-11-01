@@ -36,9 +36,9 @@ namespace Imaginophobia {
             Transform.Scale = Vector2.One * 4;
             _size = new Vector2(480, 110) * Transform.Scale;
 
-            AudioManager.Instance.PlaySFX(SoundEffectName.ScopoIndicator);
-           // _audioSource = AudioManager.Instance.Play3DSFX(_origin,SoundEffectName.ScopoIndicator, 600, 15000);
-            //AddChild(_audioSource);
+            //AudioManager.Instance.PlaySFX(SoundEffectName.ScopoIndicator);
+            _audioSource = AudioManager.Instance.Play3DSFX(_origin, SoundEffectName.ScopoIndicator, 600, 15000);
+            AddChild(_audioSource);
             UpdateShape();
             
 
@@ -81,7 +81,7 @@ namespace Imaginophobia {
         }
 
         public override void OnDestroyed() {
-            //_audioSource.SetActive(false);
+            _audioSource.SetActive(false);
             Destroy(this);
         }
     }

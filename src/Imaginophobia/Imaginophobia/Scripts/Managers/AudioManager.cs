@@ -67,6 +67,7 @@ namespace Imaginophobia {
         private Dictionary<SoundEffectName, SoundEffect> SfxByName;
         private Dictionary<BackgroundSound, Song> BgsByName;
         private Random _rand;
+        private float _previousMediaVolume;
 
         public AudioManager() {
             if (s_instance != null) {
@@ -114,8 +115,9 @@ namespace Imaginophobia {
                 { SoundEffectName.LightFlickerShort1, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_01") },
                 { SoundEffectName.LightFlickerShort2, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_02") },
                 { SoundEffectName.LightFlickerShort3, content.Load<SoundEffect>("Audio/sfx_light_flicker_short_03") },
-                { SoundEffectName.PageAdvance, content.Load<SoundEffect>("Audio/sfx_clipboard_pageturn") },
-                { SoundEffectName.PageReverse, content.Load<SoundEffect>("Audio/sfx_clipboard_pageturnback") }
+                { SoundEffectName.ClipboardPageAdvance, content.Load<SoundEffect>("Audio/sfx_clipboard_pageturn") },
+                { SoundEffectName.ClipboardPageReverse, content.Load<SoundEffect>("Audio/sfx_clipboard_pageturnback") },
+                { SoundEffectName.ClipboardCheck, content.Load<SoundEffect>("Audio/sfx_clipboard_check") }
             };
 
             //int MyBQR = FilterLoader.RegisterBiquadResonantFilter(SoundFilterType.LowPass, strength: 1f, frequency: 2000, resonance: 15);
@@ -289,14 +291,6 @@ namespace Imaginophobia {
             }
         }
 
-        public void ChangeVolume(SoundEffectName name, float volume) {
-            if (_activeAudioSources.Exists(audio => audio.Name == name.ToString())) {
-                foreach (var audioSource in _activeAudioSources.Where(audio => audio.Name == name.ToString())) {
-                    audioSource.AudioPlayer.Volume = volume;
-                }
-            }
-        }
-
         //public void ClearSFXs(params string[] soundEffectNames) {
         //    var test = _activeAudioSources.ExceptBy(soundEffectNames, p => p.Name);
         //    foreach (AudioSource audioSource in test)  {
@@ -304,6 +298,29 @@ namespace Imaginophobia {
         //        audioSource.SetActive(false);
         //    }
         //}
+
+        public void ChangeSFXVolume(SoundEffectName name, float volume) {
+            if (_activeAudioSources.Exists(audio => audio.Name == name.ToString())) {
+                foreach (var audioSource in _activeAudioSources.Where(audio => audio.Name == name.ToString())) {
+                    audioSource.AudioPlayer.Volume = volume;
+                }
+            }
+        }
+
+        public void ChangeMediaVolume(bool swapBack, float volumeScale = 1 ) {
+            if (swapBack) {
+                MediaPlayer.Volume = _previousMediaVolume;
+            }
+            else {
+                _previousMediaVolume = MediaPlayer.Volume;
+                MediaPlayer.Volume = _previousMediaVolume * volumeScale;
+            }
+        }
+
+        public void FadeSFXVolumeOut(SoundEffectName name, float time) {
+            AudioSource audioSource = _activeAudioSources.Find(audio => audio.Name == name.ToString());
+            audioSource.FadeVolumnOut(time);
+        }
 
         public void PauseAudio() {
             // Pause any active songs playing.

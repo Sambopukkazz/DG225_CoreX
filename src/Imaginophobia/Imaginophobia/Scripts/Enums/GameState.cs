@@ -11,6 +11,6 @@ namespace Imaginophobia {
         Lose,
         Win,
         Pause,
-        Loading
+        Jumpscare
     }
 }

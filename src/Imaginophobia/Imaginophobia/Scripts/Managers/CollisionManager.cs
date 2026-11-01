@@ -47,7 +47,7 @@ namespace Imaginophobia {
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
 
-                if (MainGame.GameState == GameState.Loading || trigger.Interactable == false || (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn())) {
+                if (MainGame.Loading || trigger.Interactable == false || (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn())) {
                     continue;
                 }
 
@@ -77,21 +77,21 @@ namespace Imaginophobia {
                     }
                 }
                 else if(trigger.CompareTag("skillcheck")) {
-                    if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking)) {
+                    if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking)) {
                         //Skill Check
                         Screen screen = new SpinTheValveScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
-                        _player.ToggleInteracting();
+                        _player.ToggleRepairing();
                     }
                     
                 }
                 else if (trigger.CompareTag("dots")) {
-                    if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking)) {
+                    if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking)) {
                         //Connect the dot
                         Screen screen = new ConnectTheDotsScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
-                        AudioManager.Instance.PlaySFX(SoundEffectName.ElecRepairing);
-                        _player.ToggleInteracting();
+                        AudioManager.Instance.PlaySFX(SoundEffectName.ElecRepairing, volume: 0.5f);
+                        _player.ToggleRepairing();
 
                         ObjectiveManager.Complete("repair");
                         ObjectiveManager.Complete("interact");
@@ -101,10 +101,12 @@ namespace Imaginophobia {
                 else if (trigger.CompareTag("report")) {
                     if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Reading) {
                         //Connect the dot
-                        Screen screen = new ClipboardScreen(_player);
-                        MainGame.ScreenManager.ShowScreen(screen);
-                        _player.ToggleReading();
-                        ObjectiveManager.Complete("interact");
+                        if (MainGame.ScreenManager.ActiveScreen is not ClipboardScreen) {
+                            Screen screen = new ClipboardScreen(_player);
+                            MainGame.ScreenManager.ShowScreen(screen);
+                            _player.ToggleReading();
+                            ObjectiveManager.Complete("interact");
+                        }
                     }
 
                 }

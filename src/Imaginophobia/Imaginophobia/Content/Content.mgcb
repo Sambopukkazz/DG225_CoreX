@@ -49,6 +49,13 @@
 /processorParam:Version=3.8.5.0
 /build:Audio/bgm_win_screen.mp3
 
+#begin Audio/sfx_clipboard_check.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/processorParam:Version=3.8.5.0
+/build:Audio/sfx_clipboard_check.mp3
+
 #begin Audio/sfx_clipboard_pageturn.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
@@ -387,6 +394,25 @@
 /processorParam:Version=3.8.5.0
 /build:Phobias/sprite_scopophobia.png
 
+#begin Phobias/spritesheet_entamaphobia-texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:Phobias/spritesheet_entamaphobia-texture.png
+
+#begin Phobias/spritesheet_entamaphobia.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/processorParam:Version=6.1.1.0
+/build:Phobias/spritesheet_entamaphobia.json
+
 #begin Shaders/BottomFade.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -682,32 +708,6 @@
 /processorParam:Version=3.8.5.0
 /build:UI/sprite_button_pause.png
 
-#begin UI/sprite_clipboard_er1_page1.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:UI/sprite_clipboard_er1_page1.png
-
-#begin UI/sprite_clipboard_er1_page2.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/processorParam:Version=3.8.5.0
-/build:UI/sprite_clipboard_er1_page2.png
-
 #begin UI/sprite_peek_button.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -746,6 +746,25 @@
 /processorParam:TextureFormat=Color
 /processorParam:Version=3.8.5.0
 /build:UI/sprite_valve.png
+
+#begin UI/spritesheet_clipboard-texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:UI/spritesheet_clipboard-texture.png
+
+#begin UI/spritesheet_clipboard.json
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
+/processorParam:Version=6.1.1.0
+/build:UI/spritesheet_clipboard.json
 
 #begin UI/spritesheet_minigame_dot-texture.png
 /importer:TextureImporter

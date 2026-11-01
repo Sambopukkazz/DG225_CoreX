@@ -33,10 +33,10 @@ namespace Imaginophobia {
         public override void Update(GameTime gameTime) {
 
             if (_transitionState == TransitionState.In && _fadeCurrentTime > 0) {
-                _fadeCurrentTime -= Time.DeltaTime;
+                _fadeCurrentTime -= Time.UnscaledDeltaTime;
             }
             else if (_transitionState == TransitionState.Out && _fadeCurrentTime < _fadeTargetTime) {
-                _fadeCurrentTime += Time.DeltaTime;
+                _fadeCurrentTime += Time.UnscaledDeltaTime;
             }
             
             _fadeValue = _fadeCurrentTime / _fadeTargetTime;
@@ -86,10 +86,11 @@ namespace Imaginophobia {
             _fadeCurrentTime = seconds;
         }
         public void FadeOut(float seconds) {
-            MainGame.GameState = GameState.Loading;
             _transitionState = TransitionState.Out;
             _fadeTargetTime = seconds;
             _fadeCurrentTime = 0;
+
+            MainGame.Loading = true;
         }
 
         public void PulseFade(float fadeOutSeconds, float fadeInSeconds) {

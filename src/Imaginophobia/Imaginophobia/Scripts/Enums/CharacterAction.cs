@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public enum CharacterAction {
-        Interacting, 
+        Repairing, 
         Checking,
         Reading,
         Peeking,

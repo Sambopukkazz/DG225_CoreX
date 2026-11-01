@@ -14,17 +14,23 @@ namespace Imaginophobia {
         public static float DeltaTime { get; private set; }
         public static float UnscaledDeltaTime { get; private set; }
         public static float TimeScale { get; set; } = 1;
-        public static float TimeDilation { get; set; }
+        //public static float TimeDilation { get; set; }
         public static TimeSpan ElapsedTime { get; private set; }
         public static List<Timer> Timers { get; private set; } = new();
 
         public static void Update(GameTime gameTime) {
-            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            DeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds * TimeScale;
             UnscaledDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             ElapsedTime = gameTime.ElapsedGameTime;
 
             for (int i = 0; i < Timers.Count; i++) {
-                Timers[i].Update(DeltaTime);
+                if (Timers[i].Name == "ScreenTimer") {
+                    Timers[i].Update(UnscaledDeltaTime);
+                }
+                else {
+                    Timers[i].Update(DeltaTime);
+                }
+                
                 if (Timers[i].Active == false) {
                     Timers.RemoveAt(i);
                     i--;

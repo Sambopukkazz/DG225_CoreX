@@ -13,9 +13,9 @@ namespace Imaginophobia {
     public class AudioSource : GameObject,IDisposable {
         public SoundEffectInstance AudioPlayer { get; private set; }
         private AudioEmitter _emitter;
-
         private float _duration;
         private float _volume;
+        private float _fadeSpeed;
         private float _innerRadius = 100;
         private float _outerRadius = 200;
         const float SPEED_OF_SOUND = 343.5f;
@@ -38,6 +38,21 @@ namespace Imaginophobia {
             base.Update();
             if (_emitter != null) {
                 _emitter.Position = new Vector3(Transform.Position.X, Transform.Position.Y, 0);
+            }
+
+            if (Tag == "FadeOut" && AudioPlayer.Volume > 0) {
+                if (AudioPlayer.Volume - (_fadeSpeed * Time.DeltaTime) >= 0) {
+                    AudioPlayer.Volume -= _fadeSpeed * Time.DeltaTime;
+                }
+                else {
+                    AudioPlayer.Volume = 0;
+                }
+                
+                _volume = AudioPlayer.Volume;
+
+                if (AudioPlayer.Volume <= 0) {
+                    SetActive(false);
+                }
             }
         }
 
@@ -84,13 +99,13 @@ namespace Imaginophobia {
                 AudioPlayer.Pan = MathHelper.Clamp(directionFromListener.X, -1f, 1f);
             }
 
-            float vEmitter = Vector2.Dot(Vector2.Zero, directionFromListener);
-            if (emitter != null) {
-                vEmitter = Vector2.Dot(emitter.Velocity, directionFromListener);
-            }
-            float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
-            float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
-            AudioPlayer.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
+            ////float vEmitter = Vector2.Dot(Vector2.Zero, directionFromListener);
+            ////if (emitter != null) {
+            ////    vEmitter = Vector2.Dot(emitter.Velocity, directionFromListener);
+            ////}
+            ////float vListener = Vector2.Dot(player.Velocity, directionFromListener) / 10f;
+            ////float pitchFactor = (SPEED_OF_SOUND + vListener) / (SPEED_OF_SOUND + vEmitter);
+            ////AudioPlayer.Pitch = MathHelper.Clamp(pitchFactor - 1f, -1f, 1f);
 
             //Vector3 toEmitter = _emitter.Position - player.Listener.Position;
             //float distance = toEmitter.Length();
@@ -105,6 +120,11 @@ namespace Imaginophobia {
             //float vS = Vector2.Dot(_emitter.Velocity, u) * DopplerUnitsPerPixel; // same scale on both, not /10
             //float pitchFactor = (SPEED_OF_SOUND + vL) / (SPEED_OF_SOUND + vS); // clamp denominator if you keep c
             //AudioPlayer.Pitch = MathHelper.Clamp((float)Math.Log(pitchFactor, 2), -1f, 1f); // octaves
+        }
+
+        public void FadeVolumnOut(float time) {
+            Tag = "FadeOut";
+            _fadeSpeed = AudioPlayer.Volume / time;
         }
 
         ~AudioSource() => Dispose(false);

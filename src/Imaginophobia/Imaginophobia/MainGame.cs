@@ -23,6 +23,7 @@ namespace Imaginophobia {
         public static new ContentManager Content { get; private set; }
         public static ModifiedScreenManager ScreenManager;
         public static GameState GameState { get; set; }
+        public static bool Loading;
         
         private GumService Gum => GumService.Default;
 

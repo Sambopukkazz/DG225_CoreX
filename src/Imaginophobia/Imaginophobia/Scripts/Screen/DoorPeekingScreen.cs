@@ -1,15 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
+using Penumbra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Input;
-using Penumbra;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Imaginophobia {
     public class DoorPeekingScreen : Screen {
@@ -18,6 +19,7 @@ namespace Imaginophobia {
         private PointLight _light;
         private Texture2D _sewerBackground;
         private Texture2D _doorForegound;
+        private Texture2DAtlas _textureAtlas;
 
         public DoorPeekingScreen(Player player, Trigger trigger) {
             _door = trigger;
@@ -31,6 +33,8 @@ namespace Imaginophobia {
             }
             
             _doorForegound = MainGame.Content.Load<Texture2D>("UI/foreground_peek_door");
+
+            _textureAtlas = MainGame.Content.Load<Texture2DAtlas>("Phobias/spritesheet_entamaphobia");
 
             _light = new PointLight() {
                 Position = new Vector2(540, 810),
@@ -47,8 +51,11 @@ namespace Imaginophobia {
             }
 
             LightManager.Penumbra.AmbientColor = ColorHelper.FromHex("#615D5D");
-
             LightManager.Penumbra.Lights.Add(_light);
+
+            AudioManager.Instance.ChangeMediaVolume(false, 0.5f);
+
+            MainGame.Loading = false;
         }
 
         public override void Update(GameTime gameTime) {
@@ -68,8 +75,10 @@ namespace Imaginophobia {
 
                     AudioManager.Instance.UnmuteAudio();
 
+                    AudioManager.Instance.ChangeMediaVolume(true, 0.5f);
                     MainGame.GameState = GameState.Gameplay;
                     MainGame.ScreenManager.FadeIn(0.5f);
+                    MainGame.Loading = false;
                 };
 
                 _player.TogglePeek();
@@ -87,31 +96,16 @@ namespace Imaginophobia {
             spriteBatch.Begin();
             spriteBatch.Draw(_sewerBackground, Vector2.Zero, Color.White);
 
-            Color color = Color.Black;
-            switch (_door.Progress) {
-                case 50:
-                    color = Color.Green;
-                    break;
-                case 100:
-                    color = Color.Yellow;
-                    break;
-                case 150:
-                    color = Color.Orange;
-                    break;
-                case 200:
-                    color = Color.Red;
-                    break;
+            if (_door.Progress != 0) {
+                spriteBatch.Draw(_textureAtlas[$"entama_stage_{_door.Progress}"], Vector2.Zero, Color.White);
             }
 
-            //if (_light.Enabled == false) {
-            //    spriteBatch.FillRectangle(260, 90, 1400, 900, Color.Black * 0.7f);
-            //}
-            //else if (_light.Enabled == true) {
-            //    spriteBatch.FillRectangle(960, 540, 200, 200, color);
-            //}
-            spriteBatch.FillRectangle(960, 540, 200, 200, color);
-
             spriteBatch.Draw(_doorForegound, Vector2.Zero, Color.White);
+
+            if (_door.Progress > 2) {
+                spriteBatch.Draw(_textureAtlas[$"entama_hand"], Vector2.Zero, Color.White);
+            }
+
             spriteBatch.End();
 
             LightManager.Penumbra.Draw(gameTime);

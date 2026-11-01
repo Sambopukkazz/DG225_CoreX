@@ -126,7 +126,7 @@ namespace Imaginophobia {
 
             MainGame.SpriteBatch.Begin();
             Color color;
-            if (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) {
+            if (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking) {
                 if (_player.CollidingTrigger != null && _player.CollidingTrigger.Interactable) {
                     if (_player.CollidingTrigger.Tag == "door") {
                         if (_player.CollidingTrigger.Name == Scene.tilemap_sewer.ToString()) {
@@ -280,7 +280,7 @@ namespace Imaginophobia {
         }
 
         public void ZoomVignette() {
-            if (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) {
+            if (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking) {
                 _vignetteOverlay.CameraZoom = _camera.Zoom;
             }
 
