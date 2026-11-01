@@ -35,7 +35,7 @@
 | 8  | As a designer, I want to add tutorials for players, so that they understand how to play the game easily.                                | ตอนเข้าด่านจะมี tutorial สอนเล่น + design ui ในหน้า minigame ต่างๆ                         | 2             | 3      |
 | 9  | As a designer, I want to overhaul game's menu, so that it's more clean and understandable to use.                                       | จัดระเบียบปุ่มต่างๆใน menu                                                                             | 3             | 3      |
 | 10 | As a designer, I want to add sounds to the game to make the game more interesting                                                       | เสียง loop แล้วไม่ติดขัด เสียงไม่ดังจนเกินไป แยกเสียงชัดเจน              | 2             | 4      |
-| 11 | As a developer, I want to add deathscreen/winscreen, so that the player knows if they win/lose.                                         | หน้าตายมีให้กดกลับ menu หรือเริ่มใหม่ มี tip สุ่มบอก หน้าผ่านบอกเวลา | 4             |        |
+| 11 | As a developer, I want to add deathscreen/winscreen, so that the player knows if they win/lose.                                         | หน้าตายมีให้กดกลับ menu หรือเริ่มใหม่ มี tip สุ่มบอก หน้าผ่านบอกเวลา | 4             | 4      |
 
 ## Nice to Have
 
