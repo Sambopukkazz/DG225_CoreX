@@ -43,9 +43,13 @@ namespace Imaginophobia {
             //if(_collisionWorld.)
             FocusedTrigger = null;
             _player.CollidingTrigger = null;
-            //Player with Minigame triggers
+            //Player with every triggers
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
+
+                if (MainGame.GameState == GameState.Loading || trigger.Interactable == false || (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn())) {
+                    continue;
+                }
 
                 // Nearest wins, so overlapping triggers don't leave the highlight on the wrong object
                 if (FocusedTrigger == null) {
@@ -62,16 +66,18 @@ namespace Imaginophobia {
                 }
 
                 if (trigger.CompareTag("hideout")) {
-                    if(KeyboardExtended.GetState().WasKeyPressed(Keys.Space)) {
+                    if(InputManager.PressedKey(Keys.Space)) {
                         if (_player.CurrentAction != CharacterAction.Hiding && Time.TimerExist("hideCooldown") == false) {
                             _player.PreviousPos = _player.Transform.Position;
                             _player.Transform.Position = trigger.Shape.BoundingBox.Center;
                         }
                         _player.ToggleHide();
+
+                        ObjectiveManager.Complete("interact");
                     }
                 }
                 else if(trigger.CompareTag("skillcheck")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) && trigger.Interactable) {
+                    if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking)) {
                         //Skill Check
                         Screen screen = new SpinTheValveScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
@@ -80,32 +86,41 @@ namespace Imaginophobia {
                     
                 }
                 else if (trigger.CompareTag("dots")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking) && trigger.Interactable) {
+                    if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Interacting && _player.CurrentAction != CharacterAction.Checking)) {
                         //Connect the dot
                         Screen screen = new ConnectTheDotsScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
                         AudioManager.Instance.PlaySFX(SoundEffectName.ElecRepairing);
                         _player.ToggleInteracting();
+
                         ObjectiveManager.Complete("repair");
+                        ObjectiveManager.Complete("interact");
                     }
                     
                 }
                 else if (trigger.CompareTag("report")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CurrentAction != CharacterAction.Reading && trigger.Interactable) {
+                    if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Reading) {
                         //Connect the dot
                         Screen screen = new ClipboardScreen(_player);
                         MainGame.ScreenManager.ShowScreen(screen);
-                        //AudioManager.Instance.PlaySFX(SoundEffectName.Paper);
                         _player.ToggleReading();
+                        ObjectiveManager.Complete("interact");
                     }
 
                 }
                 else if (trigger.CompareTag("door")) {
-                    if (KeyboardExtended.GetState().WasKeyPressed(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
-                        ObjectiveManager.Complete("door");
+                    if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
+                        //Exit door skips some of the first tutorial
+                        ObjectiveManager.Complete("move");
+                        ObjectiveManager.Complete("interact");
+                        ObjectiveManager.Complete("repair");
+                        ObjectiveManager.Complete("dots-done");
+                        ObjectiveManager.Complete("peek");
+                        ObjectiveManager.Complete("door-open");
+                   
                         DoorInteracted?.Invoke(trigger.Name);
                     }
-                    else if (KeyboardExtended.GetState().WasKeyPressed(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
+                    else if (InputManager.PressedKey(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
                         _player.TogglePeek();
                         Screen screen = new DoorPeekingScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen, 0.5f, 0.5f);

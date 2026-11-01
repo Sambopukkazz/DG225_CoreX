@@ -42,6 +42,8 @@ namespace Imaginophobia {
 
             AudioManager.Instance.ClearSFXs();
             AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmMainMenu);
+            AudioManager.Instance.UnmuteAudio();
+
             MainGame.GameState = GameState.Menu;
         }
 

@@ -80,9 +80,10 @@ namespace Imaginophobia {
             Timer nyctoTimer = Time.AddTimer(SpawnNyctophobia, _nyctophobiaSpawnInterval, "NyctoSpawnTimer");
             nyctoTimer.Pause();
             nyctoTimer.Repeat = true;
-            Timer entamaTimer = Time.AddTimer(SpawnEntamaphobia, _entamaphobiaSpawnInterval, "EntamaSpawnTimer");
-            entamaTimer.Pause();
-            entamaTimer.Repeat = true;
+            //Timer entamaTimer = Time.AddTimer(SpawnEntamaphobia, _entamaphobiaSpawnInterval, "EntamaSpawnTimer");
+            //entamaTimer.Pause();
+            //entamaTimer.Repeat = true;
+            //Time.AddTimer(60,"EntamaCooldown");
         }
 
         public void Update(Rectangle worldBound) {
@@ -113,6 +114,10 @@ namespace Imaginophobia {
 
             if(_worldBound != worldBound) {
                 _worldBound = worldBound;
+            }
+
+            if (InputManager.PressedKey(Keys.G)) {
+                SpawnEntamaphobia();
             }
         }
 
@@ -213,17 +218,23 @@ namespace Imaginophobia {
         }
 
         public void SpawnEntamaphobia() {
-            if (Time.TimerExist("EntamaCooldown") || HasActiveEntamaphobia()) {
+            if (Time.TimerExist("EntamaCooldown") || HasActiveEntamaphobia() || _player.CurrentAction == CharacterAction.Peeking) {
                 return;
             }
 
-            int randomNumber = _rand.Next(0, 101);
+            //int randomNumber = _rand.Next(0, 101);
 
-            if (randomNumber < _entamaphobiaSpawnChance) {
-                Entamaphobia entamaphobia = new Entamaphobia(_player);
-                _enemies.Add(entamaphobia);
-                //EnemySpawned?.Invoke(entamaphobia);
-            }
+            //if (randomNumber < _entamaphobiaSpawnChance) {
+            //    Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
+
+            //    Entamaphobia entamaphobia = new Entamaphobia(_player, door);
+            //    _enemies.Add(entamaphobia);
+            //}
+
+            Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
+
+            Entamaphobia entamaphobia = new Entamaphobia(_player, door);
+            _enemies.Add(entamaphobia);
         }
 
         public void ClearEnemies() {

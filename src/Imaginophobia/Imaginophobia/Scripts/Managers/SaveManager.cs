@@ -68,6 +68,15 @@ namespace Imaginophobia {
             Flush();
         }
 
+        // --- true only if the sewer HAS a save entry and every light in it is ON ---
+        public static bool AllSewerLightsAreOn() {
+            if (!_data.Scenes.TryGetValue(Scene.tilemap_sewer.ToString(), out SceneData scene))
+                return false;                       // no sewer save entry
+            if (scene.Lights.Count == 0)
+                return false;                       // entry exists but no lights recorded
+            return scene.Lights.All(l => l.On);
+        }
+
         public static void ResetScene(string sceneName) {
             _data.Scenes.Remove(sceneName);   // next load of this scene finds no entry → triggers fresh
             Flush();

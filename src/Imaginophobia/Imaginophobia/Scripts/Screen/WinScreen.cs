@@ -49,6 +49,7 @@ namespace Imaginophobia {
             _root.AddToRoot();
 
             AudioManager.Instance.PlayBackgroundSound(BackgroundSound.BgmWinScreen);
+            AudioManager.Instance.UnmuteAudio();
 
             MainGame.GameState = GameState.Win;
         }

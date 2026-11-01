@@ -82,10 +82,10 @@ namespace Imaginophobia {
             _tileHighlight.Clear();
 
             foreach (Trigger trigger in scene.Triggers) {
-                if (trigger.CompareTag("skillcheck") && ObjectiveManager.IsValveRepaired(trigger.Id)) {
+                if (trigger.Interactable == false) {
                     continue;
                 }
-                if (trigger.CompareTag("dots") && ObjectiveManager.IsPanelRepaired(trigger.Id)) {
+                if (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn()) {
                     continue;
                 }
                 if ((trigger.CompareTag("skillcheck") || trigger.CompareTag("dots")) && _player.CurrentAction == CharacterAction.Interacting) {
@@ -94,7 +94,6 @@ namespace Imaginophobia {
                 if (trigger.CompareTag("hideout") && _player.CurrentAction == CharacterAction.Hiding) {
                     continue;
                 }
-
                 if (trigger.Tiles.Count == 0) {
                     continue;
                 }

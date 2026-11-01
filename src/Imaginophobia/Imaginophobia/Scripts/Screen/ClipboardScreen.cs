@@ -28,14 +28,14 @@ namespace Imaginophobia {
         }
 
         public override void Update(GameTime gameTime) {
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.A)) {
+            if (InputManager.PressedKey(Keys.A)) {
                 AudioManager.Instance.PlaySFX(SoundEffectName.PageReverse);
             }
-            else if (KeyboardExtended.GetState().WasKeyPressed(Keys.D)) {
+            else if (InputManager.PressedKey(Keys.D)) {
                 AudioManager.Instance.PlaySFX(SoundEffectName.PageAdvance);
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q)) {
+            if (InputManager.PressedKey(Keys.Q)) {
                 _player.ToggleReading();
                 this.ScreenManager.CloseScreen();
             }

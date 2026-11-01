@@ -55,7 +55,7 @@ namespace Imaginophobia {
             
             _light.Enabled = _player.FlashLight.Enabled;
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) && _player.CurrentAction == CharacterAction.Peeking) {
+            if (InputManager.PressedKey(Keys.Q) && _player.CurrentAction == CharacterAction.Peeking) {
                 Action quit = () => {
                     LightManager.Penumbra.Lights.Remove(_light);
                     _light = null;
@@ -66,10 +66,14 @@ namespace Imaginophobia {
                         light.Enabled = true;
                     }
 
+                    AudioManager.Instance.UnmuteAudio();
+
+                    MainGame.GameState = GameState.Gameplay;
                     MainGame.ScreenManager.FadeIn(0.5f);
                 };
 
                 _player.TogglePeek();
+                ObjectiveManager.Complete("peek");
                 MainGame.ScreenManager.CloseScreen(0.5f);
                 Time.AddTimer(quit, 0.5f);
             }
@@ -99,12 +103,13 @@ namespace Imaginophobia {
                     break;
             }
 
-            if (_light.Enabled == false) {
-                spriteBatch.FillRectangle(260, 90, 1400, 900, Color.Black * 0.7f);
-            }
-            else if (_light.Enabled == true) {
-                spriteBatch.FillRectangle(260, 90, 1400, 900, color);
-            }
+            //if (_light.Enabled == false) {
+            //    spriteBatch.FillRectangle(260, 90, 1400, 900, Color.Black * 0.7f);
+            //}
+            //else if (_light.Enabled == true) {
+            //    spriteBatch.FillRectangle(960, 540, 200, 200, color);
+            //}
+            spriteBatch.FillRectangle(960, 540, 200, 200, color);
 
             spriteBatch.Draw(_doorForegound, Vector2.Zero, Color.White);
             spriteBatch.End();

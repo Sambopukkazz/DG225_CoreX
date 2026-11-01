@@ -135,7 +135,7 @@ namespace Imaginophobia {
 
         private void OnDoorInteracted(string sceneName) {
             if (sceneName == "end") {
-                if (ObjectiveManager.AllValvesRepaired || KeyboardExtended.GetState().IsKeyDown(Keys.Up)) {
+                if (ObjectiveManager.AllValvesRepaired || InputManager.HoldKey(Keys.Up)) {
                     ObjectiveManager.Complete("exit-ladder");
                     SaveManager.Delete();
                     ObjectiveManager.ResetValves();
@@ -172,7 +172,9 @@ namespace Imaginophobia {
             AudioManager.Instance.PlaySFX(SoundEffectName.DoorClose);
             if (SceneManager.GetActiveScene()?.Name == "tilemap_sewer") {
                 ObjectiveManager.Complete("entered-sewer");
-            } 
+            }
+
+            MainGame.GameState = GameState.Gameplay;
         }
         
         private void OnEnemySpawned(GameObject enemy) {
@@ -186,11 +188,6 @@ namespace Imaginophobia {
                 _lightManager.NyctoAlarmAll();
                 return;
             }
-            else if (enemy is Entamaphobia entamaphobia && SceneManager.GetActiveScene().Name != "tilemap_sewer") {
-                Trigger door = SceneManager.GetActiveScene().Triggers.Find(item => item.Name == "tilemap_sewer");
-                entamaphobia.Door = door;
-                return;
-            }
 
             _collisionManager.AddCollider(enemy as ICollisionActor, "enemies");
 
@@ -201,15 +198,18 @@ namespace Imaginophobia {
                 ObjectiveManager.ResetPanels();
                 _uiManager.BlackScreen();
                 _lightManager.ScopoAlarmAll();
-                //_lightManager.ScopoAlarmAll();
             }
         }
 
         private void OnEnemyRemoved(GameObject enemy) {
-            if (enemy is Scopophobia && ObjectiveManager.IsComplete("fixBlackout") == false) {
-                _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
+            //if (enemy is Scopophobia && ObjectiveManager.IsComplete("fixBlackout") == false) {
+            //    _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
+            //}
+            if (enemy is Nyctophobia || enemy is Entamaphobia) {
+                return;
             }
-            else if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false) {
+
+            if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false) {
                 ObjectiveManager.Complete("collidedAutophobia");
                 _uiManager.ShowMessage("Flashlight might be useful.", 4f);
             }
@@ -218,10 +218,10 @@ namespace Imaginophobia {
         }
 
         private void DebugUpdate() {
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.K)) {
+            if (InputManager.PressedKey(Keys.K)) {
                 //_cameraShaker.Shake(5f, 1f);
             }
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.L)) {
+            if (InputManager.PressedKey(Keys.L)) {
                 _player.Sanity -= 50;
             }
         }

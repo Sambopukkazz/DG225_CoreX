@@ -35,13 +35,15 @@ namespace Imaginophobia {
             _pauseMenu.Visible = false;
             _root.AddChild(_pauseMenu);
 
-            //AudioManager.Instance.UnmuteAudio();
+            AudioManager.Instance.UnmuteAudio();
             GumUIHelper.AddSettingsPanel(_pauseMenu, true);
             _pauseMenu.AddChild(GumUIHelper.CreateTextButton("Return to Menu", Layout.MenuFontScale, Layout.ActionButtonX, Layout.ActionButtonY, Layout.ActionButtonWidth, Layout.ActionButtonHeight, ReturnToMenu));
 
             _root.AddChild(GumUIHelper.CreatePauseButton(TogglePause));
 
             _root.AddToRoot();
+
+            AudioManager.Instance.PlayBackgroundSound(BackgroundSound.AmbElectric);
 
             MainGame.GameState = GameState.Gameplay;
         }
@@ -72,13 +74,13 @@ namespace Imaginophobia {
         }
 
         private void TogglePause() {
-            if (_pauseMenu.Visible == true) {
+            if (_pauseMenu.Visible == true && MainGame.GameState == GameState.Pause) {
                 _pauseMenu.Visible = false;
                 MainGame.GameState = GameState.Gameplay;
                 //AudioManager.Instance.ResumeAudio();
                 //Time.TimeScale = 1;
             }
-            else if (_pauseMenu.Visible == false) {
+            else if (_pauseMenu.Visible == false && MainGame.GameState == GameState.Gameplay) {
                 _pauseMenu.Visible = true;
                 MainGame.GameState = GameState.Pause;
                 //AudioManager.Instance.PauseAudio();

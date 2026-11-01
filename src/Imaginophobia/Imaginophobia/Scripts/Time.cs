@@ -23,18 +23,13 @@ namespace Imaginophobia {
             UnscaledDeltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             ElapsedTime = gameTime.ElapsedGameTime;
 
-            foreach (Timer timer in Timers.ToList()) {
-                timer.Update(DeltaTime);
-                if (timer.Active == false) {
-                    Timers.Remove(timer);
+            for (int i = 0; i < Timers.Count; i++) {
+                Timers[i].Update(DeltaTime);
+                if (Timers[i].Active == false) {
+                    Timers.RemoveAt(i);
+                    i--;
                 }
             }
-            //for (int i = Timers.Count - 1; i >= 0; i--) {
-            //    Timers[i].Update(DeltaTime);
-            //    if (Timers[i].Active == false) {
-            //        Timers.RemoveAt(i);
-            //    }
-            //}
         }
 
         public static Timer AddTimer(float seconds, string name) {

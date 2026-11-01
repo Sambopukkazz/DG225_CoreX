@@ -10,6 +10,7 @@ namespace Imaginophobia {
         Gameplay,
         Lose,
         Win,
-        Pause
+        Pause,
+        Loading
     }
 }

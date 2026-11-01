@@ -106,7 +106,7 @@ namespace Imaginophobia {
                 _dotsGenerator.PlotMap();
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.Q) || _progressValue >= 200) {
+            if (InputManager.PressedKey(Keys.Q) || _progressValue >= 200) {
                 //temp
                 //if(_completedPaths.Count == _colors.Count) {
                 //    if (UIManager.stage == 2) {

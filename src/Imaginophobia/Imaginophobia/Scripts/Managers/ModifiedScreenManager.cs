@@ -86,6 +86,7 @@ namespace Imaginophobia {
             _fadeCurrentTime = seconds;
         }
         public void FadeOut(float seconds) {
+            MainGame.GameState = GameState.Loading;
             _transitionState = TransitionState.Out;
             _fadeTargetTime = seconds;
             _fadeCurrentTime = 0;
@@ -93,11 +94,10 @@ namespace Imaginophobia {
 
         public void PulseFade(float fadeOutSeconds, float fadeInSeconds) {
             FadeOut(fadeOutSeconds);
-            Time.AddTimer(() => FadeIn(fadeInSeconds), fadeOutSeconds, "ScreenTimer");
+            Time.AddTimer(() => FadeIn(fadeInSeconds), fadeOutSeconds);
         }
 
         public void ShowScreen(Screen screen, float fadeInSeconds) {
-            AudioManager.Instance.UnmuteAudio();
             ShowScreen(screen);
             FadeIn(fadeInSeconds);
         }
@@ -121,14 +121,28 @@ namespace Imaginophobia {
 
         public void ClearScreens(Screen screen, float fadeOutSeconds, float fadeInSeconds, float waitSeconds = 0) {
             FadeOut(fadeOutSeconds);
-            Time.AddTimer(ClearScreens, fadeOutSeconds, "ScreenTimer");
-            Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds, "ScreenTimer");
+            //Time.AddTimer(ClearScreens, fadeOutSeconds, "ScreenTimer");
+            //Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds, "ScreenTimer");
 
+            //if (waitSeconds > 0) {
+            //    Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds, "ScreenTimer");
+            //}
+            //else {
+            //    Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds, "ScreenTimer");
+            //}
             if (waitSeconds > 0) {
+                Time.AddTimer(ClearScreens, fadeOutSeconds, "ScreenTimer");
+                Time.AddTimer(AudioManager.Instance.MuteAudio, fadeOutSeconds, "ScreenTimer");
                 Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), waitSeconds + fadeOutSeconds, "ScreenTimer");
             }
             else {
-                Time.AddTimer(() => ShowScreen(screen, fadeInSeconds), fadeOutSeconds, "ScreenTimer");
+                Action timer = () => {
+                    ClearScreens();
+                    AudioManager.Instance.MuteAudio();
+                    ShowScreen(screen, fadeInSeconds);
+                };
+
+                Time.AddTimer(timer, fadeOutSeconds, "ScreenTimer");
             }
         }
 

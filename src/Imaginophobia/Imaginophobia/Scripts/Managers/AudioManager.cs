@@ -24,7 +24,7 @@ namespace Imaginophobia {
         private float _previousAmbientVolume;
         private float _previousSoundEffectVolume;
         public bool IsMuted { get; private set; }
-        private bool _debugging = false;
+        private bool _debugging = true;
 
         public float BgsVolume {
             get {
@@ -286,6 +286,14 @@ namespace Imaginophobia {
             foreach (var audioSource in _activeAudioSources) {
                 audioSource.AudioPlayer.Stop();
                 audioSource.SetActive(false);
+            }
+        }
+
+        public void ChangeVolume(SoundEffectName name, float volume) {
+            if (_activeAudioSources.Exists(audio => audio.Name == name.ToString())) {
+                foreach (var audioSource in _activeAudioSources.Where(audio => audio.Name == name.ToString())) {
+                    audioSource.AudioPlayer.Volume = volume;
+                }
             }
         }
 

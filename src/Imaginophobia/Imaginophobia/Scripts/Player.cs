@@ -1,4 +1,5 @@
 ﻿
+using Gum.Wireframe;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -107,7 +108,7 @@ namespace Imaginophobia {
                 Velocity = MoveSpeed * InputManager.Direction;
                 _lockFacingDirection = false;
 
-                if (KeyboardExtended.GetState().IsKeyDown(Keys.LeftControl)) {
+                if (InputManager.HoldKey(Keys.LeftControl)) {
                     Velocity /= 1.7f;
                     _lockFacingDirection = true;
                 }
@@ -124,7 +125,7 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F) && CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Hiding) {
+            if (InputManager.PressedKey(Keys.F) && CurrentAction != CharacterAction.Interacting && CurrentAction != CharacterAction.Hiding) {
                 ToggleFlashLight();
             }
 
@@ -152,7 +153,7 @@ namespace Imaginophobia {
                 //}
 
                 Vector2 pos = Transform.Position;
-                if (KeyboardExtended.GetState().WasKeyPressed(Keys.A)) {
+                if (InputManager.PressedKey(Keys.A)) {
                     pos.X -= 400;
                     _tweener.TweenTo(target: this, expression: player => player.CameraTarget, toValue: pos, duration: 0.5f)
                             .Easing(EasingFunctions.QuadraticOut);
@@ -160,7 +161,7 @@ namespace Imaginophobia {
                     _animatedSprite.SetAnimation("check");
                     CurrentAction = CharacterAction.Checking;
                 }
-                else if (KeyboardExtended.GetState().WasKeyPressed(Keys.D)) {
+                else if (InputManager.PressedKey(Keys.D)) {
                     pos.X += 400;
                     _tweener.TweenTo(target: this, expression: player => player.CameraTarget, toValue: pos, duration: 0.5f)
                             .Easing(EasingFunctions.QuadraticOut);
@@ -168,8 +169,8 @@ namespace Imaginophobia {
                     _animatedSprite.SetAnimation("check");
                     CurrentAction = CharacterAction.Checking;
                 }
-                else if (KeyboardExtended.GetState().IsKeyUp(Keys.A) && KeyboardExtended.GetState().IsKeyUp(Keys.D)) {
-                    if (KeyboardExtended.GetState().WasKeyReleased(Keys.A) || KeyboardExtended.GetState().WasKeyReleased(Keys.D)) {
+                else if (InputManager.KeyUp(Keys.A) && InputManager.KeyUp(Keys.D)) {
+                    if (InputManager.ReleasedKey(Keys.A) || InputManager.ReleasedKey(Keys.D)) {
                         _tweener.TweenTo(target: this, expression: player => player.CameraTarget, toValue: Transform.Position, duration: 2.5f)
                             .Easing(EasingFunctions.QuadraticOut);
                     }
@@ -179,12 +180,12 @@ namespace Imaginophobia {
                         ToggleFlashLight();
                     }
                     CurrentAction = CharacterAction.Interacting;
-                    _eyeSightLength = 0;
                 }
 
                 _tweener.Update(Time.DeltaTime);
             }
             else {
+                _tweener.CancelAll();
                 CameraTarget = Transform.Position;
             }
 
@@ -392,7 +393,6 @@ namespace Imaginophobia {
                 AudioManager.Instance.PlaySFX(SoundEffectName.LockerClose);
             }
             else if (!Visible && CurrentAction == CharacterAction.Hiding) {
-                ObjectiveManager.Complete("hide");
                 SetActive(true);
                 _allowMovement = true;
                 FocusLevel = 1;
@@ -400,6 +400,7 @@ namespace Imaginophobia {
                 Transform.Position = PreviousPos;
                 Time.RemoveTimer("hideTime");
                 Time.AddTimer(HideCooldown, "hideCooldown");
+                AudioManager.Instance.StopSFX(SoundEffectName.LockerClose);
                 AudioManager.Instance.PlaySFX(SoundEffectName.LockerOpen);
             }
 
@@ -437,6 +438,7 @@ namespace Imaginophobia {
             if (CurrentAction != CharacterAction.Peeking) {
                 _allowMovement = false;
                 _animatedSprite.SetAnimation("idle");
+                _animatedSprite.Effect = SpriteEffects.FlipHorizontally;
                 CurrentAction = CharacterAction.Peeking;
                 _flashLight.Enabled = false;
                 FocusLevel = 1.75f;

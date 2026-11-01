@@ -30,8 +30,20 @@ namespace Imaginophobia {
             if (s_direction != Vector2.Zero) s_direction = Vector2.Normalize(s_direction);
         }
 
-        public static bool IsKeyDown(Keys key) {
+        public static bool KeyUp(Keys key) {
+            return s_keyboardState.IsKeyUp(key);
+        }
+
+        public static bool HoldKey(Keys key) {
             return s_keyboardState.IsKeyDown(key);
+        }
+
+        public static bool PressedKey(Keys key) {
+            return s_keyboardState.WasKeyPressed(key);
+        }
+
+        public static bool ReleasedKey(Keys key) {
+            return s_keyboardState.WasKeyReleased(key);
         }
     }
 }
