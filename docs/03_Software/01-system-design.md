@@ -34,9 +34,9 @@ flowchart TD
     WinScreen --> MainMenuScreen
 ```
 
-`MainGame` เปิดเผย static ที่ทุกคลาสใช้ร่วมกัน: `Instance`, `Graphics`, `GraphicsDevice`, `SpriteBatch`, `Content`, `ScreenManager`, `Saturation`
+`MainGame มี static properties กลางให้คลาสอื่นเรียกใช้ได้ เช่น: `Instance`, `Graphics`, `GraphicsDevice`, `SpriteBatch`, `Content`, `ScreenManager`, `Saturation`
 
-**หมายเหตุสำคัญ:** `MainGame` บังคับให้มี instance เดียว — สร้างตัวที่สองจะ throw `InvalidOperationException` และ `AudioManager` ก็เป็น singleton แบบเดียวกัน (สร้างซ้ำ = throw) ตัวหลังถูกสร้างใน `MainGame.Initialize()` ไม่ใช่ใน `GameManager` แล้ว
+**หมายเหตุสำคัญ:** `MainGame` บังคับให้มี instance เดียว — สร้างตัวที่สองจะ throw `InvalidOperationException` และ  AudioManager จะถูก new ขึ้นมาใน `MainGame.Initialize()` ไม่ใช่ใน `GameManager` แล้ว
 
 ### Post-process: Saturation (ทั้งเฟรม)
 

@@ -3,7 +3,6 @@ type: asset-pipeline
 version: 1.0
 date: 2026-10-14
 ---
-
 # Asset Pipeline Flow
 
 **Version:** 1.2 | **Last Updated:** 2026-10-25
@@ -49,16 +48,16 @@ flowchart TD
 
 ## โครงสร้าง `Content/` ปัจจุบัน
 
-| โฟลเดอร์ | เก็บอะไร |
-|---|---|
-| `Audio/` | SFX (`sfx_*`) · ambience (`amb_*`) · BGM (`bgm_*`) — **39 ไฟล์** (`.mp3` ทั้งหมด) |
-| `Character/` | Spritesheet + animation json ของตัวละครหลัก (มี `New_version/` และ `Old_version/` ที่ยังไม่ถูกโหลด) |
-| `Datas/` | ข้อมูล JSON (ปัจจุบันมี `tutorial.json`) |
-| `Fonts/` | Bitmap font (`.fnt` + `.png`) และ `TrueTypeFont/GenerationFonting.ttf` ที่ Gum ใช้สร้างฟอนต์ตอน runtime — **พหูพจน์** |
-| `Phobias/` | Entity ของ phobia ต่างๆ (ปัจจุบันมีแค่ `sprite_scopophobia.png`) |
-| `Shaders/` | `.fx` (Vignette, BottomFade, Silhouette, HighlightComposite, Saturation) |
-| `Tilemaps/` | ไฟล์ `.ldtk` และ `mapassets/` (tileset) |
-| `UI/` | องค์ประกอบ UI (spacebar, valve, ปุ่ม pause, สไลเดอร์, พื้นหลัง/จอตาย/จอชนะ, atlas ของมินิเกม Connect The Dots) |
+| โฟลเดอร์ | เก็บอะไร                                                                                                                                                 |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Audio/`       | SFX (`sfx_*`) · ambience (`amb_*`) · BGM (`bgm_*`) — **39 ไฟล์** (`.mp3` ทั้งหมด)                                                    |
+| `Character/`   | Spritesheet + animation json ของตัวละครหลัก (มี`New_version/` และ `Old_version/` ที่ยังไม่ถูกโหลด)                        |
+| `Datas/`       | ข้อมูล JSON (ปัจจุบันมี`tutorial.json`)                                                                                                        |
+| `Fonts/`       | Bitmap font (`.fnt` + `.png`) และ `TrueTypeFont/GenerationFonting.ttf` ที่ Gum ใช้สร้างฟอนต์ตอน runtime — **พหูพจน์**  |
+| `Phobias/`     | Entity ของ phobia ต่างๆ (ปัจจุบันมีแค่`sprite_scopophobia.png`)                                                                           |
+| `Shaders/`     | `.fx` (Vignette, BottomFade, Silhouette, HighlightComposite, Saturation)                                                                                       |
+| `Tilemaps/`    | ไฟล์`.ldtk` และ `mapassets/` (tileset)                                                                                                                |
+| `UI/`          | องค์ประกอบ UI (spacebar, valve, ปุ่ม pause, สไลเดอร์, พื้นหลัง/จอตาย/จอชนะ, atlas ของมินิเกม Connect The Dots) |
 
 > ไฟล์ tileset ใน `Tilemaps/mapassets/` **ไม่ต้องลงทะเบียนใน `Content.mgcb`** — `LDtkTilemapImporter` โหลดให้จาก path ที่ระบุในไฟล์ `.ldtk`
 
