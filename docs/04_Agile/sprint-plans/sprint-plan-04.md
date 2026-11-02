@@ -14,12 +14,12 @@
 
 | # | User Story                                                                                                                 | รับผิดชอบ | MoSCoW       | Estimate (SP) | Status         |
 | - | -------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------ | ------------- | -------------- |
-| 1 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                            | ธีนันทนัช | Must Have    | 6             | 🔄 In Progress |
-| 2 | As an artist, I want redesign the mini-game UI to make it look better.                                                    | ธีนันทนัช | Should Have  | 3             | 🔄 In Progress |
-| 3 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with. | เตชินท์     | Should Have  | 2             | 🔄 In Progress |
+| 1 | As phobias, I want to have many variants, so that I can challenge the player in different ways.                            | ธีนันทนัช | Must Have    | 6             | ✅ Done        |
+| 2 | As an artist, I want redesign the mini-game UI to make it look better.                                                    | ธีนันทนัช | Should Have  | 3             | ✅ Done        |
+| 3 | As a designer, I want stuffs that can interact have highlights, so that the player know what stuff they can interact with. | เตชินท์     | Should Have  | 2             | ✅ Done        |
 | 4 | As a designer, I want to make a balance sheet of entities, so that I can understand the balancing.                         | ธีนันทนัช | Nice to Have | 1             | 🔄 In Progress |
-| 5 | As a designer, I want to add sounds to the game to make the game more interesting.                                         | พรภวิษย์   | Should Have  | 2             | 🔄 In Progress |
-| 6 | As a developer, I want to add deathscreen/winscreen, so that the player knows if they win/lose.                            | ธีนันทนัช | Should Have  | 4             | 🔄 In Progress |
+| 5 | As a designer, I want to add sounds to the game to make the game more interesting.                                         | พรภวิษย์   | Should Have  | 2             | ✅ Done        |
+| 6 | As a developer, I want to add deathscreen/winscreen, so that the player knows if they win/lose.                            | ธีนันทนัช | Should Have  | 4             | ✅ Done        |
 
 ## Status Legend
 
@@ -34,34 +34,34 @@
 
 ### Story 1 — [Transform phobias to enemies mechanics]
 
-- [ ] [Search and interpret phobias]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
-- [ ] [Turn them into enemies and create a mechanic around it]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [X] [Search and interpret phobias]  [owner:: ธีนันทนัช]  [estimate:: 4hrs]  [status::✅ Done]
+- [X] [Turn them into enemies and create a mechanic around it]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: ✅ Done]
 
 ### Story 2 — [Redesign Minigame UI]
 
-- [ ] [Find the size for buttons in menu UI to give it to artist]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
-- [ ] [Draw assets for minigames]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status:: 🔄 In Progress]
+- [X] [Find the size for buttons in menu UI to give it to artist]  [owner:: ธีนันทนัช]  [estimate:: Nh]  [status::✅ Done]
+- [X] [Draw assets for minigames]  [owner:: ธีนันทนัช]  [estimate:: 6hrs]  [status:: ✅ Done]
 
 ### Story 3 — [Highlights shader]
 
-- [ ] [Follow tutorials]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status:: 🔲 Todo]
-- [ ] [Implement highlights shader]  [owner:: เตชินท์]  [estimate:: 9h]  [status:: 🔲 Todo]
+- [X] [Follow tutorials]  [owner:: เตชินท์]  [estimate:: 4hrs]  [status::✅ Done]
+- [X] [Implement highlights shader]  [owner:: เตชินท์]  [estimate:: 9hrs]  [status:: ✅ Done]
 
 ### Story 4 — [Balance sheet]
 
-- [ ] [Make separated sheets for each categories]  [owner:: ธีนันทนัช]  [estimate:: 4hrs]  [status:: ✅ Done]
-- [ ] [Make the values in the sheet usable for calculati          on]  [owner:: ธีนันทนัช]  [estimate:: 9h]  [status:: ✅ Done]
+- [ ] [Make separated sheets for each categories]  [owner:: ธีนันทนัช]  [estimate:: 4hrs]  [status:: 🔄 In Progress]
+- [ ] [Make the values in the sheet usable for calculati          on]  [owner:: ธีนันทนัช]  [estimate:: 9h]  [status:: 🔄 In Progress]
 
 ### Story 5 — [Sound Design]
 
-- [ ] [Find sounds]  [owner:: พรภวิษย์]  [estimate:: 5]  [status:: 🔄 In Progress]
-- [ ] [Save sources of the sounds]  [owner:: พรภวิษย์]  [estimate:: 3]  [status:: 🔄 In Progress]
-- [ ] [Rename audio files to fit the naming convention]  [owner:: พรภวิษย์]  [estimate:: 3]  [status:: 🔄 In Progress]
+- [X] [Find sounds]  [owner:: พรภวิษย์]  [estimate:: 5hrs]  [status:: ✅ Done]
+- [X] [Save sources of the sounds]  [owner:: พรภวิษย์]  [estimate:: 3hrs]  [status:: ✅ Done]
+- [X] [Rename audio files to fit the naming convention]  [owner:: พรภวิษย์]  [estimate:: 3hrs]  [status:: ✅ Done]
 
 ### Story 6 — [Death/Win screen UI]
 
-- [ ] [Death UI]  [owner:: ธีนันทนัช]  [estimate:: 20hrs]  [status:: 🔄 In Progress]
-- [ ] [Victory UI]  [owner:: ธีนันทนัช]  [estimate:: 20hrs]  [status:: 🔄 In Progress]
+- [X] [Death UI]  [owner:: ธีนันทนัช]  [estimate:: 20hrs]  [status:: ✅ Done]
+- [X] [Victory UI]  [owner:: ธีนันทนัช]  [estimate:: 20hrs]  [status::✅ Done]
 
 ---
 
