@@ -1,11 +1,11 @@
 ---
 type: gdd-core-loop
-version: 1.0
-date: 2026-10-14
+version: 2.0
+date: 2026-11-02
 ---
 # Imaginophobia — Core Loop & Gameplay
 
-**Version:** 1.2 | **Last Updated:** 2026-10-25
+**Version:** 2.0 (Release 1.0.0) | **Last Updated:** 2026-11-02
 
 ## Core Loop
 
@@ -31,10 +31,13 @@ flowchart TD
     P --> S[Scopophobia<br/>Fear of Being Watched]
     P --> N[Nyctophobia<br/>Fear of Darkness]
     P --> A[Autophobia<br/>Fear of Being Alone]
+    P --> EN[Entamaphobia<br/>Fear of Doors]
     S --> S1[หาที่ซ่อน]
     S1 --> S2[หาที่ที่มีไฟ / ห้ามอยู่ในที่มืด]
     S2 --> S3[ส่องไฟฉายใส่]
     A --> S3
+    EN --> S4[กด E แอบมองใต้ช่องประตู]
+    S4 --> S3
 
     subgraph Cyan[Survival loop]
       E1[สำรวจแมพ] --> E2[รักษาค่า Sanity ให้มากกว่า 0]
@@ -66,11 +69,14 @@ flowchart TD
     Scopo -->|ไม่ใช่| Auto{เจอ Autophobia?}
     Auto -->|ใช่| AutoY[ส่องไฟฉายใส่ / ซ่อนตู้]
     Auto -->|ไม่ใช่| Nycto{เจอ Nyctophobia?}
-    Nycto -->|ใช่| NyctoY[อยู่ในที่มืดไม่มีแสง]
-    Nycto -->|ไม่ใช่| AllFixed{ช่องทุกจุดแล้ว?}
+    Nycto -->|ใช่| NyctoY[รีบออกจากความมืด]
+    Nycto -->|ไม่ใช่| Entama{Entamaphobia อยู่หลังประตู?}
+    Entama -->|ใช่| EntamaY[แอบมอง + ส่องไฟฉาย]
+    Entama -->|ไม่ใช่| AllFixed{ช่องทุกจุดแล้ว?}
     ScopoY --> SanityDrop[Sanity ลด]
     AutoY --> SanityDrop
     NyctoY --> SanityDrop
+    EntamaY --> SanityDrop
     SanityDrop --> Thresh{Sanity ถึง Threshold?}
     Thresh -->|ใช่| Zero{Sanity == 0?}
     Zero -->|ใช่| End([จบ])
@@ -78,7 +84,7 @@ flowchart TD
     Stage --> Indicator[มี Visual Indicator ที่สื่อถึง sanity ที่ลดไป]
     Indicator --> AllFixed
     Thresh -->|ไม่ใช่| AllFixed
-    AllFixed -->|ใช่| End
+    AllFixed -->|ใช่| Win([ออกประตูทางออก])
     AllFixed -->|ไม่ใช่| Fix
 ```
 
@@ -87,23 +93,29 @@ flowchart TD
 | Action                                    | Input                                      | Result                                                                                          | Notes                                                                                                |
 | ----------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | เดิน                                  | `A` / `D`                              | ตัวละครเคลื่อนที่ (`MoveSpeed = 250`) — **แกน X เท่านั้น** | `CharacterAction.Walking`                                                                          |
-| ซุ่มเดิน                          | `Left Ctrl` + ทิศทาง               | เดินช้าลง (÷ 1.7) และล็อกทิศการหันหน้า                            | ไม่เปลี่ยน state —`Sneaking` ถูกถอดออกจาก enum แล้ว                     |
-| เปิด/ปิดไฟฉาย                 | `F`                                      | เปิด `Spotlight` (Battery ลด 3.5/วินาที) · ระยะสายตา 400px              | ใช้ส่อง Autophobia ให้หาย                                                               |
-| โต้ตอบ / ซ่อน / ซ่อม        | `Space`                                  | เข้าตู้ซ่อน · เริ่มมินิเกม · ใช้ประตู                          | `ReadyToHide` → `Hiding` · `Repairing`                                                       |
-| มองซ้าย-ขวาขณะซ่อม       | `A` / `D`                              | เลื่อนกล้อง 400px                                                                    | `CharacterAction.Checking`                                                                         |
-| แอบมองใต้ช่องประตู      | `E` (ขณะอยู่ที่ประตู)     | เปิด `DoorPeekingScreen` หลังดีเลย์ 1 วินาที                              | `CharacterAction.Peeking` · ใช้ไม่ได้ในฉาก `tilemap_sewer` (ยังเป็น draft) |
-| ออกจากมินิเกม                | `Q`                                      | ปิดหน้าจอมินิเกม (progress ถูกบันทึกไว้)                            | ใช้กับ Spin The Valve / Connect The Dots / Door Peeking                                        |
-| หยุดพัก / ตั้งค่าเสียง | `ESC` (หรือปุ่มมุมขวาบน) | เปิด pause overlay ใน `GameplayScreen`                                                  | อ่านผ่าน `GumService.Default.Keyboard`                                                     |
+| ซุ่มเดิน                          | `Left Ctrl` + ทิศทาง               | เดินช้าลง (÷ 1.7) และล็อกทิศการหันหน้า (animation `sneak-forward` / `sneak-backward`) | ไม่เปลี่ยน state —`CurrentAction` ยังเป็น `Walking`                     |
+| เปิด/ปิดไฟฉาย                 | `F`                                      | เปิด `Spotlight` (Battery ลด 1/วินาที) · ระยะสายตา (`EyeSight`) 400px              | ใช้ส่อง Autophobia ให้หาย · ไฟฉายปิดเองเมื่อ Battery หมด                          |
+| โต้ตอบ / ซ่อน / ซ่อม        | `Space`                                  | เข้าตู้ซ่อน · เริ่มมินิเกมวาล์ว / ซ่อมไฟ · อ่านคลิปบอร์ด · ใช้ประตู                          | `Hiding` · `Repairing` · `Reading`                                                       |
+| มองซ้าย-ขวาขณะซ่อม       | `A` / `D`                              | เลื่อนกล้อง 400px                                                                        | `CharacterAction.Checking`                                                                         |
+| พลิกหน้าคลิปบอร์ด           | `A` / `D` (ขณะ `Reading`)         | ย้อนหน้า / หน้าถัดไป (1–4)                                                        | หน้าที่ 4 มีโอกาส 3% ที่จะเจอหน้าลับ                                        |
+| แอบมองใต้ช่องประตู      | `E` (ขณะอยู่ที่ประตู)     | เปิด `DoorPeekingScreen`                                   | `CharacterAction.Peeking` · ใช้ไม่ได้ในฉาก `tilemap_sewer` |
+| ออกจากมินิเกม / หน้าจอ      | `Q`                                      | ปิดหน้าจอ (progress ถูกบันทึกไว้)                            | ใช้กับ Spin The Valve / Connect The Dots / Door Peeking / Clipboard                                        |
+| หยุดพัก / ตั้งค่าเสียง | `ESC` (หรือปุ่มมุมขวาบน) | เปิด pause overlay ใน `GameplayScreen` (`GameState = Pause` + `Time.TimeScale = 0`)                                                  | อ่านผ่าน `GumService.Default.Keyboard`                                                     |
+| กลับเมนู                     | ปุ่ม "< Return to Menu"                 | ใช้ได้จาก pause overlay / จอตาย / จอชนะ                                   | กลับสู่ `MainMenuScreen`                                                     |
+| Cheat (debug)                        | `Ctrl` + `Right Shift` + `+` / `-`       | Sanity +10 / −10                                                                                 | `GameManager.Cheat()`                                                                                |
+| Cheat (debug)                        | `F10` ค้างขณะเปิดประตู `end`    | ผ่านประตูทางออกได้โดยไม่ต้องซ่อมครบ                                  | `GameManager.OnDoorInteracted`                                                                      |
 
-> **TBD:** ปุ่มทั้งหมดยังไม่ถูกรวมไว้ที่ `InputManager` — มีแค่ `A` / `D` ที่อยู่ที่นั่น ส่วนที่เหลืออ่านตรงใน `Player.cs`, `CollisionManager.cs` และหน้าจอมินิเกม ควรย้ายมารวมกันก่อนแก้ตารางนี้ให้เป็นทางการ
+> **Input ที่รวมไว้ที่ `InputManager`** มีแค่ `A` / `D` (`Direction`) ส่วน `Left Ctrl`, `F`, `Space`, `Q`, `E`, `ESC` และ cheat keys อ่านตรงใน `Player.cs`, `CollisionManager.cs`, หน้าจอมินิเกม, `GameplayScreen.cs` และ `GameManager.cs` ตามลำดับ
 
 ## Win / Lose Conditions
 
-- **ชนะเมื่อ:** ซ่อมวาล์วครบ 5 จุดตามที่กำหนด แล้วออกจากประตูทางออก (`Destination == "end"` ที่อยู่ในห้องไฟฟ้า 1) สำเร็จ → เปิด `WinScreen`
+- **ชนะเมื่อ:** ซ่อมวาล์วครบ 5 จุด (`ObjectiveManager.AllValvesRepaired`) **และ** ไฟในโถงอุโมงติดครบ (`SaveManager.AllSewerLightsAreOn()` ซึ่งต้องซ่อมแผงไฟสำเร็จ) แล้วออกจากประตูทางออก (`Destination == "end"` ที่อยู่ในห้องไฟฟ้า 1) สำเร็จ → เปิด `WinScreen` (แสดงเวลาที่เหลือ)
 - **แพ้เมื่อ:**
   - ถูก Autophobia จับได้ (Sanity −10) หรือถูก Scopophobia พุ่งชน (Sanity −25)
-  - ค่า Sanity ลดถึง 0 (`SanityState` มี 3 ระดับ: Normal 85 / Anxious 40 / Insane 0) → เปิด `DeathScreen`
+  - ค่า Sanity ลดถึง 0 (`SanityState` มี 3 ระดับ: Normal 80 / Anxious 40 / Insane 0) → เปิด `DeathScreen`
   - Nyctophobia — อยู่ในความมืดที่ไฟดับนานเกินไป จน vignette ปิดสนิท (`Sanity = 0`)
+  - หมดเวลาหลัก 721 วินาที (`MainTimer` เรียก `Player.Dead()` ซึ่งตั้ง Sanity = 0) → เปิด `DeathScreen`
+- **Jump scare (ไม่ใช่แพ้):** เปิดประตูขณะที่ Entamaphobia ยัง active → เปิด `JumpScareScreen` 1.6 วินาที แล้วกลับเข้า gameplay ต่อ
 
 ## Related Documents
 

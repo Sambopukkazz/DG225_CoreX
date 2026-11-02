@@ -1,12 +1,12 @@
 ---
 type: wiki-hub
-version: 1.0
-date: 2026-10-14
+version: 2.0
+date: 2026-11-02
 ---
 
 # 🌐 Imaginophobia — Knowledge Wiki
 
-**Version:** 1.1 | **Last Updated:** 2026-10-24 | **Maintained by:** ทีม CoreX
+**Version:** 2.0 (Release 1.0.0) | **Last Updated:** 2026-11-02 | **Maintained by:** ทีม CoreX
 
 ---
 
@@ -16,7 +16,9 @@ date: 2026-10-14
 - **[Core Loop]**: [01-core-loop.md](../01_GDD/01-core-loop.md)
 - **[Core Mechanics]**: [03-mechanics.md](../01_GDD/03-mechanics.md)
 - **[System Design]**: [01-system-design.md](../03_Software/01-system-design.md)
-- **[Current Sprint]**: [Sprint Backlog](../04_Agile/02-sprint-backlog.md)
+- **[Class Diagram]**: [02-class-diagram.md](../03_Software/02-class-diagram.md)
+- **[Data Schema]**: [03-data-schema.md](../03_Software/03-data-schema.md)
+- **[Sprint Plans]**: [sprint-plans/](../04_Agile/sprint-plans/)
 - **[Project Index]**: [index.md](../index.md)
 
 ---
@@ -42,7 +44,7 @@ date: 2026-10-14
 |---|---|
 | [MonoGame docs](https://docs.monogame.net/) | API หลักของ engine |
 | [MonoGame.Extended](https://www.monogameextended.net/) | Sprites, Screens, Camera |
-| [Gum](https://gum.monoGame.com/) | เครื่องมือทำ UI |
+| [Gum](https://gum.monogame.com/) | เครื่องมือทำ UI |
 | [LDtk](https://ldtk.io/) | Level editor |
 | [Penumbra](https://github.com/discosultan/penumbra) | แสง 2D |
 
