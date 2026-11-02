@@ -112,13 +112,16 @@ namespace Imaginophobia {
                 }
                 else if (trigger.CompareTag("door")) {
                     if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
+
                         //Exit door skips some of the first tutorial
-                        ObjectiveManager.Complete("move");
-                        ObjectiveManager.Complete("interact");
-                        ObjectiveManager.Complete("repair");
-                        ObjectiveManager.Complete("dots-done");
-                        ObjectiveManager.Complete("peek");
-                        ObjectiveManager.Complete("door-open");
+                        if (trigger.Name != "end") {
+                            ObjectiveManager.Complete("move");
+                            ObjectiveManager.Complete("interact");
+                            ObjectiveManager.Complete("repair");
+                            ObjectiveManager.Complete("dots-done");
+                            ObjectiveManager.Complete("peek");
+                            ObjectiveManager.Complete("door-open");
+                        }
                    
                         DoorInteracted?.Invoke(trigger.Name);
                     }
