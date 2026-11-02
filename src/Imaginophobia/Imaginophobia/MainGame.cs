@@ -38,7 +38,7 @@ namespace Imaginophobia {
 
             Graphics.PreferredBackBufferWidth = Layout.ScreenWidth;
             Graphics.PreferredBackBufferHeight = Layout.ScreenHeight;
-            Graphics.IsFullScreen = false;
+            Graphics.IsFullScreen = true;
 
             Graphics.ApplyChanges();
 
