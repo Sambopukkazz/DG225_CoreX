@@ -9,7 +9,7 @@ namespace Imaginophobia {
     public class Scopophobia : GameObject, ISpatialSoundApplicable, ICollisionActor{
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
-        public float MoveSpeed { get; private set; } = 2600f;
+        public float MoveSpeed { get; private set; } = 5000f;
         public int Id { get; } = 555;
         public CollisionShape2D Shape { get; private set; }
         private AudioSource _audioSource;
@@ -33,11 +33,11 @@ namespace Imaginophobia {
             }
 
             Transform.Position = new Vector2(pos.X, pos.Y -220);
-            Transform.Scale = Vector2.One * 4;
-            _size = new Vector2(480, 110) * Transform.Scale;
+            Transform.Scale = Vector2.One * 5f;
+            _size = new Vector2(1903, 110) * Transform.Scale;
 
             //AudioManager.Instance.PlaySFX(SoundEffectName.ScopoIndicator);
-            _audioSource = AudioManager.Instance.Play3DSFX(_origin, SoundEffectName.ScopoIndicator, 600, 15000);
+            _audioSource = AudioManager.Instance.Play3DSFX(_origin, SoundEffectName.ScopoIndicator, 5000, 26500);
             AddChild(_audioSource);
             UpdateShape();
             

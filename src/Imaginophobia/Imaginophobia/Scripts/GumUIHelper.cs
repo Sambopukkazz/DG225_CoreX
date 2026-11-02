@@ -89,7 +89,7 @@ namespace Imaginophobia {
                 if (MainGame.Loading == false) {
                     label.Y = label.Y + 10;
                 }
-                //AudioManager.Instance.PlayButtonPush();
+                AudioManager.Instance.PlaySFX(SoundEffectName.ElecSuccess, volume: 0.05f);
             };
 
             visual.States.Highlighted.Clear();

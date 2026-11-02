@@ -19,8 +19,8 @@ namespace Imaginophobia {
         private Texture2DAtlas _textureAtlas;
         private Tweener _tweener;
         private string _currentRoom;
-        private int _page = 1;
-        private int _maxPage = 4;
+        public int CurrentPage = 1;
+        public int MaxPage = 4;
         private Random _rand;
         private float _lensAlpha = 0f;
         private float _zoom = 4f;
@@ -30,6 +30,7 @@ namespace Imaginophobia {
         // from 2 to 8 divides exactly (except 7), so the zoom never resamples the texels.
         private const int LensSize = 256;
         private const int Bezel = 8;
+        private bool _secret;
         private const int InnerLine = 3;
 
         public ClipboardScreen(Player player) {
@@ -56,22 +57,21 @@ namespace Imaginophobia {
                 .Easing(EasingFunctions.ExponentialOut);
 
             _rand = new Random();
-
-            if (_rand.Next(1, 101) < 3) {
-                _maxPage = 5;
-            }
         }
 
         public override void Update(GameTime gameTime) {
             if (InputManager.PressedKey(Keys.A) && _player.CurrentAction == CharacterAction.Reading) {
-                if (_page > 1) {
-                    _page--;
+                if (CurrentPage > 1) {
+                    CurrentPage--;
                     AudioManager.Instance.PlaySFX(SoundEffectName.ClipboardPageReverse, volume: 0.15f);
                 }
             }
             else if (InputManager.PressedKey(Keys.D) && _player.CurrentAction == CharacterAction.Reading) {
-                if (_page < _maxPage) {
-                    _page++;
+                if (CurrentPage < MaxPage) {
+                    CurrentPage++;
+                    if (CurrentPage == 4 && _rand.Next(1, 101) < 3) {
+                        _secret = true;
+                    }
                     AudioManager.Instance.PlaySFX(SoundEffectName.ClipboardPageAdvance, volume: 0.15f);
                 }
             }
@@ -120,11 +120,11 @@ namespace Imaginophobia {
 
         private Texture2DRegion PageRegion {
             get {
-                if (_page == 5) {
+                if (_secret == true && CurrentPage == 4) {
                     return _textureAtlas["sprite_clipboard_secret"];
                 }
                 else {
-                    return _textureAtlas[$"sprite_clipboard_{_currentRoom}_page{_page}"];
+                    return _textureAtlas[$"sprite_clipboard_{_currentRoom}_page{CurrentPage}"];
                 }
             }
         }

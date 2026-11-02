@@ -33,7 +33,9 @@ namespace Imaginophobia {
     }
 
     // Scatters eyes through the dark area of a background and animates them: they watch the
-    // cursor, twitch on their own, and all flinch together when the mouse is clicked.
+    // cursor while the left button is held and ease back to straight ahead when it is
+    // released, hold their gaze on the spot last clicked for a moment, twitch on their own,
+    // and all flinch together when the mouse is clicked.
     public class EyeField {
         // Settings parameters
         public int EyeCount { get; set; } = 9;
@@ -44,7 +46,11 @@ namespace Imaginophobia {
         public float TwitchMagnitude { get; set; } = 24f;
         public float TwitchDuration { get; set; } = 0.45f;
         public float ClickTwitchMagnitude { get; set; } = 42f;
+        public float GazeFollowSpeed { get; set; } = 200f;
+        public float GazeReturnSpeed { get; set; } = 240f;
+        public float ClickLookDuration { get; set; } = 1f;
         public bool FollowMouse { get; set; } = true;
+        public bool LookAtClick { get; set; } = true;
         public bool RandomTwitch { get; set; } = true;
         public bool TwitchOnClick { get; set; } = true;
         public bool SynchronizedTwitch { get; set; } = true;
@@ -62,6 +68,8 @@ namespace Imaginophobia {
         private readonly List<EyeInstance> _eyes = new List<EyeInstance>();
         private readonly Random _random = new Random();
         private MouseState _previousMouse = new MouseState();
+        private Vector2 _clickLookPosition = Vector2.Zero;
+        private float _clickLookTimer = 0f;
 
         private const string SpriteFolder = "UI/Eyes/";
         private const int DarkLuminance = 12;
@@ -81,22 +89,35 @@ namespace Imaginophobia {
         public void Update() {
             MouseState mouse = Mouse.GetState();
             Vector2 mousePosition = new Vector2(mouse.X, mouse.Y);
-
-            if (TwitchOnClick) {
-                bool clicked = mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released;
-                if (clicked) {
-                    TwitchAll();
-                }
-            }
+            bool clicked = mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released;
 
             _previousMouse = mouse;
 
+            if (clicked && TwitchOnClick) {
+                //TwitchAll();
+            }
+
+            if (clicked && LookAtClick) {
+                _clickLookPosition = mousePosition;
+                _clickLookTimer = ClickLookDuration;
+            }
+
+            if (_clickLookTimer > 0f) {
+                _clickLookTimer -= Time.DeltaTime;
+            }
+
+            bool holding = FollowMouse && mouse.LeftButton == ButtonState.Pressed;
+
             foreach (EyeInstance eye in _eyes) {
-                if (FollowMouse) {
-                    eye.Motion.SetGazeOffset(GazeOffset(eye, mousePosition));
+                
+                if (holding || MainGame.Loading) {
+                    eye.Motion.SetGazeOffset(GazeOffset(eye, mousePosition), GazeFollowSpeed);
+                }
+                else if (_clickLookTimer > 0f) {
+                    eye.Motion.SetGazeOffset(GazeOffset(eye, _clickLookPosition), GazeFollowSpeed);
                 }
                 else {
-                    eye.Motion.SetGazeOffset(Vector2.Zero);
+                    eye.Motion.SetGazeOffset(Vector2.Zero, GazeReturnSpeed);
                 }
 
                 if (RandomTwitch) {

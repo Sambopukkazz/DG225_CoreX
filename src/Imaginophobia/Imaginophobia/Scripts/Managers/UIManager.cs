@@ -1,25 +1,28 @@
 ﻿
+using Gum.GueDeriving;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Input.InputListeners;
+using MonoGame.Extended.Particles;
 using MonoGame.Extended.Timers;
 using MonoGame.Extended.Tweening;
 using RenderingLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gum.GueDeriving;
 using System.Text;
 using System.Threading.Tasks;
-using MonoGame.Extended.Graphics;
 
 namespace Imaginophobia {
     public class UIManager : IDisposable {
         private Texture2DAtlas _buttonAtlas;
+        private Texture2D _sanityBar;
+        private RectangleF _sanityBarRect;
         private RectangleF _spaceBarBackgroundRect;
         private RectangleF _spaceBarBackgroundMiddleRect;
         private Player _player;
@@ -43,6 +46,7 @@ namespace Imaginophobia {
             _textManager = new TextManager();
 
             _buttonAtlas = MainGame.Content.Load<Texture2DAtlas>("UI/spritesheet_buttons");
+            _sanityBar = MainGame.Content.Load<Texture2D>("UI/sprite_bar_sanity");
 
             _vignetteOverlay = new VignetteOverlay();
             _blinkOverlay = new VignetteOverlay();
@@ -51,6 +55,7 @@ namespace Imaginophobia {
             };
             _rectangleFadeOverlay = new BottomFadeOverlay();
 
+            _sanityBarRect = new Rectangle(440, 0, 440, 60);
             _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 300, 50);
             _spaceBarBackgroundMiddleRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 450, 75);
 
@@ -108,6 +113,9 @@ namespace Imaginophobia {
                 _nyctophobiaOverlay.Scale = new Vector2(0.9f, 0.5f);
                 _player.Sanity = 0;
             }
+
+            _sanityBarRect.Width = ((100 - _player.Sanity) * 4.4f);
+            _sanityBarRect.X = 440 - _sanityBarRect.Width;
 
             _previousAction = _player.CurrentAction;
 
@@ -186,23 +194,32 @@ namespace Imaginophobia {
             else if (MainGame.ScreenManager.ActiveScreen is ConnectTheDotsScreen) {
                 spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(1344, 560), Color.White * 0.4f);
             }
-            else if (MainGame.ScreenManager.ActiveScreen is ClipboardScreen && _player.CurrentAction == CharacterAction.Reading) {
+            else if (MainGame.ScreenManager.ActiveScreen is ClipboardScreen clipboard && _player.CurrentAction == CharacterAction.Reading) {
+                if (clipboard.CurrentPage != 1) {
+                    spriteBatch.Draw(_buttonAtlas["sprite_button_left"], new Vector2(385, 506), Color.White * 0.4f);
+                }
+
+                if (clipboard.CurrentPage != clipboard.MaxPage) {
+                    spriteBatch.Draw(_buttonAtlas["sprite_button_right"], new Vector2(1312, 506), Color.White * 0.4f);
+                }
+
                 spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(1312, 605), Color.White * 0.4f);
-                spriteBatch.Draw(_buttonAtlas["sprite_button_left"], new Vector2(385, 506), Color.White * 0.4f);
-                spriteBatch.Draw(_buttonAtlas["sprite_button_right"], new Vector2(1312, 506), Color.White * 0.4f);
             }
 
             color = Color.White;
             if(_player.SanityState == SanityState.Anxious) {
-                color = Color.Yellow;
+                color = ColorHelper.FromHex("#a89e6c");
             }
             else if (_player.SanityState == SanityState.Insane) {
-                color = Color.Red;
+                color = ColorHelper.FromHex("#752d22");
             }
 
             //Sanity Bar
-            spriteBatch.DrawRectangle(210, 90, 400, 40, Color.White);
-            spriteBatch.FillRectangle(210, 90, 4 * _player.Sanity, 40, color);
+            //spriteBatch.DrawRectangle(210, 90, 400, 40, Color.White);
+            
+            spriteBatch.FillRectangle(210, 90, 4.4f * _player.Sanity, 40, color);
+            spriteBatch.Draw(_sanityBar, new Vector2(650 - _sanityBarRect.Width, 80), _sanityBarRect.ToRectangle(), Color.White);
+
             //Battery Bar
             spriteBatch.DrawRectangle(210, 150, 250, 20, Color.White);
             spriteBatch.FillRectangle(210, 150, 2.5f * _player.Battery, 20, Color.White);

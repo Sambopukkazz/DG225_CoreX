@@ -10,6 +10,8 @@ namespace Imaginophobia {
         private readonly Random _random;
 
         private Vector2 _gazeOffset = Vector2.Zero;
+        private Vector2 _gazeTarget = Vector2.Zero;
+        private float _gazeSpeed = 0f;
         private Vector2 _twitchDirection = Vector2.UnitX;
         private float _twitchTimer = 0f;
         private float _twitchDuration = 1f;
@@ -25,9 +27,11 @@ namespace Imaginophobia {
             PupilPosition = eye.Center;
         }
 
-        // Offset from the eye centre the pupil wants to sit at. Zero is straight ahead.
-        public void SetGazeOffset(Vector2 offset) {
-            _gazeOffset = offset;
+        // Offset from the eye centre the pupil is trying to sit at, chased at a speed in
+        // pixels per second. Zero is straight ahead.
+        public void SetGazeOffset(Vector2 offset, float speed) {
+            _gazeTarget = offset;
+            _gazeSpeed = speed;
         }
 
         // A jerk in a set direction, so a whole group of eyes can flinch together.
@@ -54,6 +58,18 @@ namespace Imaginophobia {
                 _twitchTimer -= Time.DeltaTime;
                 float remaining = MathHelper.Clamp(_twitchTimer / _twitchDuration, 0f, 1f);
                 twitch = _twitchDirection * _twitchMagnitude * (remaining * remaining);
+            }
+
+            // The pupil creeps toward the look instead of snapping onto it.
+            float step = _gazeSpeed * Time.DeltaTime;
+            Vector2 toTarget = _gazeTarget - _gazeOffset;
+            float distance = toTarget.Length();
+
+            if (distance <= step) {
+                _gazeOffset = _gazeTarget;
+            }
+            else {
+                _gazeOffset += toTarget / distance * step;
             }
 
             // Where the pupil wants to be, and where it is allowed to be.

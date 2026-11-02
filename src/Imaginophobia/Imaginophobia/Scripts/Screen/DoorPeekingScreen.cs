@@ -112,11 +112,11 @@ namespace Imaginophobia {
                 spriteBatch.Draw(_entamaAtlas[$"entama_hand"], Vector2.Zero, Color.White);
             }
 
-            spriteBatch.DrawRectangle(108, 111, 330, 40, Color.White * 0.4f);
-            spriteBatch.FillRectangle(108, 111, _player.Battery * 3.3f, 40, Color.White * 0.4f);
+            spriteBatch.DrawRectangle(60, 60, 330, 40, Color.White * 0.4f);
+            spriteBatch.FillRectangle(60, 60, _player.Battery * 3.3f, 40, Color.White * 0.4f);
 
-            spriteBatch.Draw(_buttonAtlas["sprite_button_light"], new Vector2(108, 165), Color.White * 0.4f);
-            spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(108,260), Color.White * 0.4f);
+            spriteBatch.Draw(_buttonAtlas["sprite_button_light"], new Vector2(60, 110), Color.White * 0.4f, 0, Vector2.Zero, Vector2.One * 0.8f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_buttonAtlas["sprite_button_exit"], new Vector2(60,180), Color.White * 0.4f, 0, Vector2.Zero, Vector2.One * 0.8f, SpriteEffects.None, 0f);
 
             spriteBatch.End();
 

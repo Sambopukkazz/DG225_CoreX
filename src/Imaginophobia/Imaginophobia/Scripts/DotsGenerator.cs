@@ -13,8 +13,8 @@ namespace Imaginophobia {
         private int _column;
         private int _row;
         private int _maxDots = 5;
-        private int _minPathLength = 6;
-        private int _minDistance = 4;
+        private int _minPathLength = 5;
+        private int _minDistance = 3;
         private int _maxAttempts = 500;
         private Random _rand = new Random();
         private Action<int, int, Color> _addDot;
@@ -29,12 +29,31 @@ namespace Imaginophobia {
 
         public void PlotMap() {
             GeneratedDotsMap candidate = null;
+            int minDistance = _minDistance;
+            int minPathLength = _minPathLength;
 
-            for (int attempt = 0; attempt < _maxAttempts; attempt++) {
-                candidate = TryGenerateDotsMap();
+            while (candidate == null) {
+                for (int attempt = 0; attempt < _maxAttempts; attempt++) {
+                    GeneratedDotsMap next = TryGenerateDotsMap();
 
-                if (candidate != null && IsValidHardLevel(candidate)) {
+                    if (IsValidHardLevel(next, minPathLength, minDistance)) {
+                        candidate = next;
+                        break;
+                    }
+                }
+
+                if (candidate != null) {
                     break;
+                }
+
+                if (minDistance > 1) {
+                    minDistance--;
+                }
+                else if (minPathLength > 2) {
+                    minPathLength--;
+                }
+                else {
+                    candidate = TryGenerateDotsMap();   // safety net; on 6x6 with 5 dots this is never reached
                 }
             }
 
@@ -163,20 +182,19 @@ namespace Imaginophobia {
             return count;
         }
 
-        private bool IsValidHardLevel(GeneratedDotsMap map) {
+        private bool IsValidHardLevel(GeneratedDotsMap map, int minPathLength, int minDistance) {
             foreach (var kvp in map.Dots) {
                 int colorId = kvp.Key;
                 Point start = kvp.Value.start;
                 Point end = kvp.Value.end;
 
-                // 1. Check path length
-                if (map.PathLengths[colorId] < _minPathLength)
+                if (map.PathLengths[colorId] < minPathLength || map.PathLengths[colorId] < 2) {
                     return false;
+                }
 
-                // 2. Check Manhattan distance between endpoints
-                int distance = Math.Abs(start.X - end.X) + Math.Abs(start.Y - end.Y);
-                if (distance < _minDistance)
+                if (Math.Abs(start.X - end.X) + Math.Abs(start.Y - end.Y) < minDistance) {
                     return false;
+                }
             }
 
             return true;

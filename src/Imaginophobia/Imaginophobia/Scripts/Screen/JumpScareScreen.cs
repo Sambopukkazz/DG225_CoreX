@@ -14,6 +14,8 @@ namespace Imaginophobia {
         public JumpScareScreen() {
             _textureAtlas = MainGame.Content.Load<Texture2DAtlas>("Phobias/spritesheet_entamaphobia");
 
+            AudioManager.Instance.StopSFX(SoundEffectName.EntamaPresence);
+
             AudioManager.Instance.PlaySFX(SoundEffectName.EntamaJumpscare, volume: 0.2f);
 
             MainGame.GameState = GameState.Jumpscare;

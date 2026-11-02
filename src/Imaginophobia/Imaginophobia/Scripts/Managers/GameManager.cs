@@ -91,9 +91,12 @@ namespace Imaginophobia {
             //_cameraShaker.Update(gameTime);
 
             if (_player.Sanity <= 0 && MainGame.GameState == GameState.Gameplay) {
+                AudioManager.Instance.ClearSFXs();
                 MainGame.ScreenManager.ClearScreens(new DeathScreen(), 0, 2, 1);
                 MainGame.GameState = GameState.Lose;
             }
+
+            Cheat();
         }
 
         public void Draw(GameTime gameTime) {
@@ -135,7 +138,7 @@ namespace Imaginophobia {
 
         private void OnDoorInteracted(string sceneName) {
             if (sceneName == "end") {
-                if (ObjectiveManager.AllValvesRepaired && SaveManager.AllSewerLightsAreOn()) {
+                if ((ObjectiveManager.AllValvesRepaired && SaveManager.AllSewerLightsAreOn()) || InputManager.HoldKey(Keys.F10)) {
                     ObjectiveManager.Complete("exit-ladder");
                     SaveManager.Delete();
                     ObjectiveManager.ResetValves();
@@ -212,19 +215,20 @@ namespace Imaginophobia {
         }
 
         private void OnEnemyRemoved(GameObject enemy) {
-            //if (enemy is Scopophobia && ObjectiveManager.IsComplete("fixBlackout") == false) {
-            //    _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
-            //}
             if (enemy is Nyctophobia || enemy is Entamaphobia) {
                 return;
             }
 
-            //if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false) {
-            //    ObjectiveManager.Complete("collidedAutophobia");
-            //    _uiManager.ShowMessage("Flashlight might be useful.", 4f);
-            //}
-
             _collisionManager.RemoveCollider(enemy as ICollisionActor);
+        }
+
+        private void Cheat(){
+            if (InputManager.PressedKey(Keys.LeftControl) && InputManager.PressedKey(Keys.RightShift) && InputManager.PressedKey(Keys.OemPlus)) {
+                _player.Sanity += 10;
+            }
+            else if (InputManager.PressedKey(Keys.LeftControl) && InputManager.PressedKey(Keys.RightShift) && InputManager.PressedKey(Keys.OemMinus)) {
+                _player.Sanity -= 10;
+            }
         }
 
         public void Dispose() {

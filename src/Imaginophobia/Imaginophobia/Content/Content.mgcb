@@ -688,6 +688,19 @@
 /processorParam:Version=3.8.5.0
 /build:UI/slider_thumbinstance_placeholder.png
 
+#begin UI/sprite_bar_sanity.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:UI/sprite_bar_sanity.png
+
 #begin UI/sprite_button_pause.png
 /importer:TextureImporter
 /processor:TextureProcessor

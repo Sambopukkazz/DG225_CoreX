@@ -97,23 +97,19 @@ namespace Imaginophobia {
                 _enemies[i].Update();
             }
 
-            if (SceneManager.GetActiveScene().Name == "tilemap_sewer") {
-                if(_continueSpawnEnemy == false) {
-                    _continueSpawnEnemy = true;
-                    Time.GetTimer("ScopoSpawnTimer").Resume();
-                    Time.GetTimer("AutoSpawnTimer").Resume();
-                    Time.GetTimer("NyctoSpawnTimer").Resume();
-                    Time.GetTimer("EntamaSpawnTimer").Pause();
-                }
+            if (SceneManager.GetActiveScene().Name == "tilemap_sewer" && _continueSpawnEnemy == false) {
+                _continueSpawnEnemy = true;
+                Time.GetTimer("ScopoSpawnTimer").Resume();
+                Time.GetTimer("AutoSpawnTimer").Resume();
+                Time.GetTimer("NyctoSpawnTimer").Resume();
+                Time.GetTimer("EntamaSpawnTimer").Pause();
             }
-            else {
-                if (_continueSpawnEnemy == true) {
-                    _continueSpawnEnemy = false;
-                    Time.GetTimer("ScopoSpawnTimer").Pause();
-                    Time.GetTimer("AutoSpawnTimer").Pause();
-                    Time.GetTimer("NyctoSpawnTimer").Pause();
-                    Time.GetTimer("EntamaSpawnTimer").Resume();
-                }
+            else if (SceneManager.GetActiveScene().Name != "tilemap_sewer" && _continueSpawnEnemy == true) {
+                _continueSpawnEnemy = false;
+                Time.GetTimer("ScopoSpawnTimer").Pause();
+                Time.GetTimer("AutoSpawnTimer").Pause();
+                Time.GetTimer("NyctoSpawnTimer").Pause();
+                Time.GetTimer("EntamaSpawnTimer").Resume();
             }
 
             if(_worldBound != worldBound) {
@@ -137,12 +133,8 @@ namespace Imaginophobia {
             }
 
             Vector2 pos;
-            if (_player.CurrentAction == CharacterAction.Hiding) {
-                pos.Y = _player.PreviousPos.Y;
-            }
-            else {
-                pos.Y = _player.Transform.Position.Y;
-            }
+            pos.Y = 700;
+
             int posOffset = _rand.Next(100, 500);
             bool spawnLeft;
             if (_rand.Next(0, 10) < 5) {
@@ -155,7 +147,7 @@ namespace Imaginophobia {
             }
 
             if (spawnLeft) {
-                pos.X -= 1920;
+                pos.X -= 10000;
             }
             else {
                 pos.X += 1920;
@@ -174,12 +166,8 @@ namespace Imaginophobia {
             }
 
             Vector2 pos;
-            if (_player.CurrentAction == CharacterAction.Hiding) {
-                pos.Y = _player.PreviousPos.Y;
-            }
-            else {
-                pos.Y = _player.Transform.Position.Y;
-            }
+            pos.Y = 700;
+
             int posOffset = _rand.Next(100, 500);
             bool spawnLeft;
             if (_rand.Next(0, 10) < 5) {
@@ -195,7 +183,7 @@ namespace Imaginophobia {
 
             if (randomNumber < _scopophobiaSpawnChance) {
                 if (spawnLeft) {
-                    pos.X -= 1920;
+                    pos.X -= 10000;
                 }
                 else {
                     pos.X += 1920;
@@ -260,7 +248,7 @@ namespace Imaginophobia {
         }
 
         public void SpawnEntamaphobia() {
-            if (Time.TimerExist("EntamaCooldown") || HasActiveEntamaphobia() || _player.CurrentAction == CharacterAction.Peeking) {
+            if (Time.TimerExist("EntamaCooldown") || HasActiveEntamaphobia() || _player.CurrentAction == CharacterAction.Peeking || _player.CurrentAction == CharacterAction.Reading) {
                 return;
             }
 
