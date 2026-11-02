@@ -206,6 +206,7 @@ namespace Imaginophobia {
             //Battery Bar
             spriteBatch.DrawRectangle(210, 150, 250, 20, Color.White);
             spriteBatch.FillRectangle(210, 150, 2.5f * _player.Battery, 20, Color.White);
+            
 
             _textManager.Draw();
 

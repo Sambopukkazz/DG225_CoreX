@@ -219,10 +219,10 @@ namespace Imaginophobia {
                 return;
             }
 
-            if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false) {
-                ObjectiveManager.Complete("collidedAutophobia");
-                _uiManager.ShowMessage("Flashlight might be useful.", 4f);
-            }
+            //if (enemy is Autophobia autiophobia && autiophobia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false) {
+            //    ObjectiveManager.Complete("collidedAutophobia");
+            //    _uiManager.ShowMessage("Flashlight might be useful.", 4f);
+            //}
 
             _collisionManager.RemoveCollider(enemy as ICollisionActor);
         }
