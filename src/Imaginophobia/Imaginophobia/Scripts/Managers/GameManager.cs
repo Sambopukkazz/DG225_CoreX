@@ -184,7 +184,7 @@ namespace Imaginophobia {
                 ObjectiveManager.Complete("entered-sewer");
             }
 
-            MainGame.Loading = false;
+            //MainGame.Loading = false;
         }
         
         private void OnEnemySpawned(GameObject enemy) {

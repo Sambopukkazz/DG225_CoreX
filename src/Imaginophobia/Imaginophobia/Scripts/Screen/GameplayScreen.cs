@@ -48,7 +48,7 @@ namespace Imaginophobia {
             AudioManager.Instance.PlayBackgroundSound(BackgroundSound.AmbElectric);
 
             MainGame.GameState = GameState.Gameplay;
-            MainGame.Loading = false;
+            //MainGame.Loading = false;
         }
 
         public override void Update(GameTime gameTime) {
@@ -99,7 +99,7 @@ namespace Imaginophobia {
 
         private void ReturnToMenu() {
             if (MainGame.Loading == false) {
-                MainGame.Loading = true;
+                //MainGame.Loading = true;
                 MainGame.ScreenManager.ClearScreens(new MainMenuScreen(), 1, 1);
             }
         }

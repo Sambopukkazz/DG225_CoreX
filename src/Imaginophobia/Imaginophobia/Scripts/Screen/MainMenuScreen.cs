@@ -48,7 +48,7 @@ namespace Imaginophobia {
             AudioManager.Instance.UnmuteAudio();
 
             MainGame.GameState = GameState.Menu;
-            MainGame.Loading = false;
+            //MainGame.Loading = false;
 
             Time.TimeScale = 1;
         }

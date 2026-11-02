@@ -84,6 +84,8 @@ namespace Imaginophobia {
             _transitionState = TransitionState.In;
             _fadeTargetTime = seconds;
             _fadeCurrentTime = seconds;
+
+            MainGame.Loading = false;
         }
         public void FadeOut(float seconds) {
             _transitionState = TransitionState.Out;

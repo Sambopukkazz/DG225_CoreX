@@ -57,7 +57,7 @@ namespace Imaginophobia {
 
             AudioManager.Instance.ChangeMediaVolume(false, 0.5f);
 
-            MainGame.Loading = false;
+            //MainGame.Loading = false;
         }
 
         public override void Update(GameTime gameTime) {
@@ -80,7 +80,7 @@ namespace Imaginophobia {
                     AudioManager.Instance.ChangeMediaVolume(true, 0.5f);
                     MainGame.GameState = GameState.Gameplay;
                     MainGame.ScreenManager.FadeIn(0.5f);
-                    MainGame.Loading = false;
+                    //MainGame.Loading = false;
                 };
 
                 _player.TogglePeek();

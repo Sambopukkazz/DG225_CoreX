@@ -86,7 +86,9 @@ namespace Imaginophobia {
 
             visual.States.Pushed.Clear();
             visual.States.Pushed.Apply = () => {
-                label.Y = label.Y + 10;
+                if (MainGame.Loading == false) {
+                    label.Y = label.Y + 10;
+                }
                 //AudioManager.Instance.PlayButtonPush();
             };
 

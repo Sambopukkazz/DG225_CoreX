@@ -25,16 +25,19 @@ namespace Imaginophobia {
             _decreaseValue = 4;
             _increaseStageValue = _rand.Next(343, 492);
 
-            AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaAdvance, 60, 1920, volume: 0.5f);
+            AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaAdvance, 60, 1920, volume: 0.8f);
 
-            switch (_player.SanityState) {
-                case SanityState.Anxious:
-                    _increaseSpeed = _increaseSpeed * 1.1f;
-                    break;
-                case SanityState.Insane:
-                    _increaseSpeed = _increaseSpeed * 1.2f;
-                    break;
+            if (_player.SanityState == SanityState.Insane) {
+                _increaseSpeed = _increaseSpeed * 1.2f;
             }
+            //switch (_player.SanityState) {
+            //    case SanityState.Anxious:
+            //        _increaseSpeed = _increaseSpeed * 1.1f;
+            //        break;
+            //    case SanityState.Insane:
+                    
+            //        break;
+            //}
         }
 
         public override void Update() {
@@ -52,11 +55,11 @@ namespace Imaginophobia {
 
                     switch (_stage) {
                         case 2:
-                            AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaAdvance, 60, 1920, volume: 0.7f);
+                            AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaAdvance, 60, 1920, volume: 0.85f);
                             _increaseStageValue = _rand.Next(521, 678);
                             break;
                         case 3:
-                            AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaAdvance, 60, 1920, volume: 0.85f);
+                            AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaAdvance, 60, 1920, volume: 0.9f);
                             AudioManager.Instance.PlaySFX(SoundEffectName.EntamaPresence, repeat: true, volume: 0.5f);
                             _increaseStageValue = _rand.Next(60, 1500);
                             break;
@@ -109,13 +112,13 @@ namespace Imaginophobia {
         public override void OnDestroyed() {
             switch (_stage) {
                 case 1:
-                    _player.Sanity -= 10;
+                    _player.Sanity -= 25;
                     break;
                 case 2:
-                    _player.Sanity -= 20;
+                    _player.Sanity -= 30;
                     break;
                 case 3:
-                    _player.Sanity -= 30;
+                    _player.Sanity -= 35;
                     break;
                 case 4:
                     _player.Sanity -= 40;
