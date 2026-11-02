@@ -84,21 +84,25 @@ namespace Imaginophobia {
                         case 0:
                             AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaDecrease, 60, 1920, volume: 0.2f);
                             AudioManager.Instance.StopSFX(SoundEffectName.EntamaPresence);
+                            MainGame.ScreenManager.PulseFade(0,0.1f);
                             SetActive(false);
                             break;
                         case 1:
                             AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaDecrease, 60, 1920, volume: 0.4f);
                             AudioManager.Instance.StopSFX(SoundEffectName.EntamaPresence);
                             _decreaseStageValue = 3;
+                            MainGame.ScreenManager.PulseFade(0, 0.1f);
                             break;
                         case 2:
                             AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaDecrease, 60, 1920, volume: 0.6f);
                             AudioManager.Instance.FadeSFXVolumeOut(SoundEffectName.EntamaPresence, 1.5f);
                             _decreaseStageValue = 3;
+                            MainGame.ScreenManager.PulseFade(0, 0.1f);
                             break;
                         case 3:
                             AudioManager.Instance.Play3DSFX(_door.Shape.BoundingBox.Center, SoundEffectName.EntamaDecrease, 20, 1920, volume: 0.8f);
                             _decreaseStageValue = 4;
+                            MainGame.ScreenManager.PulseFade(0, 0.1f);
                             break;
                     }
                     //_nextStageValue = _rand.Next(3, 6);

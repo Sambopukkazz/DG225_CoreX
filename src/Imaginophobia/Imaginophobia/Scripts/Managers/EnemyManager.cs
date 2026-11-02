@@ -166,7 +166,12 @@ namespace Imaginophobia {
             }
 
             Vector2 pos;
-            pos.Y = 700;
+            if (_player.CurrentAction == CharacterAction.Hiding) {
+                pos.Y = _player.PreviousPos.Y;
+            }
+            else {
+                pos.Y = _player.Transform.Position.Y;
+            }
 
             int posOffset = _rand.Next(100, 500);
             bool spawnLeft;
@@ -195,6 +200,7 @@ namespace Imaginophobia {
                     EnemySpawned?.Invoke(autophobia);
                 }
 
+                pos.Y = 700;
                 Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
                 _enemies.Add(scopophobia);
                 Time.GetTimer("ScopoSpawnTimer").Pause();
