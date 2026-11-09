@@ -71,7 +71,8 @@ namespace Imaginophobia {
 
             if (MinigameActive && MainGame.GameState != GameState.Pause) {
                 MouseStateExtended mouseStateExtended = MouseExtended.GetState();
-                Point? hoveredPoint = ScreenToGrid(new Vector2(mouseStateExtended.X, mouseStateExtended.Y));
+                Vector2 mousePosition = new Vector2(mouseStateExtended.X, mouseStateExtended.Y);
+                Point? hoveredPoint = ScreenToGrid(mousePosition);
 
                 if (mouseStateExtended.IsButtonDown(MouseButton.Left)) {
                     if (hoveredPoint.HasValue) {
@@ -88,7 +89,7 @@ namespace Imaginophobia {
                             }
                         }
                         else if (!_currentPath.IsComplete) {
-                            TryExtendPath(_currentPath, pos);
+                            TryExtendPath(_currentPath, pos, mousePosition);
                         }
                     }
                 }
@@ -271,45 +272,114 @@ namespace Imaginophobia {
             return null;
         }
 
-        public void TryExtendPath(WirePath path, Point nextPoint) {
-            Point lastPoint = path.Points[path.Points.Count - 1];
+        public void TryExtendPath(WirePath path, Point target, Vector2 mousePos) {
+            // Mouse input is sampled once per frame, so a fast or diagonal drag can jump
+            // several cells at once. Walk one orthogonal step at a time toward the target,
+            // filling every skipped cell and applying the normal rules to each one.
+            int maxSteps = _column * _row + 1;
+            for (int i = 0; i < maxSteps; i++) {
+                Point lastPoint = path.Points[path.Points.Count - 1];
+                int dx = target.X - lastPoint.X;
+                int dy = target.Y - lastPoint.Y;
 
-            int distance = Math.Abs(nextPoint.X - lastPoint.X) + Math.Abs(nextPoint.Y - lastPoint.Y);
-            if (distance != 1) return;
+                if (dx == 0 && dy == 0) return;
+
+                Point dir;
+                if (dx == 0) {
+                    dir = new Point(0, Math.Sign(dy));
+                }
+                else if (dy == 0) {
+                    dir = new Point(Math.Sign(dx), 0);
+                }
+                else {
+                    // Diagonal target: two elbows are possible, enter the one nearest the cursor
+                    dir = ChooseElbow(path, lastPoint, new Point(Math.Sign(dx), 0), new Point(0, Math.Sign(dy)), mousePos);
+                }
+
+                if (!TryStep(path, lastPoint + dir)) return;
+
+                if (path.IsComplete) return;
+            }
+        }
+
+        // Take a single orthogonal step. Returns false when the step is blocked (stop the walk).
+        private bool TryStep(WirePath path, Point nextPoint) {
+            if (nextPoint.X < 0 || nextPoint.X >= _column || nextPoint.Y < 0 || nextPoint.Y >= _row) {
+                return false;
+            }
 
             //Remove the last wire when backtrack
             if (path.Points.Count > 1 && nextPoint == path.Points[path.Points.Count - 2]) {
                 path.Points.RemoveAt(path.Points.Count - 1);
-                return;
+                return true;
             }
 
             GridCell targetCell = _cells[nextPoint.X, nextPoint.Y];
 
             //Check if wire hit other dot color
-            if (targetCell.IsEndpoint && targetCell.Color != path.Color) return;
+            if (targetCell.IsEndpoint && targetCell.Color != path.Color) return false;
 
             //Check if wire hit other  completed wire color
             foreach (var existingPath in _completedPaths) {
-                if (existingPath.Points.Contains(nextPoint) && existingPath != path)
-                    return;
+                if (existingPath != path && existingPath.Points.Contains(nextPoint))
+                    return false;
             }
 
             //Check if wire hit itself color
-            if (!path.Points.Contains(nextPoint)) {
-                path.Points.Add(nextPoint);
+            if (path.Points.Contains(nextPoint)) return false;
 
-                //Check if reached endpoint with same color
-                if (targetCell.IsEndpoint && targetCell.Color == path.Color && path.Points.Count > 1) {
-                    path.IsComplete = true;
-                    _completedPaths.Add(path);
-                    AudioManager.Instance.PlaySFX(SoundEffectName.ElecSuccess, volume: 0.75f);
-                }
+            path.Points.Add(nextPoint);
+
+            //Check if reached endpoint with same color
+            if (targetCell.IsEndpoint && targetCell.Color == path.Color && path.Points.Count > 1) {
+                path.IsComplete = true;
+                _completedPaths.Add(path);
+                AudioManager.Instance.PlaySFX(SoundEffectName.ElecSuccess, volume: 0.75f);
             }
+
+            return true;
+        }
+
+        // For a diagonal target, pick which elbow cell to enter first based on the cursor position.
+        private Point ChooseElbow(WirePath path, Point from, Point stepX, Point stepY, Vector2 mousePos) {
+            Point cellX = from + stepX;
+            Point cellY = from + stepY;
+
+            bool openX = IsCellOpen(path, cellX);
+            bool openY = IsCellOpen(path, cellY);
+
+            if (openX && openY) {
+                float distX = Vector2.DistanceSquared(mousePos, GetCellCenter(cellX));
+                float distY = Vector2.DistanceSquared(mousePos, GetCellCenter(cellY));
+                return distX <= distY ? stepX : stepY;
+            }
+
+            if (openX) return stepX;
+            if (openY) return stepY;
+
+            // Both blocked - either works, the walk will stop on the step itself
+            return stepX;
+        }
+
+        private bool IsCellOpen(WirePath path, Point cell) {
+            if (cell.X < 0 || cell.X >= _column || cell.Y < 0 || cell.Y >= _row) return false;
+            if (_cells[cell.X, cell.Y].IsEndpoint && _cells[cell.X, cell.Y].Color != path.Color) return false;
+            if (path.Points.Contains(cell)) return false;
+
+            foreach (var existingPath in _completedPaths) {
+                if (existingPath != path && existingPath.Points.Contains(cell)) return false;
+            }
+
+            return true;
         }
 
         public Vector2 GetCellTopCenter(Point pos) {
             Vector2 center = new Vector2(_gridPos.X + pos.X * _gridSize + _gridSize / 2f, _gridPos.Y + pos.Y * _gridSize);
             return center;
+        }
+
+        public Vector2 GetCellCenter(Point pos) {
+            return new Vector2(_gridPos.X + pos.X * _gridSize + _gridSize / 2f, _gridPos.Y + pos.Y * _gridSize + _gridSize / 2f);
         }
 
         public Vector2 GetCellTopLeft(Point pos) {

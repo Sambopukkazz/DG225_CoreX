@@ -183,8 +183,11 @@ namespace Imaginophobia {
 
                     if(timer != null) {
                         spriteBatch.FillRectangle(_spaceBarBackgroundRect.X, _spaceBarBackgroundRect.Y, timer.TimeLeft * timeFactor, _spaceBarBackgroundRect.Height, color);
-                    }
-                    
+                    }                    
+                }
+                else if (_player.CollidingTrigger?.Tag == "door" && Time.TimerExist("DoorCooldown") == true) {
+                    float timeFactor = _spaceBarBackgroundMiddleRect.Width / 2f;
+                    spriteBatch.FillRectangle(_spaceBarBackgroundMiddleRect.X, _spaceBarBackgroundMiddleRect.Y, Time.GetTimer("DoorCooldown").TimeLeft * timeFactor, _spaceBarBackgroundMiddleRect.Height, ColorHelper.FromHex("#61070786"));
                 }
             }
 

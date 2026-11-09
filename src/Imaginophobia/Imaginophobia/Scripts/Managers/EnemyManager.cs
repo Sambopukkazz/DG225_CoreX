@@ -100,11 +100,14 @@ namespace Imaginophobia {
             if (SceneManager.GetActiveScene().Name == "tilemap_sewer" && _continueSpawnEnemy == false) {
                 _continueSpawnEnemy = true;
                 Time.GetTimer("EntamaSpawnTimer").Pause();
-                Time.AddTimer(PlayerEnteringSewer,2);
+                Time.GetTimer("AutoSpawnTimer").Resume();
+                Time.AddTimer(PlayerEnteringSewer,10, "BlackoutEnemyCooldown");
                 
             }
             else if (SceneManager.GetActiveScene().Name != "tilemap_sewer" && _continueSpawnEnemy == true) {
                 _continueSpawnEnemy = false;
+                Time.RemoveTimer("BlackoutEnemyCooldown");
+                Time.GetTimer("AutoSpawnTimer").Pause();
                 Time.GetTimer("EntamaSpawnTimer").Resume();
                 PlayerExitingSewer();
             }
@@ -199,11 +202,11 @@ namespace Imaginophobia {
                     pos.X += 1920;
                 }
 
-                if (randomNumber < _autophobiaSpawnChance) {
-                    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
-                    _enemies.Add(autophobia);
-                    EnemySpawned?.Invoke(autophobia);
-                }
+                //if (randomNumber < _autophobiaSpawnChance) {
+                //    Autophobia autophobia = new Autophobia(pos, _player, _autophobiaSpriteSheet);
+                //    _enemies.Add(autophobia);
+                //    EnemySpawned?.Invoke(autophobia);
+                //}
 
                 pos.Y = 700;
                 Scopophobia scopophobia = new Scopophobia(pos, _player, _scopophobiaTexture);
@@ -303,13 +306,11 @@ namespace Imaginophobia {
 
         public void PlayerEnteringSewer() {
             Time.GetTimer("ScopoSpawnTimer").Resume();
-            Time.GetTimer("AutoSpawnTimer").Resume();
             Time.GetTimer("NyctoSpawnTimer").Resume();
         }
 
         public void PlayerExitingSewer() {
             Time.GetTimer("ScopoSpawnTimer").Pause();
-            Time.GetTimer("AutoSpawnTimer").Pause();
             Time.GetTimer("NyctoSpawnTimer").Pause();
         }
 

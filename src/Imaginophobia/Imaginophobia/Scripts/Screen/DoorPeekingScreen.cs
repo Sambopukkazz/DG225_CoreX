@@ -80,6 +80,8 @@ namespace Imaginophobia {
                     AudioManager.Instance.ChangeMediaVolume(true, 0.5f);
                     MainGame.GameState = GameState.Gameplay;
                     MainGame.ScreenManager.FadeIn(0.5f);
+
+                    Time.AddTimer(5, "EntamaCooldown");
                     //MainGame.Loading = false;
                 };
 

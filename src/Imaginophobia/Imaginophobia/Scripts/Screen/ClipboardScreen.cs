@@ -23,7 +23,7 @@ namespace Imaginophobia {
         public int MaxPage = 4;
         private Random _rand;
         private float _lensAlpha = 0f;
-        private float _zoom = 4f;
+        private float _zoom = 3f;
         private int _lastScroll = 0;
 
         // Magnifier lens. Glass = LensSize - 2*Bezel = 240, which every integer zoom
@@ -31,7 +31,6 @@ namespace Imaginophobia {
         private const int LensSize = 256;
         private const int Bezel = 8;
         private bool _secret;
-        private const int InnerLine = 3;
 
         public ClipboardScreen(Player player) {
             _textureAtlas = MainGame.Content.Load<Texture2DAtlas>("UI/spritesheet_clipboard");
