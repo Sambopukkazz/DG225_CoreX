@@ -22,7 +22,6 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Imaginophobia {
     public class Player : GameObject, ISpatialSoundApplicable, ICollisionActor, IDisposable {
@@ -39,9 +38,11 @@ namespace Imaginophobia {
         public PointLight ScotopicLight => _scotopicLight;
         private Spotlight _flashLight;
         public Spotlight FlashLight => _flashLight;
+        private PointLight _centeredFlashLight;
         public Vector2 Direction { get; private set; }
         public Vector2 Velocity { get; private set; }
         private Vector2 _flashlightOffset;
+        private Vector2 _centerOffset;
         public float MoveSpeed { get; private set; } = 250f;
         private int _previousFrame;
         public SanityState SanityState { get; set; }
@@ -63,7 +64,7 @@ namespace Imaginophobia {
         private (float, float, float) _availableSanityRedectionSpeed = (0.5f, 0.2f, 0f); //per second Normal,Anxious,Insane
         public Trigger CollidingTrigger { get; set; }
         private Tweener _tweener;
-
+        public bool TimeOut;
 
         public Player() : base("Player", "Player"){
             SetUpAnimation();
@@ -83,8 +84,18 @@ namespace Imaginophobia {
             };
             _flashlightOffset = new Vector2(85,-12);
 
+            _centeredFlashLight = new PointLight() {
+                Position = new Vector2(540, 810),
+                Color = Color.FromHSV(150f, 0.5f, 0.5f),
+                Scale = new Vector2(600, 600),
+                Intensity = 1f,
+                Enabled = false
+            };
+            _centerOffset = new Vector2(0,-200);
+
             LightManager.Penumbra.Lights.Add(_scotopicLight);
             LightManager.Penumbra.Lights.Add(_flashLight);
+            LightManager.Penumbra.Lights.Add(_centeredFlashLight);
 
             //Listener
             Listener = new AudioListener();
@@ -98,6 +109,8 @@ namespace Imaginophobia {
             _tweener = new Tweener();
 
             _allowMovement = true;
+
+            SanityState = SanityState.Normal;
 
             UpdateShape();
         }
@@ -129,7 +142,7 @@ namespace Imaginophobia {
                 UpdateShape();
             }
 
-            if (InputManager.PressedKey(Keys.F) && CurrentAction != CharacterAction.Repairing && CurrentAction != CharacterAction.Hiding) {
+            if (InputManager.PressedKey(Keys.F) && CurrentAction != CharacterAction.Hiding && CurrentAction != CharacterAction.Reading) {
                 ToggleFlashLight();
             }
             else if (InputManager.ReleasedKey(Keys.F) && CurrentAction == CharacterAction.Peeking) {
@@ -183,9 +196,9 @@ namespace Imaginophobia {
                     }
                     
                     _animatedSprite.SetAnimation("back");
-                    if (_flashLight.Enabled) {
-                        ToggleFlashLight();
-                    }
+                    //if (_flashLight.Enabled) {
+                    //    ToggleFlashLight();
+                    //}
                     CurrentAction = CharacterAction.Repairing;
                 }
 
@@ -228,6 +241,18 @@ namespace Imaginophobia {
             else {
                 _eyeSightLength = 0;
             }
+
+            if (_animatedSprite.CurrentAnimation == "back" && _flashLight.Enabled) {
+                _flashLight.Intensity = 0;
+                _centeredFlashLight.Enabled = true;
+                _eyeSightLength = 0;
+            }
+            else {
+                _flashLight.Intensity = 1;
+                _centeredFlashLight.Enabled = false;
+            }
+
+            _centeredFlashLight.Position = Transform.Position + _centerOffset;
 
             if (SceneManager.GetActiveScene().Name == Scene.tilemap_sewer.ToString()) {
                 Sanity -= _sewerSanityRedectionSpeed * Time.DeltaTime;
@@ -408,7 +433,9 @@ namespace Imaginophobia {
                 _allowMovement = true;
                 FocusLevel = 1;
                 CurrentAction = CharacterAction.Idle;
-                Transform.Position = PreviousPos;
+                Vector2 pos = PreviousPos;
+                pos.X = Transform.Position.X;
+                Transform.Position = pos;
                 Time.RemoveTimer("hideTime");
                 Time.AddTimer(HideCooldown, "hideCooldown");
                 AudioManager.Instance.StopSFX(SoundEffectName.LockerClose);
@@ -431,10 +458,6 @@ namespace Imaginophobia {
 
         public void ToggleRepairing() {
             if (CurrentAction != CharacterAction.Repairing && CurrentAction != CharacterAction.Checking) {
-                if (_flashLight.Enabled) {
-                    ToggleFlashLight();
-                }
-
                 _allowMovement = false;
                 _animatedSprite.SetAnimation("back");
                 CurrentAction = CharacterAction.Repairing;
@@ -519,10 +542,6 @@ namespace Imaginophobia {
                 _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item1;
                 SanityStateChanged?.Invoke();
             }
-        }
-
-        public void Dead() {
-            Sanity = 0;
         }
 
         public void LoadScenePosition(Vector2 pos) {

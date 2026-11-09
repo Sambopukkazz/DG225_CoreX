@@ -104,7 +104,7 @@ namespace Imaginophobia {
                 NyctoClose();
                 _vignettePhase = VignettePhase.StartNyctophobia;
             }
-            else if (_player.Nyctophobia == false && _vignettePhase == VignettePhase.StartNyctophobia) {
+            else if (_player.Nyctophobia == false && _vignettePhase == VignettePhase.StartNyctophobia && _player.TimeOut == false) {
                 NyctoOpen();
                 _vignettePhase = VignettePhase.StopNyctophobia;
             }

@@ -19,8 +19,6 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using static Imaginophobia.SceneManager;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Imaginophobia {
     public class GameManager : IDisposable {
@@ -30,7 +28,8 @@ namespace Imaginophobia {
         private SceneManager _sceneManager;
         private CollisionManager _collisionManager;
         private EnemyManager _enemyManager;
-        private UIManager _uiManager;      
+        private UIManager _uiManager;  
+        private int _gameTimeLimit = 721;
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
@@ -50,7 +49,10 @@ namespace Imaginophobia {
             _sceneManager.SceneLoaded += OnSceneLoaded;
             _sceneManager.LoadScene(Scene.tilemap_electrical_room.ToString(), _camera, _collisionManager, _lightManager);
 
-            Time.AddTimer(_player.Dead, 721, "MainTimer");
+            Time.AddTimer(() => {
+                _player.TimeOut = true;
+                _uiManager?.NyctoClose();
+            }, _gameTimeLimit, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
             Time.TimeScale = 1;
@@ -156,7 +158,7 @@ namespace Imaginophobia {
             if (_enemyManager.HasActiveScopophobia()) {
                 AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck, interrupt: true);
             }
-            else {
+            else if (Time.TimerExist("DoorCooldown") == false) {
                 if (_enemyManager.HasActiveEntamaphobia()) {
                     _enemyManager.ClearEnemies();
                     _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
@@ -174,6 +176,7 @@ namespace Imaginophobia {
                     MainGame.ScreenManager.FadeIn(0.25f);
                 };
 
+                Time.AddTimer(2, "DoorCooldown");
                 Time.AddTimer(action, 0.25f, "ScreenTimer");
 
                 

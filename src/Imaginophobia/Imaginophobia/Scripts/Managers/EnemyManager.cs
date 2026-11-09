@@ -99,17 +99,14 @@ namespace Imaginophobia {
 
             if (SceneManager.GetActiveScene().Name == "tilemap_sewer" && _continueSpawnEnemy == false) {
                 _continueSpawnEnemy = true;
-                Time.GetTimer("ScopoSpawnTimer").Resume();
-                Time.GetTimer("AutoSpawnTimer").Resume();
-                Time.GetTimer("NyctoSpawnTimer").Resume();
                 Time.GetTimer("EntamaSpawnTimer").Pause();
+                Time.AddTimer(PlayerEnteringSewer,2);
+                
             }
             else if (SceneManager.GetActiveScene().Name != "tilemap_sewer" && _continueSpawnEnemy == true) {
                 _continueSpawnEnemy = false;
-                Time.GetTimer("ScopoSpawnTimer").Pause();
-                Time.GetTimer("AutoSpawnTimer").Pause();
-                Time.GetTimer("NyctoSpawnTimer").Pause();
                 Time.GetTimer("EntamaSpawnTimer").Resume();
+                PlayerExitingSewer();
             }
 
             if(_worldBound != worldBound) {
@@ -123,7 +120,15 @@ namespace Imaginophobia {
 
         public void Draw() {
             for (int i = _enemies.Count - 1; i >= 0; i--) {
-                _enemies[i].Draw();
+                if (_enemies[i] is not Scopophobia) {
+                    _enemies[i].Draw();
+                }
+            }
+
+            for (int i = _enemies.Count - 1; i >= 0; i--) {
+                if (_enemies[i] is Scopophobia) {
+                    _enemies[i].Draw();
+                }
             }
         }
 
@@ -294,6 +299,18 @@ namespace Imaginophobia {
                 _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item1;
                 _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item1;
             }
+        }
+
+        public void PlayerEnteringSewer() {
+            Time.GetTimer("ScopoSpawnTimer").Resume();
+            Time.GetTimer("AutoSpawnTimer").Resume();
+            Time.GetTimer("NyctoSpawnTimer").Resume();
+        }
+
+        public void PlayerExitingSewer() {
+            Time.GetTimer("ScopoSpawnTimer").Pause();
+            Time.GetTimer("AutoSpawnTimer").Pause();
+            Time.GetTimer("NyctoSpawnTimer").Pause();
         }
 
         public void Dispose() {

@@ -19,7 +19,7 @@ namespace Imaginophobia {
         private int _column = 6;
         private int _row = 6;
         private int _gridSize = 100;
-        private int _maxRepairStage = 5;
+        private float _maxRepairStage = 3;
         private float _progressValue;
         
         private Vector2 _gridPos;

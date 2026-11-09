@@ -32,6 +32,7 @@ namespace Imaginophobia {
         private Player _player;
         private Trigger _trigger;
         private Random _rand;
+        private bool _progressLocked;
 
         public bool MinigameActive;
         public bool MinigameVisible;
@@ -48,6 +49,9 @@ namespace Imaginophobia {
             RandomNeedleSpeed();
             //temp
             ObjectiveManager.Complete("valve-start");
+
+            _progressLocked = true;
+            Time.AddTimer(() => _progressLocked = false, 2, "ProgressLockTimer");
         }
 
         public override void Update(GameTime gameTime) {
@@ -61,16 +65,18 @@ namespace Imaginophobia {
                 _needleAngle += (_needleSpeed / 38f) + (_angularSpeed / 100f);
                 _needleAngle = MathHelper.Clamp(_needleAngle, MathHelper.ToRadians(225), MathHelper.ToRadians(313));
 
-                if (_needleAngle > MathHelper.ToRadians(255) && _needleAngle < MathHelper.ToRadians(285)) {
-                    _progressValue += 20f * Time.DeltaTime;
-                }
-                else if (_needleAngle >= MathHelper.ToRadians(285) && _needleAngle <= MathHelper.ToRadians(313)) {
-                    _progressValue -= 35f * Time.DeltaTime;
-                    AudioManager.Instance.PlaySFX(SoundEffectName.PipeFail, waitExist: true, volume: 0.75f);
-                }
-                else if (_needleAngle >= MathHelper.ToRadians(225) && _needleAngle <= MathHelper.ToRadians(255)) {
-                    _progressValue -= 15f * Time.DeltaTime;
-                    AudioManager.Instance.PlaySFX(SoundEffectName.PipeFail, waitExist: true, volume: 0.5f);
+                if (_progressLocked == false) {
+                    if (_needleAngle > MathHelper.ToRadians(255) && _needleAngle < MathHelper.ToRadians(285)) {
+                        _progressValue += 20f * Time.DeltaTime;
+                    }
+                    else if (_needleAngle >= MathHelper.ToRadians(285) && _needleAngle <= MathHelper.ToRadians(313)) {
+                        _progressValue -= 35f * Time.DeltaTime;
+                        AudioManager.Instance.PlaySFX(SoundEffectName.PipeFail, waitExist: true, volume: 0.75f);
+                    }
+                    else if (_needleAngle >= MathHelper.ToRadians(225) && _needleAngle <= MathHelper.ToRadians(255)) {
+                        _progressValue -= 15f * Time.DeltaTime;
+                        AudioManager.Instance.PlaySFX(SoundEffectName.PipeFail, waitExist: true, volume: 0.5f);
+                    }
                 }
 
                 _progressValue = MathHelper.Clamp(_progressValue, 0, 200);
@@ -92,7 +98,7 @@ namespace Imaginophobia {
                 MinigameActive = false;
                 _player.ToggleRepairing();
                 _trigger.Progress = _progressValue;
-                this.ScreenManager.CloseScreen();
+                this.ScreenManager.CloseScreen();                
             }
 
             if (_player.CurrentAction == CharacterAction.Checking) {
@@ -113,7 +119,14 @@ namespace Imaginophobia {
                 MainGame.SpriteBatch.DrawArc(_centerOrigin, 315, _needleAngle, MathHelper.ToRadians(2), 20, Color.White, 40f);
                 MainGame.SpriteBatch.Draw(_valveTexture, _centerOrigin, null, Color.White, _valveAngle, _valveOrigin, 8, SpriteEffects.None, 0);
                 MainGame.SpriteBatch.FillRectangle(860, 800, 200, 15, Color.DarkGray);
-                MainGame.SpriteBatch.FillRectangle(860, 800, _progressValue, 15, Color.GreenYellow);
+
+                Color color = Color.GreenYellow;
+                if (_progressLocked == true) {
+                    color = Color.CornflowerBlue;
+                    MainGame.SpriteBatch.DrawRectangle(860 -5, 800 -5, 200 + 10, 15 + 10, Color.LightBlue, 5);
+                }
+
+                MainGame.SpriteBatch.FillRectangle(860, 800, _progressValue, 15, color);
 
                 MainGame.SpriteBatch.End();
             }

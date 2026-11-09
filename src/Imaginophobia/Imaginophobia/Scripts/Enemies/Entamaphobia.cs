@@ -129,7 +129,9 @@ namespace Imaginophobia {
                     break;
             }
 
-            Time.AddTimer(10, "EntamaCooldown");
+            if (_stage == 0) {
+                Time.AddTimer(10, "EntamaCooldown");
+            }
         }
     }
 }

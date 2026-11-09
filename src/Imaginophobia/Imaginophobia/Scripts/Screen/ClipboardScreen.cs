@@ -51,6 +51,7 @@ namespace Imaginophobia {
 
             Time.GetTimer("MainTimer").Pause();
             Time.GetTimer("EntamaSpawnTimer").Pause();
+            Time.GetTimer("EntamaCooldown")?.Pause();
 
             _tweener = new Tweener();
             _tweener.TweenTo(target: this, expression: screen => screen.ClipboardPos, toValue: new Vector2(645, 120), duration: 0.75f)
@@ -87,6 +88,7 @@ namespace Imaginophobia {
                 Time.AddTimer(this.ScreenManager.CloseScreen, 0.75f);
                 Time.GetTimer("MainTimer").Resume();
                 Time.GetTimer("EntamaSpawnTimer").Resume();
+                Time.GetTimer("EntamaCooldown")?.Resume();
             }
 
             _tweener.Update(Time.DeltaTime);
