@@ -56,8 +56,8 @@ namespace Imaginophobia {
             _rectangleFadeOverlay = new BottomFadeOverlay();
 
             _sanityBarRect = new Rectangle(440, 0, 440, 60);
-            _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 300, 50);
-            _spaceBarBackgroundMiddleRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 450, 75);
+            _spaceBarBackgroundRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 240, 40);
+            _spaceBarBackgroundMiddleRect = new Rectangle(960 - (int)((600 * 0.75f) / 2f), 540 + 400, 360, 60);
 
             _tweener = new Tweener();
 
@@ -146,7 +146,7 @@ namespace Imaginophobia {
 
                             Vector2 buttonPos = _spaceBarBackgroundMiddleRect.Position;
                             buttonPos.X += 500;
-                            spriteBatch.Draw(_buttonAtlas["sprite_button_peek"], buttonPos, Color.White);
+                            spriteBatch.Draw(_buttonAtlas["sprite_button_peek"], buttonPos, Color.White * 0.4f, 0, Vector2.Zero, Vector2.One * 0.8f, SpriteEffects.None, 0);
                         }
                         else {
                             //_spaceBarBackgroundRect.X = _player.CollidingTrigger.Shape.BoundingBox.Max.X;
@@ -155,13 +155,13 @@ namespace Imaginophobia {
                             _spaceBarBackgroundMiddleRect.Y = 540 + 400 ;
                         }
 
-                        spriteBatch.Draw(_buttonAtlas["sprite_spacebar"], _spaceBarBackgroundMiddleRect.ToRectangle(), Color.White);
+                        spriteBatch.Draw(_buttonAtlas["sprite_spacebar"], _spaceBarBackgroundMiddleRect.ToRectangle(), Color.White * 0.4f);
                     }
                     else {
                         _spaceBarBackgroundRect.X = _camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Center).X - (_spaceBarBackgroundRect.Width / 2f);
-                        _spaceBarBackgroundRect.Y = (_camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Min).Y - _spaceBarBackgroundRect.Height);
+                        _spaceBarBackgroundRect.Y = (_camera.WorldToScreen(_player.CollidingTrigger.Shape.BoundingBox.Min).Y - _spaceBarBackgroundRect.Height * 1.5f);
                         //MainGame.SpriteBatch.Draw(_spacebar, _spaceBarBackgroundRect.ToRectangle(), ColorHelper.FromHex("#70707041"));
-                        spriteBatch.Draw(_buttonAtlas["sprite_spacebar"], _spaceBarBackgroundRect.ToRectangle(), Color.White);
+                        spriteBatch.Draw(_buttonAtlas["sprite_spacebar"], _spaceBarBackgroundRect.ToRectangle(), Color.White * 0.4f);
                     }
                     //_spaceBarBackgroundRect.Position = _camera.WorldToScreen(_spaceBarBackgroundRect.Position);
                     //_spaceBarBackgroundRect.Size = _size * _camera.Zoom;
@@ -285,14 +285,19 @@ namespace Imaginophobia {
             //_nyctophobiaOverlay.Center.SetX(_player.Transform.Position.X);
             //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
             //    .Easing(EasingFunctions.Linear);
-            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0f, 0f), duration: 25)
-                .Easing(EasingFunctions.ExponentialOut);
+            _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.008f, 0.012f), duration: 20)
+                .Easing(EasingFunctions.ExponentialOut)
+                .OnEnd(_ => Time.AddTimer(() => {
+                    _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0f, 0f), duration: 0.25f)
+                        .Easing(EasingFunctions.ExponentialIn);
+                }, 5f, "NyctoClose"));
         }
 
         public void NyctoOpen() {
             //_nyctophobiaOverlay.Center = _camera.WorldToScreen(_player.Transform.Position);
             //_tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Center, toValue: _camera.WorldToScreen(_player.Transform.Position), duration: 3)
             //    .Easing(EasingFunctions.Linear);
+            Time.RemoveTimer("NyctoClose");
             _tweener.TweenTo(target: _nyctophobiaOverlay, expression: vignette => vignette.Scale, toValue: new Vector2(0.9f, 0.5f), duration: 10)
                 .Easing(EasingFunctions.SineOut);
         }
