@@ -29,7 +29,7 @@ namespace Imaginophobia {
         private CollisionManager _collisionManager;
         private EnemyManager _enemyManager;
         private UIManager _uiManager;  
-        private int _gameTimeLimit = 721;
+        private int _gameTimeLimit = 601;
 
         public GameManager(BoxingViewportAdapter viewportAdapter) {
             _camera = new OrthographicCamera(viewportAdapter);
