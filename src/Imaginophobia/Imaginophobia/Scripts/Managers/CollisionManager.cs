@@ -40,9 +40,9 @@ namespace Imaginophobia {
                 _player.CollideWithWallMove(collision.Result.MinimumTranslationVector);
             }
 
-            //if(_collisionWorld.)
             FocusedTrigger = null;
             _player.CollidingTrigger = null;
+
             //Player with every triggers
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
@@ -51,22 +51,20 @@ namespace Imaginophobia {
                     continue;
                 }
 
-                // Nearest wins, so overlapping triggers don't leave the highlight on the wrong object
-                if (FocusedTrigger == null) {
+                if (FocusedTrigger == null ||
+                    (_player.Transform.Position - trigger.Shape.BoundingBox.Center).LengthSquared() <
+                    (_player.Transform.Position - FocusedTrigger.Shape.BoundingBox.Center).LengthSquared()) {
                     FocusedTrigger = trigger;
                 }
-                else if ((_player.Transform.Position - trigger.Shape.BoundingBox.Center).LengthSquared() < (_player.Transform.Position - FocusedTrigger.Shape.BoundingBox.Center).LengthSquared()) {
-                    FocusedTrigger = trigger;
-                }
+            }
 
-                _player.CollidingTrigger = FocusedTrigger;
+            _player.CollidingTrigger = FocusedTrigger;
 
-                if (trigger != FocusedTrigger || MainGame.GameState == GameState.Jumpscare) {
-                    return;
-                }
+            if (FocusedTrigger != null && MainGame.GameState != GameState.Jumpscare) {
+                Trigger trigger = FocusedTrigger;
 
                 if (trigger.CompareTag("hideout")) {
-                    if(InputManager.PressedKey(Keys.Space)) {
+                    if (InputManager.PressedKey(Keys.Space)) {
                         if (_player.CurrentAction != CharacterAction.Hiding && Time.TimerExist("hideCooldown") == false) {
                             _player.PreviousPos = _player.Transform.Position;
                             _player.Transform.Position = trigger.Shape.BoundingBox.Center;
@@ -76,14 +74,14 @@ namespace Imaginophobia {
                         ObjectiveManager.Complete("interact");
                     }
                 }
-                else if(trigger.CompareTag("skillcheck")) {
+                else if (trigger.CompareTag("skillcheck")) {
                     if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking)) {
                         //Skill Check
                         Screen screen = new SpinTheValveScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen);
                         _player.ToggleRepairing();
                     }
-                    
+
                 }
                 else if (trigger.CompareTag("dots")) {
                     if (InputManager.PressedKey(Keys.Space) && (_player.CurrentAction != CharacterAction.Repairing && _player.CurrentAction != CharacterAction.Checking)) {
@@ -96,7 +94,7 @@ namespace Imaginophobia {
                         ObjectiveManager.Complete("repair");
                         ObjectiveManager.Complete("interact");
                     }
-                    
+
                 }
                 else if (trigger.CompareTag("report")) {
                     if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Reading) {
@@ -122,7 +120,7 @@ namespace Imaginophobia {
                             ObjectiveManager.Complete("peek");
                             ObjectiveManager.Complete("door-open");
                         }
-                   
+
                         DoorInteracted?.Invoke(trigger.Name);
                     }
                     else if (InputManager.PressedKey(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
@@ -131,9 +129,6 @@ namespace Imaginophobia {
                         MainGame.ScreenManager.ShowScreen(screen, 0.5f, 0.5f);
                     }
                 }
-
-                //Make player acknowledge that they can interact
-                //if(trigger.Interactable)_player.CanInteract = true;
             }
 
             //Player with enemies

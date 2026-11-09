@@ -149,7 +149,7 @@ namespace Imaginophobia {
                     MainGame.GameState = GameState.Win;
                     MainGame.ScreenManager.ClearScreens(new WinScreen(Time.GetTimer("MainTimer").TimeLeft), 0.5f, 0.5f, 1f);
                 }
-                else if (SaveManager.AllSewerLightsAreOn() == false) {
+                else if (ObjectiveManager.AllValvesRepaired && SaveManager.AllSewerLightsAreOn() == false) {
                     _uiManager.ShowMessage("Don't forget to fix the light.", 2f);
                 }
                 else {
