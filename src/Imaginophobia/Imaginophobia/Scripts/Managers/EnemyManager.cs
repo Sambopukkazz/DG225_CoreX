@@ -20,16 +20,16 @@ namespace Imaginophobia {
         private int _autophobiaSpawnChance = 20; // 0-100
         private float _autoSpawnInterval = 4.96f;
 
-        private (int, int, int) _scopophobiaAvailableChance = (5, 12, 20); // Normal, Anxious, Insane
-        private int _scopophobiaSpawnChance = 5; // 0-100
+        private (int, int, int) _scopophobiaAvailableChance = (3, 12, 20); // Normal, Anxious, Insane
+        private int _scopophobiaSpawnChance = 3; // 0-100
         private float _scopoSpawnInterval = 4.98f;
 
         private (int, int, int) _nyctophobiaAvailableChance = (35, 50, 65); // Normal, Anxious, Insane
-        private int _nyctophobiaSpawnChance = 30; // 0-100
+        private int _nyctophobiaSpawnChance = 35; // 0-100
         private float _nyctophobiaSpawnInterval = 29.95f;
 
-        private (int, int, int) _entamaphobiaAvailableChance = (15, 20, 25); // Normal, Anxious, Insane
-        private int _entamaphobiaSpawnChance = 15; // 0-100
+        private (int, int, int) _entamaphobiaAvailableChance = (1, 20, 25); // Normal, Anxious, Insane
+        private int _entamaphobiaSpawnChance = 1; // 0-100
         private float _entamaphobiaSpawnInterval = 3.97f;
         
         private Texture2D _scopophobiaTexture;
