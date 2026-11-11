@@ -172,12 +172,12 @@ namespace Imaginophobia {
                     Timer timer = Time.GetTimer("hideCooldown");
                     float timeFactor;
                     if (timer != null) {
-                        color = ColorHelper.FromHex("#61070786");
+                        color = ColorHelper.FromHex("#61070786") * 0.4f;
                         timeFactor = _spaceBarBackgroundRect.Width /  _player.HideCooldown;
                     }
                     else {
                         timer = Time.GetTimer("hideTime");
-                        color = ColorHelper.FromHex("#cccccc64");
+                        color = ColorHelper.FromHex("#cccccc64") * 0.4f;
                         timeFactor = _spaceBarBackgroundRect.Width / _player.HideTime;
                     }
 
@@ -187,7 +187,7 @@ namespace Imaginophobia {
                 }
                 else if (_player.CollidingTrigger?.Tag == "door" && Time.TimerExist("DoorCooldown") == true) {
                     float timeFactor = _spaceBarBackgroundMiddleRect.Width / 2f;
-                    spriteBatch.FillRectangle(_spaceBarBackgroundMiddleRect.X, _spaceBarBackgroundMiddleRect.Y, Time.GetTimer("DoorCooldown").TimeLeft * timeFactor, _spaceBarBackgroundMiddleRect.Height, ColorHelper.FromHex("#61070786"));
+                    spriteBatch.FillRectangle(_spaceBarBackgroundMiddleRect.X, _spaceBarBackgroundMiddleRect.Y, Time.GetTimer("DoorCooldown").TimeLeft * timeFactor, _spaceBarBackgroundMiddleRect.Height, ColorHelper.FromHex("#61070786") * 0.4f);
                 }
             }
 

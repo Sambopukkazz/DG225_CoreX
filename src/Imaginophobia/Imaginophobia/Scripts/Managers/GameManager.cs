@@ -70,6 +70,8 @@ namespace Imaginophobia {
                 ObjectiveManager.Complete("repair");
                 ObjectiveManager.Complete("dots-done");
                 ObjectiveManager.Complete("peek");
+                ObjectiveManager.Complete("valve-done");
+                ObjectiveManager.Complete("valve-start");
             }
 
             Time.TimeScale = 1;
@@ -196,6 +198,12 @@ namespace Imaginophobia {
                     AudioManager.Instance.FadeSFXVolumeOut(SoundEffectName.Darkness, 1.5f);
                     _enemyManager.ClearEnemies();
                     _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);
+
+                    if (_sceneManager.LastSceneName == "tilemap_sewer" && ObjectiveManager.IsComplete("entama-hint") == false && ShiftLoader.Selected == 4) {
+                        ObjectiveManager.Complete("entama-hint");
+                        _uiManager.ShowMessage("Something might be waiting for you outside the room. \nMake sure that it is NOT there before going out.", 12f);
+                    }
+
                     MainGame.ScreenManager.FadeIn(0.25f);
                 };
 
@@ -243,6 +251,14 @@ namespace Imaginophobia {
         private void OnEnemyRemoved(GameObject enemy) {
             if (enemy is Nyctophobia || enemy is Entamaphobia) {
                 return;
+            }
+
+            if (enemy is Scopophobia && ObjectiveManager.IsComplete("fixBlackout") == false && ShiftLoader.Selected > 1 && ShiftLoader.Selected < 4) {
+                _uiManager.ShowMessage("Repairing electric system in the electric room should fix the lights.", 8f);
+            }
+            else if (enemy is Autophobia autophibia && autophibia.AllowMovement != false && ObjectiveManager.IsComplete("collidedAutophobia") == false && ShiftLoader.Selected <= 2) {
+                ObjectiveManager.Complete("collidedAutophobia");
+                _uiManager.ShowMessage("Flashlight might be useful.", 4f);
             }
 
             _collisionManager.RemoveCollider(enemy as ICollisionActor);

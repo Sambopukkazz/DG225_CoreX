@@ -17,6 +17,7 @@ namespace Imaginophobia {
         private static SceneBuilder _activeScene;
         public static SceneBuilder GetActiveScene() => _activeScene;
         private string _lastSceneName;
+        public string LastSceneName => _lastSceneName;
         private TilemapSpriteBatchRenderer _renderer;
 
         private TileHighlightRenderer _tileHighlight;
