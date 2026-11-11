@@ -64,6 +64,14 @@ namespace Imaginophobia {
             }, _gameTimeLimit, "MainTimer");
             _uiManager = new UIManager(_player, _camera);
 
+            if (ShiftLoader.Selected >= 2) {
+                ObjectiveManager.Complete("move");
+                ObjectiveManager.Complete("interact");
+                ObjectiveManager.Complete("repair");
+                ObjectiveManager.Complete("dots-done");
+                ObjectiveManager.Complete("peek");
+            }
+
             Time.TimeScale = 1;
         }
 
@@ -168,10 +176,12 @@ namespace Imaginophobia {
                 return;
             }
 
-            if (_enemyManager.HasActiveScopophobia()) {
+            if (_enemyManager.HasActiveScopophobia() || (ObjectiveManager.IsComplete("peek") == false && ShiftLoader.Selected == 1)) {
                 AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck, interrupt: true);
             }
             else if (Time.TimerExist("DoorCooldown") == false) {
+                ObjectiveManager.Complete("door-open");
+
                 if (_enemyManager.HasActiveEntamaphobia()) {
                     _enemyManager.ClearEnemies();
                     _sceneManager.LoadScene(sceneName, _camera, _collisionManager, _lightManager);

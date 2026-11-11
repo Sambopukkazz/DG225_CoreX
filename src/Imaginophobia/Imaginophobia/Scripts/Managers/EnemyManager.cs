@@ -117,7 +117,6 @@ namespace Imaginophobia {
                 Time.GetTimer("EntamaSpawnTimer").Pause();
                 Time.GetTimer("AutoSpawnTimer").Resume();
                 Time.AddTimer(PlayerEnteringSewer,10, "BlackoutEnemyCooldown");
-                
             }
             else if (SceneManager.GetActiveScene().Name != "tilemap_sewer" && _continueSpawnEnemy == true) {
                 _continueSpawnEnemy = false;
@@ -131,7 +130,7 @@ namespace Imaginophobia {
                 _worldBound = worldBound;
             }
 
-            if (_hasEverSpawnScopophobia == false && ObjectiveManager.AllValvesRepaired) {
+            if (_hasEverSpawnScopophobia == false && ObjectiveManager.AllValvesRepaired && ShiftLoader.Selected >= 3) {
                 ForceSpawnScopophobia();
             }
         }

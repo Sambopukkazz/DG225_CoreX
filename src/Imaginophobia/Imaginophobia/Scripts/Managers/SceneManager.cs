@@ -27,7 +27,7 @@ namespace Imaginophobia {
         private HighlightSettings _lockerSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _doorSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
         private HighlightSettings _clipboardSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
-        private HighlightSettings _ladderSettings = new HighlightSettings { ScanSpeed = 0f, OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0") };
+        private HighlightSettings _ladderSettings = new HighlightSettings { ScanSpeed = 0.3f, ScanColor = ColorHelper.FromHex("#bfd8ff"), OutlineRadius = 3f, OutlineColor = ColorHelper.FromHex("#e0e8e0"), ScanWidth = 0.03f };
         public event Action<Vector2> SceneLoaded;
 
         public SceneManager(Player player) {
@@ -85,7 +85,7 @@ namespace Imaginophobia {
                 if (trigger.Interactable == false) {
                     continue;
                 }
-                if (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn()) {
+                if (trigger.CompareTag("dots") && (SaveManager.AllSewerLightsAreOn() || (ShiftLoader.Selected > 1 && ObjectiveManager.IsComplete("door-open") == false))) {
                     continue;
                 }
                 if ((trigger.CompareTag("skillcheck") || trigger.CompareTag("dots")) && _player.CurrentAction == CharacterAction.Repairing) {

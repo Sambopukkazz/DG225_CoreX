@@ -94,13 +94,14 @@ namespace Imaginophobia {
             visual.States.Pushed.Clear();
             visual.States.Pushed.Apply = () => {
                 if (MainGame.Loading == false) {
-                    label.Y = label.Y + 10;
+                    label.Y = 10;
                 }
                 AudioManager.Instance.PlaySFX(SoundEffectName.ElecSuccess, volume: 0.05f);
             };
 
             visual.States.Highlighted.Clear();
             visual.States.Highlighted.Apply = () => {
+                label.Y = 0;
                 label.Color = new Color(230, 230, 230);
                 //AudioManager.Instance.PlayButtonHighlight();
             };

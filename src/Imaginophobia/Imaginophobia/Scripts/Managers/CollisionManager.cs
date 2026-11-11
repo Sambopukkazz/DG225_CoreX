@@ -47,7 +47,7 @@ namespace Imaginophobia {
             foreach (CollisionEvent2D collision in _collisionWorld.QueryCollisions(_player, "triggers")) {
                 Trigger trigger = (Trigger)collision.Other;
 
-                if (MainGame.Loading || trigger.Interactable == false || (trigger.CompareTag("dots") && SaveManager.AllSewerLightsAreOn())) {
+                if (MainGame.Loading || trigger.Interactable == false || (trigger.CompareTag("dots") && (SaveManager.AllSewerLightsAreOn() || (ShiftLoader.Selected > 1 && ObjectiveManager.IsComplete("door-open") == false)))) {
                     continue;
                 }
 
@@ -110,17 +110,6 @@ namespace Imaginophobia {
                 }
                 else if (trigger.CompareTag("door")) {
                     if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
-
-                        //Exit door skips some of the first tutorial
-                        if (trigger.Name != "end") {
-                            ObjectiveManager.Complete("move");
-                            ObjectiveManager.Complete("interact");
-                            ObjectiveManager.Complete("repair");
-                            ObjectiveManager.Complete("dots-done");
-                            ObjectiveManager.Complete("peek");
-                            ObjectiveManager.Complete("door-open");
-                        }
-
                         DoorInteracted?.Invoke(trigger.Name);
                     }
                     else if (InputManager.PressedKey(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
