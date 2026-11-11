@@ -12,8 +12,8 @@ namespace Imaginophobia {
     public class DotsGenerator {
         private int _column;
         private int _row;
-        private int _maxDots = 5;
-        private int _minPathLength = 5;
+        private int _maxDots = 6;
+        private int _minPathLength = 4;
         private int _minDistance = 3;
         private int _maxAttempts = 500;
         private Random _rand = new Random();
