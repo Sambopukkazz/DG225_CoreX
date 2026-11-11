@@ -43,6 +43,9 @@
     <Folder Include="_\" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Content\Datas\shifts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Datas\tutorial.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

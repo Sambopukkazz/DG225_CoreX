@@ -1,4 +1,4 @@
-using Gum.Forms;
+﻿using Gum.Forms;
 using Gum.Forms.Controls;
 using Gum.GueDeriving;
 using Gum.Wireframe;
@@ -14,9 +14,12 @@ namespace Imaginophobia {
         private Panel _root;
         private EyeField _eyes;
         private Texture2D _backgroundTexture;
+        private Button _shiftButton;
+        private int _shift;
 
         public MainMenuScreen() {
             _root = new Panel();
+            _shift = ShiftLoader.Selected;
 
             UpdateWhenInactive = true;
             DrawWhenInactive = true;
@@ -33,9 +36,10 @@ namespace Imaginophobia {
             _eyes = new EyeField(_backgroundTexture);
 
             canvas.AddChild(GumUIHelper.CreateTitle("Imaginophobia"));
-            canvas.AddChild(GumUIHelper.CreateTextButton("<", Layout.ArrowFontScale, Layout.LeftArrowX, Layout.ArrowY, Layout.ArrowSize, Layout.ArrowSize, null, false));
-            canvas.AddChild(GumUIHelper.CreateTextButton(">", Layout.ArrowFontScale, Layout.RightArrowX, Layout.ArrowY, Layout.ArrowSize, Layout.ArrowSize, null, false));
-            canvas.AddChild(GumUIHelper.CreateTextButton("Shift 1", Layout.StartButtonFontScale, Layout.StartButtonX, Layout.StartButtonY, Layout.StartButtonWidth, Layout.StartButtonHeight, StartGame));
+            canvas.AddChild(GumUIHelper.CreateTextButton("<", Layout.ArrowFontScale, Layout.LeftArrowX, Layout.ArrowY, Layout.ArrowSize, Layout.ArrowSize, PreviousShift, ShiftLoader.Count > 1));
+            canvas.AddChild(GumUIHelper.CreateTextButton(">", Layout.ArrowFontScale, Layout.RightArrowX, Layout.ArrowY, Layout.ArrowSize, Layout.ArrowSize, NextShift, ShiftLoader.Count > 1));
+            _shiftButton = GumUIHelper.CreateTextButton(ShiftText, Layout.StartButtonFontScale, Layout.StartButtonX, Layout.StartButtonY, Layout.StartButtonWidth, Layout.StartButtonHeight, StartGame);
+            canvas.AddChild(_shiftButton);
             canvas.AddChild(GumUIHelper.CreateTextButton("Index", Layout.MenuFontScale, Layout.MenuButtonX, Layout.MenuIndexY, Layout.MenuButtonWidth, Layout.MenuButtonHeight, null, false));
             canvas.AddChild(GumUIHelper.CreateTextButton("Settings", Layout.MenuFontScale, Layout.MenuButtonX, Layout.MenuSettingsY, Layout.MenuButtonWidth, Layout.MenuButtonHeight, OpenSettings));
             canvas.AddChild(GumUIHelper.CreateTextButton("Credits", Layout.MenuFontScale, Layout.MenuButtonX, Layout.MenuCreditsY, Layout.MenuButtonWidth, Layout.MenuButtonHeight, OpenCredits));
@@ -79,10 +83,23 @@ namespace Imaginophobia {
             _root.RemoveFromRoot();
         }
 
+        private string ShiftText => $"Shift {_shift}";
+
+        private void PreviousShift() {
+            _shift = ShiftLoader.Previous(_shift);
+            GumUIHelper.SetButtonText(_shiftButton, ShiftText);
+        }
+
+        private void NextShift() {
+            _shift = ShiftLoader.Next(_shift);
+            GumUIHelper.SetButtonText(_shiftButton, ShiftText);
+        }
+
         private void StartGame() {
             if (MainGame.GameState == GameState.Menu) {
                 MainGame.GameState = GameState.Gameplay;
-                MainGame.ScreenManager.ReplaceScreen(new GameplayScreen(), 0.5f, 0.5f, 1);
+                ShiftLoader.Selected = _shift;
+                MainGame.ScreenManager.ReplaceScreen(new GameplayScreen(_shift), 0.5f, 0.5f, 1);
             }
         }
 

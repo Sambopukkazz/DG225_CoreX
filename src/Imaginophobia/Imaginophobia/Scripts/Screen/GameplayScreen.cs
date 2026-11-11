@@ -16,14 +16,20 @@ using System.Threading.Tasks;
 
 namespace Imaginophobia {
     public class GameplayScreen : Screen {
+        private readonly int _shift;
         private GameManager _gameManager;
         private Panel _root;
         private Button _pauseButton;
         private ContainerRuntime _pauseMenu;     
 
+        // shift defaults to 1 so a plain `new GameplayScreen()` still works.
+        public GameplayScreen(int shift = 1) {
+            _shift = shift;
+        }
+
         public override void Initialize() {
             BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(MainGame.Instance.Window, MainGame.GraphicsDevice, Layout.ScreenWidth, Layout.ScreenHeight);
-            _gameManager = new(viewportAdapter);
+            _gameManager = new(viewportAdapter, ShiftLoader.Get(_shift));
 
             UpdateWhenInactive = true;
             DrawWhenInactive = true;

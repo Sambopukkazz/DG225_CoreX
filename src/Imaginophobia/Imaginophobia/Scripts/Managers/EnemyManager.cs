@@ -16,20 +16,20 @@ namespace Imaginophobia {
         private List<GameObject> _enemies;
         public IReadOnlyList<GameObject> Enemies => _enemies;
         
-        private (int, int, int) _autophobiaAvailableChance = (20, 40, 55); // Normal, Anxious, Insane
-        private int _autophobiaSpawnChance = 20; // 0-100
+        private (float, float, float) _autophobiaAvailableChance = (20, 40, 55); // Normal, Anxious, Insane
+        private float _autophobiaSpawnChance = 20; // 0-100
         private float _autoSpawnInterval = 4.96f;
 
-        private (int, int, int) _scopophobiaAvailableChance = (3, 12, 20); // Normal, Anxious, Insane
-        private int _scopophobiaSpawnChance = 3; // 0-100
+        private (float, float, float) _scopophobiaAvailableChance = (3, 12, 20); // Normal, Anxious, Insane
+        private float _scopophobiaSpawnChance = 3; // 0-100
         private float _scopoSpawnInterval = 4.98f;
 
-        private (int, int, int) _nyctophobiaAvailableChance = (35, 50, 65); // Normal, Anxious, Insane
-        private int _nyctophobiaSpawnChance = 35; // 0-100
+        private (float, float, float) _nyctophobiaAvailableChance = (35, 50, 65); // Normal, Anxious, Insane
+        private float _nyctophobiaSpawnChance = 35; // 0-100
         private float _nyctophobiaSpawnInterval = 29.95f;
 
-        private (int, int, int) _entamaphobiaAvailableChance = (1, 20, 25); // Normal, Anxious, Insane
-        private int _entamaphobiaSpawnChance = 1; // 0-100
+        private (float, float, float) _entamaphobiaAvailableChance = (1, 20, 25); // Normal, Anxious, Insane
+        private float _entamaphobiaSpawnChance = 1; // 0-100
         private float _entamaphobiaSpawnInterval = 3.97f;
         
         private Texture2D _scopophobiaTexture;
@@ -84,6 +84,21 @@ namespace Imaginophobia {
             Timer entamaTimer = Time.AddTimer(SpawnEntamaphobia, _entamaphobiaSpawnInterval, "EntamaSpawnTimer");
             entamaTimer.Repeat = true;
             Time.AddTimer(60, "EntamaCooldown");
+        }
+
+        // The shift owns every enemy's chance table. Applied before the first spawn, and it
+        // re-reads the current stage so the session starts on the right numbers.
+        public void ApplyShift(ShiftData shift) {
+            if (shift == null) {
+                return;
+            }
+
+            _autophobiaAvailableChance = shift.EnemyChanceTuple("Autophobia", _autophobiaAvailableChance);
+            _scopophobiaAvailableChance = shift.EnemyChanceTuple("Scopophobia", _scopophobiaAvailableChance);
+            _nyctophobiaAvailableChance = shift.EnemyChanceTuple("Nyctophobia", _nyctophobiaAvailableChance);
+            _entamaphobiaAvailableChance = shift.EnemyChanceTuple("Entamaphobia", _entamaphobiaAvailableChance);
+
+            OnStageChanged();
         }
 
         public void Update(Rectangle worldBound) {
@@ -284,24 +299,19 @@ namespace Imaginophobia {
         }
 
         private void OnStageChanged() {
-            if(_player.SanityState == SanityState.Anxious) {
-                _autophobiaSpawnChance = _autophobiaAvailableChance.Item2;
-                _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item2;
-                _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item2;
-                _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item2;
-            }
-            else if (_player.SanityState == SanityState.Insane) {
-                _autophobiaSpawnChance = _autophobiaAvailableChance.Item3;
-                _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item3;
-                _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item3;
-                _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item3;
-            }
-            else if (_player.SanityState == SanityState.Normal) {
-                _autophobiaSpawnChance = _autophobiaAvailableChance.Item1;
-                _scopophobiaSpawnChance = _scopophobiaAvailableChance.Item1;
-                _nyctophobiaSpawnChance = _nyctophobiaAvailableChance.Item1;
-                _entamaphobiaSpawnChance = _entamaphobiaAvailableChance.Item1;
-            }
+            _autophobiaSpawnChance = ChanceAtStage(_autophobiaAvailableChance);
+            _scopophobiaSpawnChance = ChanceAtStage(_scopophobiaAvailableChance);
+            _nyctophobiaSpawnChance = ChanceAtStage(_nyctophobiaAvailableChance);
+            _entamaphobiaSpawnChance = ChanceAtStage(_entamaphobiaAvailableChance);
+        }
+
+        // The current sanity stage's element of a (Normal, Anxious, Insane) chance table.
+        private float ChanceAtStage((float, float, float) chance) {
+            return _player.SanityState switch {
+                SanityState.Anxious => chance.Item2,
+                SanityState.Insane => chance.Item3,
+                _ => chance.Item1,
+            };
         }
 
         public void PlayerEnteringSewer() {

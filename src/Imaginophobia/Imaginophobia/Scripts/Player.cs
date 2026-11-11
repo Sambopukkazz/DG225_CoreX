@@ -510,10 +510,31 @@ namespace Imaginophobia {
             }
         }
 
+        // Called once by GameManager before the first Update. A shift owns the per-stage
+        // sanity drain; the stage thresholds themselves are the same on every shift.
+        public void ApplyShift(ShiftData shift) {
+            if (shift == null) {
+                return;
+            }
+
+            _availableSanityRedectionSpeed = shift.SanityReduction;
+            _sewerSanityRedectionSpeed = CurrentStageRate();
+        }
+
+        // The drain for the stage the player is currently in. One place, because every
+        // branch of CheckSanityStage needs the same lookup.
+        private float CurrentStageRate() {
+            return SanityState switch {
+                SanityState.Anxious => _availableSanityRedectionSpeed.Item2,
+                SanityState.Insane => _availableSanityRedectionSpeed.Item3,
+                _ => _availableSanityRedectionSpeed.Item1,
+            };
+        }
+
         public void CheckSanityStage() {
             if (Sanity <= ((float)SanityState.Anxious) && SanityState == SanityState.Anxious) {
                 SanityState = SanityState.Insane;
-                _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item3;
+                _sewerSanityRedectionSpeed = CurrentStageRate();
                 SanityStateChanged?.Invoke();
 
                 AudioManager.Instance.StopSFX(SoundEffectName.Painting);
@@ -531,7 +552,7 @@ namespace Imaginophobia {
             }
             else if (Sanity <= ((float)SanityState.Normal) && SanityState == SanityState.Normal) {
                 SanityState = SanityState.Anxious;
-                _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item2;
+                _sewerSanityRedectionSpeed = CurrentStageRate();
                 SanityStateChanged?.Invoke();
 
                 AudioManager.Instance.PlaySFX(SoundEffectName.Painting, volume: 0.025f);
@@ -539,7 +560,7 @@ namespace Imaginophobia {
             }
             else if (Sanity > (float)SanityState.Normal && SanityState != SanityState.Normal) {
                 SanityState = SanityState.Normal;
-                _sewerSanityRedectionSpeed = _availableSanityRedectionSpeed.Item1;
+                _sewerSanityRedectionSpeed = CurrentStageRate();
                 SanityStateChanged?.Invoke();
             }
         }

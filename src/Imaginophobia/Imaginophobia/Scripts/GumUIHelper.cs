@@ -1,4 +1,4 @@
-using Gum.DataTypes;
+﻿using Gum.DataTypes;
 using Gum.Forms.Controls;
 using Gum.Forms.DefaultVisuals.V3;
 using Gum.GueDeriving;
@@ -58,6 +58,13 @@ namespace Imaginophobia {
             label.HasDropshadow = hasDropShadow;
             label.OutlineThickness = outlineThickness;
             return label;
+        }
+
+        // Buttons built by CreateTextButton keep their label on the visual, so anything that
+        // has to retitle one later (the menu's "Shift n" button) goes through here instead
+        // of repeating the cast.
+        public static void SetButtonText(Button button, string text) {
+            ((ButtonVisual)button.Visual).TextInstance.Text = text;
         }
 
         // Text button with a transparent background and three visual states:

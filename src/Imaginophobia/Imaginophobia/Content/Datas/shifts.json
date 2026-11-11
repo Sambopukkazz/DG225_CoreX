@@ -1,0 +1,57 @@
+[
+  {
+    "Shift": 1,
+    "TimeLimit": 601,
+    "SanityReduction": { "Normal": 0.5, "Anxious": 0.2, "Insane": 0.0 },
+    "EnemyChance": {
+      "Autophobia": { "Normal": 20, "Anxious": 40, "Insane": 55 },
+      "Scopophobia": { "Normal": 3, "Anxious": 12, "Insane": 20 },
+      "Nyctophobia": { "Normal": 35, "Anxious": 50, "Insane": 65 },
+      "Entamaphobia": { "Normal": 1, "Anxious": 20, "Insane": 25 }
+    }
+  },
+  {
+    "Shift": 2,
+    "TimeLimit": 590,
+    "SanityReduction": { "Normal": 0.55, "Anxious": 0.22, "Insane": 0.0 },
+    "EnemyChance": {
+      "Autophobia": { "Normal": 22, "Anxious": 42, "Insane": 57 },
+      "Scopophobia": { "Normal": 5, "Anxious": 13, "Insane": 22 },
+      "Nyctophobia": { "Normal": 38, "Anxious": 52, "Insane": 67 },
+      "Entamaphobia": { "Normal": 3, "Anxious": 21, "Insane": 26 }
+    }
+  },
+  {
+    "Shift": 3,
+    "TimeLimit": 575,
+    "SanityReduction": { "Normal": 0.6, "Anxious": 0.24, "Insane": 0.0 },
+    "EnemyChance": {
+      "Autophobia": { "Normal": 24, "Anxious": 44, "Insane": 59 },
+      "Scopophobia": { "Normal": 7, "Anxious": 15, "Insane": 24 },
+      "Nyctophobia": { "Normal": 41, "Anxious": 54, "Insane": 69 },
+      "Entamaphobia": { "Normal": 5, "Anxious": 23, "Insane": 28 }
+    }
+  },
+  {
+    "Shift": 4,
+    "TimeLimit": 560,
+    "SanityReduction": { "Normal": 0.65, "Anxious": 0.26, "Insane": 0.0 },
+    "EnemyChance": {
+      "Autophobia": { "Normal": 26, "Anxious": 46, "Insane": 61 },
+      "Scopophobia": { "Normal": 9, "Anxious": 17, "Insane": 26 },
+      "Nyctophobia": { "Normal": 44, "Anxious": 56, "Insane": 71 },
+      "Entamaphobia": { "Normal": 7, "Anxious": 25, "Insane": 30 }
+    }
+  },
+  {
+    "Shift": 5,
+    "TimeLimit": 545,
+    "SanityReduction": { "Normal": 0.7, "Anxious": 0.28, "Insane": 0.0 },
+    "EnemyChance": {
+      "Autophobia": { "Normal": 28, "Anxious": 48, "Insane": 63 },
+      "Scopophobia": { "Normal": 11, "Anxious": 19, "Insane": 28 },
+      "Nyctophobia": { "Normal": 47, "Anxious": 58, "Insane": 73 },
+      "Entamaphobia": { "Normal": 9, "Anxious": 27, "Insane": 32 }
+    }
+  }
+]

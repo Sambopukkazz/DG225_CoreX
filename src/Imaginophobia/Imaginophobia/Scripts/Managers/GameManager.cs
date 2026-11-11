@@ -29,9 +29,9 @@ namespace Imaginophobia {
         private CollisionManager _collisionManager;
         private EnemyManager _enemyManager;
         private UIManager _uiManager;  
-        private int _gameTimeLimit = 601;
+        private float _gameTimeLimit = 601f;
 
-        public GameManager(BoxingViewportAdapter viewportAdapter) {
+        public GameManager(BoxingViewportAdapter viewportAdapter, ShiftData shift) {
             _camera = new OrthographicCamera(viewportAdapter);
             _lightManager = new LightManager();
             _player = new Player();
@@ -39,6 +39,15 @@ namespace Imaginophobia {
             _enemyManager = new EnemyManager(_player);
             _enemyManager.EnemySpawned += OnEnemySpawned;
             _enemyManager.EnemyRemoved += OnEnemyRemoved;
+
+            // Shift difficulty. Applied after both objects exist and before anything can spawn,
+            // so every spawn roll for the session uses this shift's chances. Left at the 1.0.0
+            // defaults if no shift was handed in.
+            if (shift != null) {
+                _gameTimeLimit = shift.TimeLimit;
+                _player.ApplyShift(shift);
+                _enemyManager.ApplyShift(shift);
+            }
 
             _collisionManager = new CollisionManager(_player, _enemyManager.Enemies);
             _collisionManager.AddCollider(_player);
@@ -256,4 +265,4 @@ namespace Imaginophobia {
             Time.Purge();
         }
     }
-}
+}
