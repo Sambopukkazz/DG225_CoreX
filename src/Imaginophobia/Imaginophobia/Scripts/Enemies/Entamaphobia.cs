@@ -114,23 +114,25 @@ namespace Imaginophobia {
         }
 
         public override void OnDestroyed() {
-            switch (_stage) {
-                case 1:
-                    _player.Sanity -= 25;
-                    break;
-                case 2:
-                    _player.Sanity -= 30;
-                    break;
-                case 3:
-                    _player.Sanity -= 35;
-                    break;
-                case 4:
-                    _player.Sanity -= 40;
-                    break;
-            }
+            if (_player.CollidingTrigger == _door) {
+                switch (_stage) {
+                    case 1:
+                        _player.Sanity -= 25;
+                        break;
+                    case 2:
+                        _player.Sanity -= 30;
+                        break;
+                    case 3:
+                        _player.Sanity -= 35;
+                        break;
+                    case 4:
+                        _player.Sanity -= 40;
+                        break;
+                }
 
-            if (_stage == 0) {
-                Time.AddTimer(10, "EntamaCooldown");
+                if (_stage == 0) {
+                    Time.AddTimer(10, "EntamaCooldown");
+                }
             }
         }
     }

@@ -112,7 +112,7 @@ namespace Imaginophobia {
                     if (InputManager.PressedKey(Keys.Space) && _player.CurrentAction != CharacterAction.Peeking) {
                         DoorInteracted?.Invoke(trigger.Name);
                     }
-                    else if (InputManager.PressedKey(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking) {
+                    else if (InputManager.PressedKey(Keys.E) && SceneManager.GetActiveScene().Name != "tilemap_sewer" && _player.CurrentAction != CharacterAction.Peeking && trigger.Name != "end") {
                         _player.TogglePeek();
                         Screen screen = new DoorPeekingScreen(_player, trigger);
                         MainGame.ScreenManager.ShowScreen(screen, 0.5f, 0.5f);

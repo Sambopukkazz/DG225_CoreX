@@ -178,8 +178,12 @@ namespace Imaginophobia {
                 return;
             }
 
-            if (_enemyManager.HasActiveScopophobia() || (ObjectiveManager.IsComplete("peek") == false && ShiftLoader.Selected == 1)) {
+            if (_enemyManager.HasActiveScopophobia()) {
                 AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck, interrupt: true);
+            }
+            else if (ObjectiveManager.IsComplete("peek") == false && ShiftLoader.Selected == 1) {
+                AudioManager.Instance.PlaySFX(SoundEffectName.DoorStuck, interrupt: true);
+                _uiManager.ShowMessage("Follow the tutorial first.", 3f);
             }
             else if (Time.TimerExist("DoorCooldown") == false) {
                 ObjectiveManager.Complete("door-open");
